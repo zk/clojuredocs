@@ -1,0 +1,31 @@
+# Getting Started
+
+## Gems
+sudo gem install ruby-openid --version '2.1.7'
+sudo gem install rcov --version '0.9.2.1'
+sudo rake gems:install
+
+## Import DB
+create the following databases in MySQL: clojuredocs, clojuredocs_test
+rake db:migrate
+rake db:migrate RAILS_ENV=test
+
+## Run Tests
+rake test
+
+## Start Server
+script/server
+
+## Search (Optional)
+http://www.sphinxsearch.com/downloads/sphinx-0.9.9.tar.gz
+(in tarball dir)
+./configure
+make
+sudo make install
+
+(project dir)
+rake thinking_sphinx:rebuild
+
+
+## Known Issues
+* config.gem 'json_pure', :version => '1.4.3' -> autotest runs, but throws an error about not being able to find json_pure. rake test runs fine. Commented out for now.

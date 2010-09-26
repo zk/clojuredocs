@@ -1,0 +1,5 @@
+Description:
+    run ./script/generate acts_as_commentable_with_threading_migration
+    
+    no need to specify any parameters after acts_as_commentable_with_threading_migration as the plugin relies on the table being named "comments"
+    the acts_as_commentable_with_threading_migration file will be created in db/migrate

@@ -1,0 +1,39 @@
+<% 
+recently_updated.each do |u| 
+	if u.instance_of? Comment and u.commentable_id %>
+
+		<% func = Function.find(u.commentable_id) %>
+		<div class="recent_comment">
+			<span class="user">
+				<%= link_to u.user.login, :controller => 'user', :action => 'profile', :login => u.user.login %>
+			</span> 
+			<%= (u.created_at == u.updated_at) ? "commented on" : "updated a comment on" %> 
+			<a href="<%= func.href %>"><span class="ns"><%= func.ns %>/</span><span class="name"><%= func.name %></span></a> 
+			<%= time_ago_or_time_stamp(u.updated_at) %>
+		</div>	
+	
+	<% elsif u.instance_of? Example and u.function_id %>
+
+		<% func = Function.find(u.function_id) %>
+		<div class="recent_example">
+			<span class="user">
+				<%= link_to u.user.login, :controller => 'user', :action => 'profile', :login => u.user.login %>
+			</span>
+			<%= (u.created_at == u.updated_at) ? "added an example to" : "updated an example on" %> 
+			<a href="<%= func.href %>"><span class="ns"><%= func.ns %>/</span><span class="name"><%= func.name %></span></a>
+			<%= time_ago_or_time_stamp(u.updated_at)%>
+		</div>
+		
+	<% elsif u.instance_of? SeeAlso %>
+	
+		<% func = u.from_function %>
+		<div class="recent_see_also">
+			<span class="user">
+				<%= link_to u.user.login, :controller => 'user', :action => 'profile', :login => u.user.login %>
+			</span>
+			<%= (u.created_at == u.updated_at) ? "added a see also to" : "updated a see also on" %> 
+			<a href="<%= func.href %>"><span class="ns"><%= func.ns %>/</span><span class="name"><%= func.name %></span></a>
+			<%= time_ago_or_time_stamp(u.updated_at)%>
+		</div>
+	<% end %>
+<% end %>

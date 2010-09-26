@@ -1,0 +1,167 @@
+h1. Thinking Sphinx
+
+h2. Usage
+
+First, if you haven't done so already, check out the main "usage":http://ts.freelancing-gods.com/usage.html page. Once you've done that, the next place to look for information is the specific method docs - ThinkingSphinx::Search and ThinkingSphinx::Index::Builder in particular.
+
+Keep in mind that while Thinking Sphinx works for ActiveRecord with Merb, it doesn't yet support DataMapper (although that is planned).
+
+h2. Contributing
+
+Fork on GitHub and after you've committed tested patches, send a pull request.
+
+To quickly see if your system is ready to run the thinking sphinx specs, run the contribute.rb script found in the project root directory. Use the following instructions to install any missing requirements.
+
+To get the spec suite running, you will need to install the ginger gem:
+
+<pre><code>sudo gem install ginger --source http://gemcutter.org</code></pre>
+  
+Then install the cucumber, yard, jeweler and rspec gems. Make sure you have a git install version 1.6.0.0 or higher, otherwise the jeweler gem won't install. Bluecloth is required for some of the yard documentation.
+
+<pre>
+  sudo gem install bluecloth cucumber yard jeweler rspec 
+</pre>
+
+Then set up your database:
+
+<pre>
+  cp spec/fixtures/database.yml.default spec/fixtures/database.yml &&
+  mysqladmin -u root create thinking_sphinx
+</pre>
+  
+This last step can be done automatically by the contribute.rb script if all dependencies are met.
+
+Make sure you don't have another Sphinx daemon (searchd) running. If you do, quit it with "rake ts:stop"
+in the app root.
+
+You should now have a passing test suite from which to build your patch on.
+
+<pre>
+  rake spec
+</pre>
+
+If you get the message "Failed to start searchd daemon", run the spec with sudo:
+
+<pre>
+  sudo rake spec
+</pre>
+
+If you quit the spec suite before it's completed, you may be left with data in the test
+database, causing the next run to have failures. Let that run complete and then try again.
+
+h2. Contributors
+
+Since I first released this library, there's been quite a few people who have submitted patches, to my immense gratitude. Others have suggested syntax changes and general improvements. So my thanks to the following people:
+
+* Joost Hietbrink
+* Jonathan Conway
+* Gregory Mirzayantz
+* Tung Nguyen
+* Sean Cribbs
+* Benoit Caccinolo
+* John Barton
+* Oliver Beddows
+* Arthur Zapparoli
+* Dusty Doris
+* Marcus Crafter
+* Patrick Lenz
+* Björn Andreasson
+* James Healy
+* Jae-Jun Hwang
+* Xavier Shay
+* Jason Rust
+* Gopal Patel
+* Chris Heald
+* Peter Vandenberk
+* Josh French
+* Andrew Bennett
+* Jordan Fowler
+* Seth Walker
+* Joe Noon
+* Wolfgang Postler
+* Rick Olson
+* Killian Murphy
+* Morten Primdahl
+* Ryan Bates
+* David Eisinger
+* Shay Arnett
+* Minh Tran
+* Jeremy Durham
+* Piotr Sarnacki
+* Matt Johnson
+* Nicolas Blanco
+* Max Lapshin
+* Josh Natanson
+* Philip Hallstrom
+* Christian Rishøj
+* Mike Flester
+* Jim Remsik
+* Kennon Ballou
+* Henrik Nyh
+* Emil Tin
+* Doug Cole
+* Ed Hickey
+* Evan Weaver
+* Thibaut Barrere
+* Kristopher Chambers
+* Dmitrij Smalko
+* Aleksey Yeschenko
+* Lachie Cox
+* Lourens Naude
+* Tom Davies
+* Dan Pickett
+* Alex Caudill
+* Jim Benton
+* John Aughey
+* Keith Pitty
+* Jeff Talbot
+* Dana Contreras
+* Menno van der Sman
+* Bill Harding
+* Isaac Feliu
+* Andrei Bocan
+* László Bácsi
+* Peter Wagenet
+* Max Lapshin
+* Martin Emde
+* David Wennergren
+* Mark Lane
+* Eric Lindvall
+* Lawrence Pit
+* Mike Bailey
+* Bill Leeper
+* Michael Reinsch
+* Anderson Dias
+* Jerome Riga
+* Tien Dung
+* Johannes Kaefer
+* Paul Campbell
+* Matthew Beale
+* Tom Simnett
+* Erik Ostrom
+* Ole Riesenberg
+* Josh Kalderimis
+* J.D. Hollis
+* Jeffrey Chupp
+* Rob Anderton
+* Zach Inglis
+* Ward Bekker
+* Brian Terlson
+* Christian Aust
+* Martin Sarasale
+* Édouard Brière
+* Steve Madsen
+* Justin DeWind
+* Chris Z
+* Chris Roos
+* Andrew Assarattanakul
+* Jonas von Andrian
+* Dimitri Krassovski
+* Sergey Kojin
+* Brad Sumersford
+* Amir Yalon
+* Edgars Beigarts
+* Ivan Ukhov
+* Tomáš Pospíšek
+* Tom Stuart
+* James Brooks

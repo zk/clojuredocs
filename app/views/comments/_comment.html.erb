@@ -1,0 +1,27 @@
+<div class="comment" id="comment_<%= c.id %>">
+	<div class="comment_header">
+		<div class="author">
+			<img src="<%= grav_url_for(c.user.email, 25) %>" />
+			<span class="author_nickname">
+				<%= link_to c.user.login, :controller => 'user', :action => 'profile', :login => c.user.login %>
+			</span>
+		</div>
+		<% if current_user_session and c.belongs_to?(current_user) %>
+		<div class="controls">
+			<a href="#" class="edit" id="edit_<%= c.id %>"><%= image_tag "pen_alt_fill_12x12.png", :alt => "edit" %></a> 
+			<%= link_to image_tag("trash_stroke_12x12.png", :alt => "delete"),
+						{:controller => 'comments', :action => 'delete', :id => c.id},
+						:id => "delete_#{c.id}",
+						:class => "delete"%>
+		</div>
+		<% end %>
+		<div class="clear"></div>
+	</div>
+	<div class="clear"></div>
+	<div class="content">
+	<%= RDiscount.new(c.body).to_html.gsub("<pre><code>", "<pre class=\"brush: clojure\">").
+									 gsub("</code></pre>", "</pre>").
+									 gsub("<pre>", "<pre class=\"brush: clojure\">")%>
+	</div>
+	<div class="hidden plain_content"><%= c.body %></div>
+</div>

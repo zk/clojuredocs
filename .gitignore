@@ -1,0 +1,8 @@
+log/*
+tmp/*
+db/sphinx
+.DS_Store
+public/javascripts/cache-application.js
+public/stylesheets/cache-application.css
+coverage.data
+test/coverage

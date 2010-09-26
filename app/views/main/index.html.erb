@@ -1,0 +1,128 @@
+<% content_for :title, " - Community powered Clojure Documentation and Examples" %>
+
+<div class="featured">
+	<div class="grid_8">
+		<div class="grid_8 alpha omega">
+			<div class="core_libraries">
+				<h2>Core Language</h2>
+				<div class="library">
+					<h3><a href="/Clojure%20Core">Clojure Core</a></h3>
+					<a href="/quickref/Clojure%20Core">Quick Reference</a><br />
+					<a href="http://clojure.org">http://clojure.org</a><br />
+					<p>Clojure is a dynamic programming language that targets the Java Virtual Machine (and the CLR).</p>
+				</div>
+				<br />
+				<div class="library">
+					<h3><a href="/Clojure%20Contrib">Clojure Contrib</a></h3>
+					<a href="http://richhickey.github.com/clojure-contrib/">http://richhickey.github.com/clojure-contrib/</a>
+					<p>The user contributions library, clojure.contrib, is a collection of namespaces each of which implements features that we believe may be useful to a large part of the clojure community.</p>
+				</div>
+			</div>
+		</div>
+		<div class="clear"></div>
+		<br />
+		<h2>Top Contributors <span class="find_functions_without_examples"><a href="/management/Clojure%20Core">Find vars that need examples.</a></span></h2>
+		<ul class="top_contributors">
+		<% @top_contributors.each do |tc| %>
+			<li>
+				<%= link_to image_tag(grav_url_for(tc[:email]), :alt => tc[:author]), :controller => 'user', :action => 'profile', :login => tc[:author] %>
+			</li>
+		<% end %>
+		</ul>
+		<div class="clear"></div>
+		<br />
+		<h2>Recently Updated <a href="/feed/recent_updates" alt="All recent updates RSS feed"><%= image_tag 'browser-rss.png'%></a></h2>
+		<%= render :partial => '/recently_updated', :locals => {:recently_updated => @recently_updated}%>
+	</div>
+	<div class="grid_8">
+		<div class="news">
+		<h2>News</h2>
+		<div class="highlight">
+			<p>As of Sept 25th, 2010 examples content has switched from allowing formatted content (through markdown) to code-only content. This was done to simplify tool integration through the API, automatic verification, and reference analysis.</p>
+			<p>Also, we&#39;ve put together an <a href="/examples_style_guide">examples style guide</a>. Please take a look before adding new examples, as following these conventions will help to keep formatting uniform across examples.</p>
+		</div>
+		</div>
+		<div class="welcome_message">
+		<h2>New to ClojureDocs?</h2>
+		<p>ClojureDocs is a community powered documentation and examples repository for the <a href="http://clojure.org">Clojure programming language</a>.</p>
+		<p>The site is currently in alpha and we need your help to make it a great community resource, so please let us know if you've got any feedback on how to make this site better.</p>
+		<p>There are a couple ways to contact us: The quickest and easiest is to use the 'Feedback' tab on the right side of any ClojureDocs page.  It's linked to our <a href="http://clojuredocs.uservoice.com">UserVoice Forum</a>, and allows you to give feedback publicly ('Go to our Feedback Forum') or privately ('Need help? Contact ClojureDocs').
+		<p>We also have a <a href="http://groups.google.com/group/clojuredocsorg">Google Group</a> for announcements and discussions.</p>
+		</div>
+		<br />
+		<h2>Other Libs</h2>
+				<div class="grid_4 alpha">
+					<h4>Meta</h4>
+					<div class="library">
+						<h5><a href="/Leiningen">Leiningen</a></h5>
+						<a href="http://github.com/technomancy/leiningen">http://github.com/technomancy/leiningen</a>
+					</div>
+					<div class="library">
+						<h5><a href="/Swank-Clojure">Swank-Clojure</a></h5>
+						<a href="http://github.com/jochu/swank-clojure">http://github.com/jochu/swank-clojure</a>
+					</div>
+					<!-- <div class="library">
+						<h5><a href="/clj-sandbox">clj-sandbox</a></h5>
+						<a href="http://github.com/Licenser/clj-sandbox">http://github.com/Licenser/clj-sandbox</a>
+					</div> -->
+				</div>
+
+				<div class="grid_4 omega">
+					<h4>Sys Administration</h4>
+					<div class="library">
+						<h5><a href="/clj-ssh">clj-ssh</a></h5>
+						<a href="http://github.com/hugoduncan/clj-ssh">http://github.com/hugoduncan/clj-ssh</a>
+					</div>
+					<div class="library">
+						<h5><a href="/Pallet">Pallet</a></h5>
+						<a href="http://github.com/hugoduncan/pallet">http://github.com/hugoduncan/pallet</a>
+					</div>
+				</div>
+				<div class="clear"></div>
+				<div class="grid_4 alpha">
+					<h4>Web</h4>
+					<div class="library">
+						<h5><a href="/Ring">Ring</a></h5>
+						<a href="http://github.com/mmcgrana/ring">http://github.com/mmcgrana/ring</a>
+					</div>
+					<div class="library">
+						<h5><a href="/Enlive">Enlive</a></h5>
+						<a href="http://github.com/cgrand/enlive">http://github.com/cgrand/enlive</a>
+					</div>
+				</div>
+				<div class="grid_4 omega">
+					<h4>Testing</h4>
+					<div class="library">
+						<h5><a href="/Circumspec">Circumspec</a></h5>
+						<a href="http://github.com/stuarthalloway/circumspec">http://github.com/stuarthalloway/cir...</a>
+					</div>
+					<div class="library">
+						<h5><a href="/Midje">Midje</a></h5>
+						<a href="http://github.com/marick/Midje#readme">http:http://github.com/marick/Midje</a>
+					</div>
+				</div>
+				<div class="grid_4 alpha">
+					<h4>Data Analysis</h4>
+					<div class="library">
+						<h5><a href="/Incanter">Incanter</a></h5>
+						<a href="http://incanter.org">http://incanter.org</a>
+					</div>
+				</div>
+				<div class="grid_4 omega">
+					<h4>Development Methodologies</h4>
+					<div class="library">
+						<h5><a href="/trammel">trammel</a></h5>
+						<a href="http://github.com/fogus/trammel">http://github.com/fogus/trammel</a>
+					</div>
+				</div>
+				<div class="grid_8 alpha omega">
+					<div style="text-align: right">
+						<a href="/libs">All Libraries &gt;&gt;</a>
+					</div>
+				</div>
+		
+	</div>
+	<div class="clear"></div>
+</div>
+
+<div class="clear"></div>

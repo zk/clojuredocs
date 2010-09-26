@@ -1,0 +1,37 @@
+<% if @ns then content_for :title, " - #{@ns.name}" end %>
+
+<div class="grid_3">
+	<%= render :partial => 'lib_nav', :locals => {:lib => @library} %>
+	<%= render :partial => '/lib_namespaces' %>
+	&nbsp;
+</div>
+<div class="grid_10">
+	<% if @ns and @ns.doc != ""%>
+	<div class="doc">
+		<h3>DocString</h3>
+		<pre><%= @ns.doc.gsub("\n", "<br />") %></pre>
+		<div class="copyright_license">
+			<%= @library.copyright %>
+			
+			<%= (@library.license || "See <a href='#{@library.site_url}'>#{@library.site_url}</a> for copyright and license details.")%>
+		</div>
+	</div>
+	<% end %>
+	<h3>Vars in <%= params[:ns] %></h3>
+
+	<div class="functions_list">
+		<% group_into_ns(Function.in_library_and_ns(@library.name, params[:ns])).each do |g| %>
+			<h5><%= g[0] %></h5>
+			<div class="functions">
+			<% g[1].each do |f| %>
+			<span class="function"><a href="<%= f.href %>"><%= f[:name] %></a></span>
+			<% end %>
+			</div>
+			<div class="clear"></div>
+		<% end%>
+	</div>
+</div>
+<div class="grid_3">
+	&nbsp;
+</div>
+

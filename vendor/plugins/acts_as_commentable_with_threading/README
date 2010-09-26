@@ -1,0 +1,117 @@
+Acts As Commentable (now with comment threads (TM)!!!  -- kidding on the (TM))
+===================
+
+Allows for threaded comments to be added to multiple and different models.  Drop-in compatible for acts_as_commentable (however requiring a database schema change)
+
+== Resources
+
+This plugin depends on CollectiveIdea's Awesome Nested Set plugin.
+
+You can find the plugin on GitHub:  http://github.com/collectiveidea/awesome_nested_set/tree/master
+
+== Install
+
+Rails
+	* To install as a plugin:
+
+  script/plugin install http://github.com/jackdempsey/acts_as_commentable
+
+Merb/Rails
+	* To install as a gem:	
+
+  rake install
+	
+
+Rails
+
+	* To install from scratch:
+
+ 	script/generate acts_as_commentable_with_threading_migration 	
+
+ 	This will generate the migration script necessary for the table
+ 	
+ 	* To upgrade to acts_as_commentable_with_threading from the old acts_as_commentable:
+
+ 	script/generate acts_as_commentable_upgrade_migration 
+
+ 	This will generate the necessary migration to upgrade your comments table to work with acts_as_commentable_with_threading
+	 	
+ * Create a new rails migration and add the following self.up and self.down methods
+
+ * These are the required fields for the database migration, however you may add any additional fields you need.
+ 
+  def self.up
+    create_table "comments", :force => true do |t|
+      t.integer "commentable_id", :default => 0
+      t.string "commentable_type", :limit => 15, :default => ""
+      t.text "body", :default => ""
+      t.integer "user_id", :default => 0, :null => false
+      t.integer "parent_id"
+      t.integer "lft"
+      t.integer "rgt"
+      t.timestamps
+    end
+  
+    add_index "comments", "user_id"
+    add_index "comments", "commentable_id"
+  end
+
+  def self.down
+    drop_table :comments
+  end
+
+== Usage
+
+class Article < ActiveRecord::Base
+	acts_as_commentable
+end
+ 
+ * Add a comment to a model instance, for example an Article
+
+	@article = Article.find(params[:id])
+	@user_who_commented = @current_user
+	@comment = Comment.build_from(@article, @user_who_commented.id, "Hey guys this is my comment!" )
+	
+ * To make a newly created comment into a child/reply of another comment
+
+	comment.move_to_child_of(the_desired_parent_comment)
+	
+ * To retrieve all comments for an article, including child comments
+	
+	@all_comments = @article.comment_threads
+	
+ * To retrieve only the root comments without their children comments
+	
+	@root_comments = @article.root_comments
+	
+ * To check if a comment has children
+
+	@comment.has_children?
+	
+ * To verify the number of children a comment has
+	
+	@comment.children.size
+	
+ * To retrieve a comments children
+
+	@comment.children
+	
+	
+ *If you plan to use the acts_as_voteable plugin with your comment system be sure to uncomment two things:
+
+	in lib/comment.rb uncomment the line "acts_as_voteable"
+	in lib/acts_as_commentable_with_threading.rb uncomment the line "include Juixe::Acts::Voteable" near the top
+	
+ 
+== Credits
+
+Jack Dempsey  - This plugin/gem is heavily influenced/liberally borrowed/stole from acts_as_commentable
+
+which in turn credits....
+
+Xelipe - Because acts_as_commentable was heavily influenced by Acts As Taggable.
+
+== More
+
+http://triple-dog-dare.com
+http://evan.tiggerpalace.com

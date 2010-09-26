@@ -1,0 +1,257 @@
+
+<% content_for :title, " - #{@function.ns}/#{@function.name}" %>
+
+<script type="text/javascript" charset="utf-8">
+
+
+$(document).ready(function() {
+	CD.VarPage.init({
+		varId: <%= @function.id %>,
+		library: "<%= @function.library %>",
+		editExampleFormHTML: '<%= (render :partial => '/examples/edit_example_form').gsub("\n", "")%>',
+		editCommentFormHTML: '<%= (render :partial => '/comments/edit_comment_form').gsub("\n", "")%>',
+	})
+})
+</script>
+<div class="grid_3">
+	<%= render :partial => 'lib_nav', :locals => {:lib => @library} %>
+	<%= render :partial => '/lib_namespaces' %>
+	&nbsp;
+</div>
+<div class="grid_11">
+	<a name="top"></a>
+	<div class="function_links">
+		<a href="#doc" class="scroll">doc</a>
+		<a href="#source" class="scroll">source</a>
+		<a href="#examples" class="scroll">examples</a>
+		<a href="#comments" class="scroll">comments</a>
+	</div>
+	<div class="short_link">
+		<a href="/v/<%= @function.id %>">short link to this var</a>
+	</div>
+	<div class="clear"></div>
+
+	<div class="function_header">
+	<h1>
+		<%= @function.name %>
+	</h1>
+	<h2>
+		<span class="ns"><%= link_to @function.ns, :controller => "main", :action => "ns", :lib => @function.library, :ns => @function.ns %></span>
+		<% if @function.added %>
+			<span class="added">(since <%= @function.added %>)</span>
+		<% end %>
+	</h2>
+	
+	<div class="clear"></div>
+	</div>
+	
+	<% if @function.arglists.size > 0 %>
+	<div class="usage">
+		<ul>
+			<% @function.arglists.each do |a| %>
+			<li>(<%= (@function.name + " " +  a[1..-2]).strip %>)</li>
+			<% end %>
+		</ul>
+	</div>
+	<% end %>
+	
+	<% if @function.doc %>
+	<div class="doc">
+		<a class="internal_nav scroll" href="#doc" name="doc"></a>
+		<div class="content"><%= @function.doc.gsub("\n", "<br />") if @function.doc %></div>
+		<div class="copyright_license">
+			<%= @library.copyright %>
+			
+			<%= (@library.license || "See <a href='#{@library.site_url}'>#{@library.site_url}</a> for copyright and license details.")%>
+		</div>
+	</div>
+	<% end %>
+	
+	<div class="examples">
+		<h3>
+			<a class="internal_nav scroll" href="#examples" name="examples">
+				<span id="examples_count"><%= @function.examples.size %></span> <span id="examples_desc">Example<% if @function.examples.size != 1 then %>s<% end %></span>
+			</a>
+			<a class="top scroll" href="#top">top</a>
+		</h3>
+		<% if @function.examples.size == 0 %>
+		<ul id="var_examples">
+		</ul>
+		<% else %>
+		<ul id="var_examples">
+		<% @function.examples.each do |e| %>
+			<li>
+				<%= render :partial => '/examples/example', :locals => {:e => e} %>
+			</li>
+		<% end %>
+		</ul>
+		<% end %>
+		<% if current_user_session %>
+		<div id="new_example" class="example">
+			<% form_for :example, @example do |f| %>
+			Example Content <span class="instructions">(code only, do not wrap in &lt;pre&gt; tags. See <a href="/examples_style_guide">style guide</a> for more information.)</span>
+			<div class="examples_license">
+				Examples submitted to clojuredocs will be licensed under the <a href="http://creativecommons.org/publicdomain/zero/1.0/">Creative Commons CC 0</a>.
+			</div>
+			<%= image_tag "ajax-loader.gif", :class => "ajax_loader" %>
+			<div class="clear"></div>
+			<%= f.text_area :body %>
+			<div style="text-align: right">
+				<a class="cancel" href="" style="float: left">Cancel</a>
+				<!-- <input class="preview_example" type="button" value="Preview" /> -->
+				<%= f.submit 'Add example'%>
+			</div>
+			<input type="hidden" name="isexample" value="true" />
+			<input type="hidden" name="var_id" value="<%= @function.id %>" />
+			<% end %>
+			<fieldset class="live_preview">
+				<legend>Live Preview</legend>
+				<div class="preview">
+				</div>
+			</fieldset>
+		</div>
+		<% end %>
+		
+		<% if current_user_session %>
+			<a href="" id="add_new_example">Add an example.</a>
+		<% else %>
+			Log in to add / edit an example.
+		<% end %>
+		
+	</div>
+	
+	
+	<div class="see_alsos">
+		<h3>See Also <a class="top scroll" href="#top">top</a></h3>
+
+		<ul>
+			<% @function.see_alsos_sorted.each do |sa| %>
+			<li class="see_also_item" id="see_also_item_<%=sa.id%>">
+				<%= render :partial => "/see_also/see_also_content", :locals => {:sa => sa} %>
+			</li>
+			<% end %>
+		</ul>
+		<% if current_user_session %>
+		<div id="new_see_also">
+			<%= text_field_tag :var_name_search %>
+		</div>
+		<% else %>
+		Log in to add a see also.
+		<% end %>
+		<div class="clear"></div>
+	</div>
+
+	<div class="source">
+		<h3 style="margin: 0px; padding: 0px;">
+			<%= image_tag "plus_12x12.png", :id => "expand_source" %>
+			<%= image_tag "minus_12x12.png", :id => "collapse_source" %>
+			<a class="internal_nav scroll" href="#source" name="source">Source</a>
+			<% if @function.file %>
+			<span class="file">
+				<% if @library.source_base_url %>
+				<a href="<%= @library.source_base_url %>/master<%= @ns.source_url %>#L<%= @function.line %>"><%= @function.file %>:<%= @function.line %></a>
+				<% else %>
+				<%= @function.file %>:<%= @function.line %>
+				<% end %>
+			</span>
+			<% end %>
+			<a class="top scroll" href="#top">top</a>
+
+		</h3>
+		<div class="source_content">
+			<pre class="brush: clojure"><%= @function.source %></pre>
+			<div class="copyright_license">
+				<%= @library.copyright %>
+
+				<%= (@library.license || "See <a href='#{@library.site_url}'>#{@library.site_url}</a> for copyright and license details.")%>
+			</div>
+
+			<div class="references">
+				Vars in <span class="ns"><%= @function.ns %>/</span><%= @function.name %>:
+				<% @function.source_references.each do |f|%>
+				<span class="reference"><a href="<%= f.href %>"><%= f.name %></a></span>
+				<% end %>
+			</div>
+
+			<div class="used_in">
+				Used in <%= @function.used_in.size %> other vars
+				<% if @function.used_in.size < 20 %>
+				<% @function.used_in.each do |f| %>
+				<span class="reference"><a href="<%= f.href %>"><%= f.name %></a></span>
+				<% end %>
+				<% else %>
+				<a href="#" class="expand_used_in">(expand)</a>
+				<div class="used_in_expander">
+					<% @function.used_in.each do |f| %>
+					<span class="reference"><a href="<%= f.href %>"><%= f.name %></a></span>
+					<% end %>
+				</div>
+				<% end %>
+			</div>
+		</div>
+	</div>
+	
+	<div class="comments">
+		<h3><a class="internal_nav scroll" href="#comments" name="comments">Comments</a> <a class="top scroll" href="#top">top</a></h3>
+		<% if @function.root_comments.size == 0 %>
+			<h4>
+				No comments for <em><%= @function.name %></em>.
+				<% if current_user_session %>
+					<a href="" id="add_comment">Add a comment</a>.
+				<% else %>
+					Log in to add a comment.
+				<% end %>
+			</h4>
+		<% else %>
+			<h4><%= @function.root_comments.size %> comment(s) for <em><%= @function.name %></em>.</h4>
+		<% end %>
+		<% @function.root_comments.each do |c| %>
+		<%= render :partial => '/comments/comment', :locals => {:c => c} %>
+		<% end %>
+		<% if @function.root_comments.size != 0 %>
+			<% if current_user_session %>
+				<h4><a href="" id="add_comment">Add a comment</a>.</h4>
+			<% else %>
+				Log in to add a comment.
+			<% end %>
+		<% end %>
+		<% if current_user_session %>
+		<div id="new_comment" class="comment">
+			<div class="author">
+				<img src="<%= grav_url_for(current_user.email, 25) %>" />
+				<span class="author_nickname">
+					<%= link_to current_user.login, :controller => 'user', :action => 'profile', :login => current_user.login %>
+				</span>
+			</div>
+			<div class="clear"></div>
+			<% form_for :comment, @comment do |f| %>
+			Example <span class="instructions">(markdown allowed, code in &lt;pre /&gt;)</span><br />
+			<%= f.text_area :body %>
+			<div style="text-align: right">
+				<a class="cancel" href="" style="float: left">Cancel</a>
+				<!-- <input class="preview_comment" type="button" value="Preview" /> -->
+				<%= f.submit 'Add comment'%>
+			</div>
+			<div class="copyright_license">
+				Comments submitted to clojuredocs will be licensed under the <a href="http://creativecommons.org/publicdomain/zero/1.0/">Creative Commons CC 0</a>.
+			</div>
+			<input type="hidden" name="iscomment" value="true">
+			<% end %>
+			
+			<fieldset class="live_preview">
+				<legend>Live Preview</legend>
+				<div class="preview">
+				</div>
+			</fieldset>
+		</div>
+		<% end %>
+		<div class="hidden" id="preview_window">
+		</div>
+	</div>
+</div>
+<div class="grid_3">
+	
+	&nbsp;
+</div>
+
+

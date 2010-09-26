@@ -1,0 +1,24 @@
+<div class="example" id="example_<%= e.id %>">
+	<% if not (hide_controls rescue nil) %>
+	<div class="controls">
+		<%= link_to image_tag("article_12x12.png", :alt => "view changes", :title => "view changes"), {:controller => 'examples', :action => 'view_changes', :id => e.id}, :class => 'view_changes' %>
+		<% if current_user_session %>			
+			<a href="#" class="edit" id="edit_<%= e.id %>"><%= image_tag "pen_alt_fill_12x12.png", :alt => "edit", :title => "edit" %></a> 
+			
+			<% if e.belongs_to?(current_user) %>
+			<%= link_to image_tag("trash_stroke_12x12.png", :alt => "delete", :title => "delete"), 
+						{:controller => "examples", :action => "delete", :id => e.id}, 
+						:id => "delete_#{e.id}",
+						:class => "delete"%>
+			<% end %>
+		<% end %>
+	</div>
+	<% end %>
+	<div class="clear"></div>
+	<div class="content">
+	<pre class="brush: clojure"><%= e.body.gsub("<pre>", "").
+									 gsub("</pre>", "") %></pre>
+	</div>
+	<div class="hidden plain_content"><%= e.body %></div>
+	<div class="clear"></div>
+</div>

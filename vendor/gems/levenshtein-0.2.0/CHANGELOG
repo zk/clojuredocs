@@ -1,0 +1,22 @@
+0.2.0 (11-07-2009)
+
+* Return 0 instead of 0.0 in case of empty strings.
+
+* Added specific support for arrays.
+
+* Added specific support for arrays of strings.
+
+* Added generic support for all (?) kind of sequences.
+
+* Moved a lot of code to the C world.
+
+0.1.1 (06-10-2008)
+
+* If one of the strings was both the begin and the end of the
+  other string, it would be stripped from both ends. Example:
+  Levenshtein.distance("abracadabra", "abra") resulted in 3
+  instead of 7. It's fixed now.
+
+0.1.0 (24-05-2008)
+
+* First release.

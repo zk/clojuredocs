@@ -1,0 +1,5 @@
+Description:
+    run ./script/generate acts_as_commentable_upgrade_migration
+    
+    no need to specify any parameters after acts_as_commentable_upgrade_migration as the generator just creates a migration to update your existing comments table
+    the acts_as_commentable_upgrade_migration file will be created in db/migrate

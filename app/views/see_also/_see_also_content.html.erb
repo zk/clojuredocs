@@ -1,0 +1,22 @@
+<%
+f = sa.to_function
+belongs_to_user = current_user_session && (current_user == sa.user)
+%>
+<div>
+	<div class="controls">
+		<span class="vote_count <%= (sa.vote_score < 0 ? "below_vote_threshold" : "") %>"><%= sa.vote_score %></span>
+
+		<% if current_user_session and not sa.has_voted?(current_user) and not sa.owner?(current_user) %>
+		<a class="vote_down" id="vote_down_<%=sa.id%>" href="#"><%= image_tag "minus_alt_12x12.png"%></a>
+		<a class="vote_up" id="vote_up_<%=sa.id%>" href="#"><%= image_tag "check_alt_12x12.png"%></a>
+		<% end %>	
+		<% if belongs_to_user %>
+		<a class="delete" id="delete_<%=sa.id%>" href="#"><%= image_tag "trash_stroke_12x12.png", :alt => "delete" %></a>
+		<% end %>
+	</div>
+	<a href="<%= f.href %>">
+		<span class="ns"><%= f.ns %>/</span><span class="name"><%= f.name %></span>
+	</a>
+	<p class="shortdoc"><%= f.shortdoc %></p>
+	<div class="clear"></div>
+</div>

@@ -1,0 +1,68 @@
+=== 0.7.0 / 2010-05-03
+
+* Added new methods to report the degree statistics of a node.
+
+* Added a convenience method alias 'level' to 'nodeDepth'.
+
+* Converted the exceptions thrown on invalid arguments to 'ArgumentError' instead of 'RuntimeError'.
+
+* Converted the documentation to Yard format.
+
+* Added new methods for converting from/to JSON formats.  Thanks to Dirk Breuer[http://github.com/railsbros-dirk] for
+  this fork[http://github.com/galaxycats/].
+
+* Added a separate API-CHANGES documentation file.
+
+* Added fixes for root related edge conditions to 'isOnlyChild?', 'nextSibling', 'previousSibling' and 'remove' methods.
+
+* Removed the 'ChangeLog' file as this can now be generated from the git logs.
+
+* Other minor code cleanup.
+
+=== 0.6.2 / 2010-01-30
+
+* Updated the documentation.
+
+=== 0.6.1 / 2010-01-04
+
+* Changed the hard-dependency on the 'structured_warnings' RubyGem to a soft-dependency - which lets Rubytree still
+  work if this RubyGem is not available.  The rationale for this is that we should not require the user to install a
+  separate library just for one single edge-case function (in this case, to indicate a deprecated method).  However, if
+  the library _is_ available on the user's system, then it will get used.
+
+=== 0.6.0 / 2010-01-03
+
+* Fixed the bug#22535[http://rubyforge.org/tracker/index.php?func=detail&aid=22535&group_id=1215&atid=4793] where the
+  depth method was actually returning height+1 (not the depth).
+
+* Marked the Tree::TreeNode#depth method as *deprecated* (and introduced the run-time dependency on
+  structured-warnings[http://github.com/schmidt/structured_warnings] gem).
+
+=== 0.5.3 / 2009-12-31
+
+* Cleanup of the build system to exclusively use Hoe.
+* Modifications and reformatting to the documentation.
+* No user visible changes.
+
+=== 0.5.2 / 2007-12-21
+
+* Added more test cases and enabled ZenTest compatibility for the test case
+  names.
+
+=== 0.5.1 / 2007-12-20
+
+* Minor code refactoring.
+
+=== 0.5.0 / 2007-12-18
+
+* Fixed the marshalling code to correctly handle non-string content.
+
+=== 0.4.3 / 2007-10-09
+
+* Changes to the build mechanism (now uses Hoe).
+
+=== 0.4.2 / 2007-10-01
+
+* Minor code refactoring. Changes in the Rakefile.
+
+$Id$
