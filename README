@@ -29,3 +29,7 @@ rake thinking_sphinx:rebuild
 
 ## Known Issues
 * config.gem 'json_pure', :version => '1.4.3' -> autotest runs, but throws an error about not being able to find json_pure. rake test runs fine. Commented out for now.
+
+
+## License
+ClojureDocs is licensed under the EPL v1.0 http://opensource.org/licenses/eclipse-1.0.php
