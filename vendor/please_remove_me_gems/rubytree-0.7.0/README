@@ -1,0 +1,220 @@
+= RubyTree
+   __       _           _
+   /__\_   _| |__  _   _| |_ _ __ ___  ___
+  / \// | | | '_ \| | | | __| '__/ _ \/ _ \
+ / _  \ |_| | |_) | |_| | |_| | |  __/  __/
+ \/ \_/\__,_|_.__/ \__, |\__|_|  \___|\___|
+                  |___/
+
+Copyright (c) 2006, 2007, 2008, 2009, 2010 Anupam Sengupta (anupamsg at gmail dot com)
+
+http://rubytree.rubyforge.org
+
+== DESCRIPTION:
+
+RubyTree is a Ruby implementation of the generic tree data structure.  It provides a node-based model to store keyed
+node-elements in the tree and simple APIs to access, modify and traverse the structure.  RubyTree is node-centric, where
+individual nodes on the tree are the primary compositional and structural elements.
+
+This implementation also mixes in the Enumerable module to allow standard access to the tree as a collection.
+
+== SYNOPSIS:
+
+As an example, the following code-snippet implements this tree structure:
+
+                 +------------+
+                 |    ROOT    |
+                 +-----+------+
+         +-------------+------------+
+         |                          |
+ +-------+-------+          +-------+-------+
+ |  CHILD 1      |          |  CHILD 2      |
+ +-------+-------+          +---------------+
+         |
+         |
+ +-------+-------+
+ | GRANDCHILD 1  |
+ +---------------+
+
+ # ..... Example starts.
+ require 'tree'                 # Load the library
+
+ # ..... Create the root node first.  Note that every node has a name and an optional content payload.
+ root_node = Tree::TreeNode.new("ROOT", "Root Content")
+
+ # ..... Now insert the child nodes.  Note that you can "chain" the child insertions for a given path to any depth.
+ root_node << Tree::TreeNode.new("CHILD1", "Child1 Content") << Tree::TreeNode.new("GRANDCHILD1", "GrandChild1 Content")
+ root_node << Tree::TreeNode.new("CHILD2", "Child2 Content")
+
+ # ..... Lets print the representation to stdout.  This is primarily used for debugging purposes.
+ root_node.printTree
+
+ # ..... Lets directly access children and grandchildren of the root.  The can be "chained" for a given path to any depth.
+ child1 = root_node["CHILD1"]
+ grand_child1 = root_node["CHILD1"]["GRANDCHILD1"]
+
+ # ..... Lets retrieve siblings of the current node as an array.
+ siblings_of_child1 = child1.siblings
+
+ # ..... Lets retrieve immediate children of the root node as an array.
+ children_of_root = root_node.children
+
+ # ..... This is a depth-first and L-to-R pre-ordered traversal.
+ root_node.each { |node| node.content.reverse }
+
+ # ..... Lets remove a child node from the root node.
+ root_node.remove!(child1)
+
+
+== REQUIREMENTS:
+
+* Ruby 1.8+  (http://www.ruby-lang.org)
+
+* Optional but recommended:
+  * structured_warnings (http://github.com/schmidt/structured_warnings) Rubygem
+  * Yard (http://yardoc.org) Rubygem for the documentation
+  * JSON (http://flori.github.com/json) Rubygem for converting to/from the JSON format
+
+* Development dependencies (not required for installing the gem):
+  * Hoe (http://seattlerb.rubyforge.org/hoe/Hoe.html) Rubygem
+  * gemcutter (http://gemcutter.org/gems/gemcutter) Rubygem
+  * Rubyforge (http://codeforpeople.rubyforge.org/rubyforge) Rubygem
+
+== INSTALL:
+
+RubyTree is an open source project and is hosted at:
+
+http://rubytree.rubyforge.org
+
+RubyTree can be downloaded as a Rubygem or as a tar/zip file from:
+
+http://rubyforge.org/frs/?group_id=1215&release_id=8817
+
+The file-name is one of:
+
+    rubytree-<VERSION>.gem - The Rubygem
+    rubytree-<VERSION>.tgz - GZipped source files
+    rubytree-<VERSION>.zip - Zipped  source files
+
+Download the appropriate file-type for your system.
+
+It is recommended to install RubyTree as a Ruby Gem, as this is an easy way to keep the version updated, and keep
+multiple versions of the library available on your system.
+
+=== Installing the Gem
+
+To Install the Gem, from a Terminal/CLI command prompt, issue the command:
+
+  $ gem install rubytree
+
+This should install the gem file for RubyTree. Note that you may need to be a super-user (root) to successfully install
+the gem.
+
+=== Installing from the tgz/zip file
+
+Extract the archive file (tgz or zip) and run the following command from the top-level source directory:
+
+    ruby ./setup.rb
+
+You may need administrator/super-user privileges to complete the setup using this method.
+
+== DOCUMENTATION:
+
+The primary class for this implementation is Tree::TreeNode. See the class documentation for an usage example.
+
+From a command line/terminal prompt, you can issue the following command to view the text mode ri documentation:
+
+    ri Tree::TreeNode
+
+Documentation for the latest released version is available at:
+
+http://rubytree.rubyforge.org/rdoc
+
+Documentation for the latest git HEAD is available at:
+
+http://rdoc.info/projects/evolve75/RubyTree
+
+Note that the documentation is formatted for Yard (http://yardoc.org).
+
+== DEVELOPERS:
+
+You can download the latest released source code using the tar or zip version as mentioned above in the installation
+section.
+
+Alternatively, you can checkout the latest commit/revision from the version control system.  Note that RubyTree's
+primary SCM[http://en.wikipedia.org/wiki/Source_Code_Management] is on git[http://git-scm.com] and is
+also mirrored on github[http://www.github.com].
+
+=== Using the Git repository
+
+For checking out from the primary Git repository, use the following command:
+
+  $ git clone git://rubyforge.org/rubytree.git
+
+The Git repository is available for browsing on the web at: http://fisheye2.atlassian.com/browse/rubytree
+
+=== Using the Git repository on http://github.com
+
+For cloning the git repository, use one of the following commands:
+
+  $ git clone git://github.com/evolve75/RubyTree.git
+
+or
+  $ git clone http://github.com/evolve75/RubyTree.git
+
+The git repository is available on the web at: http://github.com/evolve75/RubyTree
+
+=== Setting up the development environment
+
+After checking out the source, run:
+
+  $ rake newb
+
+This task will install any missing dependencies, run the tests/specs, and generate the RDoc.
+
+Note that you need to have the Rubygem Hoe[http://seattlerb.rubyforge.org/hoe/Hoe.html] to successfully run the rake
+tasks.  Installing Hoe may also install additional pre-requisite gems.  See the REQUIREMENTS section in this document for
+details.
+
+For generating the documentation, it is strongly suggested that the Yard[http://yardoc.org] gem be installed.
+
+== ACKNOWLEDGMENTS:
+
+I would like to acknowledge the following contributors for helping improve RubyTree:
+
+1. Dirk Breuer (http://github.com/railsbros-dirk) for contributing the JSON conversion code.
+
+== LICENSE:
+
+RubyTree is licensed under the BSD[http://www.opensource.org/licenses/bsd-license.php] license.
+
+Copyright (c) 2006, 2007, 2008, 2009, 2010 Anupam Sengupta
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
+following conditions are met:
+
+- Redistributions of source code must retain the above copyright notice, this list of conditions and the following
+  disclaimer.
+
+- Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following
+  disclaimer in the documentation and/or other materials provided with the distribution.
+
+- Neither the name of the organization nor the names of its contributors may be used to endorse or promote products
+  derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+(Document Revision: $Revision$ by $Author$)
+
+# Local Variables:
+# mode: text
+# coding: utf-8-unix
+# End:

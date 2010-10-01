@@ -1,0 +1,52 @@
+# -*- mode: org; coding: utf-8-unix; -*-
+
+
+* R0.7.0
+*** TODO Start using signed tags from R0.7.0
+*** DONE Add a check in the Tree::TreeNode.add method to prevent addition of nil child nodes
+    CLOSED: [2010-02-23 Tue 23:07]
+*** DONE Fix the edge condition for Tree::TreeNode.isOnlyChild? when the root node is the receiver.
+    CLOSED: [2010-02-23 Tue 22:03]
+    There really is no good default to this situation.  We will return 'true' simply because there is no other sibling
+    to a root.  However, a good case can be made that a root node does not have any parent either.
+*** DONE Add a convenience 'level' method to the TreeNode class (will be an alias to nodeDepth)
+    CLOSED: [2010-02-21 Sun 01:02]
+*** DONE Add a API-CHANGES file to document the various API changes made till date
+    CLOSED: [2010-01-31 Sun 00:52]
+*** DONE Add new methods to return the degree counts of the receiver node (in-degree and out-degree)
+    CLOSED: [2010-01-30 Sat 23:56]
+
+* R0.8.0
+*** TODO Convert all method names to the canonical /^[_a-z<>=\[|+-\/\*`]+[_a-z0-9_<>=~@\[\]]*[=!\?]?$/ pattern
+    See Roodi report at http://getcaliper.com/caliper/tool?tool=roodi&repo=git://github.com/evolve75/RubyTree.git
+*** TODO Fix the inconsistency of returning root as its first sibling, and returning a nil instead.  Ditto for last sibling.
+*** TODO fix the inconsistency of returning nil for the root, and an empty array for nodes which have no siblings.
+*** TODO We should perhaps return nil as root's root.
+*** TODO The semantic of length is probably unclear.  Should return the node_depth instead (or remove the method)
+    The current equivalence of length to size should also be removed.
+
+
+* Unplanned / Not assigned to any release
+*** TODO Fix the TreeNode#root method to return nil for root's root.
+*** TODO Fix the marshal_load method.  This probably needs to be a class method.
+*** TODO Fix the semantic inconsistency between the TreeNode#first|lastSibling method and the siblings method w.r.t. the root
+*** TODO Create the basic UML diagrams and upload to the Site
+    DEADLINE: <2010-01-04 Mon>
+
+*** DONE Fix bug # [[http://rubyforge.org/tracker/index.php%3Ffunc%3Ddetail&aid%3D22535&group_id%3D1215&atid%3D4793][22535]]: The method Tree::TreeNode#depth is a misnomer.  The current definition actually provides the height function.
+    DEADLINE: <2010-01-09 Sat> CLOSED: [2010-01-03 Sun 22:15]
+
+*** TODO Add a YAML export method to the TreeNode class.
+
+*** DONE Get the version control moved from CVS to Subversion (request submitted to RubyForge)
+    CLOSED: [2010-01-02 Sat 17:58]
+
+*** DONE Add logic in Rakefile to read the file list from Manifest.txt file.
+  CLOSED: [2009-12-31 Thu 23:37]
+*** TODO Fix the inconsistency of returning root as its last sibling, and returning a nil array for siblings of the node
+*** TODO marshal_load method probably should be a class method.  It currently clobbers self.
+*** TODO Fix the inconsistency of returning root as its first/last sibling, and returning a nil array for siblings of the node
+
+$Id$
+
+

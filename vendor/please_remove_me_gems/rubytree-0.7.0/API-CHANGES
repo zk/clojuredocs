@@ -1,0 +1,42 @@
+= API Changes in RubyTree
+
+This file documents various API level changes that have been made to the RubyTree package.
+
+Note: API level changes are expected to reduce dramatically after the 1.x release.  In most cases, an alternative will
+be provided to ensure relatively smooth transition to the new APIs.
+
+== Release 0.7.0 Changes
+
+- Converted all exceptions thrown on invalid method arguments to from 'RuntimeError' to 'ArgumentError'.  This impacts the
+  following methods:
+
+  - {Tree::TreeNode#initialize}
+  - {Tree::TreeNode#add}
+  - {Tree::TreeNode#[]}
+  - {Tree::BinaryTreeNode#add}
+
+- Added {Tree::TreeNode#level} as an alias for {Tree::TreeNode#nodeDepth}
+
+- Added new methods {Tree::TreeNode#in_degree} and {Tree::TreeNode#out_degree} to report the node's degree stats
+
+- {Tree::TreeNode#isOnlyChild?} now returns +true+ for a root node.
+
+- {Tree::TreeNode#nextSibling} and {Tree::TreeNode#previousSibling} now return +nil+ for a root node.
+
+- {Tree::TreeNode#add} and {Tree::TreeNode#<<} now throw an ArgumentError exception if a +nil+ node is passed as an argument.
+
+- Added new methods {Tree::TreeNode#to_json} and {Tree::TreeNode::json_create} to convert to/from the JSON format.
+  Thanks to Dirk[http://github.com/railsbros-dirk] for this change.
+
+== Release 0.6.1 Changes
+
+- Deprecated the {Tree::TreeNode#depth} method as it was returning an incorrect depth value.  Have introduced a new replacement
+  method {Tree::TreeNode#nodeDepth} which returns the correct result.
+
+
+
+
+# Local Variables:
+# mode: text
+# coding: utf-8-unix
+# End:
