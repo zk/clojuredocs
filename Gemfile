@@ -1,9 +1,9 @@
 source "http://rubygems.org"
 
 gem "rake", "0.8.7"
-gem "rails", "2.3.8"
+gem "rails", "2.3.5"
 gem "ruby-openid", "2.1.7"
-gem "mysql", "2.8.1"
+gem "pg", "0.9.0"
 
 gem "rdiscount", "1.6.5"
 gem "chronic", "0.2.3"

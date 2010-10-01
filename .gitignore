@@ -7,3 +7,4 @@ public/stylesheets/cache-application.css
 coverage.data
 test/coverage
 .bundle
+config/database.yml
