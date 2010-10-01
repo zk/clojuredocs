@@ -42,7 +42,7 @@ class ActiveSupport::TestCase
         get action_name, params
       end
 
-      should_respond_with response
+      should respond_with response
     end
   end
   

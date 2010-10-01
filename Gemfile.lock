@@ -37,7 +37,8 @@ GEM
     ruby-openid (2.1.7)
     rubyforge (2.0.4)
       json_pure (>= 1.1.7)
-    shoulda (2.11.1)
+    rubytree (0.7.0)
+    shoulda (2.11.3)
     will_paginate (2.3.12)
 
 PLATFORMS
@@ -54,5 +55,6 @@ DEPENDENCIES
   rcov (= 0.9.9)
   rdiscount (= 1.6.5)
   ruby-openid (= 2.1.7)
-  shoulda (= 2.11.1)
+  rubytree (= 0.7.0)
+  shoulda (= 2.11.3)
   will_paginate (= 2.3.12)

@@ -14,7 +14,7 @@ class CommentsControllerTest < ActionController::TestCase
       end
       
       should respond_with 302
-      should_set_the_flash_to "Comment successfully deleted."
+      should set_the_flash.to "Comment successfully deleted."
     end
     
     context "without a logged in user" do
@@ -23,7 +23,7 @@ class CommentsControllerTest < ActionController::TestCase
       end
       
       should respond_with 302
-      should_set_the_flash_to "There was a problem deleting that comment."
+      should set_the_flash.to "There was a problem deleting that comment."
     end
     
     context "without a valid comment id" do
@@ -32,7 +32,7 @@ class CommentsControllerTest < ActionController::TestCase
       end
       
       should respond_with 302
-      should_set_the_flash_to "There was a problem deleting that comment."
+      should set_the_flash.to "There was a problem deleting that comment."
     end
   end
 end

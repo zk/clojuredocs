@@ -8,3 +8,4 @@ coverage.data
 test/coverage
 .bundle
 config/database.yml
+tags

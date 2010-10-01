@@ -12,7 +12,7 @@ class UserControllerTest < ActionController::TestCase
       get :profile, :login => 'not found'
     end
     
-    should_respond_with 404
+    should respond_with 404
   end
   
   context "A login with a space in it" do
@@ -20,7 +20,7 @@ class UserControllerTest < ActionController::TestCase
       get :profile, :login => 'Brian Marick'
     end
     
-    should_respond_with :success
+    should respond_with :success
   end
   
   context "Where the current user and the profile page user are the same" do
@@ -30,7 +30,7 @@ class UserControllerTest < ActionController::TestCase
       get :profile, :login => 'zkim'
     end
     
-    should_respond_with :success
+    should respond_with :success
   end
   
   context "updating a user with a valid email" do

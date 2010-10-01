@@ -109,9 +109,9 @@ class ExamplesControllerTest < ActionController::TestCase
         get :view_changes, :id => 1
       end
 
-      should_assign_to :example
-      should_assign_to :versions
-      should_render_template :view_changes
+      should assign_to :example
+      should assign_to :versions
+      should render_template :view_changes
       should respond_with :success
     end
     
@@ -121,7 +121,7 @@ class ExamplesControllerTest < ActionController::TestCase
       end
       
       should set_the_flash
-      should_redirect_to "/"
+      should redirect_to "/"
     end
     
   end

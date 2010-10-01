@@ -20,7 +20,7 @@ class MainControllerTest < ActionController::TestCase
         get :function_short_link, :id => -1
       end
       
-      should_respond_with 404
+      should respond_with 404
     end
     
     context "with a valid function, but an invalid library" do
@@ -28,7 +28,7 @@ class MainControllerTest < ActionController::TestCase
         get :function_short_link, :id => 2
       end
       
-      should_respond_with 404
+      should respond_with 404
     end
   end
   
@@ -40,7 +40,7 @@ class MainControllerTest < ActionController::TestCase
         get :ns, :lib => 'not found', :ns => 'clojure.core'
       end
       
-      should_respond_with 404
+      should respond_with 404
     end
     
     context "with a valid library and an invalid ns" do
@@ -48,7 +48,7 @@ class MainControllerTest < ActionController::TestCase
         get :ns, :lib => 'Clojure Core', :ns => 'not found'
       end
       
-      should_respond_with 404
+      should respond_with 404
     end
   end
   
@@ -60,7 +60,7 @@ class MainControllerTest < ActionController::TestCase
         get :lib, :lib => "not found"
       end
       
-      should_respond_with 404
+      should respond_with 404
     end
   end
   
@@ -71,7 +71,7 @@ class MainControllerTest < ActionController::TestCase
         get :quick_ref_shortdesc, :lib => 'not found'
       end
       
-      should_respond_with 404
+      should respond_with 404
     end
     
     should_succeed :quick_ref_vars_only, :lib => 'Clojure Core'
@@ -80,7 +80,7 @@ class MainControllerTest < ActionController::TestCase
         get :quick_ref_vars_only, :lib => 'not found'
       end
       
-      should_respond_with 404
+      should respond_with 404
     end
   end
   
