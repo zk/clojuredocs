@@ -6,3 +6,4 @@ public/javascripts/cache-application.js
 public/stylesheets/cache-application.css
 coverage.data
 test/coverage
+.bundle
