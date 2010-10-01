@@ -15,7 +15,7 @@ ActiveRecord::Schema.define(:version => 20100814013032) do
     t.integer  "commentable_id",                 :default => 0
     t.string   "commentable_type", :limit => 15, :default => ""
     t.string   "title",                          :default => ""
-    t.text     "body"
+    t.text     "body",                           :default => ""
     t.string   "subject",                        :default => ""
     t.integer  "user_id",                        :default => 0,  :null => false
     t.integer  "parent_id"

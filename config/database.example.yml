@@ -11,3 +11,7 @@ development:
 test:
   database: clojuredocs_test
   <<: *shared
+
+production:
+  database: clojuredocs_production
+  <<: *shared
