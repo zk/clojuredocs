@@ -897,4 +897,12 @@ span.version {
 	
 }
 
+.versions_nav a {
+	color: #ccc;
+}
+
+.versions_nav .selected {
+	font-weight: bold;
+}
+
 

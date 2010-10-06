@@ -28,7 +28,18 @@ class MainController < ApplicationController
   end
 
   def lib
-    @library = Library.find_by_name(params[:lib].gsub("^", "/"))
+    
+    name = params[:lib]
+    version = params[:version]
+    
+    @library = nil
+    
+    if version and version != 'current'
+      @library = Library.find_by_name_and_version(name, version)
+    else
+      @library = Library.find_by_name(name)
+    end
+    
     if not @library
       logger.error "Tried to load library #{params[:lib]}"
 
@@ -124,8 +135,25 @@ class MainController < ApplicationController
     end
 
     def ns
-      @ns = Namespace.find_by_name(params[:ns])
-      @library = Library.find_by_name(params[:lib].gsub("^", "/"))
+      
+      #lib_name = params[:lib]
+      #version = params[:version]
+      ns_name = params[:ns]
+      
+      @library = nil
+      if version and version != 'current'
+        @library = Library.find_by_name_and_version(lib_name, version)
+      else
+        @library = Library.find_by_name(lib_name)
+      end
+      
+      @ns = nil 
+      if version and version != 'current'
+        @ns = Namespace.find_by_name_and_version(ns_name, version)
+      else
+        @ns = Namespace.find_by_name(ns_name)
+      end
+      
 
       if not @ns or not @library
         render :template => 'public/404.html', :layout => false, :status => 404

@@ -26,8 +26,15 @@ $(document).ready(function() {
 		<a href="#examples" class="scroll">examples</a>
 		<a href="#comments" class="scroll">comments</a>
 	</div>
-	<div class="short_link">
-		<a href="/v/<%= @function.id %>">short link to this var</a>
+	<div class="short_link versions_nav">
+		<% Function.versions_of(@function).each do |f| %>
+			<% if @function.version == f.version %>
+				<span class="selected"><%= f.version %></span>
+			<% else %>
+				<a href="<%= f.href %>"><%= f.version %></a>
+			<% end %>
+		<% end %>
+		<!-- <a href="/v/<%= @function.id %>">short link to this var</a> -->
 	</div>
 	<div class="clear"></div>
 
@@ -36,7 +43,13 @@ $(document).ready(function() {
 		<%= @function.name %>
 	</h1>
 	<h2>
-		<span class="ns"><%= link_to @function.ns, :controller => "main", :action => "ns", :lib => @function.library, :ns => @function.ns %></span>
+		<span class="ns">
+			<%= link_to @function.ns, :controller => "main", 
+									  :action => "ns", 
+									  :lib => @function.library, 
+									  :ns => @function.ns, 
+									  :version => @function.version %>
+		</span>
 		<% if @function.added %>
 			<span class="added">(since <%= @function.added %>)</span>
 		<% end %>

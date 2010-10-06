@@ -1,11 +1,12 @@
 <%
-lib = (params[:lib].gsub("^", "/") rescue nil || @function.library || nil)
+lib_name = (params[:lib].gsub("^", "/") rescue nil || @function.library || nil)
+library = Library.find_by_name(lib_name)
 current_ns = @function.ns rescue nil || params[:ns] || ""
 
-if lib
+if library
 
 	require 'tree'
-	_nss = Function.find(:all, :conditions => {:library => lib}, :select => 'distinct(ns),ns').map(&:ns).sort
+	_nss = Function.find(:all, :conditions => {:library => library.name}, :select => 'distinct(ns),ns').map(&:ns).sort
 
 	@ns_flat_list = _nss
 
@@ -39,7 +40,7 @@ if lib
 	end
 
 	def generate_level(lib, current_ns, root)
-		%>
+	%>
 		<ul>
 			<%
 			root.children.each do |c|
@@ -57,7 +58,7 @@ if lib
 				<% if @ns_flat_list.index(c.content) %>
 				<li>
 					<span<%= (current_ns == c.content ? " class=\"current_ns\"" : "")%>>
-					<%= link_to ns, {:controller => 'main', :action => 'ns', :lib => lib, :ns => c.content} %>
+					<%= link_to ns, {:controller => 'main', :action => 'ns', :lib => lib.name, :version => lib.version, :ns => c.content} %>
 				</span>
 				<% if c.children.size > 0 then generate_level(lib, current_ns, c) end %>
 			</li>
@@ -67,9 +68,9 @@ if lib
 			</li>
 			<% end %>
 			<%
-		end
+	end
 		%>
-	</ul>
+		</ul>
 	<%
 end
 
@@ -78,6 +79,6 @@ _nss = treeify(Tree::TreeNode.new("ROOT", "root node"), _nss)
 %>
 <div class="namespaces">
 	<h3>Namespaces</h3>
-	<% generate_level(lib, current_ns, _nss) %>
+	<% generate_level(library, current_ns, _nss) %>
 </div>
 <% end %>

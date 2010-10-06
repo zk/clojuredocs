@@ -20,7 +20,7 @@
 	<h3>Vars in <%= params[:ns] %></h3>
 
 	<div class="functions_list">
-		<% group_into_ns(Function.in_library_and_ns(@library.name, params[:ns])).each do |g| %>
+		<% group_into_ns(Function.in_library_and_ns(@library, @ns.name)).each do |g| %>
 			<h5><%= g[0] %></h5>
 			<div class="functions">
 			<% g[1].each do |f| %>

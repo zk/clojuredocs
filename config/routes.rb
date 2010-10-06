@@ -84,10 +84,10 @@ ActionController::Routing::Routes.draw do |map|
   # /Clojure%20Core/clojure.core -> ns page, 
   # /Clojure%20Core/clojure.core/bigdec -> var page
   map.connect '/:lib', :controller => 'main', :action => 'lib'
-  map.connect '/:lib/:ns', :controller => 'main', :action => 'ns'
-  #map.connect '/:lib/:ns/:name', :controller => 'main', :action => 'function'
-
+  map.connect '/:lib/:version', :controller => 'main', :action => 'lib'
+  map.connect '/:lib/:version/:ns', :controller => 'main', :action => 'ns'
   
+
   # See how all your routes lay out with "rake routes"
 
   # Install the default routes as the lowest priority.

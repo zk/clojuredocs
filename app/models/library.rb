@@ -8,4 +8,8 @@ class Library < ActiveRecord::Base
   end
   #:nocov:
   
+  def self.versions(name)
+    Library.find_all_by_name(name).map{|l| l.version}
+  end
+  
 end
