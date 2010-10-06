@@ -79,13 +79,11 @@ ActionController::Routing::Routes.draw do |map|
   map.connect '/management/:lib/function', :controller => 'management', :action => 'function' 
   map.connect '/management/:lib', :controller => 'management'
   
-  # ex.
-  # /Clojure%20Core -> lib page, 
-  # /Clojure%20Core/clojure.core -> ns page, 
-  # /Clojure%20Core/clojure.core/bigdec -> var page
+  
   map.connect '/:lib', :controller => 'main', :action => 'lib'
   map.connect '/:lib/:version', :controller => 'main', :action => 'lib'
   map.connect '/:lib/:version/:ns', :controller => 'main', :action => 'ns'
+  map.connect '/:lib/:version/:ns/:function', :controller => 'main', :action => 'function'
   
 
   # See how all your routes lay out with "rake routes"

@@ -1,6 +1,6 @@
 
 <div class="lib_nav">
-	<h2><%= link_to lib.name, :controller => 'main', :action => 'lib', :lib => lib.name %></h2>
+	<h2><%= link_to lib.name, :controller => 'main', :action => 'lib', :lib => lib.url_friendly_name %></h2>
 	<% if lib.name == "Clojure Core"%>
 	<ul class="level_0">
 		<li>
@@ -10,7 +10,7 @@
 				<li><a href="/quickref/varsonly/Clojure%20Core">Vars Only</a></li>
 			</ul>
 		</li>
-		<li><a href="/Clojure%20Core">Alphabetical</a></li>
+		<li><a href="/clojure_core">Alphabetical</a></li>
 	</ul>
 	<% end %>
 </div>

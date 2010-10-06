@@ -55,7 +55,7 @@ class Function < ActiveRecord::Base
   end
   
   def self.in_library_and_ns(lib, ns)
-    Function.find(:all, :conditions => {:library => lib.name, :ns => ns, :version => lib.version}, :select => 'library,ns,name, weight, id', :order => 'name ASC, weight DESC')
+    Function.find(:all, :conditions => {:library => lib.name, :ns => ns, :version => lib.version}, :order => 'name ASC, weight DESC')
   end
   
   def self.versions_of(function)

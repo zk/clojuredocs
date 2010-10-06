@@ -47,7 +47,7 @@
 		
 		<div class="grid_8">
 			<% if params[:lib] %>
-			<h1><a href="/">ClojureDocs</a><span class="version">(alpha)</span> :: <a class="lib_name" href="/<%= params[:lib] %>"><%= params[:lib] %></a></h1>
+			<h1><a href="/">ClojureDocs</a><span class="version">(alpha)</span> :: <a class="lib_name" href="/<%= @library.url_friendly_name %>"><%= @library.name %></a></h1>
 			<% else %>
 			<h1><a href="/">ClojureDocs</a><span class="version">(alpha)</span></h1>
 			<% end %>

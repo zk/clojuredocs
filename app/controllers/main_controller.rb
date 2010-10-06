@@ -28,16 +28,15 @@ class MainController < ApplicationController
   end
 
   def lib
-    
     name = params[:lib]
     version = params[:version]
     
     @library = nil
     
     if version and version != 'current'
-      @library = Library.find_by_name_and_version(name, version)
+      @library = Library.find_by_url_friendly_name_and_version(name, version)
     else
-      @library = Library.find_by_name(name)
+      @library = Library.find_by_url_friendly_name_and_current(name, true)
     end
     
     if not @library
@@ -136,15 +135,15 @@ class MainController < ApplicationController
 
     def ns
       
-      #lib_name = params[:lib]
-      #version = params[:version]
+      lib_name = params[:lib]
+      version = params[:version]
       ns_name = params[:ns]
       
       @library = nil
       if version and version != 'current'
-        @library = Library.find_by_name_and_version(lib_name, version)
+        @library = Library.find_by_url_friendly_name_and_version(lib_name, version)
       else
-        @library = Library.find_by_name(lib_name)
+        @library = Library.find_by_url_friendly_name_and_current(lib_name, true)
       end
       
       @ns = nil 
@@ -160,27 +159,50 @@ class MainController < ApplicationController
         return
       end
     end
+    
+    def function
+      lib_url_name = params[:lib]
+      version = params[:version]
+      
+      ns = params[:ns]
+      function_url_name = params[:function]
 
-    def function_short_link
-      @function = Function.find(params[:id]) rescue nil
-
+      @library = Library.find_by_url_friendly_name(lib_url_name)
+      @ns = Namespace.find_by_name(ns)
+      @function = nil
+      if version and version != 'current'
+        @function = Function.find(
+        :first, 
+        :conditions => {
+          :library => @library.name,
+          :version => version,
+          :ns => ns,
+          :url_friendly_name => function_url_name}
+          )
+      else
+        @function = Function.find(
+        :first, 
+        :conditions => {
+          :library => @library.name,
+          :ns => ns,
+          :url_friendly_name => function_url_name}
+          )
+      end
+      
       if not @function
         logger.error "Couldn't find function id #{params[:id]}"
 
         render :template => 'public/404.html', :layout => false, :status => 404
         return  
       end
-
-      @ns = Namespace.find_by_name(@function.ns)
-
-      @library = Library.find_by_name(@function.library)
+      
       if not @library
         logger.error "Couldn't find library by function #{@function.to_yaml}"
 
         render :template => 'public/404.html', :layout => false, :status => 404
         return
       end
-
+      
       @example = Example.new
       @comment = Comment.new
 
@@ -204,7 +226,28 @@ class MainController < ApplicationController
 
       end
 
-      render :template => '/main/function'
+    end
+    
+    def function_short_link
+      @function = Function.find(params[:id]) rescue nil
+      @library = Library.find_by_name_and_version(@function.library, @function.version)
+      
+      version = (params[:version] || @function.version)
+      
+      if not @function
+        logger.error "Couldn't find function id #{params[:id]}"
+
+        render :template => 'public/404.html', :layout => false, :status => 404
+        return  
+      end
+      
+      redirect_to :controller => 'main',
+			            :action => 'function',
+			            :lib => @library.url_friendly_name,
+			            :version => (@library.current ? 'current' : @library.version),
+			            :ns => @function.ns,
+			            :function => @function.url_friendly_name
+			            
     end
 
     def search_autocomplete

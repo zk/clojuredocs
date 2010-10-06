@@ -1,13 +1,16 @@
 <%
-lib_name = (params[:lib].gsub("^", "/") rescue nil || @function.library || nil)
-library = Library.find_by_name(lib_name)
-current_ns = @function.ns rescue nil || params[:ns] || ""
 
-if library
+if not @library
+	@library = Library.find_by_url_friendly_name(params[:lib])
+end
+
+current_ns = params[:ns]
+
+if @library
 
 	require 'tree'
-	_nss = Function.find(:all, :conditions => {:library => library.name}, :select => 'distinct(ns),ns').map(&:ns).sort
-
+	_nss = Function.find(:all, :conditions => {:library => @library.name}, :select => 'distinct(ns),ns').map(&:ns).sort
+	
 	@ns_flat_list = _nss
 
 	_nss = _nss.map do |ns|
@@ -58,27 +61,31 @@ if library
 				<% if @ns_flat_list.index(c.content) %>
 				<li>
 					<span<%= (current_ns == c.content ? " class=\"current_ns\"" : "")%>>
-					<%= link_to ns, {:controller => 'main', :action => 'ns', :lib => lib.name, :version => lib.version, :ns => c.content} %>
-				</span>
-				<% if c.children.size > 0 then generate_level(lib, current_ns, c) end %>
-			</li>
-			<% else %>
-			<li><%= if ns.size <= 22 then ns else ("..." + ns[ns.size-22, ns.size]) end %>
-				<% if c.children.size > 0 then generate_level(lib, current_ns, c) end %>
-			</li>
-			<% end %>
-			<%
-	end
-		%>
+					<%= link_to ns,
+								:controller => 'main',
+								:action => 'ns',
+								:lib => lib.url_friendly_name,
+								:version => (params[:version] ? params[:version] : lib.version),
+								:ns => c.content %>
+					</span>
+					<% if c.children.size > 0 then generate_level(lib, current_ns, c) end %>
+						</li>
+					<% else %>
+						<li>
+							<%= if ns.size <= 22 then ns else ("..." + ns[ns.size-22, ns.size]) end %>
+							<% if c.children.size > 0 then generate_level(lib, current_ns, c) end %>
+						</li>
+					<% end %>
+				<% end %>
 		</ul>
 	<%
-end
+	end
 
 _nss = treeify(Tree::TreeNode.new("ROOT", "root node"), _nss)
 
 %>
 <div class="namespaces">
 	<h3>Namespaces</h3>
-	<% generate_level(library, current_ns, _nss) %>
+	<% generate_level(@library, current_ns, _nss) %>
 </div>
 <% end %>

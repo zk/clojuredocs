@@ -82,6 +82,7 @@ ActiveRecord::Schema.define(:version => 20101006031711) do
     t.string   "copyright"
     t.string   "license"
     t.string   "version"
+    t.boolean  "current"
     t.string   "url_friendly_name"
   end
 

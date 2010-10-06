@@ -12,4 +12,8 @@ class Library < ActiveRecord::Base
     Library.find_all_by_name(name).map{|l| l.version}
   end
   
+  def self.versions_of(library)
+    Library.find(:all, :conditions => {:name => library.name})
+  end
+  
 end

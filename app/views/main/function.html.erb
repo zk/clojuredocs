@@ -31,7 +31,13 @@ $(document).ready(function() {
 			<% if @function.version == f.version %>
 				<span class="selected"><%= f.version %></span>
 			<% else %>
-				<a href="<%= f.href %>"><%= f.version %></a>
+				<%= link_to f.version,
+							:controller => 'main',
+							:action => 'function',
+							:lib => @library.url_friendly_name,
+							:version => f.version,
+							:ns => f.ns,
+							:function => f.url_friendly_name %>
 			<% end %>
 		<% end %>
 		<!-- <a href="/v/<%= @function.id %>">short link to this var</a> -->
@@ -46,7 +52,7 @@ $(document).ready(function() {
 		<span class="ns">
 			<%= link_to @function.ns, :controller => "main", 
 									  :action => "ns", 
-									  :lib => @function.library, 
+									  :lib => @library.url_friendly_name, 
 									  :ns => @function.ns, 
 									  :version => @function.version %>
 		</span>

@@ -1,5 +1,6 @@
 <%
 f = sa.to_function
+lib = Library.find_by_name(f.library)
 belongs_to_user = current_user_session && (current_user == sa.user)
 %>
 <div>
@@ -14,9 +15,15 @@ belongs_to_user = current_user_session && (current_user == sa.user)
 		<a class="delete" id="delete_<%=sa.id%>" href="#"><%= image_tag "trash_stroke_12x12.png", :alt => "delete" %></a>
 		<% end %>
 	</div>
-	<a href="<%= f.href %>">
-		<span class="ns"><%= f.ns %>/</span><span class="name"><%= f.name %></span>
-	</a>
+	
+	<%= link_to "<span class='ns'>#{f.ns}/</span><span class='name'>#{f.name}</span>", 
+				:controller => 'main',
+				:action => 'function',
+				:lib => lib.url_friendly_name,
+				:version => 'current',
+				:ns => f.ns,
+				:function => f.url_friendly_name %>
+				
 	<p class="shortdoc"><%= f.shortdoc %></p>
 	<div class="clear"></div>
 </div>

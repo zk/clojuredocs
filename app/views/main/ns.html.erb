@@ -24,7 +24,15 @@
 			<h5><%= g[0] %></h5>
 			<div class="functions">
 			<% g[1].each do |f| %>
-			<span class="function"><a href="<%= f.href %>"><%= f[:name] %></a></span>
+			<span class="function">
+				<%= link_to f[:name], 
+							:controller => 'main',
+							:action => 'function',
+							:lib => @library.url_friendly_name,
+							:version => params[:version],
+							:ns => f[:ns],
+							:function => f[:url_friendly_name] %>
+			</span>
 			<% end %>
 			</div>
 			<div class="clear"></div>
