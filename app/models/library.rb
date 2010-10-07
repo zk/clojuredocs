@@ -16,4 +16,8 @@ class Library < ActiveRecord::Base
     Library.find(:all, :conditions => {:name => library.name})
   end
   
+  def self.current_version_of(library)
+    Library.find_by_name_and_current(library.name, true)
+  end
+  
 end

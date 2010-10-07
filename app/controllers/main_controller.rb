@@ -166,28 +166,23 @@ class MainController < ApplicationController
       
       ns = params[:ns]
       function_url_name = params[:function]
-
-      @library = Library.find_by_url_friendly_name(lib_url_name)
-      @ns = Namespace.find_by_name(ns)
-      @function = nil
+      
+      @library = nil
       if version and version != 'current'
-        @function = Function.find(
-        :first, 
-        :conditions => {
-          :library => @library.name,
-          :version => version,
-          :ns => ns,
-          :url_friendly_name => function_url_name}
-          )
+        @library = Library.find_by_url_friendly_name_and_version(lib_url_name, version)
       else
-        @function = Function.find(
+        @library = Library.find_by_url_friendly_name_and_current(lib_url_name, true)
+      end
+      
+      @ns = Namespace.find_by_name(ns)
+      @function = Function.find(
         :first, 
         :conditions => {
           :library => @library.name,
+          :version => @library.version,
           :ns => ns,
           :url_friendly_name => function_url_name}
           )
-      end
       
       if not @function
         logger.error "Couldn't find function id #{params[:id]}"

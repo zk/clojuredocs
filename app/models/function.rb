@@ -59,8 +59,23 @@ class Function < ActiveRecord::Base
   end
   
   def self.versions_of(function)
-    Function.find(:all, :conditions => {:library => function.library,
+    Function.find(:all, :conditions => {:library => function.library_.name,
                                         :ns => function.ns,
                                         :name => function.name})
+  end
+  
+  # not ready to make the leap to a has_many / belongs_to yet, so this
+  # will have to do for now
+  def library_
+    Library.find_by_name_and_version(library, version)
+  end
+
+  def link_opts(use_current_vs_actual_version = true)
+    {:controller => 'main',
+     :action     => 'function',
+     :lib        => library_.url_friendly_name,
+     :version    => (use_current_vs_actual_version && library_.current ? 'current' : version),
+     :ns         => ns,
+     :function   => url_friendly_name}
   end
 end

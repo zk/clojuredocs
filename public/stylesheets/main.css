@@ -898,11 +898,24 @@ span.version {
 }
 
 .versions_nav a {
-	color: #ccc;
+	color: #aaa;
 }
 
-.versions_nav .selected {
+.versions_nav a .selected {
 	font-weight: bold;
+	color: black;
+}
+
+.versions_nav a .current {
+	background-color: #ffffaa;
+}
+
+.version_warning {
+	text-align: center;
+	padding: 10px;
+	background-color: #ffffaa;
+	border: solid #ccc 1px;
+	margin-bottom: 5px;
 }
 
 

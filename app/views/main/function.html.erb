@@ -19,6 +19,12 @@ $(document).ready(function() {
 	&nbsp;
 </div>
 <div class="grid_11">
+	<% if not @function.library_.current %>
+	<div class="version_warning">
+		You're viewing version <%= @function.version %> of this var.  
+		The current version is <%= Library.current_version_of(@library).version %>.
+	</div>
+	<% end %>
 	<a name="top"></a>
 	<div class="function_links">
 		<a href="#doc" class="scroll">doc</a>
@@ -29,15 +35,17 @@ $(document).ready(function() {
 	<div class="short_link versions_nav">
 		<% Function.versions_of(@function).each do |f| %>
 			<% if @function.version == f.version %>
-				<span class="selected"><%= f.version %></span>
+				<% if f.library_.current %>
+					<%= link_to "<span class='selected current'>#{f.version}</span>", f.link_opts(false) %>
+				<% else %>
+					<span class="selected"><%= f.version %></span>
+				<% end %>				
 			<% else %>
-				<%= link_to f.version,
-							:controller => 'main',
-							:action => 'function',
-							:lib => @library.url_friendly_name,
-							:version => f.version,
-							:ns => f.ns,
-							:function => f.url_friendly_name %>
+				<% if f.library_.current %>
+					<%= link_to "<span class='current'>#{f.version}</span>", f.link_opts %>
+				<% else %>
+					<%= link_to f.version, f.link_opts %>
+				<% end %>
 			<% end %>
 		<% end %>
 		<!-- <a href="/v/<%= @function.id %>">short link to this var</a> -->
