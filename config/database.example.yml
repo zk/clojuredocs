@@ -1,6 +1,5 @@
 shared: &shared
-  adapter: postgresql
-  encoding: unicode
+  adapter: mysql
   pool: 5
   min_messages: warning
 
