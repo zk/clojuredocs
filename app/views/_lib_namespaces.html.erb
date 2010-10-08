@@ -65,7 +65,7 @@ if @library
 								:controller => 'main',
 								:action => 'ns',
 								:lib => lib.url_friendly_name,
-								:version => (params[:version] ? params[:version] : lib.version),
+								:version => params[:version],
 								:ns => c.content %>
 					</span>
 					<% if c.children.size > 0 then generate_level(lib, current_ns, c) end %>

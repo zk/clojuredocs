@@ -20,7 +20,7 @@ belongs_to_user = current_user_session && (current_user == sa.user)
 				:controller => 'main',
 				:action => 'function',
 				:lib => lib.url_friendly_name,
-				:version => 'current',
+				:version => nil,
 				:ns => f.ns,
 				:function => f.url_friendly_name %>
 				

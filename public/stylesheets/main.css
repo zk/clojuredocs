@@ -230,7 +230,7 @@ h2.section_header {
 }
 
 .function_links {
-	width: 80%;
+	width: 60%;
 	float: left;
 }
 
@@ -244,18 +244,23 @@ h2.section_header {
 	font-weight: 300;
 }
 
+.function_header {
+	position: relative;
+}
+
 .function_header h1 {
 	display: inline;
 }
 
 .function_header h2 {
-	display: inline;
 	font-size: 12pt;
 	color: #777;
-	float: right;
+	position: absolute;
+	top: 0px;
+	right: 0px;
 }
 
-.function_header span.ns a {
+.function_header .ns a {
 	color: #777;
 	font-size: 14pt;
 }
@@ -897,25 +902,66 @@ span.version {
 	
 }
 
-.versions_nav a {
-	color: #aaa;
+.versions_nav {
+	font-size: 14pt;
+	float: right;
 }
 
-.versions_nav a .selected {
-	font-weight: bold;
+.versions_nav span {
+	padding-right: 3px;
+}
+
+.versions_nav span img {
+	margin-bottom: -1px;
+}
+
+.versions_nav span:hover {
+	background-color: #eee;
+	cursor: pointer;
+}
+
+.versions_nav ul {
+	position: absolute;
+	right: 0px;
+	display: none;
+	border: solid #eee 1px;
+	background-color: white;
+	z-index: 1;
+}
+
+.versions_nav ul a {
+	color: black;
+	display: block;
+	padding: 5px;
+	background-color: #ffaaaa;
+}
+
+.versions_nav ul a:hover {
+	text-decoration: none;
+	background-color: #ff0000;
+	color: white;
+}
+
+.versions_nav .selected {
 	color: black;
 }
 
-.versions_nav a .current {
-	background-color: #ffffaa;
+.versions_nav ul a.stable {
+	background-color: #88ff88;
 }
+
+.versions_nav ul a.stable:hover {
+	background-color: #00aa00;
+}
+
 
 .version_warning {
 	text-align: center;
 	padding: 10px;
-	background-color: #ffffaa;
+	background-color: #ff0000;
 	border: solid #ccc 1px;
 	margin-bottom: 5px;
+	color: white;
 }
 
 

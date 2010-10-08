@@ -21,8 +21,8 @@ $(document).ready(function() {
 <div class="grid_11">
 	<% if not @function.library_.current %>
 	<div class="version_warning">
-		You're viewing version <%= @function.version %> of this var.  
-		The current version is <%= Library.current_version_of(@library).version %>.
+		You're viewing version <%= @function.version %> of <%= @function.name %>.  
+		The latest stable version of <%= @library.name %> is <%= Library.current_version_of(@library).version %>.
 	</div>
 	<% end %>
 	<a name="top"></a>
@@ -32,26 +32,48 @@ $(document).ready(function() {
 		<a href="#examples" class="scroll">examples</a>
 		<a href="#comments" class="scroll">comments</a>
 	</div>
-	<div class="short_link versions_nav">
-		<% Function.versions_of(@function).each do |f| %>
-			<% if @function.version == f.version %>
-				<% if f.library_.current %>
-					<%= link_to "<span class='selected current'>#{f.version}</span>", f.link_opts(false) %>
-				<% else %>
-					<span class="selected"><%= f.version %></span>
-				<% end %>				
-			<% else %>
-				<% if f.library_.current %>
-					<%= link_to "<span class='current'>#{f.version}</span>", f.link_opts %>
-				<% else %>
-					<%= link_to f.version, f.link_opts %>
-				<% end %>
+	
+	<script type="text/javascript" charset="utf-8">
+		$(document).ready(function() {
+			$(".versions_nav").click(function() {
+				$(".versions_nav ul").toggle()
+			})
+		})
+	</script>
+	
+
+	<div class="versions_nav">
+		<span>
+			<%= @function.version %> 
+			<% if @function.library_.current && params[:version] %>
+				permalink
 			<% end %>
+			<%= image_tag "arrow_down_16x16.png" %>
+		</span>
+		<ul>
+			<!-- <% if @function.stable_version %>
+						<li>
+							<%= link_to 'stable', @function.stable_version.link_opts, :class => 'stable' %>
+						</li>
+						<% end %> -->
+		<% Function.versions_of(@function).each do |f| %>
+			<% 
+				classes = []
+				if @function.version == f.version then classes << "selected" end
+				if f.library_.current then classes << "stable" end
+			%>
+			<li>
+				<% if @function.version == f.version && f.library_.current && !params[:version]%>
+					<%= link_to f.version + " permalink", f.link_opts(false), :class => classes.join(' ') %>
+				<% else %>
+					<%= link_to f.version, f.link_opts, :class => classes.join(' ') %>
+				<% end %>
+			</li>
 		<% end %>
+		</ul>
 		<!-- <a href="/v/<%= @function.id %>">short link to this var</a> -->
 	</div>
 	<div class="clear"></div>
-
 	<div class="function_header">
 	<h1>
 		<%= @function.name %>
@@ -64,9 +86,6 @@ $(document).ready(function() {
 									  :ns => @function.ns, 
 									  :version => @function.version %>
 		</span>
-		<% if @function.added %>
-			<span class="added">(since <%= @function.added %>)</span>
-		<% end %>
 	</h2>
 	
 	<div class="clear"></div>
@@ -81,6 +100,7 @@ $(document).ready(function() {
 		</ul>
 	</div>
 	<% end %>
+
 	
 	<% if @function.doc %>
 	<div class="doc">
@@ -97,16 +117,16 @@ $(document).ready(function() {
 	<div class="examples">
 		<h3>
 			<a class="internal_nav scroll" href="#examples" name="examples">
-				<span id="examples_count"><%= @function.examples.size %></span> <span id="examples_desc">Example<% if @function.examples.size != 1 then %>s<% end %></span>
+				<span id="examples_count"><%= @function.all_versions_examples.size %></span> <span id="examples_desc">Example<% if @function.all_versions_examples.size != 1 then %>s<% end %></span>
 			</a>
 			<a class="top scroll" href="#top">top</a>
 		</h3>
-		<% if @function.examples.size == 0 %>
+		<% if @function.all_versions_examples.size == 0 %>
 		<ul id="var_examples">
 		</ul>
 		<% else %>
 		<ul id="var_examples">
-		<% @function.examples.each do |e| %>
+		<% @function.all_versions_examples.each do |e| %>
 			<li>
 				<%= render :partial => '/examples/example', :locals => {:e => e} %>
 			</li>
@@ -126,7 +146,7 @@ $(document).ready(function() {
 			<div style="text-align: right">
 				<a class="cancel" href="" style="float: left">Cancel</a>
 				<!-- <input class="preview_example" type="button" value="Preview" /> -->
-				<%= f.submit 'Add example'%>
+				<%= f.submit 'Add example' %>
 			</div>
 			<input type="hidden" name="isexample" value="true" />
 			<input type="hidden" name="var_id" value="<%= @function.id %>" />
@@ -143,16 +163,14 @@ $(document).ready(function() {
 			<a href="" id="add_new_example">Add an example.</a>
 		<% else %>
 			Log in to add / edit an example.
-		<% end %>
-		
+		<% end %>	
 	</div>
-	
 	
 	<div class="see_alsos">
 		<h3>See Also <a class="top scroll" href="#top">top</a></h3>
 
 		<ul>
-			<% @function.see_alsos_sorted.each do |sa| %>
+			<% @function.all_versions_see_alsos.each do |sa| %>
 			<li class="see_also_item" id="see_also_item_<%=sa.id%>">
 				<%= render :partial => "/see_also/see_also_content", :locals => {:sa => sa} %>
 			</li>

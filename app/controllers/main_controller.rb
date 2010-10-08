@@ -33,7 +33,7 @@ class MainController < ApplicationController
     
     @library = nil
     
-    if version and version != 'current'
+    if version
       @library = Library.find_by_url_friendly_name_and_version(name, version)
     else
       @library = Library.find_by_url_friendly_name_and_current(name, true)
@@ -140,14 +140,14 @@ class MainController < ApplicationController
       ns_name = params[:ns]
       
       @library = nil
-      if version and version != 'current'
+      if version
         @library = Library.find_by_url_friendly_name_and_version(lib_name, version)
       else
         @library = Library.find_by_url_friendly_name_and_current(lib_name, true)
       end
       
       @ns = nil 
-      if version and version != 'current'
+      if version
         @ns = Namespace.find_by_name_and_version(ns_name, version)
       else
         @ns = Namespace.find_by_name(ns_name)
@@ -168,7 +168,7 @@ class MainController < ApplicationController
       function_url_name = params[:function]
       
       @library = nil
-      if version and version != 'current'
+      if version
         @library = Library.find_by_url_friendly_name_and_version(lib_url_name, version)
       else
         @library = Library.find_by_url_friendly_name_and_current(lib_url_name, true)
@@ -239,7 +239,7 @@ class MainController < ApplicationController
       redirect_to :controller => 'main',
 			            :action => 'function',
 			            :lib => @library.url_friendly_name,
-			            :version => (@library.current ? 'current' : @library.version),
+			            :version => (@library.current ? nil : @library.version),
 			            :ns => @function.ns,
 			            :function => @function.url_friendly_name
 			            
@@ -255,17 +255,22 @@ class MainController < ApplicationController
       end
 
       q = '"' + q + '*"'
+      
+      core_current_version = (Library.find_by_name_and_current("Clojure Core", true).version rescue nil || "1.2.0")
+      contrib_current_version = (Library.find_by_name_and_current("Clojure Contrib", true).version rescue nil || "1.2.0")
+      
 
-      @functions = Function.search("@name #{q} @library (\"Clojure Core\" | \"Clojure Contrib\")", :field_weights => {
+      @functions = Function.search("@name #{q} @library (\"Clojure Core\" | \"Clojure Contrib\") @version (\"#{core_current_version}\" | \"#{contrib_current_version}\")", :field_weights => {
         :name => 100,
         :library => 1,
         :ns => 1,
-        :doc => -1
+        :doc => -1,
         }, :match_mode => :extended)
 
         @functions.delete(nil)
 
         if @functions != nil and @functions.size > 0
+          # sort clojure core & contrib higher than other libs
           @functions.sort!{|a,b|
             aval = 0
             bval = 0
