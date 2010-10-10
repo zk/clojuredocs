@@ -1,6 +1,10 @@
 <%
-total_count = Function.find_by_sql(["select count(id) from functions where library = ?", @lib.name])[0]["count(id)"].to_i
-missing_examples = Function.find_by_sql(["select distinct id, library, ns, name from functions where (id) not in (select function_id from examples) and library = ? order by name", @lib.name])
+#total_count = Function.find_by_sql(["select count(id) from functions where library = ?", @lib.name])[0]["count(id)"].to_i
+total_count = Function.count(:all, 
+							 :include => [:namespace, {:namespace => :library}],
+							 :conditions => {:namespaces => {:libraries => {:name => @lib.name}}})
+							
+missing_examples = Function.find_by_sql(["select distinct name, id from functions where (id) not in (select function_id from examples) order by name"])
 missing_examples_count = missing_examples.size
 functions_with_examples_count = total_count - missing_examples_count
 
@@ -30,7 +34,7 @@ groups = functions_group_into_alpha(missing_examples)
 			<h5><a name="missing_examples_<%= gs[0] %>"><%= gs[0] %></a></h5>
 			<ul>
 				<% gs[1].each do |f| %>
-				<li><a href="<%= f.href %>"><span class="ns"><%= f.ns %>/</span><%= f.name %></a></li>
+				<li><a href="<%= f.href %>"><%= f.name %></a></li>
 				<% end %>
 			</ul>
 			<% end %>

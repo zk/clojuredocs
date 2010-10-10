@@ -9,13 +9,13 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101006031711) do
+ActiveRecord::Schema.define(:version => 20101010034343) do
 
   create_table "comments", :force => true do |t|
     t.integer  "commentable_id",                 :default => 0
     t.string   "commentable_type", :limit => 15, :default => ""
     t.string   "title",                          :default => ""
-    t.text     "body",                           :default => ""
+    t.text     "body"
     t.string   "subject",                        :default => ""
     t.integer  "user_id",                        :default => 0,  :null => false
     t.integer  "parent_id"
@@ -55,8 +55,6 @@ ActiveRecord::Schema.define(:version => 20101006031711) do
   end
 
   create_table "functions", :force => true do |t|
-    t.string   "library"
-    t.string   "ns"
     t.string   "name"
     t.string   "file"
     t.string   "line"
@@ -70,6 +68,7 @@ ActiveRecord::Schema.define(:version => 20101006031711) do
     t.string   "shortdoc",          :limit => 70
     t.string   "version"
     t.string   "url_friendly_name"
+    t.integer  "namespace_id"
   end
 
   create_table "libraries", :force => true do |t|
@@ -111,6 +110,7 @@ ActiveRecord::Schema.define(:version => 20101006031711) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "version"
+    t.integer  "library_id"
   end
 
   create_table "open_id_authentication_associations", :force => true do |t|

@@ -1,4 +1,5 @@
 shared: &shared
+  host: 127.0.0.1 #thinking_sphinx dosen't like sock, have to use ip
   adapter: mysql
   pool: 5
   min_messages: warning

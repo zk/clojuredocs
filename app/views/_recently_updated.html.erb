@@ -8,7 +8,7 @@ recently_updated.each do |u|
 				<%= link_to u.user.login, :controller => 'user', :action => 'profile', :login => u.user.login %>
 			</span> 
 			<%= (u.created_at == u.updated_at) ? "commented on" : "updated a comment on" %> 
-			<a href="<%= func.href %>"><span class="ns"><%= func.ns %>/</span><span class="name"><%= func.name %></span></a> 
+			<a href="<%= func.href %>"><span class="ns"><%= func.namespace.name %>/</span><span class="name"><%= func.name %></span></a> 
 			<%= time_ago_or_time_stamp(u.updated_at) %>
 		</div>	
 	
@@ -20,7 +20,7 @@ recently_updated.each do |u|
 				<%= link_to u.user.login, :controller => 'user', :action => 'profile', :login => u.user.login %>
 			</span>
 			<%= (u.created_at == u.updated_at) ? "added an example to" : "updated an example on" %> 
-			<a href="<%= func.href %>"><span class="ns"><%= func.ns %>/</span><span class="name"><%= func.name %></span></a>
+			<a href="<%= func.href %>"><span class="ns"><%= func.namespace.name %>/</span><span class="name"><%= func.name %></span></a>
 			<%= time_ago_or_time_stamp(u.updated_at)%>
 		</div>
 		
@@ -32,7 +32,7 @@ recently_updated.each do |u|
 				<%= link_to u.user.login, :controller => 'user', :action => 'profile', :login => u.user.login %>
 			</span>
 			<%= (u.created_at == u.updated_at) ? "added a see also to" : "updated a see also on" %> 
-			<a href="<%= func.href %>"><span class="ns"><%= func.ns %>/</span><span class="name"><%= func.name %></span></a>
+			<a href="<%= func.href %>"><span class="ns"><%= func.namespace.name %>/</span><span class="name"><%= func.name %></span></a>
 			<%= time_ago_or_time_stamp(u.updated_at)%>
 		</div>
 	<% end %>

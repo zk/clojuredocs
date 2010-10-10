@@ -6,15 +6,12 @@
 	&nbsp;
 </div>
 <div class="grid_10">
-	<div class="short_link versions_nav">
-		<% Library.versions_of(@library).each do |l| %>
-			<% if @library.version == l.version %>
-				<span class="selected"><%= l.version %></span>
-			<% else %>
-				<a href="/<%= l.url_friendly_name %>/<%= l.version %>/<%= @ns.name %>"><%= l.version %></a>
-			<% end %>
-		<% end %>
+	<% if not @library.current %>
+	<div class="version_warning">
+		You're viewing version <%= @library.version %> of <%= @ns.name %>.  
+		The latest stable version of <%= @ns.name %> is <%= Library.current_version_of(@library).version %>.
 	</div>
+	<% end %>
 	<% if @ns and @ns.doc != ""%>
 	<div class="doc">
 		<h3>DocString</h3>
@@ -29,7 +26,7 @@
 	<h3>Vars in <%= params[:ns] %></h3>
 
 	<div class="functions_list">
-		<% group_into_ns(Function.in_library_and_ns(@library, @ns.name)).each do |g| %>
+		<% group_into_ns(@ns.functions).each do |g| %>
 			<h5><%= g[0] %></h5>
 			<div class="functions">
 			<% g[1].each do |f| %>
@@ -39,7 +36,7 @@
 							:action => 'function',
 							:lib => @library.url_friendly_name,
 							:version => params[:version],
-							:ns => f[:ns],
+							:ns => @ns.name,
 							:function => f[:url_friendly_name] %>
 			</span>
 			<% end %>

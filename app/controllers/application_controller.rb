@@ -42,21 +42,24 @@ class ApplicationController < ActionController::Base
       examples = Example.find(:all, :limit => size, :order => 'updated_at DESC')
       see_alsos = SeeAlso.find(:all, :limit => size, :order => 'updated_at DESC')
     else
-      comments = Comment.find(:all, 
-        :joins => "INNER JOIN functions ON comments.commentable_id = functions.id",
-        :conditions => ["functions.library = ?", lib],
+      
+       comments = Comment.find(:all, 
+        :joins => "INNER JOIN functions ON comments.commentable_id = functions.id LEFT JOIN namespaces ON functions.namespace_id = namespaces.id LEFT JOIN libraries ON namespaces.library_id = libraries.id",
+        :conditions => ["libraries.name = ?", lib],
         :limit => size, 
         :order => 'updated_at DESC')
-      examples = Example.find(:all, 
-        :joins => "INNER JOIN functions ON examples.function_id = functions.id",
-        :conditions => ["functions.library = ?", lib],
-        :limit => size, 
-        :order => 'updated_at DESC')
-      see_alsos = SeeAlso.find(:all, 
-        :joins => "INNER JOIN functions ON see_alsos.from_id = functions.id",
-        :conditions => ["functions.library = ?", lib],
-        :limit => size, 
-        :order => 'updated_at DESC')
+        
+       examples = Example.find(:all, 
+          :include => [:function, {:function => :namespace}, {:function => {:namespace => :library}}],
+          :conditions => {:functions => {:namespaces => {:libraries => {:name => lib}}}},
+          :limit => size, 
+          :order => 'examples.updated_at DESC')
+      
+       see_alsos = SeeAlso.find(:all, 
+          :include => [:from_function, {:from_function => :namespace}, {:from_function => {:namespace => :library}}],
+          :conditions => {:from_functions => {:namespaces => {:libraries => {:name => lib}}}},
+          :limit => size, 
+          :order => 'see_alsos.updated_at DESC')  
     end
     
     recent = (comments + examples + see_alsos).sort{|a,b| b.updated_at <=> a.updated_at}

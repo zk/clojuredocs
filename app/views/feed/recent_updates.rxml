@@ -22,15 +22,15 @@ xml.rss "version" => "2.0", "xmlns:dc" => "http://purl.org/dc/elements/1.1/" do
       
       if r.instance_of? Comment
         f = Function.find(r.commentable_id)
-        title = "#{new_or_updated} comment on #{f.ns}/#{f.name} by #{author}."
+        title = "#{new_or_updated} comment on #{f.namespace.name}/#{f.name} by #{author}."
         body = r.body
       elsif r.instance_of? Example
         f = r.function
-        title = "#{new_or_updated} example for #{f.ns}/#{f.name} by #{author}."
+        title = "#{new_or_updated} example for #{f.namespace.name}/#{f.name} by #{author}."
         body = r.body
       elsif r.instance_of? SeeAlso
         f = r.from_function
-        title = "New see also for #{f.ns}/#{f.name} by #{author}."        
+        title = "New see also for #{f.namespace.name}/#{f.name} by #{author}."        
       end
       
       link = "http://clojuredocs.org#{f.href}"

@@ -57,7 +57,7 @@ class SeeAlsoController < ApplicationController
       @functions = @functions[0, 10]
     end
     
-    render :json => @functions.map{|f| {:href => f.href, :ns => f.ns, :name => f.name, :examples => f.examples.size, :shortdoc => f.shortdoc }}
+    render :json => @functions.map{|f| {:href => f.href, :ns => f.namespace.name, :name => f.name, :examples => f.examples.size, :shortdoc => f.shortdoc }}
   end
   
   def delete
@@ -112,7 +112,8 @@ class SeeAlsoController < ApplicationController
     ns = split[0]
     name = split[1]
 
-    to_var = Function.find_by_ns_and_name(ns, name)
+    to_var = Function.find(:first, :include => [:namespace],
+                           :conditions => {:namespaces => {:name => ns}, :name => name})
     
     if not to_var
       render json_fail("Couldn't find to var.")
@@ -136,7 +137,7 @@ class SeeAlsoController < ApplicationController
       :to_var => {
         :sa_id => sa.id, 
         :name => to_var.name, 
-        :ns => to_var.ns, 
+        :ns => to_var.namespace.name, 
         :href => to_var.href, 
         :shortdoc => to_var.shortdoc
       },

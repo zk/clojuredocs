@@ -7,6 +7,12 @@
 	&nbsp;
 </div>
 <div class="grid_10">
+	<% if not @library.current %>
+	<div class="version_warning">
+		You're viewing version <%= @library.version %> of <%= @library.name %>.  
+		The latest stable version of <%= @library.name %> is <%= Library.current_version_of(@library).version %>.
+	</div>
+	<% end %>
 	<div class="lib_header">
 		<div class="short_link versions_nav">
 			<% Library.versions_of(@library).each do |l| %>
@@ -28,7 +34,7 @@
 		<% end %>
 	</div>
 	<div class="functions_list">
-		<% group_into_ns(Function.in_library(@library)).each do |g| %>
+		<% group_into_ns(@library.namespaces.reduce([]) {|coll, ns| coll + ns.functions}).each do |g| %>
 			<h5><%= g[0] %></h5>
 			<div class="functions">
 			<% g[1].each do |f| %>

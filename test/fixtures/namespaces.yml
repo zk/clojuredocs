@@ -8,5 +8,11 @@
 
 clojure_core:
     id: 1
+    library_id: 1
     name: clojure.core
     doc: "Fundamental library of the Clojure language"
+    
+clojure_dummy:
+    id: 2
+    name: clojure.dummy.ns
+    doc: "hello world"

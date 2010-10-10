@@ -8,9 +8,9 @@
 
 map:
   id: 1
-  library: Clojure Core
-  ns: clojure.core
+  namespace_id: 1
   name: map
+  url_friendly_name: map
   file: clojure/core.clj
   line: 2079
   arglists_comp: "[f coll]|[f c1 c2]|[f c1 c2 c3]|[f c1 c2 c3 & colls]"
@@ -64,21 +64,21 @@ f should accept number-of-colls arguments.\"
   
 dummy:
     id: 2
-    library: "not_found"
-    ns: dummy.ns
+    namespace_id: 2
     name: dummyname
+    url_friendly_name: dummyname
     
 clojure_core_dummy:
     id: 3
-    library: "Clojure Core"
-    ns: clojure.dummy.ns
+    namespace_id: 2
     name: clojure.core
+    url_friendly_name: clojure.core
     
 clojure_core_plus:
     id: 4
-    library: "Clojure Core"
-    ns: clojure.core
+    namespace_id: 1
     name: "+"
+    url_friendly_name: "+"
     file: "clojure/core.clj"
     line: 809
     arglists_comp: "[]|[x]|[x y]|[x y & more]"

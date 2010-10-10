@@ -12,8 +12,12 @@ class MainControllerTest < ActionController::TestCase
   should_succeed :index
   should_succeed :libs
 
-  context "The function page" do
-    should_succeed :function_short_link, {:id => 1}
+  context "The function short link action" do
+    setup do
+      get :function_short_link, {:id => 1}
+    end
+    
+    should respond_with 302 
     
     context "with an invalid function" do
       setup do
@@ -22,18 +26,10 @@ class MainControllerTest < ActionController::TestCase
       
       should respond_with 404
     end
-    
-    context "with a valid function, but an invalid library" do
-      setup do
-        get :function_short_link, :id => 2
-      end
-      
-      should respond_with 404
-    end
   end
   
   context "the ns page" do
-    should_succeed :ns, {:lib => 'Clojure Core', :ns => 'clojure.core'}
+    should_succeed :ns, {:lib => 'clojure_core', :ns => 'clojure.core'}
     
     context "with an invalid library" do
       setup do
@@ -45,7 +41,7 @@ class MainControllerTest < ActionController::TestCase
     
     context "with a valid library and an invalid ns" do
       setup do
-        get :ns, :lib => 'Clojure Core', :ns => 'not found'
+        get :ns, :lib => 'clojure_core', :ns => 'not found'
       end
       
       should respond_with 404
@@ -53,7 +49,7 @@ class MainControllerTest < ActionController::TestCase
   end
   
   context "The library page" do
-    should_succeed :lib, :lib => "Clojure Core"
+    should_succeed :lib, :lib => "clojure_core"
     
     context "with a library not in the database" do
       setup do

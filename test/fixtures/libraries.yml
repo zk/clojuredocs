@@ -6,7 +6,11 @@
 # two:
 #   column: value
 clojure_core:
+  id: 1
   name: Clojure Core
+  url_friendly_name: clojure_core
+  version: "1.2.0"
+  current: true
   description: "The user contributions library, clojure.contrib, is a collection of namespaces each of which implements features that we believe may be useful to a large part of the Clojure community."
   site_url: http://richhickey.github.com/clojure-contrib/
   source_base_url: http://github.com/richhickey/clojure-contrib/blob/master/src/main/clojure

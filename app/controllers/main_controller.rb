@@ -146,14 +146,11 @@ class MainController < ApplicationController
         @library = Library.find_by_url_friendly_name_and_current(lib_name, true)
       end
       
-      @ns = nil 
-      if version
-        @ns = Namespace.find_by_name_and_version(ns_name, version)
-      else
-        @ns = Namespace.find_by_name(ns_name)
+      @ns = nil
+      if @library
+        @ns = Namespace.find_by_name_and_library_id(ns_name, @library.id)
       end
       
-
       if not @ns or not @library
         render :template => 'public/404.html', :layout => false, :status => 404
         return
@@ -167,23 +164,14 @@ class MainController < ApplicationController
       ns = params[:ns]
       function_url_name = params[:function]
       
-      @library = nil
-      if version
-        @library = Library.find_by_url_friendly_name_and_version(lib_url_name, version)
-      else
-        @library = Library.find_by_url_friendly_name_and_current(lib_url_name, true)
-      end
-      
-      @ns = Namespace.find_by_name(ns)
       @function = Function.find(
-        :first, 
+        :first,
+        :include => [:namespace, {:namespace => :library}],
         :conditions => {
-          :library => @library.name,
-          :version => @library.version,
-          :ns => ns,
+          :namespaces => {:name => ns, :libraries => {:url_friendly_name => lib_url_name}},
           :url_friendly_name => function_url_name}
           )
-      
+          
       if not @function
         logger.error "Couldn't find function id #{params[:id]}"
 
@@ -191,18 +179,10 @@ class MainController < ApplicationController
         return  
       end
       
-      if not @library
-        logger.error "Couldn't find library by function #{@function.to_yaml}"
-
-        render :template => 'public/404.html', :layout => false, :status => 404
-        return
-      end
-      
       @example = Example.new
       @comment = Comment.new
 
       if request.post?
-
         if params[:update_comment]
           @comment = Comment.find(params[:comment_id])
           if @comment and @comment.user_id == current_user.id
@@ -225,7 +205,13 @@ class MainController < ApplicationController
     
     def function_short_link
       @function = Function.find(params[:id]) rescue nil
-      @library = Library.find_by_name_and_version(@function.library, @function.version)
+      
+      if not @function
+        logger.error "Couldn't find function id #{params[:id]}"
+
+        render :template => 'public/404.html', :layout => false, :status => 404
+        return  
+      end
       
       version = (params[:version] || @function.version)
       
@@ -238,9 +224,9 @@ class MainController < ApplicationController
       
       redirect_to :controller => 'main',
 			            :action => 'function',
-			            :lib => @library.url_friendly_name,
-			            :version => (@library.current ? nil : @library.version),
-			            :ns => @function.ns,
+			            :lib => @function.namespace.library.url_friendly_name,
+			            :version => (@function.namespace.library.current ? nil : @function.namespace.library.version),
+			            :ns => @function.namespace.name,
 			            :function => @function.url_friendly_name
 			            
     end

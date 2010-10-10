@@ -1,6 +1,7 @@
 GEM
   remote: http://rubygems.org/
   specs:
+    ZenTest (4.4.0)
     actionmailer (2.3.5)
       actionpack (= 2.3.5)
     actionpack (2.3.5)
@@ -11,6 +12,9 @@ GEM
     activeresource (2.3.5)
       activesupport (= 2.3.5)
     activesupport (2.3.5)
+    autotest-fsevent (0.2.3)
+      sys-uname
+    autotest-growl (0.2.6)
     chronic (0.2.3)
       hoe (>= 1.2.1)
     flexmock (0.8.7)
@@ -39,12 +43,16 @@ GEM
       json_pure (>= 1.1.7)
     rubytree (0.7.0)
     shoulda (2.11.3)
+    sys-uname (0.8.4)
     will_paginate (2.3.12)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  ZenTest (= 4.4.0)
+  autotest-fsevent (= 0.2.3)
+  autotest-growl (= 0.2.6)
   chronic (= 0.2.3)
   flexmock (= 0.8.7)
   levenshtein (= 0.2.0)

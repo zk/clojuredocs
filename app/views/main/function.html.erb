@@ -1,5 +1,5 @@
 
-<% content_for :title, " - #{@function.ns}/#{@function.name}" %>
+<% content_for :title, " - #{@function.namespace.name}/#{@function.name}" %>
 
 <script type="text/javascript" charset="utf-8">
 
@@ -7,19 +7,19 @@
 $(document).ready(function() {
 	CD.VarPage.init({
 		varId: <%= @function.id %>,
-		library: "<%= @function.library %>",
+		library: "<%= @function.library.name %>",
 		editExampleFormHTML: '<%= (render :partial => '/examples/edit_example_form').gsub("\n", "")%>',
 		editCommentFormHTML: '<%= (render :partial => '/comments/edit_comment_form').gsub("\n", "")%>',
 	})
 })
 </script>
 <div class="grid_3">
-	<%= render :partial => 'lib_nav', :locals => {:lib => @library} %>
+	<%= render :partial => 'lib_nav', :locals => {:lib => @function.namespace.library} %>
 	<%= render :partial => '/lib_namespaces' %>
 	&nbsp;
 </div>
 <div class="grid_11">
-	<% if not @function.library_.current %>
+	<% if not @function.library.current %>
 	<div class="version_warning">
 		You're viewing version <%= @function.version %> of <%= @function.name %>.  
 		The latest stable version of <%= @library.name %> is <%= Library.current_version_of(@library).version %>.
@@ -45,7 +45,7 @@ $(document).ready(function() {
 	<div class="versions_nav">
 		<span>
 			<%= @function.version %> 
-			<% if @function.library_.current && params[:version] %>
+			<% if @function.library.current && params[:version] %>
 				permalink
 			<% end %>
 			<%= image_tag "arrow_down_16x16.png" %>
@@ -60,13 +60,13 @@ $(document).ready(function() {
 			<% 
 				classes = []
 				if @function.version == f.version then classes << "selected" end
-				if f.library_.current then classes << "stable" end
+				if f.library.current then classes << "stable" end
 			%>
 			<li>
-				<% if @function.version == f.version && f.library_.current && !params[:version]%>
-					<%= link_to f.version + " permalink", f.link_opts(false), :class => classes.join(' ') %>
+				<% if @function.library.version == f.library.version && f.library.current && !params[:version]%>
+					<%= link_to f.library.version + " permalink", f.link_opts(false), :class => classes.join(' ') %>
 				<% else %>
-					<%= link_to f.version, f.link_opts, :class => classes.join(' ') %>
+					<%= link_to f.library.version, f.link_opts, :class => classes.join(' ') %>
 				<% end %>
 			</li>
 		<% end %>
@@ -80,11 +80,11 @@ $(document).ready(function() {
 	</h1>
 	<h2>
 		<span class="ns">
-			<%= link_to @function.ns, :controller => "main", 
+			<%= link_to @function.namespace.name, :controller => "main", 
 									  :action => "ns", 
-									  :lib => @library.url_friendly_name, 
-									  :ns => @function.ns, 
-									  :version => @function.version %>
+									  :lib => @function.library.url_friendly_name, 
+									  :ns => @function.namespace.name, 
+									  :version => @function.library.version %>
 		</span>
 	</h2>
 	
@@ -194,7 +194,7 @@ $(document).ready(function() {
 			<% if @function.file %>
 			<span class="file">
 				<% if @library.source_base_url %>
-				<a href="<%= @library.source_base_url %>/master<%= @ns.source_url %>#L<%= @function.line %>"><%= @function.file %>:<%= @function.line %></a>
+				<a href="<%= @function.library.source_base_url %>/master<%= @function.namespace.source_url %>#L<%= @function.line %>"><%= @function.file %>:<%= @function.line %></a>
 				<% else %>
 				<%= @function.file %>:<%= @function.line %>
 				<% end %>
@@ -212,7 +212,7 @@ $(document).ready(function() {
 			</div>
 
 			<div class="references">
-				Vars in <span class="ns"><%= @function.ns %>/</span><%= @function.name %>:
+				Vars in <span class="ns"><%= @function.namespace.name %>/</span><%= @function.name %>:
 				<% @function.source_references.each do |f|%>
 				<span class="reference"><a href="<%= f.href %>"><%= f.name %></a></span>
 				<% end %>

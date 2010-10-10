@@ -46,13 +46,5 @@ class ApplicationControllerTest < ActionController::TestCase
       end
     end
     
-    context "from the library not_found" do
-      should "give a single recent update of the type Example" do
-        recent = @app_controller.send(:find_recently_updated, 10, "not_found")
-        assert_equal recent.size, 1
-        assert recent[0].instance_of? Example
-      end
-    end
-    
   end
 end

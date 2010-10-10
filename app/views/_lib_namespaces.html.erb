@@ -9,7 +9,7 @@ current_ns = params[:ns]
 if @library
 
 	require 'tree'
-	_nss = Function.find(:all, :conditions => {:library => @library.name}, :select => 'distinct(ns),ns').map(&:ns).sort
+	_nss = @library.namespaces.map(&:name).sort
 	
 	@ns_flat_list = _nss
 

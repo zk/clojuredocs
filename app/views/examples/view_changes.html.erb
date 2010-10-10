@@ -1,7 +1,7 @@
 <script type="text/javascript" charset="utf-8">
 	SyntaxHighlighter.all()
 </script>
-<h1>Changes for <span class="ns"><%= @example.function.ns %>/</span><%= @example.function.name %></h1>
+<h1>Changes for <span class="ns"><%= @example.function.namespace.name %>/</span><%= @example.function.name %></h1>
 
 <% @versions.each do |v| %>
 	<% if v.user_id 

@@ -1,4 +1,6 @@
 class Function < ActiveRecord::Base
+  belongs_to :namespace
+  
   has_many :examples
   has_many :comments
   has_and_belongs_to_many :source_references, 
@@ -43,6 +45,10 @@ class Function < ActiveRecord::Base
     "/v/#{id}"
   end
   
+  def library
+    namespace.library
+  end
+  
   def see_alsos_sorted
     see_alsos.sort{|a,b| b.vote_score <=> a.vote_score}
   end
@@ -51,32 +57,20 @@ class Function < ActiveRecord::Base
     Function.find(:all, :select => 'distinct(library),library').map(&:library).sort
   end
   
-  def self.in_library(lib)
-    Function.find(:all, :conditions => {:library => lib.name, :version => lib.version}, :select => 'library,ns,name, weight, id', :order => 'name ASC, weight DESC')
-  end
-  
-  def self.in_library_and_ns(lib, ns)
-    Function.find(:all, :conditions => {:library => lib.name, :ns => ns, :version => lib.version}, :order => 'name ASC, weight DESC')
-  end
-  
   def self.versions_of(function)
-    Function.find(:all, :conditions => {:library => function.library_.name,
-                                        :ns => function.ns,
-                                        :name => function.name})
-  end
-  
-  # not ready to make the leap to a has_many / belongs_to yet, so this
-  # will have to do for now
-  def library_
-    Library.find_by_name_and_version(library, version)
+    Function.find(:all, 
+                  :include => [:namespace, {:namespace => :library}],
+                  :conditions => {:namespaces => {:name => function.namespace.name,
+                                                 :libraries => {:name => function.library.name}},
+                                  :name => function.name})
   end
 
   def link_opts(use_current_vs_actual_version = true)
     {:controller => 'main',
      :action     => 'function',
-     :lib        => library_.url_friendly_name,
-     :version    => (use_current_vs_actual_version && library_.current ? nil : version),
-     :ns         => ns,
+     :lib        => library.url_friendly_name,
+     :version    => (use_current_vs_actual_version && library.current ? nil : version),
+     :ns         => namespace.name,
      :function   => url_friendly_name}
   end
   

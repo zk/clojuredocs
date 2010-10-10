@@ -1,6 +1,6 @@
 <%
 f = sa.to_function
-lib = Library.find_by_name(f.library)
+lib = f.library
 belongs_to_user = current_user_session && (current_user == sa.user)
 %>
 <div>
@@ -16,12 +16,12 @@ belongs_to_user = current_user_session && (current_user == sa.user)
 		<% end %>
 	</div>
 	
-	<%= link_to "<span class='ns'>#{f.ns}/</span><span class='name'>#{f.name}</span>", 
+	<%= link_to "<span class='ns'>#{f.namespace.name}/</span><span class='name'>#{f.name}</span>", 
 				:controller => 'main',
 				:action => 'function',
 				:lib => lib.url_friendly_name,
 				:version => nil,
-				:ns => f.ns,
+				:ns => f.namespace.name,
 				:function => f.url_friendly_name %>
 				
 	<p class="shortdoc"><%= f.shortdoc %></p>
