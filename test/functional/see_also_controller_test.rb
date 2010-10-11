@@ -103,7 +103,7 @@ class SeeAlsoControllerTest < ActionController::TestCase
     
     context "with a query matching an existing var name" do
       setup do
-        get :lookup, :term => 'ma'
+        get :lookup, :term => 'ma', :library => 'Clojure Core'
       end
 
       should "respond with the map var" do

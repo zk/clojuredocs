@@ -9,6 +9,7 @@
 clojure_core:
     id: 1
     library_id: 1
+    version: "1.2.0"
     name: clojure.core
     doc: "Fundamental library of the Clojure language"
     

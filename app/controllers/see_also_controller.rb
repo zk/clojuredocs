@@ -45,7 +45,7 @@ class SeeAlsoController < ApplicationController
   def lookup
     l = params[:library]
     q = params[:term]
-    version = Library.find_by_name_and_current(l, true).version
+    version = Library.find_by_name_and_current(l, true).version rescue nil
     
     if not q
       render :json => []
@@ -53,6 +53,7 @@ class SeeAlsoController < ApplicationController
     end
     
     name = q + "%"
+    
     @functions = Function.find(:all, :conditions => ['name like ? and version = ?', name, version]).sort{|a,b| Levenshtein.distance(q, a.name) <=> Levenshtein.distance(q, b.name)}.uniq
     
     if @functions.size > 10

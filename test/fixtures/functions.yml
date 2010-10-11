@@ -61,6 +61,7 @@ f should accept number-of-colls arguments.\"
   created_at: 2010-07-14 20:22:06
   updated_at: 2010-07-21 02:31:05
   shortdoc: Returns a lazy sequence consisting of the result of applying f to the
+  version: "1.2.0"
   
 dummy:
     id: 2
