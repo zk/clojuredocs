@@ -4,7 +4,7 @@ class ManagementController < ApplicationController
   require 'chronic'
   
   def index
-    @lib = Library.find(:first, :conditions => {:name => params[:lib]})
+    @lib = Library.find(:first, :conditions => {:url_friendly_name => params[:lib]})
     @recently_updated = find_recently_updated(100, @lib.name)
   end
   

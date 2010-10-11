@@ -2,9 +2,14 @@
 #total_count = Function.find_by_sql(["select count(id) from functions where library = ?", @lib.name])[0]["count(id)"].to_i
 total_count = Function.count(:all, 
 							 :include => [:namespace, {:namespace => :library}],
-							 :conditions => {:namespaces => {:libraries => {:name => @lib.name}}})
+							 :conditions => {:namespaces => {:libraries => {:name => @lib.name, :version => @lib.version}}})
 							
-missing_examples = Function.find_by_sql(["select distinct name, id from functions where (id) not in (select function_id from examples) order by name"])
+missing_examples = Function.find(:all,
+              :select=>"functions.*",
+              :joins=>"LEFT OUTER JOIN examples ON functions.id = examples.function_id LEFT OUTER JOIN namespaces on functions.namespace_id = namespaces.id LEFT OUTER JOIN libraries on namespaces.library_id = libraries.id",
+			  :conditions => ["examples.id is NULL and libraries.name = ? and libraries.version = ?", @lib.name, @lib.version],
+			  :order => :name)
+
 missing_examples_count = missing_examples.size
 functions_with_examples_count = total_count - missing_examples_count
 
