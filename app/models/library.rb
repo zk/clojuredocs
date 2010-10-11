@@ -21,4 +21,11 @@ class Library < ActiveRecord::Base
     Library.find_by_name_and_current(library.name, true)
   end
   
+  def link_opts(use_current_vs_actual_version = true)
+    {:controller => 'main',
+     :action     => 'lib',
+     :lib        => url_friendly_name,
+     :version    => (use_current_vs_actual_version && current ? nil : version)}
+  end
+  
 end

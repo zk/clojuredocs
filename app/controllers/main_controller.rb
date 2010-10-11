@@ -164,13 +164,21 @@ class MainController < ApplicationController
       ns = params[:ns]
       function_url_name = params[:function]
       
-      @function = Function.find(
-        :first,
-        :include => [:namespace, {:namespace => :library}],
-        :conditions => {
-          :namespaces => {:name => ns, :libraries => {:url_friendly_name => lib_url_name}},
-          :url_friendly_name => function_url_name}
-          )
+      if version
+        @function = Function.find(
+          :first,
+          :include => [:namespace, {:namespace => :library}],
+          :conditions => {
+            :namespaces => {:name => ns, :libraries => {:url_friendly_name => lib_url_name, :version => version}},
+            :url_friendly_name => function_url_name})
+      else
+        @function = Function.find(
+          :first,
+          :include => [:namespace, {:namespace => :library}],
+          :conditions => {
+            :namespaces => {:name => ns, :libraries => {:url_friendly_name => lib_url_name, :current => true}},
+            :url_friendly_name => function_url_name})
+      end
           
       if not @function
         logger.error "Couldn't find function id #{params[:id]}"

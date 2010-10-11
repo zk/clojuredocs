@@ -19,4 +19,5 @@ group :test do
   gem "autotest-fsevent", "0.2.3"
   gem "autotest-growl", "0.2.6"
   gem "rcov", "0.9.9", :require => nil
+  gem "ruby-prof", "0.9.2"
 end

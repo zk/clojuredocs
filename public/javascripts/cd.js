@@ -434,12 +434,13 @@ CD.SeeAlsos = function() {
 		initVoteAction(el, "vote_down")
 	}
 	
-	function initAutoComplete(varId, library) {
+	function initAutoComplete(varId, library, version) {
 		$("#var_name_search").autocomplete({
 			source: function(req, add) {
 				params = {
 					term: req.term,
-					library: library
+					library: library,
+					version: version
 				}
 				$.getJSON("/see_also/lookup", params, function(data) {
 					var out = []
@@ -472,8 +473,9 @@ CD.SeeAlsos = function() {
 			
 			var varId = args.varId
 			var library = args.library
+			var version = args.version
 			
-			initAutoComplete(varId, library)
+			initAutoComplete(varId, library, version)
 
 			initItem($(".see_also_item"))
 
@@ -515,6 +517,7 @@ CD.VarPage = function() {
 			var editExampleFormHTML = args.editExampleFormHTML
 			var editCommentFormHTML = args.editCommentFormHTML
 			var library = args.library
+			var version = args.version
 			
 			
 			CD.Examples.init({
@@ -523,7 +526,8 @@ CD.VarPage = function() {
 			
 			CD.SeeAlsos.init({
 				varId: varId,
-				library: library
+				library: library,
+				version: version
 			})
 			
 			

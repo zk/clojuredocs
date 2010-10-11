@@ -2,11 +2,11 @@ class AddLibNsVarRels < ActiveRecord::Migration
   def self.up
     add_column :functions, :namespace_id, :integer
     add_column :namespaces, :library_id, :integer
+    
+    Namespace.reset_column_information
+    Function.reset_column_information
 
-    functions = Function.find(:all)
-    namespaces = Namespace.find(:all)
-
-    functions.each do |f|
+    Function.find(:all).each do |f|
       ns_id = Namespace.find_by_name_and_version(f.ns, f.version).id rescue nil
 
       if not ns_id
@@ -19,16 +19,17 @@ class AddLibNsVarRels < ActiveRecord::Migration
       end
     end
 
-    namespaces.each do |n|
+    Namespace.find(:all).each do |n|
+      
       f = Function.find_by_ns_and_version(n.name, n.version)
       if not f
         f = Function.find_by_ns(n.name)
       end
-
+      
       if f
-        l = Library.find_by_name_and_version(f.library, f.version)
+        l = Library.find_by_name_and_version(f.attributes["library"], n.version)
         if not l
-          l = Library.find_by_name(f.library)
+          l = Library.find_by_name(f.attributes["library"])
         end
 
         if l

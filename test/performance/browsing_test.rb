@@ -6,4 +6,8 @@ class BrowsingTest < ActionController::PerformanceTest
   def test_homepage
     get '/'
   end
+  
+  def test_clojure_lib_page
+    get '/clojure_core'
+  end
 end

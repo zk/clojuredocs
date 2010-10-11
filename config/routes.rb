@@ -81,12 +81,13 @@ ActionController::Routing::Routes.draw do |map|
   
   version_regex = /\d+\.[^\/]*/
   
-  map.connect '/:lib', :controller => 'main', :action => 'lib'
+  
   map.connect '/:lib/:version', :controller => 'main', :action => 'lib', :requirements => {:version => version_regex}
+  
   map.connect '/:lib/:version/:ns', :controller => 'main', :action => 'ns', :requirements => {:version => version_regex}
   map.connect '/:lib/:version/:ns/:function', :controller => 'main', :action => 'function', :requirements => {:version => version_regex}
   
-  map.connect '/:lib', :controller => 'main', :action => 'lib', :version => nil
+  map.connect '/:lib', :controller => 'main', :action => 'lib'
   map.connect '/:lib/:ns', :controller => 'main', :action => 'ns', :version => nil
   map.connect '/:lib/:ns/:function', :controller => 'main', :action => 'function', :version => nil
   

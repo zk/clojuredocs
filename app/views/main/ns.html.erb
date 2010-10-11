@@ -1,5 +1,13 @@
 <% if @ns then content_for :title, " - #{@ns.name}" end %>
 
+<script type="text/javascript" charset="utf-8">
+	$(document).ready(function() {
+		$(".versions_nav").click(function() {
+			$(".versions_nav ul").toggle()
+		})
+	})
+</script>
+
 <div class="grid_3">
 	<%= render :partial => 'lib_nav', :locals => {:lib => @library} %>
 	<%= render :partial => '/lib_namespaces' %>
@@ -12,6 +20,34 @@
 		The latest stable version of <%= @ns.name %> is <%= Library.current_version_of(@library).version %>.
 	</div>
 	<% end %>
+	
+	<div class="versions_nav">
+		<span>
+			<%= @ns.version %> 
+			<% if @ns.library.current && params[:version] %>
+				permalink
+			<% end %>
+			<%= image_tag "arrow_down_16x16.png" %>
+		</span>
+		<ul>
+			
+		<% Namespace.versions_of(@ns).each do |n| %>
+			<% 
+				classes = []
+				if @ns.library.version == n.library.version then classes << "selected" end
+				if n.library.current then classes << "stable" end
+			%>
+			<li>
+				<% if @ns.library.version == n.library.version && n.library.current && !params[:version]%>
+					<%= link_to n.library.version + " permalink", n.link_opts(false), :class => classes.join(' ') %>
+				<% else %>
+					<%= link_to n.library.version, n.link_opts, :class => classes.join(' ') %>
+				<% end %>
+			</li>
+		<% end %>
+		</ul>
+	</div>
+	
 	<% if @ns and @ns.doc != ""%>
 	<div class="doc">
 		<h3>DocString</h3>

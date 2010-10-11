@@ -8,7 +8,7 @@
 	})
 </script>
 	<h3>
-		<span class="ns"><%= link_to @function.ns, :controller => "main", :action => "ns", :lib => @function.library, :ns => @function.ns %></span>/<%= @function.name %>
+		<span class="ns"><%= link_to @function.namespace.name, :controller => "main", :action => "ns", :lib => @function.library, :ns => @function.ns %></span>/<%= @function.name %>
 	</h3>
 	
 	<% if @function.arglists.size > 0 %>

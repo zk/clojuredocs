@@ -15,7 +15,7 @@ class ManagementController < ApplicationController
     high = Chronic.parse(params[:high_date]).utc rescue nil
     
     @results = Example.find(:all, :conditions => ["updated_at > ? and updated_at < ?", low, high], :order => 'updated_at DESC')
-    @results = @results.collect{|e| e.function}.select{|f| f.ns =~ /#{params[:namespaces]}/}
+    @results = @results.collect{|e| e.function}.select{|f| f.namespace.name =~ /#{params[:namespaces]}/}
   end
   
   def function

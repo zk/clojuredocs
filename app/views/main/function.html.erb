@@ -8,6 +8,7 @@ $(document).ready(function() {
 	CD.VarPage.init({
 		varId: <%= @function.id %>,
 		library: "<%= @function.library.name %>",
+		version: "<%= @function.library.version %>",
 		editExampleFormHTML: '<%= (render :partial => '/examples/edit_example_form').gsub("\n", "")%>',
 		editCommentFormHTML: '<%= (render :partial => '/comments/edit_comment_form').gsub("\n", "")%>',
 	})

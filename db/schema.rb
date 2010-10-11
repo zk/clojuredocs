@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101010034343) do
+ActiveRecord::Schema.define(:version => 20101010212830) do
 
   create_table "comments", :force => true do |t|
     t.integer  "commentable_id",                 :default => 0
@@ -49,6 +49,8 @@ ActiveRecord::Schema.define(:version => 20101010034343) do
     t.integer  "user_id"
   end
 
+  add_index "examples", ["function_id"], :name => "function_id_idx"
+
   create_table "function_references", :id => false, :force => true do |t|
     t.integer "from_function_id"
     t.integer "to_function_id"
@@ -70,6 +72,8 @@ ActiveRecord::Schema.define(:version => 20101010034343) do
     t.string   "url_friendly_name"
     t.integer  "namespace_id"
   end
+
+  add_index "functions", ["namespace_id"], :name => "namespace_id_idx"
 
   create_table "libraries", :force => true do |t|
     t.string   "name"
@@ -113,6 +117,8 @@ ActiveRecord::Schema.define(:version => 20101010034343) do
     t.integer  "library_id"
   end
 
+  add_index "namespaces", ["library_id"], :name => "library_id_idx"
+
   create_table "open_id_authentication_associations", :force => true do |t|
     t.integer "issued"
     t.integer "lifetime"
@@ -136,6 +142,9 @@ ActiveRecord::Schema.define(:version => 20101010034343) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "see_alsos", ["from_id"], :name => "from_id_idx"
+  add_index "see_alsos", ["to_id"], :name => "to_id_idx"
 
   create_table "users", :force => true do |t|
     t.string   "login"
