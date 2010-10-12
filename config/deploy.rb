@@ -11,11 +11,11 @@ set :branch, "master"
 set :deploy_to, "/var/www/clojuredocs"
 set :rake, "/opt/ruby-enterprise/bin/rake"
 set :db_user, "root"
-set :db_pass, ""
+set :db_pass, "clojuredocs"
 
-role :web, "173.45.229.12"
-role :app, "173.45.229.12"
-role :db, "173.45.229.12", :primary => true
+role :web, "173.45.232.155"
+role :app, "173.45.232.155"
+role :db, "173.45.232.155", :primary => true
 
 deploy.task :restart, :roles => :app do
   run "touch #{current_path}/tmp/restart.txt"
