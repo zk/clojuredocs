@@ -17,8 +17,6 @@ group :test do
   gem 'shoulda', '2.11.3'
   gem 'flexmock', '0.8.7'
   gem 'ZenTest', '4.4.0'
-  gem 'autotest-fsevent', '0.2.3'
-  gem 'autotest-growl', '0.2.6'
   gem 'rcov', '0.9.9', :require => nil
   gem 'ruby-prof', '0.9.2'
 end
