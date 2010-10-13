@@ -17,8 +17,8 @@
 	<div class="clear"></div>
 	<div class="content">
 	<pre class="brush: clojure"><%= e.body.gsub("<pre>", "").
-									 gsub("</pre>", "") %></pre>
+									 gsub("</pre>", "").gsub("<", "&lt;").gsub(">", "&gt;") %></pre>
 	</div>
-	<div class="hidden plain_content"><%= e.body %></div>
+	<div class="hidden plain_content"><%= e.body.gsub("<", "&lt;").gsub(">", "&gt;") %></div>
 	<div class="clear"></div>
 </div>

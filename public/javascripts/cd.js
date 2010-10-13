@@ -128,7 +128,7 @@ CD.Examples = function() {
 		var textarea = el.find("textarea")
 
 		function updatePreview() {
-			preview.html("<pre class='brush: clojure'>" + textarea.val() + "</pre>")
+			preview.html("<pre class='brush: clojure'>" + textarea.val().replace(/</g, "&lt;").replace(/>/g, "&gt;") + "</pre>")
 			SyntaxHighlighter.highlight(preview)
 		}
 
@@ -157,7 +157,7 @@ CD.Examples = function() {
 
 				example.find(".cancel").click(function(e) {
 					example.slideUp(function() {
-						example.find(".content").html("<pre class='brush: clojure'>" + plain_content + "</pre>")
+						example.find(".content").html("<pre class='brush: clojure'>" + plain_content.replace(/</g, "&lt;").replace(/>/g, "&gt;") + "</pre>")
 						example.find(".edit").css('display', 'inline')
 						example.removeClass("editing")
 						SyntaxHighlighter.highlight(example)
