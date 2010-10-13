@@ -7,7 +7,13 @@
   <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
   <title>The page you were looking for doesn't exist (404)</title>
 	<style type="text/css">
-		body { background-color: #fff; color: #666; text-align: center; font-family: arial, sans-serif; }
+		body { 
+			background-color: #fff;
+			color: #666; 
+			text-align: center; 
+			font-family: 'Century Gothic', Arial, sans-serif;
+		}
+		
 		div.dialog {
 			width: 25em;
 			padding: 0 4em;
@@ -16,15 +22,41 @@
 			border-right-color: #999;
 			border-bottom-color: #999;
 		}
-		h1 { font-size: 100%; color: #f00; line-height: 1.5em; }
+		
+		div.content {
+			position: relative;
+			display: inline;
+		}
+		
+		h1 { 
+			font-size: 50px;
+			line-height: 1.5em; 
+			display: inline;
+		}
+		
+		h2 {
+			position: absolute;
+			background-color: #666;
+			color: white;
+			padding: 3px;
+			padding-left: 4px;
+			padding-right: 4px;
+			right: -57px;
+			top: -28px;
+			font-size: 30px;
+			font-family: arial, sans-serif; 
+		}
 	</style>
 </head>
 
 <body>
-  <!-- This file lives in public/404.html -->
-  <div class="dialog">
-    <h1>The page you were looking for doesn't exist.</h1>
-    <p>You may have mistyped the address or the page may have moved.</p>
-  </div>
+	<br />
+	<br />
+	<br />
+	<br />
+	<div class="content">
+		<h1>ClojureDocs</h1>
+		<h2>404</h2>
+	</div>
 </body>
 </html>
