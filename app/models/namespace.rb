@@ -2,6 +2,16 @@ class Namespace < ActiveRecord::Base
   belongs_to :library
   has_many :functions
   
+  #:nocov:
+  define_index do
+    # fields
+    indexes name
+    indexes libraries.name, :as => :library
+    
+    has library_id
+  end
+  #:nocov:
+  
   def self.versions_of(ns)
     Namespace.find(:all, :include => :library, :conditions => {:name => ns.name, :libraries => {:name => ns.library.name}})
   end

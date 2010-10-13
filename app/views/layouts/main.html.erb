@@ -60,7 +60,7 @@
 
 		var acUrl = "<%= ROOT_URL %>/ac_search";
 		<% if params[:lib] %>
-		acUrl = "<%= ROOT_URL %>/ac_search/<%= CGI::escape(params[:lib]) %>";
+		//acUrl = "<%= ROOT_URL %>/ac_search/<%= CGI::escape(params[:lib]) %>";
 		<% end %>
 		
 		$('#main_search').keydown(function(e) {

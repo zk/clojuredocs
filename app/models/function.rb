@@ -22,14 +22,17 @@ class Function < ActiveRecord::Base
   #:nocov:
   define_index do
     # fields
-    indexes "REPLACE(name, '-', '')", :as => :name
+    #indexes "REPLACE(name, '-', '')", :as => :name
     set_property :enable_star => true
     set_property :min_prefix_len => 1
-    #indexes name
+    indexes name
     indexes doc
-    indexes library
-    indexes ns
+    indexes '(select libraries.name from libraries where libraries.id = (select library_id from namespaces where namespaces.id = functions.namespace_id))', :as => :library
+    indexes '(select namespaces.name from namespaces where namespaces.id = namespace_id)'
+#    indexes namespace
+#    indexes functions(:namespace, :name), :as => :ns
     indexes version
+    
   end
   #:nocov:
   

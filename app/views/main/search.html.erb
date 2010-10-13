@@ -53,9 +53,9 @@ $(document).ready(function() {
 	<% @functions.each do |f| %>
 	<div class="search_result">
 		<h4>
-			<a href="<%= f.href %>"><%= f.excerpts.name %></a>
+			<%= link_to f.name, f.link_opts %>
 			<span class="ns">
-				<%= link_to f.excerpts.ns, :controller => 'main', :action => 'ns', :lib => f.library, :ns => f.ns %>
+				<%= link_to f.namespace.name, :controller => 'main', :action => 'ns', :lib => f.library.url_friendly_name, :ns => f.namespace.name %>
 			</span>
 		</h4>
 		<p class="doc"><%= f.excerpts.doc %></p>

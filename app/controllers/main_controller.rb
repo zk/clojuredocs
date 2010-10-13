@@ -240,6 +240,7 @@ class MainController < ApplicationController
     end
 
     def search_autocomplete
+      
       q = params[:term]
       q = q.gsub("-", "")
       if not q
@@ -253,8 +254,9 @@ class MainController < ApplicationController
       core_current_version = (Library.find_by_name_and_current("Clojure Core", true).version rescue nil || "1.2.0")
       contrib_current_version = (Library.find_by_name_and_current("Clojure Contrib", true).version rescue nil || "1.2.0")
       
+      # @version (\"#{core_current_version}\" | \"#{contrib_current_version}\")
 
-      @functions = Function.search("@name #{q} @library (\"Clojure Core\" | \"Clojure Contrib\") @version (\"#{core_current_version}\" | \"#{contrib_current_version}\")", :field_weights => {
+      @functions = Function.search("@name #{q} @library (\"Clojure Core\" | \"Clojure Contrib\")", :field_weights => {
         :name => 100,
         :library => 1,
         :ns => 1,
@@ -264,7 +266,12 @@ class MainController < ApplicationController
         @functions.delete(nil)
 
         if @functions != nil and @functions.size > 0
-          # sort clojure core & contrib higher than other libs
+          
+          @functions.sort!{|a,b| 
+            Levenshtein.distance(q, a.name) <=> Levenshtein.distance(q, b.name) 
+          }
+          
+          # sort clojure core & contrib higher than other libs          
           @functions.sort!{|a,b|
             aval = 0
             bval = 0
@@ -281,19 +288,23 @@ class MainController < ApplicationController
               bval = 1
             end
 
-            bval <=> aval
+            aval <=> bval
           }
 
-          @functions.sort!{|a,b| 
-            Levenshtein.distance(q, a.name) <=> Levenshtein.distance(q, b.name) 
-          } 
+           
         end
-
+        
+        @exact_matches = Function.find_all_by_name(params[:term])
+        
+        if @exact_matches
+          @functions = (@exact_matches + @functions).uniq
+        end
+        
         if @functions.size > 10
           @functions = @functions[0, 10]
         end
 
-        render :json => @functions.map{|f| {:href => f.href, :ns => f.ns, :name => f.name, :examples => f.examples.size, :shortdoc => f.shortdoc }}
+        render :json => @functions.map{|f| {:href => f.href, :ns => f.namespace.name, :name => f.name, :examples => f.examples.size, :shortdoc => f.shortdoc }}
       end
       
       def examples_style_guide
