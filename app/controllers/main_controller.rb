@@ -6,12 +6,13 @@ class MainController < ApplicationController
 
   def index
 
-    num_recent = 7
+    num_recent = 6
+    num_tc = 24
     @recently_updated = find_recently_updated(7, nil)
     @top_contributors = []
 
-    tc_example_versions = Example.find_by_sql("select count(*), example_versions.user_id from example_versions group by user_id order by count(*) desc")[0, 10]
-    tc_examples = Example.find_by_sql("select count(*), examples.user_id from examples group by user_id order by count(*) desc;")[0, 10]
+    tc_example_versions = Example.find_by_sql("select count(*), example_versions.user_id from example_versions group by user_id order by count(*) desc")[0, num_tc]
+    tc_examples = Example.find_by_sql("select count(*), examples.user_id from examples group by user_id order by count(*) desc;")[0, num_tc]
 
     tc_examples.each do |e|
       count = e["count(*)"]

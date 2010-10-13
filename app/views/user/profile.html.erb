@@ -1,3 +1,4 @@
+<div class="container_16">
 <div class="profile">
 <div class="grid_3">
 	<img class="profile_image" src="<%= grav_url_for(@user.email, 150)%>" />
@@ -19,5 +20,6 @@
 	<% else %>
 		No recent activity for <%= @user.login %>.
 	<% end %>
+</div>
 </div>
 </div>

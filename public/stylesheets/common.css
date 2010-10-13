@@ -1,3 +1,7 @@
+body {
+	/*background-color: #f9f9f9;*/
+}
+
 h1, h2, h3, h4, h5, form, fieldset, ul {
 	padding: 0px;
 	margin: 0px;
@@ -44,6 +48,7 @@ em {
 
 a {
 	color: blue;
+	
 	text-decoration: none;
 }
 
@@ -90,12 +95,19 @@ ul li {
 	color #999;
 }
 
+
 /*** Recently Updated Content ***/
 .recent_comment, .recent_example, .recent_see_also {
 	background-repeat: no-repeat;
-	background-position: 0px -1px;
+	background-position: -2px -3px;
 	padding-left: 22px;
 	margin-bottom: 8px;
+	font-size: 10pt;
+}
+
+.recent_comment .timestamp, .recent_example .timestamp, .recent_see_also .timestamp {
+	font-size: 8pt;
+	color: #888;
 }
 
 .recent_comment {

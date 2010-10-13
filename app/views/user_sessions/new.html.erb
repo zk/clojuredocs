@@ -10,6 +10,7 @@ $(document).ready(function() {
 })
 
 </script>
+<div class="container_16">
 <div class="grid_16">
 	<h2 class="section_header">Sign up or log in using OpenID</h2>
 </div>
@@ -19,7 +20,6 @@ $(document).ready(function() {
 		<a href="https://www.google.com/accounts/o8/id" class="provider" id="provider_google">Google</a>
 		<a href="http://yahoo.com/" class="provider" id="provider_google">Yahoo</a>
 		<a href="http://myopenid.com" class="provider" id="provider_myopenid">myOpenId</a>
-		<a href="http://openid.aol.com" class="provider" id="provider_aol">AOL</a>
 		<h3>Or enter your OpenID url below:</h3>
 		<% form_for :user_session, @user_session do |f| %>
 		<%= f.label :openid_identifier, "OpenID URL"%>
@@ -50,7 +50,7 @@ $(document).ready(function() {
 <div class="grid_6">
 	<div class="why_account">
 		<h4>Why do I need an account?</h4>
-		<p>Most, if not all of the content on ClojureDocs can be accessed without ever logging in to the site. However, if you'd like to add or update comments, examples, and other content feel free to sign up.</p>
+		<p>Most of the content on ClojureDocs can be accessed without ever logging in to the site. However, if you'd like to add or update comments, examples, and other content feel free to sign up.</p>
 	</div>
 	<div class="why_openid">
 		<h4>What's OpenID?</h4>
@@ -63,4 +63,5 @@ $(document).ready(function() {
 		
 		<p>For a good place to find an OpenID provider, visit the <a href="http://openid.net/get-an-openid">OpenID Foundation website</a>.
 	</div>
+</div>
 </div>

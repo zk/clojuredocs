@@ -34,23 +34,24 @@
 	<div class="header_content">
 		<div class="user_area">
 				<div class="grid_16">
+					<span class="user_area_content">
 					<% if current_user_session %>
+					<%= image_tag(grav_url_for(current_user.email, 16), :class => 'user_area_gravatar') %>
 					Logged in as <%= link_to current_user.login, :controller => 'user', :action => 'profile', :login => current_user.login %>
 					|
 					<a href="/logout">logout</a>
 					<% else %>
 					<a href="/login" id="login">login / sign up</a>
 					<% end%>
+					</span>
 				</div>
 			<div class="clear"></div>
 		</div>
-		
-		<div class="grid_8">
-			<% if @library %>
-			<h1><a href="/">ClojureDocs</a><span class="version">(alpha)</span> :: <a class="lib_name" href="/<%= @library.url_friendly_name %>"><%= @library.name %></a></h1>
-			<% else %>
+		<div class="grid_1">
+			<%= image_tag "cd_logo.png", :class => 'cd_logo' %>
+		</div>
+		<div class="grid_7">
 			<h1><a href="/">ClojureDocs</a><span class="version">(alpha)</span></h1>
-			<% end %>
 		</div>
 		<div class="grid_8">
 			<div class="search">

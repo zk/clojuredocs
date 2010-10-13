@@ -1,17 +1,23 @@
 <% content_for :title, " - Community powered Clojure Documentation and Examples" %>
-
-<div class="featured">
-	<div class="grid_8">
-		<div class="grid_8 alpha omega">
+<div class="container_16">
+	<div class="grid_15 prefix_1 suffix_1">
+		<div class="overview">
+		<h2 style="text-align: left">ClojureDocs is a community powered documentation and examples repository for the <a href="http://clojure.org">Clojure programming language</a>.</h2>
+		</div>
+	</div>
+	<div class="grid_16">
+		<div class="grid_7 prefix_1 alpha">
 			<div class="core_libraries">
-				<h2>Core Language</h2>
 				<div class="library">
 					<h3><a href="/clojure_core">Clojure Core</a></h3>
 					<a href="/quickref/Clojure%20Core">Quick Reference</a><br />
 					<a href="http://clojure.org">http://clojure.org</a><br />
 					<p>Clojure is a dynamic programming language that targets the Java Virtual Machine (and the CLR).</p>
 				</div>
-				<br />
+			</div>
+		</div>
+		<div class="grid_7 suffix_1 omega">
+			<div class="core_libraries">
 				<div class="library">
 					<h3><a href="/clojure_contrib">Clojure Contrib</a></h3>
 					<a href="http://richhickey.github.com/clojure-contrib/">http://richhickey.github.com/clojure-contrib/</a>
@@ -20,8 +26,48 @@
 			</div>
 		</div>
 		<div class="clear"></div>
-		<br />
-		<h2>Top Contributors <span class="find_functions_without_examples"><a href="/management/Clojure%20Core">Find vars that need examples.</a></span></h2>
+	</div>
+	<div class="clear"></div>
+	<br />
+	<br />
+</div>
+<div class="other_content">
+<div class="container_16">
+	
+	<br />
+	<br />
+	<div class="grid_9">
+		<div class="welcome_message">
+			<h2>Getting started with ClojureDocs</h2>
+			<p>Finding the right tool for the job can be tough, so we&apos;ve outlined a few ways to go about your search below.</p>
+			<ul>
+				<li>Take a look at the <a href="/quickref/Clojure%20Core">Clojure Core quickref</a>, which displays Clojure vars grouped by category.</li>
+				<li>Browse an alphabetical list of vars defined in <a href="/clojure_core">Clojure Core</a> or <a href="/clojure_contrib">Contrib</a>.</li>
+				<li><a href="/search?q=reduce">Search</a> for something.</li>
+			</ul>
+		</div>
+		
+		<div class="contribute">
+			<h2>Contribute to ClojureDocs</h2>
+			<p>We need your help to make ClojureDocs a great community resource.  Here are a couple of ways you can contribute.</p>
+			<ul>
+				<li>
+					<h3>Give Feedback</h3>
+					<p>Our <a href="http://clojuredocs.uservoice.com">UserVoice Forum</a> allows you to give feedback publicly ('Go to our Feedback Forum') or privately ('Need help? Contact ClojureDocs').</p>
+					<p>We also have a <a href="http://groups.google.com/group/clojuredocsorg">Google Group</a> for announcements and discussions.</p>
+				</li>
+				<li>
+					<h3>Add an Example</h3>
+					<p></p>
+				</li>
+			</ul>
+		<p>The site is currently in alpha and we need your help to make it a great community resource, so please let us know if you've got any feedback on how to make this site better.</p>
+		</div>
+		
+	</div>
+	<div class="grid_6 prefix_1">
+		<div class="top_contributors">
+		<h2>Top Contributors</h2>
 		<ul class="top_contributors">
 		<% @top_contributors.each do |tc| %>
 			<li>
@@ -29,11 +75,35 @@
 			</li>
 		<% end %>
 		</ul>
+		
 		<div class="clear"></div>
-		<br />
+		 <span class="find_functions_without_examples"><a href="/management/Clojure%20Core">Find vars that need examples.</a></span>
+		</div>
+		<%= image_tag "curly_bracket.png", :class => "curly" %>
+		<div class="recently_updated_panel">
 		<h2>Recently Updated <a href="/feed/recent_updates" alt="All recent updates RSS feed"><%= image_tag 'browser-rss.png'%></a></h2>
 		<%= render :partial => '/recently_updated', :locals => {:recently_updated => @recently_updated}%>
+		</div>
 	</div>
+	<div class="grid_8 suffix_1">
+		
+	</div>
+	<div class="grid_1 suffix_1">
+		<h2 style="font-size: 160px; line-height: 180px">}</h2>
+	</div>
+	
+	<div class="grid_7">
+		<div class="feedback_callout">
+		<h2>Have Feedback?</h2>
+		<ul>
+			<li>Use the feedback tab at the right side of the page.</li>
+			<li>Google Group</li>
+		</ul>
+		<p>There are a couple ways to contact us: The quickest and easiest is to use the 'Feedback' tab on the right side of any ClojureDocs page.  It's linked to our <a href="http://clojuredocs.uservoice.com">UserVoice Forum</a>, and allows you to give feedback publicly ('Go to our Feedback Forum') or privately ('Need help? Contact ClojureDocs').
+		<p>We also have a <a href="http://groups.google.com/group/clojuredocsorg">Google Group</a> for announcements and discussions.</p>
+		</div>
+	</div>
+	
 	<div class="grid_8">
 		<div class="news">
 		<h2>News</h2>
@@ -42,13 +112,7 @@
 			<p>Also, we&#39;ve put together an <a href="/examples_style_guide">examples style guide</a>. Please take a look before adding new examples, as following these conventions will help to keep formatting uniform across examples.</p>
 		</div>
 		</div>
-		<div class="welcome_message">
-		<h2>New to ClojureDocs?</h2>
-		<p>ClojureDocs is a community powered documentation and examples repository for the <a href="http://clojure.org">Clojure programming language</a>.</p>
-		<p>The site is currently in alpha and we need your help to make it a great community resource, so please let us know if you've got any feedback on how to make this site better.</p>
-		<p>There are a couple ways to contact us: The quickest and easiest is to use the 'Feedback' tab on the right side of any ClojureDocs page.  It's linked to our <a href="http://clojuredocs.uservoice.com">UserVoice Forum</a>, and allows you to give feedback publicly ('Go to our Feedback Forum') or privately ('Need help? Contact ClojureDocs').
-		<p>We also have a <a href="http://groups.google.com/group/clojuredocsorg">Google Group</a> for announcements and discussions.</p>
-		</div>
+		
 		<br />
 		<h2>Other Libs</h2>
 				<div class="grid_4 alpha">
@@ -122,7 +186,7 @@
 				</div>
 		
 	</div>
-	<div class="clear"></div>
-</div>
 
 <div class="clear"></div>
+</div>
+</div>

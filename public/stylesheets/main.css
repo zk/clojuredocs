@@ -10,41 +10,76 @@
 
 .header {
 	padding-top: 3px;
+	padding-bottom: 3px;
 	top: 0px;
 	left: 0px;
 	z-index: 5000;
 	height: 60px;
 	width: 100%;
-	margin-bottom: 10px;
-	color: white;
-	background-color: #444;
-	border-bottom: solid orange 2px;
+	margin-bottom: 20px;
+	border-bottom: solid #ccc 1px;
+	background-color: #f8f8f8;
 }
 
 .header_content {
 	padding-bottom: 5px;
+
 }
 
 .header a {
-	color: #fff;
+	color: black;
 }
 
 .header h1 a {
-	color: #fff;
 }
 
 .header h1 a:hover {
 	text-decoration: none;
 }
 
+.header .cd_logo {
+	margin-top: 3px;
+	margin-left: 6px;
+}
+
 .user_area {
 	margin: 0px;
 	padding: 0px;
 	text-align: right;
-	color: #ddd;
+	color: #666666;
+}
+
+.user_area_content {
+	border-left: solid #ccc 1px;
+	border-right: solid #ccc 1px;
+	border-bottom: solid #ccc 1px;
+	padding: 5px;
+	-moz-border-radius: 0px 12px;
+	-webkit-border-bottom-left-radius: 3px;
+	-webkit-border-bottom-right-radius: 3px;		
+	
+}
+
+.user_area_gravatar {
+	margin-bottom: -3px;
 }
 
 .user_area a {
+	color: blue;
+}
+
+.user_area a:visited {
+	color: blue;
+}
+
+.other_content {
+	background-color: #f8f8f8;
+	border-top: solid #ccc 1px;
+	border-bottom: solid #ccc 1px;
+}
+
+.overview {
+	margin-bottom: 20px;
 }
 
 .example .content {
@@ -145,6 +180,7 @@
 .search .submit_image {
 	margin-bottom: -4px;
 	border: none;
+	display: none;
 }
 
 .search_results .match {
@@ -526,16 +562,65 @@ fieldset {
 .core_libraries {
 	font-size: 10pt;
 	background-color: #fafafa;
-	padding: 10px;
-	border: solid #f3f3f3 1px;
+	padding: 14px;
+	border: solid #ddd 1px;
+	-webkit-box-shadow: inset 0px 0px 7px #ccc; 
+	-moz-box-shadow: inset 0px 0px 7px #ccc; 
+	border-radius: 12px;
+	-moz-border-radius: 12px;
+	-webkit-border-radius: 12px;	
 }
 
-.welcome_message {
-	margin-top: 9px;
+.recently_updated_panel, div.top_contributors {
+	border: solid #ddd 1px;
+	padding: 20px;
+	padding-left: 35px;
+	background-color: #fafafa;
 }
 
-.welcome_message p {
+.recently_updated_panel h2 {
 	margin-bottom: 10px;
+}
+
+.curly {
+	margin-left: 40px;
+}
+
+
+.welcome_message, .feedback_callout {
+	margin-bottom: 30px;
+}
+
+.welcome_message h2 {
+/*	background-color: #62A632;*/
+/*	background-color: #00D8FF;*/
+/*	color: #62A632;*/
+	margin-bottom: 10px;
+}
+
+.welcome_message ul, .contribute ul {
+	font-size: 12pt;
+	margin-bottom: 20px;
+}
+
+.welcome_message p, .contribute p {
+	font-size: 11pt;
+	margin-bottom: 10px;
+}
+
+.welcome_message ul li {
+	list-style-type: circle;
+	margin-left: 30px;
+	margin-bottom: 10px;
+}
+
+.contribute ul li {
+	margin-left: 30px;
+	margin-bottom: 10px;
+}
+
+.contribute ul li h3 {
+	font-weight: normal;
 }
 
 .formError {
