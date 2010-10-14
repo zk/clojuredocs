@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101014192108) do
+ActiveRecord::Schema.define(:version => 20101014205638) do
 
   create_table "comments", :force => true do |t|
     t.integer  "commentable_id",                 :default => 0
@@ -51,6 +51,43 @@ ActiveRecord::Schema.define(:version => 20101014192108) do
 
   add_index "examples", ["function_id"], :name => "function_id_idx"
 
+  create_table "flat_comments_view", :id => false, :force => true do |t|
+    t.integer  "id",                             :default => 0,  :null => false
+    t.integer  "commentable_id",                 :default => 0
+    t.string   "commentable_type", :limit => 15, :default => ""
+    t.string   "title",                          :default => ""
+    t.text     "body"
+    t.string   "subject",                        :default => ""
+    t.integer  "user_id",                        :default => 0,  :null => false
+    t.integer  "parent_id"
+    t.integer  "lft"
+    t.integer  "rgt"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "library"
+    t.string   "version"
+    t.string   "ns"
+    t.string   "function"
+    t.integer  "library_id",                     :default => 0
+    t.integer  "namespace_id",                   :default => 0
+  end
+
+  create_table "flat_examples_view", :id => false, :force => true do |t|
+    t.integer  "id",           :default => 0, :null => false
+    t.text     "body"
+    t.integer  "function_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "version"
+    t.integer  "user_id"
+    t.string   "library"
+    t.string   "lib_version"
+    t.string   "ns"
+    t.string   "function"
+    t.integer  "library_id",   :default => 0
+    t.integer  "namespace_id", :default => 0
+  end
+
   create_table "flat_functions_view", :id => false, :force => true do |t|
     t.integer  "id",                              :default => 0, :null => false
     t.string   "name"
@@ -70,6 +107,22 @@ ActiveRecord::Schema.define(:version => 20101014192108) do
     t.string   "library"
     t.string   "ns"
     t.integer  "library_id",                      :default => 0
+  end
+
+  create_table "flat_see_alsos_view", :id => false, :force => true do |t|
+    t.integer  "id",           :default => 0, :null => false
+    t.integer  "from_id"
+    t.integer  "to_id"
+    t.integer  "user_id"
+    t.integer  "weight",       :default => 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "library"
+    t.string   "version"
+    t.string   "ns"
+    t.string   "function"
+    t.integer  "library_id",   :default => 0
+    t.integer  "namespace_id", :default => 0
   end
 
   create_table "function_references", :id => false, :force => true do |t|
