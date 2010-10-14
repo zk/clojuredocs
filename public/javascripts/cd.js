@@ -128,8 +128,10 @@ CD.Examples = function() {
 		var textarea = el.find("textarea")
 
 		function updatePreview() {
-			preview.html("<pre class='brush: clojure'>" + textarea.val().replace(/</g, "&lt;").replace(/>/g, "&gt;") + "</pre>")
-			SyntaxHighlighter.highlight(preview)
+			if(textarea.val()) {
+				preview.html("<pre class='brush: clojure'>" + textarea.val().replace(/</g, "&lt;").replace(/>/g, "&gt;") + "</pre>")
+				SyntaxHighlighter.highlight(preview)
+			}
 		}
 
 		textarea.keyup(function() {

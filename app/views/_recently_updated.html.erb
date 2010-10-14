@@ -40,12 +40,15 @@ recently_updated.each do |u|
 	
 		<% func = u.from_function %>
 		<div class="recent_see_also">
-			<span class="user">
-				<%= link_to u.user.login, :controller => 'user', :action => 'profile', :login => u.user.login %>
-			</span>
-			<%= (u.created_at == u.updated_at) ? "added a see also to" : "updated a see also on" %> 
+			on
 			<a href="<%= func.href %>"><span class="ns"><%= func.namespace.name %>/</span><span class="name"><%= func.name %></span></a>
-			<%= time_ago_or_time_stamp(u.updated_at)%>
+			<div class="timestamp">
+				by
+				<span class="user">
+					<%= link_to u.user.login, :controller => 'user', :action => 'profile', :login => u.user.login %>
+				</span>
+				<%= time_ago_or_time_stamp(u.updated_at)%>
+			</div>
 		</div>
 	<% end %>
 <% end %>

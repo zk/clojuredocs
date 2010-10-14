@@ -54,10 +54,12 @@
 	border-right: solid #ccc 1px;
 	border-bottom: solid #ccc 1px;
 	padding: 5px;
-	-moz-border-radius: 0px 12px;
+	border-bottom-left-radius: 3px;
+	border-bottom-right-radius: 3px;
+	-moz-border-radius-bottomleft: 3px;
+	-moz-border-radius-bottomright: 3px;
 	-webkit-border-bottom-left-radius: 3px;
 	-webkit-border-bottom-right-radius: 3px;		
-	
 }
 
 .user_area_gravatar {
@@ -70,6 +72,10 @@
 
 .user_area a:visited {
 	color: blue;
+}
+
+#main_search {
+	padding-left: 3px;
 }
 
 .other_content {
