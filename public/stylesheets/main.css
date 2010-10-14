@@ -566,6 +566,7 @@ fieldset {
 }
 
 .core_libraries {
+	height: 108px;
 	font-size: 10pt;
 	background-color: #fafafa;
 	padding: 14px;
@@ -575,6 +576,11 @@ fieldset {
 	border-radius: 12px;
 	-moz-border-radius: 12px;
 	-webkit-border-radius: 12px;	
+}
+
+.core_libraries h4 {
+	font-family: arial; 
+	font-size: 12pt
 }
 
 .recently_updated_panel, div.top_contributors {
