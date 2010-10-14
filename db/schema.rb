@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101011035100) do
+ActiveRecord::Schema.define(:version => 20101014192108) do
 
   create_table "comments", :force => true do |t|
     t.integer  "commentable_id",                 :default => 0
@@ -50,6 +50,27 @@ ActiveRecord::Schema.define(:version => 20101011035100) do
   end
 
   add_index "examples", ["function_id"], :name => "function_id_idx"
+
+  create_table "flat_functions_view", :id => false, :force => true do |t|
+    t.integer  "id",                              :default => 0, :null => false
+    t.string   "name"
+    t.string   "file"
+    t.string   "line"
+    t.string   "arglists_comp"
+    t.string   "added"
+    t.text     "doc"
+    t.text     "source"
+    t.integer  "weight",                          :default => 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "shortdoc",          :limit => 70
+    t.string   "version"
+    t.string   "url_friendly_name"
+    t.integer  "namespace_id"
+    t.string   "library"
+    t.string   "ns"
+    t.integer  "library_id",                      :default => 0
+  end
 
   create_table "function_references", :id => false, :force => true do |t|
     t.integer "from_function_id"
