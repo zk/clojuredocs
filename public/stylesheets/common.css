@@ -120,6 +120,7 @@ ul li {
 
 .recent_see_also {
 	background-image: url('/images/file-go.png');
+	background-position: -2px -1px;
 }
 
 .copyright_license, .examples_license {
