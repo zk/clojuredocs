@@ -608,19 +608,47 @@ fieldset {
 	margin-bottom: 10px;
 }
 
-.welcome_message ul li {
-	list-style-type: circle;
-	margin-left: 30px;
+.welcome_message ul li, .contribute ul li {
+	padding-left: 30px;
 	margin-bottom: 10px;
 }
 
-.contribute ul li {
-	margin-left: 30px;
-	margin-bottom: 20px;
+.wm_quickref, .wm_alpha, .wm_search, .contribute .feedback, .contribute .add_example {
+	background-repeat: no-repeat;
+	background-position: 4px 4px;
+}
+
+.wm_quickref {
+	background-image: url('/images/map_pin_stroke_16x16.png');
+	background-position: 6px 4px;
+}
+
+.wm_alpha {
+	background-image: url('/images/book_alt_16x16.png');
+}
+
+.wm_search {
+	background-image: url('/images/magnifying_glass_alt_16x16.png');
+}
+
+.contribute .feedback {
+	background-image: url('/images/chat_alt_stroke_16x16.png');
+	background-position: 4px 7px;
+}
+
+.contribute .add_example {
+	background-image: url('/images/read_more_16x16.png');
+	background-position: 5px 7px;
 }
 
 .contribute ul li h3 {
 	font-weight: normal;
+}
+
+p.callout {
+	margin-bottom: 10px;
+	background-color: #ffffee;
+	padding: 10px;
 }
 
 .formError {

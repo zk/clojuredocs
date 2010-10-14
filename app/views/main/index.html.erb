@@ -2,7 +2,7 @@
 <div class="container_16">
 	<div class="grid_15 prefix_1 suffix_1">
 		<div class="overview">
-		<h2 style="text-align: left">ClojureDocs is a community powered documentation and examples repository for the <a href="http://clojure.org">Clojure programming language</a>.</h2>
+			<h2 style="text-align: left">ClojureDocs is a community powered documentation and examples repository for the <a href="http://clojure.org">Clojure programming language</a>.</h2>
 		</div>
 	</div>
 	<div class="grid_16">
@@ -32,161 +32,138 @@
 	<br />
 </div>
 <div class="other_content">
-<div class="container_16">
-	
-	<br />
-	<br />
-	<div class="grid_9">
-		<div class="welcome_message">
-			<h2>Getting started with ClojureDocs</h2>
-			<p>Finding the right tool for the job can be tough, so we&apos;ve outlined a few ways to go about your search below.</p>
-			<ul>
-				<li>Take a look at the <a href="/quickref/Clojure%20Core">Clojure Core quickref</a>, which displays Clojure vars grouped by category.</li>
-				<li>Browse an alphabetical list of vars defined in <a href="/clojure_core">Clojure Core</a> or <a href="/clojure_contrib">Contrib</a>.</li>
-				<li><a href="/search?q=reduce">Search</a> for something.</li>
-			</ul>
-		</div>
-		
-		<div class="contribute">
-			<h2>Contribute to ClojureDocs</h2>
-			<p>We need your help to make ClojureDocs a great community resource.  Here are a couple of ways you can contribute.</p>
-			<ul>
-				<li>
-					<h3>Give Feedback</h3>
-					<p>Our <a href="http://clojuredocs.uservoice.com">UserVoice Forum</a> allows you to give feedback publicly ('Go to our Feedback Forum') or privately ('Need help? Contact ClojureDocs').</p>
-					<p>We also have a <a href="http://groups.google.com/group/clojuredocsorg">Google Group</a> for announcements and discussions.</p>
-				</li>
-				<li>
-					<h3>Add an Example</h3>
-					<p></p>
-				</li>
-			</ul>
-		<p>The site is currently in alpha and we need your help to make it a great community resource, so please let us know if you've got any feedback on how to make this site better.</p>
-		</div>
-		
-	</div>
-	<div class="grid_6 prefix_1">
-		<div class="top_contributors">
-		<h2>Top Contributors</h2>
-		<ul class="top_contributors">
-		<% @top_contributors.each do |tc| %>
-			<li>
-				<%= link_to image_tag(grav_url_for(tc[:email]), :alt => tc[:author]), :controller => 'user', :action => 'profile', :login => tc[:author] %>
-			</li>
-		<% end %>
-		</ul>
-		
-		<div class="clear"></div>
-		 <span class="find_functions_without_examples"><a href="/management/clojure_core">Find vars that need examples.</a></span>
-		</div>
-		<%= image_tag "curly_bracket.png", :class => "curly" %>
-		<div class="recently_updated_panel">
-		<h2>Recently Updated <a href="/feed/recent_updates" alt="All recent updates RSS feed"><%= image_tag 'browser-rss.png'%></a></h2>
-		<%= render :partial => '/recently_updated', :locals => {:recently_updated => @recently_updated}%>
-		</div>
-	</div>
-	<div class="grid_8 suffix_1">
-		
-	</div>
-	<div class="grid_1 suffix_1">
-		<h2 style="font-size: 160px; line-height: 180px">}</h2>
-	</div>
-	
-	<div class="grid_7">
-		<div class="feedback_callout">
-		<h2>Have Feedback?</h2>
-		<ul>
-			<li>Use the feedback tab at the right side of the page.</li>
-			<li>Google Group</li>
-		</ul>
-		<p>There are a couple ways to contact us: The quickest and easiest is to use the 'Feedback' tab on the right side of any ClojureDocs page.  It's linked to our <a href="http://clojuredocs.uservoice.com">UserVoice Forum</a>, and allows you to give feedback publicly ('Go to our Feedback Forum') or privately ('Need help? Contact ClojureDocs').
-		<p>We also have a <a href="http://groups.google.com/group/clojuredocsorg">Google Group</a> for announcements and discussions.</p>
-		</div>
-	</div>
-	
-	<div class="grid_8">
-		<div class="news">
-		<h2>News</h2>
-		<div class="highlight">
-			<p>As of Sept 25th, 2010 examples content has switched from allowing formatted content (through markdown) to code-only content. This was done to simplify tool integration through the API, automatic verification, and reference analysis.</p>
-			<p>Also, we&#39;ve put together an <a href="/examples_style_guide">examples style guide</a>. Please take a look before adding new examples, as following these conventions will help to keep formatting uniform across examples.</p>
-		</div>
-		</div>
-		
+	<div class="container_16">
+
 		<br />
-		<h2>Other Libs</h2>
-				<div class="grid_4 alpha">
-					<h4>Meta</h4>
-					<div class="library">
-						<h5><a href="/leiningen">Leiningen</a></h5>
-						<a href="http://github.com/technomancy/leiningen">http://github.com/technomancy/leiningen</a>
-					</div>
-					<div class="library">
-						<h5><a href="/swank-clojure">Swank-Clojure</a></h5>
-						<a href="http://github.com/jochu/swank-clojure">http://github.com/jochu/swank-clojure</a>
-					</div>
-					<!-- <div class="library">
-						<h5><a href="/clj-sandbox">clj-sandbox</a></h5>
-						<a href="http://github.com/Licenser/clj-sandbox">http://github.com/Licenser/clj-sandbox</a>
-					</div> -->
-				</div>
+		<br />
+		<div class="grid_9">
+			<div class="welcome_message">
+				<h2>Getting started with ClojureDocs</h2>
+				<p>Finding the right tool for the job can be tough, so we&apos;ve outlined a few ways to go about your search below.</p>
+				<ul>
+					<li class="wm_quickref">Take a look at the <a href="/quickref/Clojure%20Core">Clojure Core quickref</a>, which displays Clojure vars grouped by category.</li>
+					<li class="wm_alpha">Browse an alphabetical list of vars defined in <a href="/clojure_core">Clojure Core</a> or <a href="/clojure_contrib">Contrib</a>.</li>
+					<li class="wm_search"><a href="/search?q=reduce">Search</a> for something.</li>
+				</ul>
+			</div>
 
-				<div class="grid_4 omega">
-					<h4>Sys Administration</h4>
-					<div class="library">
-						<h5><a href="/clj-ssh">clj-ssh</a></h5>
-						<a href="http://github.com/hugoduncan/clj-ssh">http://github.com/hugoduncan/clj-ssh</a>
-					</div>
-					<div class="library">
-						<h5><a href="/pallet">Pallet</a></h5>
-						<a href="http://github.com/hugoduncan/pallet">http://github.com/hugoduncan/pallet</a>
-					</div>
+			<div class="contribute">
+				<h2>Contribute to ClojureDocs</h2>
+				<p>We need your help to make ClojureDocs a great community resource.  Here are a couple of ways you can contribute.</p>
+				<ul>
+					<li class="feedback">
+						<h3>Give Feedback</h3>
+						<p>Our <a href="http://clojuredocs.uservoice.com">UserVoice Forum</a> allows you to give feedback publicly ('Go to our Feedback Forum') or privately ('Need help? Contact ClojureDocs').</p>
+						<p>We also have a <a href="http://groups.google.com/group/clojuredocsorg">Google Group</a> for announcements and discussions.</p>
+					</li>
+					<li class="add_example">
+						<h3>Add an Example</h3>
+						<p>Please read the <a href="/examples_style_guide">examples style guide</a>, and then take a look at the <a href="/management/clojure_core">list of example-needing vars</a>.</p>
+						<p>In addition to examples, you can also add &apos;see also&apos; references between vars.</p>
+					</li>
+				</ul>
+			</div>
+
+			<h2>3rd Party Libraries</h2>
+			<p class="callout">The following libraries were imported as part of alpha work done to explore 3rd party library support for ClojureDocs, and as a result may not be up to date.  For more information on where 3rd party library support fits in to the overall ClojureDocs plan, please see <a href="http://groups.google.com/group/clojuredocsorg/browse_thread/thread/af7edbf85a6607c4">this form post</a>.</p>
+			<div class="grid_4 alpha">
+				<h4>Meta</h4>
+				<div class="library">
+					<h5><a href="/leiningen">Leiningen</a></h5>
+					<a href="http://github.com/technomancy/leiningen">http://github.com/technomancy/leiningen</a>
 				</div>
+				<div class="library">
+					<h5><a href="/swank-clojure">Swank-Clojure</a></h5>
+					<a href="http://github.com/jochu/swank-clojure">http://github.com/jochu/swank-clojure</a>
+				</div>
+				<!-- <div class="library">
+				<h5><a href="/clj-sandbox">clj-sandbox</a></h5>
+				<a href="http://github.com/Licenser/clj-sandbox">http://github.com/Licenser/clj-sandbox</a>
+				</div> -->
+			</div>
+
+			<div class="grid_4 omega">
+				<h4>Sys Administration</h4>
+				<div class="library">
+					<h5><a href="/clj-ssh">clj-ssh</a></h5>
+					<a href="http://github.com/hugoduncan/clj-ssh">http://github.com/hugoduncan/clj-ssh</a>
+				</div>
+				<div class="library">
+					<h5><a href="/pallet">Pallet</a></h5>
+					<a href="http://github.com/hugoduncan/pallet">http://github.com/hugoduncan/pallet</a>
+				</div>
+			</div>
+			<div class="clear"></div>
+			<div class="grid_4 alpha">
+				<h4>Web</h4>
+				<div class="library">
+					<h5><a href="/ring">Ring</a></h5>
+					<a href="http://github.com/mmcgrana/ring">http://github.com/mmcgrana/ring</a>
+				</div>
+				<div class="library">
+					<h5><a href="/enlive">Enlive</a></h5>
+					<a href="http://github.com/cgrand/enlive">http://github.com/cgrand/enlive</a>
+				</div>
+			</div>
+			<div class="grid_4 omega">
+				<h4>Testing</h4>
+				<div class="library">
+					<h5><a href="/circumspec">Circumspec</a></h5>
+					<a href="http://github.com/stuarthalloway/circumspec">http://github.com/stuarthalloway/cir...</a>
+				</div>
+				<div class="library">
+					<h5><a href="/midje">Midje</a></h5>
+					<a href="http://github.com/marick/Midje#readme">http:http://github.com/marick/Midje</a>
+				</div>
+			</div>
+			<div class="grid_4 alpha">
+				<h4>Data Analysis</h4>
+				<div class="library">
+					<h5><a href="/incanter">Incanter</a></h5>
+					<a href="http://incanter.org">http://incanter.org</a>
+				</div>
+			</div>
+			<div class="grid_4 omega">
+				<h4>Development Methodologies</h4>
+				<div class="library">
+					<h5><a href="/trammel">trammel</a></h5>
+					<a href="http://github.com/fogus/trammel">http://github.com/fogus/trammel</a>
+				</div>
+			</div>
+			<div class="grid_8 alpha omega">
+				<div style="text-align: right">
+					<a href="/libs">All Libraries &gt;&gt;</a>
+				</div>
+			</div>
+
+		</div>
+		<div class="grid_6 prefix_1">
+			<div class="top_contributors">
+				<h2>Top Contributors</h2>
+				<ul class="top_contributors">
+					<% @top_contributors.each do |tc| %>
+					<li>
+						<%= link_to image_tag(grav_url_for(tc[:email]), :alt => tc[:author]), :controller => 'user', :action => 'profile', :login => tc[:author] %>
+					</li>
+					<% end %>
+				</ul>
+
 				<div class="clear"></div>
-				<div class="grid_4 alpha">
-					<h4>Web</h4>
-					<div class="library">
-						<h5><a href="/ring">Ring</a></h5>
-						<a href="http://github.com/mmcgrana/ring">http://github.com/mmcgrana/ring</a>
-					</div>
-					<div class="library">
-						<h5><a href="/enlive">Enlive</a></h5>
-						<a href="http://github.com/cgrand/enlive">http://github.com/cgrand/enlive</a>
-					</div>
-				</div>
-				<div class="grid_4 omega">
-					<h4>Testing</h4>
-					<div class="library">
-						<h5><a href="/circumspec">Circumspec</a></h5>
-						<a href="http://github.com/stuarthalloway/circumspec">http://github.com/stuarthalloway/cir...</a>
-					</div>
-					<div class="library">
-						<h5><a href="/midje">Midje</a></h5>
-						<a href="http://github.com/marick/Midje#readme">http:http://github.com/marick/Midje</a>
-					</div>
-				</div>
-				<div class="grid_4 alpha">
-					<h4>Data Analysis</h4>
-					<div class="library">
-						<h5><a href="/incanter">Incanter</a></h5>
-						<a href="http://incanter.org">http://incanter.org</a>
-					</div>
-				</div>
-				<div class="grid_4 omega">
-					<h4>Development Methodologies</h4>
-					<div class="library">
-						<h5><a href="/trammel">trammel</a></h5>
-						<a href="http://github.com/fogus/trammel">http://github.com/fogus/trammel</a>
-					</div>
-				</div>
-				<div class="grid_8 alpha omega">
-					<div style="text-align: right">
-						<a href="/libs">All Libraries &gt;&gt;</a>
-					</div>
-				</div>
-		
-	</div>
+				<span class="find_functions_without_examples"><a href="/management/clojure_core">Find vars that need examples.</a></span>
+			</div>
+			<%= image_tag "curly_bracket.png", :class => "curly" %>
+			<div class="recently_updated_panel">
+				<h2>Recently Updated <a href="/feed/recent_updates" alt="All recent updates RSS feed"><%= image_tag 'browser-rss.png'%></a></h2>
+				<%= render :partial => '/recently_updated', :locals => {:recently_updated => @recently_updated}%>
+			</div>
+		</div>
 
-<div class="clear"></div>
-</div>
+		<div class="grid_8">
+
+
+
+		</div>
+
+		<div class="clear"></div>
+	</div>
 </div>

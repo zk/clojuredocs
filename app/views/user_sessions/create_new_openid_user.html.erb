@@ -1,3 +1,5 @@
+<div class="container_16">
+	<div class="grid_16">
 <h2>Create a new ClojureDocs user</h2>
 <p>We couldn't find a ClojureDocs account based on your OpenID provider url you entered (<%= params[:openid_identifier]%>).  If this is your first time logging into the site, please enter a nickname and email to use when adding / updating content on ClojureDocs below:</p>
 
@@ -11,3 +13,5 @@
 	<%= f.submit 'Create Account'%>
 	<%= f.hidden_field :openid_identifier, :value => params[:openid_identifier] %>
 <% end %>
+	</div>
+</div>
