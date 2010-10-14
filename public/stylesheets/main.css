@@ -599,15 +599,15 @@ fieldset {
 }
 
 
-.welcome_message, .feedback_callout {
-	margin-bottom: 30px;
+.welcome_message, .contribute {
+	margin-bottom: 40px;
 }
 
-.welcome_message h2 {
+.welcome_message h2, .contribute h2 {
 /*	background-color: #62A632;*/
 /*	background-color: #00D8FF;*/
 /*	color: #62A632;*/
-	margin-bottom: 10px;
+	margin-bottom: 6px;
 }
 
 .welcome_message ul, .contribute ul {
