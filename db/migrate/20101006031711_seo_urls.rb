@@ -1,4 +1,18 @@
 class SeoUrls < ActiveRecord::Migration
+
+  def self.make_url_friendly(name)
+    out = name.gsub("?","_q").
+      gsub("/","_").
+      gsub(" ","_").
+      downcase
+
+    if name =~ /^\.+$/
+      out = out.gsub(".", "_dot")
+    end
+
+    out
+  end
+  
   def self.up
     add_column :libraries, :url_friendly_name, :string
     add_column :functions, :url_friendly_name, :string
@@ -9,12 +23,12 @@ class SeoUrls < ActiveRecord::Migration
     Function.reset_column_information
     
     Library.find(:all).each do |l|
-      l.url_friendly_name = l.name.gsub("?","_q").gsub("/","_").gsub(" ","_").downcase
+      l.url_friendly_name = make_url_friendly(l.name)
       l.save
     end
     
     Function.find(:all).each do |f|
-      f.url_friendly_name = f.name.gsub("?","_q").gsub("/","_").gsub(" ","_").downcase
+      f.url_friendly_name = make_url_friendly(f.name)
       f.save
     end
     
