@@ -603,7 +603,7 @@ fieldset {
 	margin-bottom: 40px;
 }
 
-.welcome_message h2, .contribute h2 {
+.welcome_message h2, .contribute h2, .third_party_libs h2 {
 /*	background-color: #62A632;*/
 /*	background-color: #00D8FF;*/
 /*	color: #62A632;*/
