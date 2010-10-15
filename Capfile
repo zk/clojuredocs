@@ -42,3 +42,22 @@ task :update_sphinx, :role => [:web, :app] do
   run("killall searchd; true")
   run("cd #{deploy_to}/current && #{rake} thinking_sphinx:rebuild RAILS_ENV=production")
 end
+
+require 'yaml'
+
+desc "Backup the remote production database"
+task :backup, :roles => :db, :only => { :primary => true } do
+  filename = "#{application.downcase}.dump.#{Time.now.to_i}.sql.bz2"
+  file = "/tmp/#{filename}"
+  on_rollback { run "rm -f #{file}" }
+  db = YAML::load(ERB.new(IO.read(File.join(File.dirname(__FILE__), './config/database.yml'))).result)['production']
+  run "mysqldump -u #{db['username']} #{db['database']} | bzip2 -c > #{file}"  do |ch, stream, data|
+    puts data
+  end
+  `mkdir -p ~/.#{application.downcase}_db_backups`
+  get file, File.expand_path("~/.#{application.downcase}_db_backups/#{filename}")
+  run "rm -f #{file}"
+end
+
+desc "Backup the database before running migrations"
+before 'deploy:migrate', :backup
