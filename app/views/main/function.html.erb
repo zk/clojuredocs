@@ -107,7 +107,7 @@ $(document).ready(function() {
 	<% if @function.doc %>
 	<div class="doc">
 		<a class="internal_nav scroll" href="#doc" name="doc"></a>
-		<div class="content"><%= @function.doc.gsub("\n", "<br />") if @function.doc %></div>
+		<div class="content"><%= @function.doc.gsub("\n", "<br />").gsub(/http:\/\/[a-zA-Z0-9-.\/?%&=:@;_#]*/){|s| '<a href="' + s + '">' + s + '</a>' } if @function.doc %></div>
 		<div class="copyright_license">
 			<%= @library.copyright %>
 			

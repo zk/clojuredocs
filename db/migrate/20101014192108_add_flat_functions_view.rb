@@ -1,5 +1,9 @@
 class AddFlatFunctionsView < ActiveRecord::Migration
   def self.up
+
+    connection.execute "DROP VIEW IF EXISTS flat_functions_view;"
+
+    
     #flat_function_view is used by the api to simplify querying
     puts "Adding flat_function_view view."
     connection.execute <<-EOC
