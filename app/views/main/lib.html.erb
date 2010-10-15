@@ -62,7 +62,7 @@
 		<% end %>
 	</div>
 	<div class="functions_list">
-		<% group_into_ns(@library.namespaces.reduce([]) {|coll, ns| coll + ns.functions}).each do |g| %>
+		<% functions_group_into_alpha(@library.namespaces.reduce([]) {|coll, ns| coll + ns.functions}).each do |g| %>
 			<h5><%= g[0] %></h5>
 			<div class="functions">
 			<% g[1].each do |f| %>

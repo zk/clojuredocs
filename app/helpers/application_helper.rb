@@ -24,7 +24,7 @@ module ApplicationHelper
   end
   
   def functions_group_into_alpha(functions)
-    functions.group_by do |f|
+    functions.sort{|a,b| a.name <=> b.name}.group_by do |f|
       name = f.name
       first_char = name[0,1].downcase
       if first_char == "*"
@@ -34,7 +34,7 @@ module ApplicationHelper
       else
         first_char
       end
-    end
+    end.sort{|a,b| a[0] <=> b[0]}
   end
   
   def time_ago_or_time_stamp(from_time, to_time = Time.now, include_seconds = true, detail = false)
