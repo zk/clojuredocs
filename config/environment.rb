@@ -12,5 +12,5 @@ Rails::Initializer.run do |config|
 
   config.action_controller.perform_caching = true
   
-  ROOT_URL = "http://localhost:3000"
+  ROOT_URL = ""
 end

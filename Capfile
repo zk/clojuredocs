@@ -17,6 +17,10 @@ task :copy_database_yml, :role => [:web, :app] do
 end
 
 task :set_permissions, :role => [:web, :app] do
+  run "mkdir -p #{release_path}/tmp/openids"
+  run "mkdir -p #{release_path}/tmp/openids/associations"
+  run "mkdir -p #{release_path}/tmp/openids/nonces"
+  run "mkdir -p #{release_path}/tmp/openids/temp"
   run "chown -R nobody #{release_path}/tmp"
   run "chown -R nobody #{release_path}/public"
   run "touch #{release_path}/log/production.log"
@@ -61,3 +65,4 @@ end
 
 desc "Backup the database before running migrations"
 before 'deploy:migrate', :backup
+
