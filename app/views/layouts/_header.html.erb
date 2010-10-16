@@ -34,16 +34,23 @@
 	<div class="header_content">
 		<div class="user_area">
 				<div class="grid_16">
-					<span class="user_area_content">
-					<% if current_user_session %>
-					<%= image_tag(grav_url_for(current_user.email, 16), :class => 'user_area_gravatar') %>
-					Logged in as <%= link_to current_user.login, :controller => 'user', :action => 'profile', :login => current_user.login %>
-					|
-					<a href="/logout">logout</a>
-					<% else %>
-					<a href="/login" id="login">login / sign up</a>
-					<% end%>
-					</span>
+                                  <span class="main_nav">
+                                  <a href="http://clojuredocs.wordpress.com">blog</a>
+                                  &nbsp;
+                                  <a href="http://github.com/zkim/clojuredocs">github</a>
+                                  </span>
+                                  &nbsp;
+                                  &nbsp;
+				  <span class="user_area_content">
+				    <% if current_user_session %>
+				      <%= image_tag(grav_url_for(current_user.email, 16), :class => 'user_area_gravatar') %>
+				      Logged in as <%= link_to current_user.login, :controller => 'user', :action => 'profile', :login => current_user.login %>
+				      |
+				      <a href="/logout">logout</a>
+				    <% else %>
+				      <a href="/login" id="login">login / sign up</a>
+				      <% end%>
+				  </span>
 				</div>
 			<div class="clear"></div>
 		</div>

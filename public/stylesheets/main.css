@@ -42,6 +42,14 @@
 	margin-left: 6px;
 }
 
+.user_area .main_nav a {
+    color: #888
+}
+
+.user_area .main_nav a:visited {
+    color: #888;
+}
+
 .user_area {
 	margin: 0px;
 	padding: 0px;
