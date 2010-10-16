@@ -56,7 +56,7 @@
 		<div id="new_example" class="example">
 			<% form_for :example, @example do |f| %>
 			Example <span class="instructions">(markdown allowed, code in &lt;pre /&gt;)</span>
-			<%= image_tag "ajax-loader.gif", :class => "ajax_loader" %>
+			<%= image_tag "ajax-loader.gif", :class => "ajax_loader", :width => 20, :height => 20 %>
 			<div class="clear"></div>
 			<%= f.text_area :body %>
 			<div style="text-align: right">

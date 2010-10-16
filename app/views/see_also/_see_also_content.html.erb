@@ -8,11 +8,11 @@ belongs_to_user = current_user_session && (current_user == sa.user)
 		<span class="vote_count <%= (sa.vote_score < 0 ? "below_vote_threshold" : "") %>"><%= sa.vote_score %></span>
 
 		<% if current_user_session and not sa.has_voted?(current_user) and not sa.owner?(current_user) %>
-		<a class="vote_down" id="vote_down_<%=sa.id%>" href="#"><%= image_tag "minus_alt_12x12.png"%></a>
-		<a class="vote_up" id="vote_up_<%=sa.id%>" href="#"><%= image_tag "check_alt_12x12.png"%></a>
+		<a class="vote_down" id="vote_down_<%=sa.id%>" href="#"><%= image_tag "minus_alt_12x12.png", :width => 12, :height => 12 %></a>
+		<a class="vote_up" id="vote_up_<%=sa.id%>" href="#"><%= image_tag "check_alt_12x12.png", :width => 12, :height => 12 %></a>
 		<% end %>	
 		<% if belongs_to_user %>
-		<a class="delete" id="delete_<%=sa.id%>" href="#"><%= image_tag "trash_stroke_12x12.png", :alt => "delete" %></a>
+		<a class="delete" id="delete_<%=sa.id%>" href="#"><%= image_tag "trash_stroke_12x12.png", :alt => "delete", :width => 12, :height => 12 %></a>
 		<% end %>
 	</div>
 	

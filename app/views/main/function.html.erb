@@ -50,7 +50,7 @@ $(document).ready(function() {
 			<% if @function.library.current && params[:version] %>
 				permalink
 			<% end %>
-			<%= image_tag "arrow_down_16x16.png" %>
+			<%= image_tag "arrow_down_16x16.png", :width => 16, :height => 16 %>
 		</span>
 		<ul>
 			<!-- <% if @function.stable_version %>
@@ -190,8 +190,8 @@ $(document).ready(function() {
 
 	<div class="source">
 		<h3 style="margin: 0px; padding: 0px;">
-			<%= image_tag "plus_12x12.png", :id => "expand_source" %>
-			<%= image_tag "minus_12x12.png", :id => "collapse_source" %>
+			<%= image_tag "plus_12x12.png", :id => "expand_source", :width => 12, :height => 12 %>
+			<%= image_tag "minus_12x12.png", :id => "collapse_source", :width => 12, :height => 12 %>
 			<a class="internal_nav scroll" href="#source" name="source">Source</a>
 			<% if @function.file %>
 			<span class="file">

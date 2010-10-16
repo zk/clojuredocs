@@ -8,8 +8,8 @@
 		</div>
 		<% if current_user_session and c.belongs_to?(current_user) %>
 		<div class="controls">
-			<a href="#" class="edit" id="edit_<%= c.id %>"><%= image_tag "pen_alt_fill_12x12.png", :alt => "edit" %></a> 
-			<%= link_to image_tag("trash_stroke_12x12.png", :alt => "delete"),
+			<a href="#" class="edit" id="edit_<%= c.id %>"><%= image_tag "pen_alt_fill_12x12.png", :alt => "edit", :width => 12, :height => 12 %></a> 
+			<%= link_to image_tag("trash_stroke_12x12.png", :alt => "delete", :width => 12, :height => 12),
 						{:controller => 'comments', :action => 'delete', :id => c.id},
 						:id => "delete_#{c.id}",
 						:class => "delete"%>
