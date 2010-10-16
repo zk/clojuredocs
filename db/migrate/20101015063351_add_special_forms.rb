@@ -88,6 +88,16 @@ class AddSpecialForms < ActiveRecord::Migration
                      ns,
                      'set!',
                      'Please see http://clojure.org/special_forms#set')
+
+    add_special_form(lib,
+                     ns,
+                     'catch',
+                     'Please see http://clojure.org/special_forms#try')
+
+    add_special_form(lib,
+                     ns,
+                     'finally',
+                     'Please see http://clojure.org/special_forms#finally')
   end
 
   def self.down
