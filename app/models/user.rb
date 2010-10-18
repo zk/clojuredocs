@@ -3,7 +3,9 @@ class User < ActiveRecord::Base
   acts_as_authentic do |c|
     #c.openid_required_fields = [:nickname, :email]    
   end
-  
+
+  acts_as_tagger
+
   def self.find_by_login_or_email(login)
     User.find_by_login(login) || User.find_by_email(login)
   end

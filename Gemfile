@@ -12,6 +12,7 @@ gem 'chronic', '0.2.3'
 gem 'will_paginate', '2.3.12'
 gem 'levenshtein', '0.2.0'
 gem 'capistrano', '2.5.19'
+gem 'acts-as-taggable-on', '2.0.0.rc1'
 
 group :test do
   gem 'shoulda', '2.11.3'

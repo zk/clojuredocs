@@ -12,6 +12,7 @@ GEM
     activeresource (2.3.5)
       activesupport (= 2.3.5)
     activesupport (2.3.5)
+    acts-as-taggable-on (2.0.0.rc1)
     capistrano (2.5.19)
       highline
       net-scp (>= 1.0.0)
@@ -62,6 +63,7 @@ PLATFORMS
 
 DEPENDENCIES
   ZenTest (= 4.4.0)
+  acts-as-taggable-on (= 2.0.0.rc1)
   capistrano (= 2.5.19)
   chronic (= 0.2.3)
   flexmock (= 0.8.7)

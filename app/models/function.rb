@@ -18,6 +18,11 @@ class Function < ActiveRecord::Base
   has_many :see_alsos, :foreign_key => "from_id"
   
   acts_as_commentable
+  acts_as_taggable
+
+  def all_tags
+    all_tags_on :tags
+  end
   
   #:nocov:
   define_index do
