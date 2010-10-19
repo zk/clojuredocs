@@ -492,6 +492,17 @@ CD.SeeAlsos = function() {
 	}
 }()
 
+CD.Tags = function() {
+    return {
+        init: function(args) {
+            var newTagInput = $("#new_tag_input")
+            
+            newTagInput.keyup(function() {
+            })
+        }
+    }
+}()
+
 CD.VarPage = function() {
 	
 	function previewify(el) {

@@ -297,9 +297,22 @@ $(document).ready(function() {
 		</div>
 	</div>
 </div>
-<div class="grid_3">
-	
-	&nbsp;
+<div class="grid_2">
+  <div class="function_tags">
+  <h2>Tags</h2>
+  <ul>
+  <% @function.all_tags.each do |t| %>
+    <li>
+      <a href="" class="tag">
+        <%= t.name %>
+      </a>
+      <a href="" class='delete'>
+        <%= image_tag 'x_alt_12x12.png', :width => 12, :height => 12 %>
+      </a>
+    </li>
+  <% end %>
+  <input type="text" id="new_tag_input" placeholder="Add a Tag">
+  </div>
 </div>
 </div>
 

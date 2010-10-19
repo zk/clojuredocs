@@ -1117,3 +1117,42 @@ span.version {
 }
 
 
+/* Tagging */
+
+.function_tags h2 {
+    margin-bottom: 5px;
+}
+
+.function_tags li {
+    margin-bottom: 8px;
+}
+
+.function_tags a.tag {
+    border: solid #ccc 1px;
+    border-right: none;
+    padding: 3px;
+    padding-left: 5px;
+    padding-right: 10px;
+}
+
+.function_tags a.tag:hover {
+    background-color: #ddd;
+    text-decoration: none;
+}
+
+.function_tags .delete {
+    border: solid #ccc 1px;
+    border-left: none;
+    padding: 3px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.function_tags .delete:hover {
+    background-color: #ddd;
+}
+
+.function_tags .delete img {
+    margin-bottom: -1px
+}
+
