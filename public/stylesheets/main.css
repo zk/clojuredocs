@@ -611,25 +611,25 @@ fieldset {
 	margin-bottom: 40px;
 }
 
-.welcome_message h2, .contribute h2, .third_party_libs h2 {
+.welcome_message h2, .contribute h2, .third_party_libs h2, .beta_status h2 {
 /*	background-color: #62A632;*/
 /*	background-color: #00D8FF;*/
 /*	color: #62A632;*/
 	margin-bottom: 6px;
 }
 
-.welcome_message ul, .contribute ul, .api_integration ul {
+.welcome_message ul, .contribute ul, .api_integration ul, .beta_status ul {
 	font-size: 12pt;
 	margin-bottom: 20px;
 }
 
-.api_integration ul li{
+.api_integration ul li, .beta_status ul li {
 	list-style-type: disc;
 	margin-bottom: 10px;
 	margin-left: 30px;
 }
 
-.welcome_message p, .contribute p, .api_integration p {
+.welcome_message p, .contribute p, .api_integration p, .beta_status p {
 	font-size: 11pt;
 	margin-bottom: 10px;
 }
