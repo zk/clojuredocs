@@ -22,7 +22,7 @@ ClojureDocs consists of three main projects: this website, the [library importer
 * Create the required databases: `echo 'create database clojuredocs_development; create database clojuredocs_test' | mysql -uroot`
 * Run database migrations: `rake db:migrate`
 * Start the dev server: `script/server`
-* Navigate to "http://localhost:3000"
+* Navigate to `http://localhost:3000`
 
 
 This will give you a pristine working version of ClojureDocs.  Not very interesting without data, so lets import some:
