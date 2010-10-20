@@ -607,7 +607,7 @@ fieldset {
 }
 
 
-.welcome_message, .contribute {
+.welcome_message, .contribute, .api_integration {
 	margin-bottom: 40px;
 }
 
@@ -618,12 +618,18 @@ fieldset {
 	margin-bottom: 6px;
 }
 
-.welcome_message ul, .contribute ul {
+.welcome_message ul, .contribute ul, .api_integration ul {
 	font-size: 12pt;
 	margin-bottom: 20px;
 }
 
-.welcome_message p, .contribute p {
+.api_integration ul li{
+	list-style-type: disc;
+	margin-bottom: 10px;
+	margin-left: 30px;
+}
+
+.welcome_message p, .contribute p, .api_integration p {
 	font-size: 11pt;
 	margin-bottom: 10px;
 }
