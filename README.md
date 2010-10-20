@@ -32,7 +32,7 @@ Enabling search requires sphinx
 * `./configure`
 * `make`
 * `sudo make install`
-* Back in the clojuredocs project directory: `rake thinking_sphinx:rebuild`
+* Back in the clojuredocs project directory: `rake thinking_sphinx:rebuild`  This will index the database and start the sphinx search daemon.
 
 
 ## License
