@@ -1,4 +1,6 @@
-# Getting Started
+# ClojureDocs Web App
+
+## Getting Started
 
 ## Gems
 sudo gem install bundler

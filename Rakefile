@@ -35,5 +35,4 @@ if ENV['RAILS_ENV'] != 'production'
       task :coverage => "test:coverage:#{target}"
     end
   end
-
 end

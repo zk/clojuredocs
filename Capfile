@@ -66,3 +66,30 @@ end
 desc "Backup the database before running migrations"
 before 'deploy:migrate', :backup
 
+task :clean_dump, :roles => :db do
+  filename = "unprotected_dump.sql"
+  file = "/tmp/#{filename}"
+  on_rollback { run "rm -f #{file}" }
+  db = YAML::load(ERB.new(IO.read(File.join(File.dirname(__FILE__), './config/database.yml'))).result)['production']
+  run "echo 'create database clean_temp;' | mysql -u root"
+  run "mysqldump -u root clojuredocs_production > #{file}"
+  run "mysql -uroot clean_temp < #{file}"
+  
+  run "rm -f #{file}"
+  
+  run "echo 'use clean_temp; UPDATE users set login = MD5(RAND()), email = MD5(RAND()), openid_identifier = MD5(RAND()), password_salt = MD5(RAND()), crypted_password = MD5(RAND());' | mysql -u root"  
+  
+  filename = "clojuredocs_clean_dump.#{Time.now.to_i}.sql.bz2"
+  file = "/tmp/#{filename}"
+  
+  run "mysqldump -u root clean_temp | bzip2 -c > #{file}"  do |ch, stream, data|
+    puts data
+  end
+  run "echo 'drop database clean_temp;' | mysql -u root"
+  
+  `mkdir -p ~/.#{application.downcase}_db_backups`
+  get file, File.expand_path("~/.#{application.downcase}_db_backups/#{filename}")
+  run "rm -f #{file}"
+  
+end
+
