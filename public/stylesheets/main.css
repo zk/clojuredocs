@@ -607,7 +607,7 @@ fieldset {
 }
 
 
-.welcome_message, .contribute, .api_integration {
+.welcome_message, .contribute, .api_integration, .beta_status {
 	margin-bottom: 40px;
 }
 
