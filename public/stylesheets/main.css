@@ -1,4 +1,3 @@
-
 .letter_group {
 	width: 300px;
 	float: left;
@@ -1044,6 +1043,14 @@ span.version {
 .versions_nav {
 	font-size: 14pt;
 	float: right;
+	border: solid #ccc 1px;
+	padding-left: 3px;
+	padding-right: 1px;
+}
+
+.versions_nav:hover {
+	background-color: #eee;
+	cursor: pointer;
 }
 
 .versions_nav span {
@@ -1052,16 +1059,15 @@ span.version {
 
 .versions_nav span img {
 	margin-bottom: -1px;
+	border-left: solid #ccc 1px;
+	padding-left: 3px;
 }
 
-.versions_nav span:hover {
-	background-color: #eee;
-	cursor: pointer;
-}
 
 .versions_nav ul {
 	position: absolute;
 	right: 0px;
+	top: 30px;
 	display: none;
 	border: solid #eee 1px;
 	background-color: white;
