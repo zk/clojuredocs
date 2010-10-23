@@ -73,6 +73,7 @@ ActionController::Routing::Routes.draw do |map|
   
   map.connect '/tags/lookup', :controller => 'cdtags', :action => 'lookup'
   map.connect '/tags/add', :controller => 'cdtags', :action => 'add'
+  map.connect '/tags/delete', :controller => 'cdtags', :action => 'delete'
   
   map.connect '/v/:id', :controller => 'main', :action => 'function_short_link'
   

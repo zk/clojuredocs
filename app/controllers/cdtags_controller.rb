@@ -43,4 +43,26 @@ class CdtagsController < ApplicationController
     }
     
   end
+  
+  def delete
+    
+    @function = Function.find_by_id(params[:function_id])
+    @tag = Tag.find_by_id(params[:tag_id])
+
+    render json_fail "Couldn't find function." and return unless @function
+    render json_fail "Couldn't find tag." and return unless @tag
+    
+    #really should only be max of one, but what the hell
+    taggings = Tagging.find_all_by_tag_id_and_taggable_type_and_taggable_id(@tag.id, 'Function', @function.id)
+    
+    raise [@tag.id, 'Function', @function.id].to_yaml
+    
+    all_succeeded = tagging.map {|t|
+      t.delete
+    }.reduce{|a,b| a && b}
+    
+    render json_fail "There was a problem removing tag #{@tag.name} from #{@function.name}." and return unless all_succeeded
+    
+    render :json => {:success => true}
+  end
 end

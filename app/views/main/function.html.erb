@@ -301,11 +301,11 @@ $(document).ready(function() {
   <h2>Tags</h2>
   <ul>
   <% @function.all_tags.each do |t| %>
-    <li>
+    <li class="tag_item" id="tag_item_<%= t.id %>">
       <a href="" class="tag">
         <%= t.name %>
       </a>
-      <a href="" class='delete'>
+      <a href="" class="delete" id="tag_delete_<%= t.id %>">
         <%= image_tag 'x_alt_12x12.png', :width => 12, :height => 12 %>
       </a>
     </li>
@@ -315,5 +315,4 @@ $(document).ready(function() {
   </div>
 </div>
 </div>
-
 

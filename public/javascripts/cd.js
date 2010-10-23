@@ -490,14 +490,13 @@ CD.SeeAlsos = function() {
 CD.Tags = function() {
 	
 	function deleteItem() {
-		if(confirm("Are you sure you want to delete this see also? There is no undo!")) {
+		if(confirm("Are you sure you want to remove this tag? There is no undo!")) {
 			var id = $(this).attr("id").split("_")[2]
 			params = {id: id}
-			alert('delete ' + id)
-			$.getJSON("/tag/delete", params, function(data) {
-				$("#see_also_item_" + id).slideUp(500)
+			$.getJSON("/tags/delete", params, function(data) {
+				$("#tag_item_" + id).slideUp(500)
 			})
-			$("#see_also_item_" + id + " .controls .delete img").attr("src", "/images/ajax-loader.gif")
+			$("#tag_item_" + id + " .controls .delete img").attr("src", "/images/ajax-loader.gif")
 		}
 
 		return false
@@ -577,6 +576,7 @@ CD.Tags = function() {
         init: function(args) {
 			var varId = args.varId
 			initAutoComplete(varId)
+			$(".function_tags .delete").click(deleteItem)
 			
 			$("#tag_name_search").keyup(function(e) {
 				if(e.keyCode != 13) return;
