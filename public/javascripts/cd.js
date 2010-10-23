@@ -24,10 +24,6 @@ CD.showMessage = function(text) {
 	el.slideDown()
 }
 
-
-
-
-
 //'Fixed' sidebar when window scrolls below a predetermined point
 // see quick ref / management pages
 jQuery.fn.makeTOCSideBar = function() {
@@ -472,7 +468,6 @@ CD.SeeAlsos = function() {
 	
 	return {
 		init: function(args) {
-			
 			var varId = args.varId
 			var library = args.library
 			var version = args.version
@@ -493,12 +488,100 @@ CD.SeeAlsos = function() {
 }()
 
 CD.Tags = function() {
+	
+	function deleteItem() {
+		if(confirm("Are you sure you want to delete this see also? There is no undo!")) {
+			var id = $(this).attr("id").split("_")[2]
+			params = {id: id}
+			alert('delete ' + id)
+			$.getJSON("/tag/delete", params, function(data) {
+				$("#see_also_item_" + id).slideUp(500)
+			})
+			$("#see_also_item_" + id + " .controls .delete img").attr("src", "/images/ajax-loader.gif")
+		}
+
+		return false
+	}
+	
+	function addTag(data) {
+		var tag = data.tag
+
+		var li = ""
+		li += '<li class="tag_item" id="tag_item_'+ tag.id + '">'
+		li += '<a href="" class="tag">' + tag.name + '</a>'
+		li += '<a href="" id="tag_delete_' + tag.id + '" class="delete">'
+		li += '<img src="/images/x_alt_12x12.png" width="12" height="12">'
+		li += '</a>'
+		li += "</li>"
+		
+		var jqli = $(li)
+
+		jqli.find(".delete").click(deleteItem)
+
+		jqli.css("display", "none")
+
+		$(".function_tags ul").append(jqli)
+		jqli.slideDown(500)
+	}
+	
+	function requestAddTag(varId, tagName) {
+		
+		params = {
+			var_id: varId,
+			tag_name: tagName
+		}
+
+		$.getJSON("/tags/add", params, function(data) {
+			if(data.success) {
+				addTag(data)
+				$("#tag_name_search").val("")
+			} else {
+				CD.showMessage(data.message)
+				$("#tag_name_search").val("")
+			}
+		})
+	}
+	
+	function initAutoComplete(varId) {
+		$("#tag_name_search").autocomplete({
+			source: function(req, add) {
+				params = {
+					term: req.term
+				}
+				$.getJSON("/tags/lookup", params, function(data) {
+					var out = []
+					$.each(data, function(i, v) {
+						var lbl = "<div class=\"tag_result\">"
+						lbl += "<span class='name'>" + v.name + "</span>"
+						lbl += "</div>"
+						out.push({label: lbl, value: v.name})
+					})
+
+					add(out)
+				})
+			},
+			focus: function(event, ui) {
+				return false
+			},
+			select: function(event, ui) {
+				$("#tag_name_search").val(ui.item.value)
+				requestAddTag(varId, ui.item.value)
+				$("#tag_name_search").val("")
+				return false
+			},
+			dataType: "json"
+		})
+	}
+	
     return {
         init: function(args) {
-            var newTagInput = $("#new_tag_input")
-            
-            newTagInput.keyup(function() {
-            })
+			var varId = args.varId
+			initAutoComplete(varId)
+			
+			$("#tag_name_search").keyup(function(e) {
+				if(e.keyCode != 13) return;
+				requestAddTag(varId, $(this).val())				
+			})
         }
     }
 }()

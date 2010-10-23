@@ -140,7 +140,7 @@
 
 .ui-autocomplete {
 	background-color: #fafafa;
-	border: solid #ddd 4px;
+	border: solid #ddd 1px;
 	width: 450px;
 	overflow: hidden;
 }

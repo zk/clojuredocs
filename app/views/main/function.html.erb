@@ -12,6 +12,10 @@ $(document).ready(function() {
 		editExampleFormHTML: '<%= (render :partial => '/examples/edit_example_form').gsub("\n", "")%>',
 		editCommentFormHTML: '<%= (render :partial => '/comments/edit_comment_form').gsub("\n", "")%>',
 	})
+	
+	CD.Tags.init({
+	  varId: <%= @function.id %>
+	})
 })
 </script>
 <div class="container_16">
@@ -53,11 +57,6 @@ $(document).ready(function() {
 			<%= image_tag "arrow_down_16x16.png", :width => 16, :height => 16 %>
 		</span>
 		<ul>
-			<!-- <% if @function.stable_version %>
-						<li>
-							<%= link_to 'stable', @function.stable_version.link_opts, :class => 'stable' %>
-						</li>
-						<% end %> -->
 		<% Function.versions_of(@function).each do |f| %>
 			<% 
 				classes = []
@@ -311,7 +310,8 @@ $(document).ready(function() {
       </a>
     </li>
   <% end %>
-  <input type="text" id="new_tag_input" placeholder="Add a Tag">
+  </ul>
+  <input type="text" id="tag_name_search" placeholder="Add a Tag">
   </div>
 </div>
 </div>
