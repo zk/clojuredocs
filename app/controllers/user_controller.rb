@@ -22,6 +22,15 @@ class UserController < ApplicationController
       return
     end
     
-    @recent = (@user.comments + @user.examples + @user.see_alsos).sort{|a,b| b.updated_at <=> a.updated_at}
+    examples = @user.examples
+    examples_map = @user.examples.reduce({}) {|coll, e| coll.merge({e.function_id => e})}
+    Example.find_by_sql(["select * from example_versions where user_id = ?", @user.id]).each do |e|
+      if not examples_map[e.function_id]
+        examples << e
+        examples_map = examples_map.merge({e.function_id => e})
+      end
+    end
+        
+    @recent = (@user.comments + examples + @user.see_alsos).uniq.sort{|a,b| b.updated_at <=> a.updated_at}
   end
 end
