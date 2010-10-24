@@ -28,7 +28,7 @@ ClojureDocs consists of three main projects: this website, the [library importer
 This will give you a pristine working version of ClojureDocs.  Not very interesting without data, so lets import some:
 
 * Download the latest [database export](https://github.com/zkim/clojuredocs/downloads)
-* Import the database: `mysql -uroot clojuredocs_production < downloaded_export_file`
+* Import the database: `mysql -uroot clojuredocs_development < downloaded_export_file`
 * Refresh `http://localhost:3000`
 
 Enabling search requires sphinx
