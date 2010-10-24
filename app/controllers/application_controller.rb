@@ -39,7 +39,8 @@ class ApplicationController < ActionController::Base
     
     if not lib
       comments = Comment.find(:all, :limit => size, :order => 'updated_at DESC')
-      examples = Example.find(:all, :limit => size, :order => 'updated_at DESC')
+      examples = Example.find_by_sql(["select * from example_versions order by updated_at DESC limit ?", size])
+#      raise examples.to_yaml
       see_alsos = SeeAlso.find(:all, :limit => size, :order => 'updated_at DESC')
     else
       
