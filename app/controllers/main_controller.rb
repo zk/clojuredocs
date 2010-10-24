@@ -11,8 +11,8 @@ class MainController < ApplicationController
     @recently_updated = find_recently_updated(7, nil)
     @top_contributors = []
 
-    tc_example_versions = Example.find_by_sql("select count(*), example_versions.user_id from example_versions group by user_id order by count(*) desc")[0, num_tc]
-    tc_examples = Example.find_by_sql("select count(*), examples.user_id from examples group by user_id order by count(*) desc;")[0, num_tc]
+    tc_example_versions = Example.find_by_sql("select count(*), example_versions.user_id from example_versions group by user_id order by count(*) desc")[0, num_tc+1]
+    tc_examples = Example.find_by_sql("select count(*), examples.user_id from examples group by user_id order by count(*) desc;")[0, num_tc+1]
 
     tc_examples.each do |e|
       count = e["count(*)"]
@@ -23,8 +23,12 @@ class MainController < ApplicationController
       end
 
       user = User.find(e.user_id)
-      @top_contributors << {:author => user.login, :email => user.email, :score => count}
+      if not user.id == 1
+        @top_contributors << {:author => user.login, :email => user.email, :score => count} 
+      end
     end
+    
+    @top_contributors = @top_contributors[0, num_tc]
 
   end
 
