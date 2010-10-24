@@ -11,9 +11,5 @@ class ApplicationHelperTest < ActionView::TestCase
     should "result in 2 groups when using functions from clojure core" do  
       assert_equal 2, @groups.size
     end
-    
-    should "have the first function in the group with name '+' as '+'" do
-      assert_equal '+', @groups["+"][0].name
-    end
   end
 end
