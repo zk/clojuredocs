@@ -22,6 +22,6 @@ class UserController < ApplicationController
       return
     end
     
-    @recent = (@user.comments + @user.examples + @user.see_alsos)
+    @recent = (@user.comments + @user.examples + @user.see_alsos).sort{|a,b| b.updated_at <=> a.updated_at}
   end
 end
