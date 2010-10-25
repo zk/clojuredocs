@@ -1,12 +1,19 @@
 <div class="example" id="example_<%= e.id %>">
 	<% if not (hide_controls rescue nil) %>
 	<div class="controls">
-		<%= link_to image_tag("article_12x12.png", :alt => "view changes", :title => "view changes", :width => 12, :height => 12), {:controller => 'examples', :action => 'view_changes', :id => e.id}, :class => 'view_changes' %>
-		<% if current_user_session %>			
-		  <a href="#" class="edit" id="edit_<%= e.id %>"><%= image_tag "pen_alt_fill_12x12.png", :alt => "edit", :title => "edit", :width => 12, :height => 12 %></a> 
+		<a class="permalink" name="example_<%= e.id %>" href="#example_<%= e.id %>">link</a>
+		|
+		<%= link_to 'changes', {:controller => 'examples', :action => 'view_changes', :id => e.id}, :class => 'view_changes' %>
+		<% if current_user_session %>
+			|
+		  <a href="#" class="edit" id="edit_<%= e.id %>">
+			<!-- <%= image_tag "pen_alt_fill_12x12.png", :alt => "edit", :title => "edit", :width => 12, :height => 12 %> -->
+			edit
+		  </a> 
 			
 			<% if e.belongs_to?(current_user) %>
-			  <%= link_to image_tag("trash_stroke_12x12.png", :alt => "delete", :title => "delete", :width => 12, :height => 12), 
+			|
+			<%= link_to 'delete', 
 						{:controller => "examples", :action => "delete", :id => e.id}, 
 						:id => "delete_#{e.id}",
 						:class => "delete"%>

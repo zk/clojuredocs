@@ -98,6 +98,9 @@
 .example .content {
 }
 
+.example .permalink {
+}
+
 #login_content .error, #signup_content .error {
 	background-color: yellow;
 }
@@ -472,6 +475,7 @@ textarea {
 
 .example img, .comment img {
 	padding: 5px;
+	padding-bottom: 0px;
 }
 
 .author {
@@ -495,6 +499,9 @@ textarea {
 }
 
 .controls {
+	color: #bbb;
+	margin-right: 6px;
+	font-weight: 300;
 }
 
 
