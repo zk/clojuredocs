@@ -39,7 +39,7 @@ class ApplicationControllerTest < ActionController::TestCase
     context "from all libraries" do
       should "give recent updates of the types SeeAlso, Example, Comment" do
         recent = @app_controller.send(:find_recently_updated, 10)
-        assert_equal recent.size, 4
+        assert_equal 3, recent.size
         assert recent[0].instance_of? SeeAlso
         assert recent[1].instance_of? Example
         assert recent[2].instance_of? Comment

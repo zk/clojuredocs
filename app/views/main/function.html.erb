@@ -30,7 +30,7 @@ $(document).ready(function() {
 	<a name="top"></a>
 	<div class="function_links">
 		<a href="#doc" class="scroll">doc</a>
-		<a href="#source" class="scroll">source</a>
+		<% if @function.source %><a href="#source" class="scroll">source</a><% end %>
 		<a href="#examples" class="scroll">examples</a>
 		<a href="#comments" class="scroll">comments</a>
 	</div>
@@ -187,7 +187,7 @@ $(document).ready(function() {
 		<% end %>
 		<div class="clear"></div>
 	</div>
-
+	<% if @function.source %>
 	<div class="source">
 		<h3 style="margin: 0px; padding: 0px;">
 			<%= image_tag "plus_12x12.png", :id => "expand_source", :width => 12, :height => 12 %>
@@ -237,6 +237,7 @@ $(document).ready(function() {
 			</div>
 		</div>
 	</div>
+	<% end %>
 	
 	<div class="comments">
 		<h3><a class="internal_nav scroll" href="#comments" name="comments">Comments</a> <a class="top scroll" href="#top">top</a></h3>
