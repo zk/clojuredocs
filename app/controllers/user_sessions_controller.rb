@@ -5,6 +5,10 @@ class UserSessionsController < ApplicationController
     @user_session = UserSession.new
 
     if request.post?
+      
+      if params[:user_session] and params[:user_session][:openid_identifier] and not params[:user_session][:openid_identifier].match(/https?:\/\//)
+        params[:user_session][:openid_identifier] = "http://" + params[:user_session][:openid_identifier]
+      end
 
       if (params[:user_session] && params[:user_session][:openid_identifier]) or params[:for_session] 
 
