@@ -9,6 +9,11 @@
 		<%= render :partial => 'lib_nav', :locals => {:lib => @library} %>
 		<div class="clear"></div>
 		<div class="toc">
+                  <div class="toc_controls">
+                    <input type="checkbox" id="floating_toc" name="floating_toc" checked="checked" />
+                    <label for="floating_toc">Float TOC</label>
+                  </div>
+
 			<h2>Table of Contents</h2>
 		<% @spheres.each do |s| %>
 			<div class="sphere">
