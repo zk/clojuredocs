@@ -1117,3 +1117,11 @@ span.version {
 }
 
 
+.toc_controls {
+    font-size: 8pt;
+    margin-top: 0px;
+}
+
+.toc_controls input {
+    font-size: 8pt;
+}

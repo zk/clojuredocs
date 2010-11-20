@@ -19,7 +19,12 @@
 		<%= render :partial => 'lib_nav', :locals => {:lib => @library} %>
 		<div class="clear"></div>
 		<div class="toc">
-			<h2>Table of Contents</h2>
+		  <h2>Table of Contents</h2>
+                <div class="toc_controls">
+                  <input type="checkbox" id="floating_toc" name="floating_toc" checked="checked" />
+                  <label for="floating_toc">Float TOC</label>
+                </div>
+                  
 		<% @spheres.each do |s| %>
 			<div class="sphere">
 			<h3><a class="scroll" href="#<%= CGI::escape(s[:name].gsub(/\//, "-")) %>"><%= s[:name] %></a></h3>

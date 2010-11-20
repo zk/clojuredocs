@@ -32,7 +32,11 @@ CD.showMessage = function(text) {
 // see quick ref / management pages
 jQuery.fn.makeTOCSideBar = function() {
 
-	var el = $(this)
+    var el = $(this)
+    var floatingToc = $("#floating_toc")
+    var floatToc = true
+
+    floatingToc.attr('checked', floatToc)
 
 	var startTop = el.offset().top;
 
@@ -49,11 +53,21 @@ jQuery.fn.makeTOCSideBar = function() {
 		}
 	}
 
-	$(window).scroll(function (event) {
-		updateTocPosition(el, startTop);
-	});
+    $(window).scroll(function (event) {
+        if(floatToc) {
+	    updateTocPosition(el, startTop);
+        }
+    });
 
-	updateTocPosition(el, startTop);
+    floatingToc.click(function() {
+        floatToc = !floatToc
+
+        if(!floatToc) {
+            el.removeClass('fixed')
+        }
+    })
+
+    updateTocPosition(el, startTop);
 }
 
 //Behavior for input fields with descriptive text that goes away when focused
