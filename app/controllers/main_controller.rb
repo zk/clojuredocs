@@ -94,17 +94,24 @@ class MainController < ApplicationController
 
     q = q.gsub("-", "")
 
-    @functions = Function.search(q, :page => params[:page], :per_page => 16, :match_mode => :extended,
-    :field_weights => {
-      :name => 10,
-      :doc => 1
-      })
+    res = []
+    for i in (0..q.size)
+      after = q[i,q.size]
+      before = q[0,i]
+      res << before + ".*" + after
+    end
 
-      if params[:feeling_lucky] and @functions.size > 0
-        func = @functions[0]
-        redirect_to "/#{func.library}/#{func.ns}/#{CGI::escape(func.name)}"
-        return
-      end
+    qm = res.clone
+    qm = qm.fill("?")
+    
+    sql = "select name from functions where name RLIKE " + qm.join(" or name RLIKE ")    
+    @functions = Function.find_by_sql([sql] + res)
+    
+    if params[:feeling_lucky] and @functions.size > 0
+      func = @functions[0]
+      redirect_to "/#{func.library}/#{func.ns}/#{CGI::escape(func.name)}"
+      return
+    end
 
 
     end
