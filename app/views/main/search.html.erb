@@ -41,16 +41,11 @@ $(document).ready(function() {
 	<% if @functions.size == 0 %>
 	<h3>Sorry, couldn't find any results for your search of '<%= @orig_query %>'. </h3>
 	<% else %>
-	<h3>Found <%= @functions.total_entries %> results for query '<%= @orig_query %>'.</h3>
-	<h4>
-		Showing results
-		<%= @functions.current_page * @functions.per_page - @functions.per_page + 1 %>
-		-
-		<%= [@functions.current_page * @functions.per_page, @functions.total_entries].min %>
-		<span><%= will_paginate @functions %></span>
-	</h4>
+	<h3>Found <%= @functions.length %> results for query '<%= @orig_query %>'.</h3>
 	<br />
 	<% @functions.each do |f| %>
+        <% if !f.nil? %>
+        <%= puts f.library %>
 	<div class="search_result">
 		<h4>
 			<%= link_to f.name, f.link_opts %>
@@ -68,6 +63,7 @@ $(document).ready(function() {
 		</span>
 		
 	</div>
+        <% end %>
 	<% end %>
 	<h4 style="border-top: solid #ccc 1px">
 		Showing results

@@ -88,11 +88,11 @@ class MainController < ApplicationController
 
     @orig_query = q
 
-    if not q.match("@library")
-      q += " @library (\"Clojure Core\" | \"Clojure Contrib\")"
-    end
+    # if not q.match("@library")
+    #   q += " @library (\"Clojure Core\" | \"Clojure Contrib\")"
+    # end
 
-    q = q.gsub("-", "")
+    #q = "*" + q + "*"
 
     res = []
     for i in (0..q.size)
@@ -106,6 +106,9 @@ class MainController < ApplicationController
     
     sql = "select name from functions where name RLIKE " + qm.join(" or name RLIKE ")    
     @functions = Function.find_by_sql([sql] + res)
+    puts "found: #{@functions.length}"
+    puts "f: "
+    puts @functions.map {|f| f.name }
     
     if params[:feeling_lucky] and @functions.size > 0
       func = @functions[0]
