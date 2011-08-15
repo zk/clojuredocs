@@ -86,13 +86,9 @@ class MainController < ApplicationController
   def search
     q = params[:q] || ""
 
+    # for display on page -- 'You search for x'
     @orig_query = q
 
-    # if not q.match("@library")
-    #   q += " @library (\"Clojure Core\" | \"Clojure Contrib\")"
-    # end
-
-    #q = "*" + q + "*"
 
     res = []
     for i in (0..q.size)
@@ -104,12 +100,32 @@ class MainController < ApplicationController
     qm = res.clone
     qm = qm.fill("?")
     
-    sql = "select name from functions where name RLIKE " + qm.join(" or name RLIKE ")    
-    @functions = Function.find_by_sql([sql] + res)
-    puts "found: #{@functions.length}"
-    puts "f: "
-    puts @functions.map {|f| f.name }
-    
+    sql = "select * from functions where name RLIKE " + qm.join(" or name RLIKE ") + " LIMIT 100"
+
+    begin
+
+      @functions = Function.find_by_sql([sql] + res)
+      @functions = @functions.sort{|a,b| Levenshtein.distance(q, a.name) <=> Levenshtein.distance(q, b.name)}
+      @functions = @functions[0..24]
+
+    rescue
+      @functions = []
+    end
+
+    if @functions.size <= 0
+
+      if not q.match("@library")
+        q += " @library (\"Clojure Core\" | \"Clojure Contrib\")"
+      end
+
+      q = "*" + q + "*"
+
+      @functions = Function.search(q, :page => params[:page], :per_page => 16, :match_mode => :extended, :field_weights => {:name => 10,:doc => 1})
+
+      @functions = @functions[0..24]
+      
+    end
+
     if params[:feeling_lucky] and @functions.size > 0
       func = @functions[0]
       redirect_to "/#{func.library}/#{func.ns}/#{CGI::escape(func.name)}"
@@ -117,7 +133,7 @@ class MainController < ApplicationController
     end
 
 
-    end
+  end
 
     def lib_search
       q = params[:q]

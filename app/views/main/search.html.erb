@@ -53,7 +53,7 @@ $(document).ready(function() {
 				<%= link_to f.namespace.name, :controller => 'main', :action => 'ns', :lib => f.library.url_friendly_name, :ns => f.namespace.name %>
 			</span>
 		</h4>
-		<p class="doc"><%= f.excerpts.doc %></p>
+		<p class="doc"><%= f.doc %></p>
 		<span class="extra_info">
 		<span class="examples_count">
 			<%= f.examples.size %> example<%= (f.examples.size != 1 ? "s" : "") %>
@@ -66,11 +66,7 @@ $(document).ready(function() {
         <% end %>
 	<% end %>
 	<h4 style="border-top: solid #ccc 1px">
-		Showing results
-		<%= @functions.current_page * @functions.per_page - @functions.per_page + 1 %>
-		-
-		<%= [@functions.current_page * @functions.per_page, @functions.total_entries].min %>
-		<span><%= will_paginate @functions %></span>
+
 	</h4>
 	<% end%>
 	</div>
