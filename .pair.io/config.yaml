@@ -1,6 +1,6 @@
 # pair.io config
 
-pairio-image: 4e4887e8e4b0980bad3b5eb7-zkim-zkim/clojuredocs
+quickstart: rails3
 size: small
 inbound-ports: [22, 80, 443, 3000, 3443]
 
