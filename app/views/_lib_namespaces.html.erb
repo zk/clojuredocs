@@ -1,7 +1,15 @@
 <%
 
 if not @library
-	@library = Library.find_by_url_friendly_name(params[:lib])
+   
+   version = params[:version]
+   if version
+     @library =
+   Library.find_by_url_friendly_name_and_version(params[:lib], version)
+   else
+     @library =
+   Library.find_by_url_friendly_name_and_current(params[:lib],true)
+   end
 end
 
 current_ns = params[:ns]

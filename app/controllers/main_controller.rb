@@ -197,7 +197,7 @@ class MainController < ApplicationController
     def function
       lib_url_name = params[:lib]
       version = params[:version]
-      
+
       ns = params[:ns]
       function_url_name = params[:function]
       
@@ -212,9 +212,10 @@ class MainController < ApplicationController
         @function = Function.find(
           :first,
           :include => [:namespace, {:namespace => :library}],
-          :conditions => {
-            :namespaces => {:name => ns, :libraries => {:url_friendly_name => lib_url_name, :current => true}},
-            :url_friendly_name => function_url_name})
+          :conditions => {:namespaces => {:name => ns,
+                                          :libraries => {:url_friendly_name => lib_url_name,
+                                                         :current => true}},
+          :url_friendly_name => function_url_name})
       end
           
       if not @function
@@ -242,8 +243,6 @@ class MainController < ApplicationController
         @comment.save
         redirect_to @function.href
         return
-
-
       end
 
     end
