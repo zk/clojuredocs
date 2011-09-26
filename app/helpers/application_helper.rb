@@ -54,5 +54,19 @@ module ApplicationHelper
     return time_stamp(from_time) if (detail && distance_in_minutes > 2880)
     return time
   end
+
+  def make_url_friendly(name)
+    out = name.gsub("?","_q").
+      gsub("/","_").
+      gsub(" ","_").
+      downcase
+
+    if name =~ /^\.+$/
+      out = out.gsub(".", "_dot")
+    end
+
+    out
+  end
+
   
 end

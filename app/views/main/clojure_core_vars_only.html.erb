@@ -56,7 +56,7 @@
 									<td>
 										<% g[:symbols].each do |sym| %>
 										<% if sym[:link] and sym[:link] != "" %>
-											<a href="<%= sym[:link] %>"><%= sym[:name] %></a>
+										<a href="/clojure_core/<%= sym[:ns]%>/<%= make_url_friendly(sym[:name])%>"><%= sym[:name]%></a>
 										<% else %>
 											<%= sym[:name] %>
 										<% end %>
