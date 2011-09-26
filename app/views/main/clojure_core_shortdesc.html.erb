@@ -73,7 +73,9 @@
 									<tr class="var">
 										<td class="var">
 											<% if sym[:link] and sym[:link] != "" %>
-												<a href="<%= sym[:link] %>"><%= sym[:name] %></a>
+												<a href="/clojure_core/<%= sym[:ns]
+											%>/<%= sym[:name]%>"><%= sym[:name]
+											%></a>
 											<% else %>
 												<%= sym[:name] %>
 											<% end %>
