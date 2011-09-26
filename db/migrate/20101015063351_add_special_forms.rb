@@ -18,11 +18,11 @@ class AddSpecialForms < ActiveRecord::Migration
 
     f.save
   end
-  
-  def self.up
 
-    lib = Library.find_by_name_and_version('Clojure Core', '1.2.0')
-    ns = Namespace.find_by_name_and_version('clojure.core', '1.2.0')
+  def self.add_special_forms_for_version(version)
+
+    lib = Library.find_by_name_and_version('Clojure Core', version)
+    ns = Namespace.find_by_name_and_version('clojure.core', version)
 
     add_special_form(lib,
                      ns,
@@ -98,6 +98,10 @@ class AddSpecialForms < ActiveRecord::Migration
                      ns,
                      'finally',
                      'Please see http://clojure.org/special_forms#finally')
+  end
+
+  def self.up
+    add_special_forms_for_version "1.2.0"
   end
 
   def self.down
