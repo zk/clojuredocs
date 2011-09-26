@@ -122,9 +122,15 @@ class MainController < ApplicationController
 
       @functions = Function.search(q, :page => params[:page], :per_page => 16, :match_mode => :extended, :field_weights => {:name => 10,:doc => 1})
 
+      
+
       @functions = @functions[0..24]
       
     end
+
+    @functions = @functions.find_all { |f|
+      f.library.current
+    }
 
     if params[:feeling_lucky] and @functions.size > 0
       func = @functions[0]
@@ -330,7 +336,11 @@ class MainController < ApplicationController
         if @exact_matches
           @functions = (@exact_matches + @functions).uniq
         end
-        
+
+        @functions = @functions.find_all { |f|
+          f.library.current
+        }
+
         if @functions.size > 10
           @functions = @functions[0, 10]
         end
