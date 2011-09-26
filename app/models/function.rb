@@ -45,7 +45,7 @@ class Function < ActiveRecord::Base
   end
   
   def href
-    "/v/#{id}"
+    "/#{library.url_friendly_name}/#{namespace.name}/#{url_friendly_name}"
   end
   
   def library
