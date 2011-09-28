@@ -2,10 +2,7 @@ class MainController < ApplicationController
 
   layout 'main', :except => ["lib_search", "preview_example"]
 
-  caches_action :quick_ref_shortdesc
-
   def index
-
     num_recent = 6
     num_tc = 24
     @recently_updated = find_recently_updated(7, nil)
