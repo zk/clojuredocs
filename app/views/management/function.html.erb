@@ -3,7 +3,7 @@
 <script type="text/javascript" charset="utf-8">
 	$(document).ready(function() {
 		CD.Examples.init({
-			editExampleFormHTML: '<%= (render :partial => '/examples/edit_example_form').gsub("\n", "")%>'
+			editExampleFormHTML: '<%= escape_javascript(render :partial => '/examples/edit_example_form').gsub("\n", "")%>'
 		})
 	})
 </script>
