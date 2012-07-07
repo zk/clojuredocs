@@ -9,8 +9,8 @@ $(document).ready(function() {
 		varId: <%= @function.id %>,
 		library: "<%= @function.library.name %>",
 		version: "<%= @function.library.version %>",
-		editExampleFormHTML: '<%= (render :partial => '/examples/edit_example_form').gsub("\n", "")%>',
-		editCommentFormHTML: '<%= (render :partial => '/comments/edit_comment_form').gsub("\n", "")%>',
+		editExampleFormHTML: '<%= escape_javascript(render :partial => '/examples/edit_example_form').gsub("\n", "")%>',
+		editCommentFormHTML: '<%= escape_javascript(render :partial => '/comments/edit_comment_form').gsub("\n", "")%>',
 	})
 })
 </script>
