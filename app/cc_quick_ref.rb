@@ -3047,7 +3047,7 @@ class CCQuickRef
 				:name => "Code Structure",
 				:categories => [
 					{
-						:name => "Varibles",
+						:name => "Variables",
 						:groups => [
 							{
 								:name => "Create",
