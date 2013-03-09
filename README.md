@@ -1,6 +1,6 @@
 # ClojureDocs Web App
 
-[ClojureDocs](http://clojuredocs.org) is a community powered documentation and examples repository designed to aid clojurists of all skill levels in groking clojure core and third party libraries.
+[ClojureDocs](http://clojuredocs.org) is a community powered documentation and examples repository designed to aid clojurists of all skill levels in grokking clojure core and third party libraries.
 
 The alpha version of ClojureDocs was released on July 9th, 2010.  See the [original mailing list post](http://groups.google.com/group/clojure/browse_thread/thread/a97d472679f2cade/810b73543fd6a2a5?q=clojuredocs&lnk=ol&) for more information.
 
