@@ -24,4 +24,6 @@
        [:div.row
         [:div.col-md-10.col-md-offset-1
          content]]]
-      [:script {:type "text/javascript" :src "/cljs/clojuredocs.js"}]]]))
+      [:script {:type "text/javascript" :src "/cljs/goog/base.js"}]
+      [:script {:type "text/javascript" :src "/cljs/clojuredocs.js"}]
+      [:script {:type "text/javascript"} "goog.require(\"clojuredocs.main\");"]]]))
