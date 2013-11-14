@@ -56,7 +56,8 @@
   (GET "/" [] (fn [r]
                 (-> {:content $index}
                     layout/main
-                    html-resp))))
+                    html-resp)))
+  (GET "/search" [] (fn [{:keys [params]}] {:body (pr-str params)})))
 
 (def session-store
   (cookie-store

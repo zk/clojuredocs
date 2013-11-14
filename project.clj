@@ -10,13 +10,14 @@
                  [compojure "1.1.6"]
                  [aleph "0.3.0-rc2"]
                  [hiccup "1.0.4"]
-                 [org.clojure/clojurescript "0.0-2030"]]
+                 [org.clojure/clojurescript "0.0-2030"]
+                 [prismatic/dommy "0.1.2"]]
   :plugins [[lein-cljsbuild "1.0.0-alpha2"]] ;; required for heroku deploy
   :cljsbuild {:builds
               {:dev  {:source-paths ["src/cljs"]
                       :compiler {:output-to "resources/public/cljs/clojuredocs.js"
                                  :output-dir "resources/public/cljs"
-                                 :optimizations :whitespace
+                                 :optimizations :none
                                  :source-map true}}
 
                ;; for debugging advanced compilation problems

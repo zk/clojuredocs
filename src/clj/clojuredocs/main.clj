@@ -17,4 +17,4 @@
 (defn -main []
   (start-server
     (var entry/routes)
-    {:port (env/int :port 8080) :join? false})la)
+    {:port (env/int :port 8080) :join? false}))
