@@ -1,0 +1,59 @@
+body {
+  font-size: 16px;
+  line-height: 1.5em;
+}
+
+h1 {
+  font-size: 30px;
+  line-height: 1.3em;
+  font-weight: 500;
+}
+
+h3 {
+  font-size: 24px;
+  font-weight: normal;
+}
+
+h4 {
+  font-weight: 500;
+}
+
+p {
+  font-size: 16px;
+  margin-bottom: 0.9em;
+}
+
+li {
+  margin-bottom: 0.5em;
+  list-style-type: none;
+}
+
+header.navbar i {
+  margin-right: 5px;
+}
+
+.intro {
+  margin-bottom: 30px;
+}
+
+form.search {
+  margin-bottom: 70px;
+}
+
+input[name='query'] {
+  font-size: 20px;
+  padding: 20px 10px;
+}
+
+ul i {
+  margin-right: 15px;
+  margin-left: -30px;
+}
+
+ul i.icon-map-marker {
+  padding: 0 3px;
+}
+
+section {
+  margin-bottom: 4em;
+}
