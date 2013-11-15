@@ -8,5 +8,7 @@ pom.xml.asc
 /.lein-*
 /.nrepl-port
 
+.DS_Store
+.sass-cache
 
 /resources/public/cljs

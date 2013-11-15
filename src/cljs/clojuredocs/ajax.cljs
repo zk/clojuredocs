@@ -1,6 +1,7 @@
 (ns clojuredocs.ajax
   (:require [goog.net.XhrIo]
-            [clojure.string :as str]))
+            [clojure.string :as str]
+            [cljs.reader :as reader]))
 
 (defn validate-ajax-args [{:keys [method]}]
   (let [valid-http-methods #{:get

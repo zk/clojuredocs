@@ -1,0 +1,116 @@
+@import "font-awesome.min";
+@import "bootstrap.min";
+
+@mixin blue-bg($alpha: 1) { background-color: rgba(53,151,202,$alpha); }
+@mixin green-bg($alpha: 1) { background-color: rgba(57,202,116,$alpha); }
+@mixin yellow-bg($alpha: 1) { background-color: rgba(236,192,47,$alpha); }
+@mixin red-bg($alpha: 1) { background-color: rgba(229,77,66,$alpha); }
+
+@mixin flex($val) {
+  -webkit-box-flex: $val;
+  -webkit-flex: $val;
+  -moz-box-flex: $val;
+  -ms-flex: $val;
+}
+
+html, body {
+  -webkit-font-smothing: anti-alias;
+  height: 100%;
+}
+
+body {
+  font-size: 16px;
+  line-height: 1.5em;
+}
+
+h1 {
+  font-size: 30px;
+  line-height: 1.3em;
+  font-weight: 500;
+}
+
+h3 {
+  font-size: 24px;
+  font-weight: normal;
+}
+
+h4 {
+  font-weight: 500;
+}
+
+p {
+  font-size: 16px;
+  margin-bottom: 0.9em;
+}
+
+li {
+  margin-bottom: 0.5em;
+  list-style-type: none;
+}
+
+header.navbar i {
+  margin-right: 5px;
+}
+
+.intro {
+  margin-bottom: 30px;
+}
+
+
+section.search {
+  form {
+    margin-bottom: 1em;
+  }
+
+  input[name='query'] {
+    font-size: 20px;
+    padding: 20px 10px;
+  }
+
+  .ac-result ul {
+    margin: 0;
+  }
+}
+
+ul i {
+  margin-right: 15px;
+  margin-left: -30px;
+}
+
+ul i.icon-map-marker {
+  padding: 0 3px;
+}
+
+section {
+  margin-bottom: 4em;
+}
+
+
+table.ac-results {
+  width: 100%;
+  font-size: 15px;
+
+  td {
+    padding-bottom: 20px;
+  }
+
+  .ac-result {
+    .name {
+      vertical-align: top;
+      margin-right: 10px;
+      font-weight: bold;
+    }
+
+    .docstring {
+      vertical-align: top;
+      max-width: 500px;
+    }
+  }
+
+  .ac-metadata {
+    font-weight: normal;
+    color: #999;
+    font-size: 9px;
+    text-transform: uppercase;
+  }
+}
