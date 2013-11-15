@@ -12,3 +12,7 @@ pom.xml.asc
 .sass-cache
 
 /resources/public/cljs
+
+resources/public/css/app.css
+resources/public/css/bootstrap.min.css
+resources/public/css/font-awesome.min.css
