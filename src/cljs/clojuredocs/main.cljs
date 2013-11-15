@@ -42,7 +42,7 @@
           (str name)
           [:div.ac-metadata
            "1 ex, 2 sa"]]
-         [:td.docstring (str doc)]]))
+         [:td.docstring (ellipsis (str doc) 200)]]))
 
 (defn prevent [e]
   (.preventDefault e))
