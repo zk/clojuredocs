@@ -12,6 +12,7 @@
             [clojure.string :as str]
             [clojuredocs.env :as env]
             [clojuredocs.layout :as layout]
+            [clojuredocs.quickref :as quickref]
             [clojure.pprint :refer (pprint)]
             [clucy.core :as clucy]))
 
@@ -42,6 +43,11 @@
        [:li [:i.icon-search] "Use the search box above to find what you're looking for."]
        [:li [:i.icon-map-marker] "Take a look at the Clojure Core quickref, which displays Clojure vars grouped by category."]
        [:li [:i.icon-book] "Browse an alphabetical list of vars defined in Clojure Core or Contrib."]]]
+     [:section
+      [:h3 "Getting started with Clojure"]
+      [:p "It's no secret that wrapping your head around Clojure can be tough (it took me three tries!)."]
+      [:p "The good news is learning Clojure and the concepts it espouses are getting easier every day. You will be transformed on the other side, so stick with it."]
+      [:p ""]]
      [:section
       [:h3 "Contribute to ClojureDocs"]
       [:p "We need your help to make ClojureDocs a great community resource. Here are a couple of ways you can contribute."]
@@ -155,7 +161,9 @@ Still maintains the O(n*m) guarantee.
   (GET "/search" []
     (fn [{:keys [params]}]
       {:headers {"Content-Type" "application/edn"}
-       :body (pr-str (search (:query params)))})))
+       :body (pr-str (search (:query params)))}))
+
+  (GET "/quickref" [] quickref/index))
 
 (def session-store
   (cookie-store
