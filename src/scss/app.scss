@@ -65,10 +65,18 @@ section.search {
   input[name='query'] {
     font-size: 20px;
     padding: 20px 10px;
+    border-radius: 0;
   }
 
-  .ac-result ul {
-    margin: 0;
+  .ac-result {
+    td {
+      padding: 10px;
+    }
+
+    &:hover {
+      background-color: #f4f4f4;
+      cursor: pointer;
+    }
   }
 }
 
