@@ -1,0 +1,18 @@
+#!/bin/sh
+
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+export BASE_URL=http://localhost:5000
+
+export DEBUG_EXCEPTIONS=true
+export REPL_PORT=7888
+
+export CLJS_DEV=true
+
+export APP_ID="dev-$USER-`uname -n`"
+
+# export EXCEPTIONAL_KEY=4de15b3207d63564e95f712ed69a80e053504f6f
+
+export MONGO_URL="mongodb://localhost:27017/clojuredocs"
+
+cd  $SCRIPT_DIR/.. && foreman start
