@@ -1,7 +1,8 @@
 (ns clojuredocs.main
   (:require [dommy.utils :as utils]
             [dommy.core :as dom]
-            [clojuredocs.ajax :refer [ajax]])
+            [clojuredocs.ajax :refer [ajax]]
+            [clojuredocs.sticky :as sticky])
   (:use-macros [dommy.macros :only [node sel sel1]]))
 
 (defn log [& args]
@@ -73,4 +74,6 @@
   (fn [$el]
     (dom/listen! $el :submit
       (fn [e]
-        (prevent e)))))
+        (prevent e))))
+
+  "[data-sticky-offset]" sticky/init)
