@@ -12,7 +12,8 @@
                  [hiccup "1.0.4"]
                  [org.clojure/clojurescript "0.0-2030"]
                  [prismatic/dommy "0.1.2"]
-                 [clucy "0.4.0"]]
+                 [clucy "0.4.0"]
+                 [watchtower "0.1.1"]]
   :plugins [[lein-cljsbuild "1.0.0-alpha2"]] ;; required for heroku deploy
   :cljsbuild {:builds
               {:dev  {:source-paths ["src/cljs"]

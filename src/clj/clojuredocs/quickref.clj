@@ -44,8 +44,9 @@
    [:ul
     (map $toc-category categories)]])
 
-(def $toc
+(defn $toc [quickref-data]
   [:div.toc
+   {:data-sticky-offset "70"}
    [:h2 "Table of Contents"]
    (map $toc-sphere quickref-data)])
 
@@ -55,9 +56,9 @@
      :content
      [:div.row
       [:div.col-sm-3
-       $toc]
+       ($toc quickref-data)]
       [:div.col-sm-9
-       [:h1 "Quickref"]
+       [:h1 "Quickref for Clojure Core"]
        (map $sphere quickref-data)]]}))
 
 (def quickref-data '({:title "Simple Values",
@@ -319,8 +320,8 @@
                             select-keys
                             merge
                             merge-with),
-                          :title "Use"}
-                         {:syms ((Sorted Maps) rseq subseq subseq rsubseq rsubseq),
+                          :title "Use (Sorted Maps)"}
+                         {:syms (rseq subseq subseq rsubseq rsubseq),
 
                           :title "Use"})}
                        {:title "Sets",
