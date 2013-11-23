@@ -1,29 +1,64 @@
 (ns clojuredocs.quickref
-  (:require [clojuredocs.layout :as layout]))
+  (:require [clojuredocs.layout :as layout]
+            [clojuredocs.search :as search]))
 
 (declare quickref-data)
 
 (defn $group [{:keys [title syms]}]
   [:div.group
-   [:h5 title]
-   [:p (pr-str syms)]])
+   [:div.quickref-header.clearfix
+    [:h5 title]
+    [:h5.header-reference "Simple Values > Numbers"]]
+   [:dl.dl-horizontal
+    (mapcat #(vector
+               [:div.dl-row
+                [:dt [:a {:href "#"} (str %)]]
+                [:dd (->> (str "clojure.core/" %)
+                          search/lookup-vars
+                          :doc
+                          (take 50)
+                          (apply str))
+                 [:span.examples-count.pull-right
+                  "1 ex."]]])
+      syms)]])
 
 (defn $category [{:keys [title groups]}]
   [:div.category
-   [:h4 title]
+   [:div.category-header.clearfix
+    [:h4 title]
+    [:h4.header-reference "Simple Values"]]
    (map $group groups)])
 
 (defn $sphere [{:keys [title categories]}]
   [:div.sphere
-   [:h3 title]
+   [:div.sphere-header
+    [:h3 title]]
    (map $category categories)])
+
+(defn $toc-category [{:keys [title]}]
+  [:li title])
+
+(defn $toc-sphere [{:keys [title categories]}]
+  [:div.toc-sphere
+   [:h3 title]
+   [:ul
+    (map $toc-category categories)]])
+
+(def $toc
+  [:div.toc
+   [:h2 "Table of Contents"]
+   (map $toc-sphere quickref-data)])
 
 (defn index [r]
   (layout/main
-    {:content
-     [:div
-      [:h1 "Quickref"]
-      (map $sphere quickref-data)]}))
+    {:body-class "quickref-page"
+     :content
+     [:div.row
+      [:div.col-sm-3
+       $toc]
+      [:div.col-sm-9
+       [:h1 "Quickref"]
+       (map $sphere quickref-data)]]}))
 
 (def quickref-data '({:title "Simple Values",
                       :categories

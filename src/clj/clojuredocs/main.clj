@@ -16,7 +16,10 @@
     opts))
 
 (defn -main []
-  (nrepl-server/start-server :port (env/int :repl-port 7888))
-  (start-http-server
-    (var entry/routes)
-    {:port (env/int :port 8080) :join? false}))
+  (let [port (env/int :port 8080)
+        repl-port (env/int :repl-port 7888)]
+    (nrepl-server/start-server :port repl-port)
+    (start-http-server
+      (var entry/routes)
+      {:port port :join? false})
+    (println (format "Started server on port %d" port))))
