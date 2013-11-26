@@ -39,11 +39,12 @@
 
 (defn $ac-result [{:keys [name ns doc]}]
   (node [:tr.ac-result
-         [:td.name
-          (str name)
-          [:div.ac-metadata
-           "1 ex, 2 sa"]]
-         [:td.docstring (ellipsis (str doc) 200)]]))
+         [:a {:href (str "/v/" ns "/" name)}
+          [:td.name
+           (str name)
+           [:div.ac-metadata
+            "1 ex, 2 sa"]]
+          [:td.docstring (ellipsis (str doc) 200)]]]))
 
 (defn prevent [e]
   (.preventDefault e))
