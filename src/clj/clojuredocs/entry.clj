@@ -17,6 +17,7 @@
             [clojuredocs.layout :as layout]
             [clojuredocs.quickref :as quickref]
             [clojuredocs.site.intro :as site-intro]
+            [clojuredocs.site.vars :as site-vars]
             [clojure.pprint :refer (pprint)]))
 
 (defn hiccup->html-string [body]
@@ -43,6 +44,7 @@
 
 (defroutes _routes
   site-intro/routes
+  (GET "/v/:ns/:name" [ns name] (site-vars/var-page ns name))
   (GET "/quickref" [] quickref/index))
 
 (def session-store

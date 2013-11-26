@@ -53,6 +53,30 @@
   [string]
   (some-> string str (js/encodeURIComponent) (.replace "+" "%20")))
 
+(def raf
+  (or (.-requestAnimationFrame js/window)
+      (.-webkitRequestAnimationFrame js/window)
+      (.-mozRequestAnimationFrame js/window)
+      (.-oRequestAnimationFrame js/window)
+      (.-msRequestAnimationFrame js/window)
+      (fn [f] (.setTimeout js/window f (/ 1000 60.0)))))
+
+(defn offset-top [$el]
+  (loop [y 0
+         $el $el]
+    (let [parent (.-offsetParent $el)]
+      (if-not parent
+        y
+        (recur
+          (+ y (.-offsetTop $el))
+          parent)))))
+
+(defn scroll-to [$el]
+  (let [scroll (.-pageYOffset js/window)
+        top (offset-top $el)]
+    (clog (- top scroll))
+    (.scrollBy js/window 0 (- (- top scroll) 20))))
+
 (init
   [:.search :form :input]
   (fn [$el]
@@ -66,6 +90,7 @@
                     :success (fn [resp]
                                (let [$ac (sel1 [:table.ac-results])]
                                  (dom/clear! $ac)
+                                 (scroll-to $el)
                                  (->> resp
                                       :body
                                       (map $ac-result)
