@@ -1,8 +1,16 @@
 (ns clojuredocs.quickref
-  (:require [clojuredocs.layout :as layout]
+  (:require [clojure.string :as str]
+            [clojuredocs.layout :as layout]
             [clojuredocs.search :as search]))
 
 (declare quickref-data)
+
+(defn title->id [k]
+  (-> k
+      name
+      str/lower-case
+      (str/replace #"[^a-z0-9]" "-")
+      (str/replace #"-+" "-")))
 
 (defn $group [{:keys [title syms]}]
   [:div.group
@@ -25,22 +33,22 @@
 (defn $category [{:keys [title groups]}]
   [:div.category
    [:div.category-header.clearfix
-    [:h4 title]
+    [:h4 {:id (title->id title)} title]
     [:h4.header-reference "Simple Values"]]
    (map $group groups)])
 
 (defn $sphere [{:keys [title categories]}]
   [:div.sphere
    [:div.sphere-header
-    [:h3 title]]
+    [:h3 {:id (title->id title)} title]]
    (map $category categories)])
 
 (defn $toc-category [{:keys [title]}]
-  [:li title])
+  [:li [:a {:href (str "#" (title->id title))} title]])
 
 (defn $toc-sphere [{:keys [title categories]}]
   [:div.toc-sphere
-   [:h3 title]
+   [:h3 [:a {:href (str "#" (title->id title))} title]]
    [:ul
     (map $toc-category categories)]])
 
