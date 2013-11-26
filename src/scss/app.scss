@@ -75,7 +75,6 @@ section.search {
 
     &:hover {
       background-color: #f4f4f4;
-      cursor: pointer;
     }
   }
 }
@@ -160,6 +159,11 @@ table.ac-results {
   .toc.sticky {
     position: fixed;
     top: 10px;
+
+    @media (max-width: 767px) {
+      top: auto;
+      position: relative;
+    }
   }
 
   .toc-sphere {
