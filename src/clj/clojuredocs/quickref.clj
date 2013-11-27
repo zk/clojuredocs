@@ -64,9 +64,10 @@
    [:h2 "Table of Contents"]
    (map $toc-sphere quickref-data)])
 
-(defn index [r]
+(defn index [{:keys [user]}]
   (layout/main
     {:body-class "quickref-page"
+     :user user
      :content
      [:div.row
       [:div.col-sm-3
