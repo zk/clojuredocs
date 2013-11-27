@@ -28,6 +28,11 @@ CD is still kind of an MVC app, in that we separate datastore access, transforma
 * Functions that return hiccup structures should be prefixed with a `$`, like `$layout`.
 
 
+## TODO
+
+* Figure out how to get all the existing users hooked up to their GH accounts.
+
+
 ## License
 
 Copyright © 2013 Zachary Kim
