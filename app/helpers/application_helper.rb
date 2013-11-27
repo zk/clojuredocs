@@ -2,7 +2,7 @@
 module ApplicationHelper
   def grav_url_for(email, size=80)
     digest = Digest::MD5.hexdigest(email)
-    return "http://www.gravatar.com/avatar/" + digest + "?s=" + size.to_s
+    return "http://www.gravatar.com/avatar/" + digest + "?s=" + size.to_s + "&d=mm"
   end
   
   def font_size_for_weight(weight)
