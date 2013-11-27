@@ -2,10 +2,6 @@
 
 The clojuredocs.org webapp
 
-## Prerequs
-
-* MongoDB
-
 ## Dev
 
 Run `bin/dev`
