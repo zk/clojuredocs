@@ -39,6 +39,7 @@ CD is still kind of an MVC app, in that we separate datastore access, transforma
 ## TODO
 
 * Figure out how to get all the existing users hooked up to their GH accounts.
+* 301 old var urls to new
 
 
 ## License
