@@ -11,12 +11,14 @@
         [ring.util.response :only (response content-type)])
   (:require [compojure.core :refer (defroutes GET POST PUT DELETE)]
             [compojure.response :refer (Renderable render)]
+            [ring.util.response :refer (redirect)]
             [clojure.string :as str]
             [hiccup.page :refer (html5)]
             [clojuredocs.env :as env]
             [clojuredocs.layout :as layout]
             [clojuredocs.quickref :as quickref]
             [clojuredocs.site.intro :as site-intro]
+            [clojuredocs.site.gh-auth :as site-gh-auth]
             [clojuredocs.site.vars :as site-vars]
             [clojure.pprint :refer (pprint)]))
 
@@ -41,19 +43,26 @@
       (merge (with-meta (response "") (meta resp-map))
              resp-map))))
 
-
 (defroutes _routes
-  site-intro/routes
+  (var site-intro/routes)
+  (var site-gh-auth/routes)
+  (GET "/logout" [] (fn [r] (-> (redirect "/")
+                                (assoc :session nil))))
   (GET "/v/:ns/:name" [ns name] (site-vars/var-page ns name))
   (GET "/quickref" [] quickref/index))
 
 (def session-store
   (cookie-store
-    {:key (env/str :session-key "abcdefg")
+    {:key (env/str :session-key)
      :domain ".clojuredocs.org"}))
+
+(defn promote-session-user [h]
+  (fn [{:keys [session] :as r}]
+    (h (assoc r :user (:user session)))))
 
 (def routes
   (-> _routes
+      promote-session-user
       wrap-keyword-params
       wrap-nested-params
       wrap-params

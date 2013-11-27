@@ -47,10 +47,10 @@
      [:h3 "Top Contributors"]]]])
 
 (defroutes routes
-
   (GET "/" []
-    (fn [r]
-      (-> {:content $index}
+    (fn [{:keys [ user]}]
+      (-> {:content $index
+           :user user}
           layout/main)))
 
   (GET "/search" []

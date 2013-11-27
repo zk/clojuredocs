@@ -22,4 +22,4 @@
     (start-http-server
       (var entry/routes)
       {:port port :join? false})
-    (println (format "Started server on port %d" port))))
+    (println (format "Server running on port %d" port))))

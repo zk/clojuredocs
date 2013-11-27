@@ -2,6 +2,8 @@
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
+export SESSION_KEY=b29689d1842e4a20b7cf100333f6d8cb
+
 export BASE_URL=http://localhost:5000
 
 export DEBUG_EXCEPTIONS=true
@@ -14,5 +16,8 @@ export APP_ID="dev-$USER-`uname -n`"
 # export EXCEPTIONAL_KEY=4de15b3207d63564e95f712ed69a80e053504f6f
 
 export MONGO_URL="mongodb://localhost:27017/clojuredocs"
+
+export GH_CLIENT_ID=00c7338906c4ac29315b
+export GH_CLIENT_SECRET=1af3fca29ce3fb36075ca28bb7513e6070847d71
 
 cd  $SCRIPT_DIR/.. && foreman start

@@ -19,12 +19,13 @@
       (str/replace #"_div" "/")))
 
 (defn var-page [ns name]
-  (fn [r]
+  (fn [{:keys [user]}]
     (let [name (unmunge-name name)
           {:keys [arglists name ns doc] :as v}
           (search/lookup (str ns "/" name))]
       (layout/main
         {:body-class "var-page"
+         :user user
          :content [:div.row
                    [:div.col-sm-3
                     "TOC"]
@@ -34,10 +35,11 @@
                     [:ul.arglists
                      (map #($arglist name %) arglists)]
                     [:div.docstring
-                     [:pre doc]
+                     [:pre (-> doc
+                               (str/replace #"\n\s\s" "\n"))]
                      [:div.copyright
                       "&copy; Rich Hickey. All rights reserved."
                       " "
                       [:a {:href "http://www.eclipse.org/legal/epl-v10.html"}
                        "Eclipse Public License 1.0"]]]
-                    (pr-str v)]]}))))
+                    [:pre (pr-str v)]]]}))))
