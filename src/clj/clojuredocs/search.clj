@@ -36,16 +36,42 @@
     :ns "clojure.core"
     :doc "Assignment special form. When the first operand is a field member access form, the assignment is to the corresponding field. If it is an instance field, the instance expr will be evaluated, then the expr. In all cases the value of expr is returned. Note - you cannot assign to function params or local bindings. Only Java fields, Vars, Refs and Agents are mutable in Clojure. See http://clojure.org/special_forms for more information."}])
 
+(def clojure-namespaces
+  '[clojure.core
+    clojure.data
+    clojure.edn
+    clojure.inspector
+    clojure.instant
+    clojure.java.browse
+    clojure.java.io
+    clojure.java.javadoc
+    clojure.java.shell
+    clojure.main
+    clojure.pprint
+    clojure.reflect
+    clojure.repl
+    clojure.set
+    clojure.stacktrace
+    clojure.string
+    clojure.template
+    clojure.test
+    clojure.walk
+    clojure.xml
+    clojure.zip])
+
 (def searchable-vars
-  (->> ['clojure.core 'clojure.zip]
-       (mapcat ns-publics)
-       (map second)
-       (map meta)
-       (map #(update-in % [:ns] str))
-       (map #(update-in % [:name] str))
-       (map #(select-keys % [:ns :arglists :file :name
-                             :column :added :static :doc :line]))
-       (concat special-forms)))
+  (do
+    (doseq [ns-sym clojure-namespaces]
+      (require ns-sym))
+    (->> clojure-namespaces
+         (mapcat ns-publics)
+         (map second)
+         (map meta)
+         (map #(update-in % [:ns] str))
+         (map #(update-in % [:name] str))
+         (map #(select-keys % [:ns :arglists :file :name
+                               :column :added :static :doc :line]))
+         (concat special-forms))))
 
 (binding [clucy/*analyzer* (org.apache.lucene.analysis.core.WhitespaceAnalyzer. clucy/*version*)]
   (doseq [nm searchable-vars]
