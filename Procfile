@@ -1,1 +1,1 @@
-web: lein run -m main
+web: lein run -m clojuredocs.main
