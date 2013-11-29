@@ -38,13 +38,14 @@
                "...")))
 
 (defn $ac-result [{:keys [name ns doc]}]
-  (node [:tr.ac-result
-         [:a {:href (str "/v/" ns "/" name)}
+  (node [:a {:href "#"}
+         [:tr.ac-result
           [:td.name
            (str name)
            [:div.ac-metadata
-            "1 ex, 2 sa"]]
-          [:td.docstring (ellipsis (str doc) 200)]]]))
+            [:a {:href (str "/v/" ns)} (str ns)]]]
+          [:td.docstring
+           [:a {:href (str "/v/" ns "/" name)} (ellipsis (str doc) 200)]]]]))
 
 (defn prevent [e]
   (.preventDefault e))
@@ -90,7 +91,7 @@
                     :success (fn [resp]
                                (let [$ac (sel1 [:table.ac-results])]
                                  (dom/clear! $ac)
-                                 (scroll-to $el)
+                                 #_(scroll-to $el)
                                  (->> resp
                                       :body
                                       (map $ac-result)

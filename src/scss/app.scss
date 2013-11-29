@@ -104,8 +104,16 @@ section.search {
       padding: 10px;
     }
 
+    .docstring {
+      color: #444;
+    }
+
     &:hover {
       background-color: #f4f4f4;
+
+      a {
+        text-decoration: none;
+      }
     }
   }
 }
@@ -130,6 +138,7 @@ table.ac-results {
 
   td {
     padding-bottom: 20px;
+    vertical-align: top;
   }
 
   .ac-result {
@@ -137,19 +146,26 @@ table.ac-results {
       vertical-align: top;
       margin-right: 10px;
       font-weight: bold;
+      white-space: nowrap;
     }
 
     .docstring {
       vertical-align: top;
       max-width: 700px;
+
+      a {
+        display: block;
+        color: #444;
+      }
     }
   }
 
   .ac-metadata {
     font-weight: normal;
     color: #999;
-    font-size: 9px;
-    text-transform: uppercase;
+    font-size: 12px;
+    //text-transform: uppercase;
+    white-space: nowrap;
   }
 }
 
