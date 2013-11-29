@@ -6,7 +6,10 @@ The clojuredocs.org webapp
 
 ## Dev
 
-Run `bin/dev`
+Run `bin/dev`, which will start all the things (repl, web process,
+scss compiler, etc). See `Procfile` for more info.
+
+Connect from cider (emacs) or Light Table, repl port 7888.
 
 
 ## Reqs
