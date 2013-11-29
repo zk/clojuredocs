@@ -1,4 +1,4 @@
-web: lein run -m clojuredocs.main
+web: lein repl :headless
 sass: sass --watch src/scss:resources/public/css
 cljs: lein trampoline cljsbuild auto dev
 #mongo: mongod

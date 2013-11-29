@@ -2,8 +2,7 @@
   (:require [ring.adapter.jetty :as jetty]
             [aleph.http :as ah]
             [clojuredocs.env :as env]
-            [clojuredocs.entry :as entry]
-            [clojure.tools.nrepl.server :as nrepl-server]))
+            [clojuredocs.entry :as entry]))
 
 (defn start-http-server [entry-point opts]
   (ah/start-http-server
@@ -16,9 +15,7 @@
     opts))
 
 (defn -main []
-  (let [port (env/int :port 8080)
-        repl-port (env/int :repl-port 7888)]
-    (nrepl-server/start-server :port repl-port)
+  (let [port (env/int :port 8080)]
     (start-http-server
       (var entry/routes)
       {:port port :join? false})

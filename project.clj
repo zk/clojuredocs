@@ -17,7 +17,13 @@
                  [org.clojure/tools.reader "0.7.10"]
                  [clj-http "0.7.7"]
                  [cheshire "5.2.0"]
-                 [javert "0.1.0"]]
+                 [org.clojure/java.jdbc "0.3.0-beta2"]
+                 [mysql/mysql-connector-java "5.1.25"]
+                 [lein-light-nrepl "0.0.9"]]
+  :repl-options {:init (do (require 'clojuredocs.main)
+                           (clojuredocs.main/-main))
+                 :port 7888
+                 :nrepl-middleware [lighttable.nrepl.handler/lighttable-ops]}
   :plugins [[lein-cljsbuild "1.0.0"]] ;; required for heroku deploy
   :cljsbuild {:builds
               {:dev  {:source-paths ["src/cljs"]
