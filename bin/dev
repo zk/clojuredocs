@@ -20,4 +20,4 @@ export MONGO_URL="mongodb://localhost:27017/clojuredocs"
 export GH_CLIENT_ID=00c7338906c4ac29315b
 export GH_CLIENT_SECRET=1af3fca29ce3fb36075ca28bb7513e6070847d71
 
-cd  $SCRIPT_DIR/.. && foreman start
+cd  $SCRIPT_DIR/.. && foreman start -f Procfile.dev

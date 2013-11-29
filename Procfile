@@ -1,7 +1,1 @@
-web: lein repl :headless
-sass: sass --watch src/scss:resources/public/css
-cljs: lein trampoline cljsbuild auto dev
-#mongo: mongod
-
-# Refresh 1st tab of chrome when fs changes are seen
-refresher: lein run -m tools.refresher chrome src/clj src/md resources
+web: lein run -m main
