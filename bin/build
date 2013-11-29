@@ -1,0 +1,18 @@
+#!/bin/sh
+
+lein test
+
+# sass
+if [ ! -d "$PWD/.gem" ]; then
+    mkdir $PWD/.gem
+fi
+gem install sass --no-rdoc --no-ri --install-dir "$PWD/.gem"
+export GEM_PATH=$GEM_PATH:$PWD/.gem
+$PWD/.gem/bin/sass --update src/scss:resources/public/css --style compressed
+
+# cljx
+#lein cljx
+
+# cljs
+lein cljsbuild once prod
+lein with-profile production compile :all
