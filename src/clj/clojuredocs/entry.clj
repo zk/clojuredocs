@@ -15,7 +15,6 @@
             [clojure.string :as str]
             [hiccup.page :refer (html5)]
             [clojuredocs.env :as env]
-            [clojuredocs.layout :as layout]
             [clojuredocs.quickref :as quickref]
             [clojuredocs.site.intro :as site-intro]
             [clojuredocs.site.gh-auth :as site-gh-auth]
@@ -48,8 +47,8 @@
   (var site-gh-auth/routes)
   (GET "/logout" [] (fn [r] (-> (redirect "/")
                                 (assoc :session nil))))
-  (GET "/v/:ns/:name" [ns name] (site-vars/var-page ns name))
-  (GET "/quickref" [] quickref/index))
+  (GET "/quickref" [] quickref/index)
+  (GET "/:ns/:name" [ns name] (site-vars/var-page ns name)))
 
 (def session-store
   (cookie-store
@@ -69,3 +68,6 @@
       (wrap-session {:store session-store})
       (wrap-file "resources/public" {:allow-symlinks? true})
       wrap-file-info))
+
+
+(println {:foo "bar" :baz [1 2 3 4]})

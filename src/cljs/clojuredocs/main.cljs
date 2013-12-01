@@ -1,6 +1,7 @@
 (ns clojuredocs.main
   (:require [dommy.utils :as utils]
             [dommy.core :as dom]
+            [clojure.string :as str]
             [clojuredocs.ajax :refer [ajax]]
             [clojuredocs.sticky :as sticky])
   (:use-macros [dommy.macros :only [node sel sel1]]))
@@ -37,15 +38,22 @@
                     (apply str))
                "...")))
 
+(defn munge-name [s]
+  (-> s
+      str
+      (str/replace #"\." "_dot")
+      (str/replace #"/" "_div")
+      (str/replace #"\?" "_qm")))
+
 (defn $ac-result [{:keys [name ns doc]}]
-  (node [:a {:href "#"}
-         [:tr.ac-result
-          [:td.name
-           (str name)
-           [:div.ac-metadata
-            [:a {:href (str "/v/" ns)} (str ns)]]]
-          [:td.docstring
-           [:a {:href (str "/v/" ns "/" name)} (ellipsis (str doc) 200)]]]]))
+  node [:a.ac-result-link {:href (str "/" ns "/" (munge-name name))}
+        [:tr.ac-result
+         [:td.name
+          (str name)
+          [:div.ac-metadata
+           [:a {:href (str "/" ns)} (str ns)]]]
+         [:td.docstring
+          (ellipsis (str doc) 200)]]])
 
 (defn prevent [e]
   (.preventDefault e))
@@ -79,7 +87,7 @@
     (.scrollBy js/window 0 (- (- top scroll) 20))))
 
 (init
-  [:.search :form :input]
+  [:form.search :input]
   (fn [$el]
     (let [$input (sel1 [$el :input])]
       (dom/listen! $el
@@ -96,8 +104,7 @@
                                       :body
                                       (map $ac-result)
                                       (dom/append! $ac))))})))))
-
-  [:.search :form]
+  [:form.search]
   (fn [$el]
     (dom/listen! $el :submit
       (fn [e]

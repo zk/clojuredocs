@@ -71,7 +71,10 @@
          (map #(update-in % [:name] str))
          (map #(select-keys % [:ns :arglists :file :name
                                :column :added :static :doc :line]))
-         (concat special-forms))))
+         (concat special-forms)
+         (map #(-> %
+                   (update-in [:ns] str)
+                   (update-in [:name] str))))))
 
 (binding [clucy/*analyzer* (org.apache.lucene.analysis.core.WhitespaceAnalyzer. clucy/*version*)]
   (doseq [nm searchable-vars]

@@ -1,7 +1,7 @@
 (ns clojuredocs.site.intro
   (:require [compojure.core :refer (defroutes GET)]
-            [clojuredocs.layout :as layout]
-            [clojuredocs.search :as search]))
+            [clojuredocs.search :as search]
+            [clojuredocs.site.common :as common]))
 
 (def $index
   [:div
@@ -9,11 +9,11 @@
     [:div.col-md-12
      [:section
       [:h1 "ClojureDocs is a community-powered documentation and examples repository for the " [:a {:href "http://clojure.org"} "Clojure programming language"] "."]]
-     [:section.search
-      [:form {:method :get :action "/search" :autocomplete "off"}
+     [:section
+      [:form.search {:method :get :action "/search" :autocomplete "off"}
        [:input.form-control {:type "text"
                              :name "query"
-                             :placeholder "What do you need help with?"
+                             :placeholder "Looking for?"
                              :autofocus "autofocus"
                              :autocomplete "off"}]]
       [:table.ac-results]]]]
@@ -50,8 +50,10 @@
   (GET "/" []
     (fn [{:keys [ user]}]
       (-> {:content $index
+           :body-class "intro-page"
+           :hide-search true
            :user user}
-          layout/main)))
+          common/$main)))
 
   (GET "/search" []
     (fn [{:keys [params]}]

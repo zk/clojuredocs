@@ -1,6 +1,6 @@
 (ns clojuredocs.quickref
   (:require [clojure.string :as str]
-            [clojuredocs.layout :as layout]
+            [clojuredocs.site.common :as common]
             [clojuredocs.search :as search]))
 
 (declare quickref-data)
@@ -26,7 +26,7 @@
    [:dl.dl-horizontal
     (mapcat #(vector
                [:div.dl-row
-                [:dt [:a {:href (str "/v/clojure.core/" (munge-name %))} (str %)]]
+                [:dt [:a {:href (str "/clojure.core/" (munge-name %))} (str %)]]
                 [:dd (->> (str "clojure.core/" %)
                           search/lookup-vars
                           :doc
@@ -65,7 +65,7 @@
    (map $toc-sphere quickref-data)])
 
 (defn index [{:keys [user]}]
-  (layout/main
+  (common/$main
     {:body-class "quickref-page"
      :user user
      :content
