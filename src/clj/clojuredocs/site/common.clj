@@ -33,7 +33,7 @@
          {:method :get :action "/search" :autocomplete "off"}
          [:input.form-control {:type "text"
                                :name "query"
-                               :placeholder "Quick lookup (ctrl-s)"
+                               :placeholder "Quick Lookup (ctrl-s)"
                                :autocomplete "off"}]])]]
     (when-not hide-search
       [:div.row
