@@ -2,7 +2,9 @@
 
 The clojuredocs.org webapp
 
-![](https://dl.dropboxusercontent.com/s/pw1kcpbdxk1c3oq/Screenshot%202013-11-26%2021.15.38.png)
+![](https://dl.dropboxusercontent.com/spa/wwj1uggqjrao4hu/_d10v1tw.png)
+
+![](https://dl.dropboxusercontent.com/spa/wwj1uggqjrao4hu/a8st8f8c.png)
 
 
 ## Reqs
