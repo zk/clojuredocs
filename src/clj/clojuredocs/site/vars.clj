@@ -1,37 +1,45 @@
 (ns clojuredocs.site.vars
-  (:require [clojuredocs.layout :as layout]
+  (:require [clojure.string :as str]
+            [somnium.congomongo :as mon]
             [clojuredocs.search :as search]
-            [clojure.string :as str]))
+            [clojuredocs.site.common :as common]))
+
+(defn examples-for [{:keys [ns name]}]
+  (mon/fetch :examples :where {:name name
+                               :ns ns
+                               :library-url "https://github.com/clojure/clojure"}))
 
 (defn $arglist [name a]
   [:li.arglist (str
-                 "("
-                 (->> a
-                      (cons name)
-                      (apply list)
-                      (interpose " ")
-                      (apply str))
-                 ")")])
+                 "(" name " " a ")")])
 
 (defn unmunge-name [s]
   (-> s
       (str/replace #"_dot" ".")
-      (str/replace #"_div" "/")))
+      (str/replace #"_div" "/")
+      (str/replace #"_qm" "?")))
+
+(defn $example [{:keys [body]}]
+  [:li
+   [:pre body]])
 
 (defn var-page [ns name]
   (fn [{:keys [user]}]
     (let [name (unmunge-name name)
-          {:keys [arglists name ns doc] :as v}
-          (search/lookup (str ns "/" name))]
-      (layout/main
+
+          {:keys [arglists name ns doc runtimes] :as v}
+          (mon/fetch-one :vars :where {:name name :ns ns})
+          examples (examples-for v)]
+      (common/$main
         {:body-class "var-page"
          :user user
          :content [:div.row
-                   [:div.col-sm-3
-                    "TOC"]
-                   [:div.col-sm-9
+                   [:div.col-sm-12
                     [:h1 name]
                     [:h2 ns]
+                    [:ul.runtimes
+                     (for [r runtimes]
+                       [:li (str r)])]
                     [:ul.arglists
                      (map #($arglist name %) arglists)]
                     [:div.docstring
@@ -42,4 +50,6 @@
                       " "
                       [:a {:href "http://www.eclipse.org/legal/epl-v10.html"}
                        "Eclipse Public License 1.0"]]]
-                    [:pre (pr-str v)]]]}))))
+                    [:h3 (count examples) " Examples"]
+                    [:ul
+                     (map $example examples)]]]}))))

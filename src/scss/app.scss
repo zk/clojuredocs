@@ -52,11 +52,26 @@ pre {
   border-radius: 0px;
 }
 
-header.navbar i {
-  margin-right: 5px;
+ul {
+  padding: 0;
 }
 
-header{
+header.navbar {
+  h1 {
+  }
+
+  i {
+    margin-right: 5px;
+  }
+
+  @media (max-width: 767px) {
+    .navbar-brand {
+      float: none;
+      display: inline-block;
+      padding-left: 0;
+    }
+  }
+
   .user-area {
     padding: 13px 15px;
     font-size: 14px;
@@ -78,42 +93,56 @@ header{
     margin-right: 5px;
   }
 
-  a {
-    font-size: 14px;
+  .navbar-nav {
+    li {
+      margin-bottom: 0;
+      font-size: 14px;
+    }
   }
 
+  input[type='text'] {
+    border-radius: 0;
+    font-size: 14px;
+    padding: 10px;
+    min-width: 220px;
+  }
 }
 
 .intro {
   margin-bottom: 30px;
 }
 
-section.search {
-  form {
+.intro-page {
+  form.search {
     margin-bottom: 1em;
+
+    input[name='query'] {
+      font-size: 20px;
+      padding: 20px 10px;
+      border-radius: 0;
+    }
+  }
+}
+
+.ac-result-link:hover {
+  text-decoration: none;
+  width: 100%;
+}
+
+.ac-result {
+  td {
+    padding: 10px;
   }
 
-  input[name='query'] {
-    font-size: 20px;
-    padding: 20px 10px;
-    border-radius: 0;
+  .docstring {
+    color: #444;
   }
 
-  .ac-result {
-    td {
-      padding: 10px;
-    }
+  &:hover {
+    background-color: rgba(0,0,0,0.05);
 
-    .docstring {
-      color: #444;
-    }
-
-    &:hover {
-      background-color: #f4f4f4;
-
-      a {
-        text-decoration: none;
-      }
+    a {
+      text-decoration: none;
     }
   }
 }
@@ -126,11 +155,6 @@ ul i {
 ul i.icon-map-marker {
   padding: 0 3px;
 }
-
-section {
-  margin-bottom: 4em;
-}
-
 
 table.ac-results {
   width: 100%;
@@ -169,12 +193,54 @@ table.ac-results {
   }
 }
 
+.intro-page {
+  section {
+    margin-bottom: 4em;
+  }
+}
+
+.var-page {
+  h1 {
+    margin-top: 0;
+  }
+
+  h2 {
+    margin-top: 0;
+    font-size: 16px;
+  }
+
+  section.search {
+    margin-bottom: 1em;
+  }
+
+  .arglists {
+    margin-left: 0;
+    padding-left: 0;
+  }
+
+  .docstring {
+    margin-bottom: 10px;
+
+    pre {
+      font-size: 13px;
+      margin-bottom: 0;
+    }
+
+    .copyright {
+      text-align: right;
+      font-size: 10px;
+      color: #bbb;
+
+      a {
+        color: #bbb;
+      }
+    }
+  }
+}
 
 // QUICKREF
 
-
 .quickref-page {
-
   h1 {
     font-size: 24px;
     margin-top: 0;
@@ -287,30 +353,5 @@ table.ac-results {
 
   dt {
     font-weight: normal;
-  }
-}
-
-.var-page {
-  .arglists {
-    margin-left: 0;
-    padding-left: 0;
-  }
-
-  .docstring {
-    margin-bottom: 10px;
-
-    pre {
-      font-size: 13px;
-      margin-bottom: 0;
-    }
-    .copyright {
-      text-align: right;
-      font-size: 10px;
-      color: #bbb;
-
-      a {
-        color: #bbb;
-      }
-    }
   }
 }
