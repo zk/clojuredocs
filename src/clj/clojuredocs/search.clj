@@ -126,7 +126,7 @@ Still maintains the O(n*m) guarantee.
 
 (defn query [q]
   (when-not (empty? q)
-    (->> (clucy/search search-index (str (lucene-escape q) "*") 1000)
+    (->> (clucy/search search-index (str (lucene-escape (str/trim q)) "*") 1000)
          (map #(assoc % :edit-distance (levenshtein-distance (str (:name %)) q)))
          (sort-by :edit-distance)
          (take 5))))
