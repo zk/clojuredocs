@@ -4,19 +4,20 @@ The clojuredocs.org webapp
 
 ![](https://dl.dropboxusercontent.com/s/pw1kcpbdxk1c3oq/Screenshot%202013-11-26%2021.15.38.png)
 
-## Dev
-
-Run `bin/dev`, which will start all the things (repl, web process,
-scss compiler, etc). See `Procfile` for more info.
-
-Connect from cider (emacs) or Light Table, repl port 7888.
-
 
 ## Reqs
 
 * lein
 * foreman (see `Procfile`, `bin/dev`)
 * scss (`gem install scss`)
+
+
+## Dev
+
+Run `bin/dev`, which will start all the things (repl, web process,
+scss compiler, etc). See `Procfile` for more info.
+
+Connect from cider (emacs) or Light Table, repl port 7888.
 
 
 ### App Structure
@@ -37,6 +38,11 @@ CD is still kind of an MVC app, in that we separate datastore access, transforma
 ### Conventions
 
 * Functions that return hiccup structures should be prefixed with a `$`, like `$layout`.
+
+
+## Dev-Prod differences
+
+* Dev starts the environment using `lein repl :headless`, prod uses `lein run -m clojuredocs.main`. See `:repl-options` in `project.clj` for initialization options.
 
 
 ## TODO
