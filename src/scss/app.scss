@@ -1,5 +1,6 @@
 @import "font-awesome.min";
 @import "bootstrap.min";
+@import "highlighting";
 
 @mixin blue-bg($alpha: 1) { background-color: rgba(53,151,202,$alpha); }
 @mixin green-bg($alpha: 1) { background-color: rgba(57,202,116,$alpha); }
@@ -14,8 +15,10 @@
 }
 
 html, body {
-  -webkit-font-smothing: anti-alias;
+  -webkit-font-smothing: antialiased;
   height: 100%;
+  font-family: 'Open Sans', sans-serif;
+  color: #333;
 }
 
 body {
@@ -23,24 +26,32 @@ body {
   line-height: 1.5em;
 }
 
+img {
+  max-width: 100%;
+}
+
 h1 {
-  font-size: 30px;
+  font-size: 28px;
   line-height: 1.3em;
-  font-weight: 500;
+  font-weight: 400;
 }
 
 h3 {
   font-size: 24px;
   font-weight: normal;
+  line-height: 1.5em;
+  margin-top: 0;
+  margin-bottom: 20px;
+  //font-family: 'Open Sans', sans-serif;
 }
 
 h4 {
-  font-weight: 500;
+  font-weight: 400;
 }
 
 p {
   font-size: 16px;
-  margin-bottom: 0.9em;
+  margin-bottom: 1.4em;
 }
 
 li {
@@ -118,6 +129,13 @@ header.navbar {
 }
 
 .intro-page {
+  .on-clojure {
+    background-color: #fafafa;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+  }
+
   form.search {
     margin-bottom: 1em;
 
@@ -126,6 +144,17 @@ header.navbar {
       padding: 20px 10px;
       border-radius: 0;
     }
+  }
+
+  .code-example {
+    font-size: 14px;
+    padding: 20px;
+    border: solid transparent 1px;
+    background-color: #fafafa;
+  }
+
+  h4 {
+    font-weight: 300;
   }
 }
 
@@ -201,6 +230,37 @@ table.ac-results {
 .intro-page {
   section {
     margin-bottom: 4em;
+
+    img {
+      margin-bottom: 1.6em;
+    }
+  }
+
+  .used-by {
+    ul {
+      text-align: center;
+    }
+
+    li {
+      display: inline-block;
+      margin-right: 30px;
+      margin-bottom: 20px;
+    }
+
+    img {
+      max-width: 200px;
+      max-height: 50px;
+      opacity: 0.6;
+
+      @media (max-width: 1199px) {
+        max-height: 35px;
+      }
+
+      @media (max-width: 991px) {
+        max-height: 50px;
+      }
+
+    }
   }
 }
 
@@ -240,6 +300,12 @@ table.ac-results {
         color: #bbb;
       }
     }
+  }
+
+  .syntaxhighlighter {
+    border: solid #ccc 1px;
+    overflow: hidden;
+    padding: 10px;
   }
 }
 

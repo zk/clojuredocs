@@ -68,6 +68,3 @@
       (wrap-session {:store session-store})
       (wrap-file "resources/public" {:allow-symlinks? true})
       wrap-file-info))
-
-
-(println {:foo "bar" :baz [1 2 3 4]})

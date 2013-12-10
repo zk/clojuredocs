@@ -21,13 +21,16 @@
 
 (defn $example [{:keys [body]}]
   [:li
-   [:pre body]])
+   [:pre {:class "brush: clj"} body]])
+
+(defn source-url [{:keys [file line]}]
+  (str "https://github.com/clojure/clojure/blob/clojure-1.5.1/src/clj/" file "#L" line))
 
 (defn var-page [ns name]
   (fn [{:keys [user]}]
     (let [name (unmunge-name name)
 
-          {:keys [arglists name ns doc runtimes] :as v}
+          {:keys [arglists name ns doc runtimes added file] :as v}
           (mon/fetch-one :vars :where {:name name :ns ns})
           examples (examples-for v)]
       (common/$main
@@ -37,11 +40,17 @@
                    [:div.col-sm-12
                     [:h1 name]
                     [:h2 ns]
+                    [:ul.arglists
+                     (map #($arglist name %) arglists)]
                     [:ul.runtimes
                      (for [r runtimes]
                        [:li (str r)])]
-                    [:ul.arglists
-                     (map #($arglist name %) arglists)]
+                    (when added
+                      [:div.added
+                       "Available since version " added])
+                    (when file
+                      [:div.source-code
+                       [:a {:href (source-url v)} "Source"]])
                     [:div.docstring
                      [:pre (-> doc
                                (str/replace #"\n\s\s" "\n"))]
@@ -50,6 +59,7 @@
                       " "
                       [:a {:href "http://www.eclipse.org/legal/epl-v10.html"}
                        "Eclipse Public License 1.0"]]]
+                    [:pre (pr-str v)]
                     [:h3 (count examples) " Examples"]
                     [:ul
                      (map $example examples)]]]}))))

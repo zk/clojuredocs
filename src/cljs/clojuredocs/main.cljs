@@ -3,7 +3,8 @@
             [dommy.core :as dom]
             [clojure.string :as str]
             [clojuredocs.ajax :refer [ajax]]
-            [clojuredocs.sticky :as sticky])
+            [clojuredocs.sticky :as sticky]
+            [highlight])
   (:use-macros [dommy.macros :only [node sel sel1]]))
 
 (defn log [& args]
@@ -49,14 +50,14 @@
   (str "/" ns "/" (munge-name name)))
 
 (defn $ac-result [{:keys [name ns doc] :as v}]
-  node [:a.ac-result-link {:href (path-for-var v)}
-        [:tr.ac-result
-         [:td.name
-          (str name)
-          [:div.ac-metadata
-           [:a {:href (str "/" ns)} (str ns)]]]
-         [:td.docstring
-          (ellipsis (str doc) 200)]]])
+  (node [:a.ac-result-link {:href (path-for-var v)}
+         [:tr.ac-result
+          [:td.name
+           (str name)
+           [:div.ac-metadata
+            [:a {:href (str "/" ns)} (str ns)]]]
+          [:td.docstring
+           (ellipsis (str doc) 200)]]]))
 
 (defn prevent [e]
   (.preventDefault e))
@@ -139,3 +140,8 @@
                          ;; s
                          (= 83 (key-code e)))
                 (.focus (sel1 [:form.search :input])))))))
+
+
+(aset (aget js/SyntaxHighlighter "defaults") "toolbar" false)
+(aset (aget js/SyntaxHighlighter "defaults") "gutter" false)
+(.all js/SyntaxHighlighter)
