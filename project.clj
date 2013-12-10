@@ -12,7 +12,7 @@
                  [aleph "0.3.0-rc2"]
                  [hiccup "1.0.4"]
                  [prismatic/dommy "0.1.2"]
-                 [org.clojure/clojurescript "0.0-2030"]
+                 [org.clojure/clojurescript "0.0-2080"]
                  [clucy "0.4.0"]
                  [watchtower "0.1.1"]
                  [org.clojure/tools.reader "0.7.10"]
@@ -20,19 +20,22 @@
                  [cheshire "5.2.0"]
                  [org.clojure/java.jdbc "0.3.0-beta2"]
                  [mysql/mysql-connector-java "5.1.25"]
-                 [lein-light-nrepl "0.0.9"]
+                 #_[lein-light-nrepl "0.0.9"]
                  [congomongo "0.4.1"]]
   :repl-options {:init (do (require 'clojuredocs.main)
                            (clojuredocs.main/-main))
                  :port 7888
-                 :nrepl-middleware [lighttable.nrepl.handler/lighttable-ops]}
+                 :nrepl-middleware [#_lighttable.nrepl.handler/lighttable-ops]}
   :plugins [[lein-cljsbuild "1.0.0"]] ;; required for heroku deploy
   :cljsbuild {:builds
               {:dev  {:source-paths ["src/cljs"]
                       :compiler {:output-to "resources/public/cljs/clojuredocs.js"
                                  :output-dir "resources/public/cljs"
                                  :optimizations :none
-                                 :source-map true}}
+                                 :source-map true
+                                 :foreign-libs [{:file "js/syntaxhighlighter.js"
+                                                 :provides ["highlight"]}]
+                                 :externs ["externs/syntaxhighlighter.js"]}}
 
                ;; for debugging advanced compilation problems
                :dev-advanced  {:source-paths ["src/cljs"]

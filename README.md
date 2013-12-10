@@ -22,6 +22,11 @@ scss compiler, etc). See `Procfile` for more info.
 Connect from cider (emacs) or Light Table, repl port 7888.
 
 
+### CLJS Source Maps
+
+The ClojureDocs project is set-up to emit source-maps for compiled javascript. To enable in Chrome, check the 'Enable JS source maps' option in the Developer Tools settings pane.
+
+
 ### App Structure
 
 The CD webapp is structured around functionality, where each distinct part has it's own root namespace (`quickref`, `vars`, etc). This is different from a traditional *ails app setup, where source files are organized by type (controllers, views, models), instead of by function.

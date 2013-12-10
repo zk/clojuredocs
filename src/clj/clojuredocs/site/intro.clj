@@ -3,10 +3,10 @@
             [clojuredocs.search :as search]
             [clojuredocs.site.common :as common]))
 
-(def $index
+(defn $index []
   [:div
    [:div.row
-    [:div.col-md-12
+    [:div.col-sm-12
      [:section
       [:h1 "ClojureDocs is a community-powered documentation and examples repository for the " [:a {:href "http://clojure.org"} "Clojure programming language"] "."]]
      [:section
@@ -18,19 +18,70 @@
                              :autocomplete "off"}]]
       [:table.ac-results]]]]
    [:div.row
-    [:div.col-md-6
+    [:div.col-sm-6
      [:section
       [:h3 "Getting started with ClojureDocs"]
       [:p "Finding the right tool for the job can be tough, so we've outlined a few ways to go about your search below."]
       [:ul
        [:li [:i.icon-search] "Use the search box above to find what you're looking for."]
        [:li [:i.icon-map-marker] "Take a look at the Clojure Core quickref, which displays Clojure vars grouped by category."]
-       [:li [:i.icon-book] "Browse an alphabetical list of vars defined in Clojure Core or Contrib."]]]
-     [:section
-      [:h3 "Getting started with Clojure"]
-      [:p "It's no secret that wrapping your head around Clojure can be tough (it took me three tries!)."]
-      [:p "The good news is learning Clojure and the concepts it espouses are getting easier every day. You will be transformed on the other side, so stick with it."]
-      [:p ""]]
+       [:li [:i.icon-book] "Browse an alphabetical list of vars defined in Clojure Core or Contrib."]]]]
+    [:div.col-sm-6
+     [:h3 "Top Contributors"]]]
+   [:div.row
+    [:div.col-sm-6
+     [:h3 "Clojure is concise, powerful, and performant."]
+     [:p
+      "New to Clojure and not sure where to start? If you'd like to get a good background on Clojure's design origins (and be entertained at the same time), start "
+      [:a {:href "http://www.infoq.com/presentations/Are-We-There-Yet-Rich-Hickey"} "here"]
+      "."]
+     [:p "If you're ready to jump in, then "
+      [:a {:href ""} "here you go"]
+      "."]
+     [:h3 "On Clojure"]
+     [:p "There's no denying that Clojure is just so "
+      " *different* "
+      " from what most of us are used to. "
+      [:em "What is up with all those parentheses?!"]]
+     [:p ]
+     [:p "So it's no surprise that it"
+      " takes a bit to get your head around. Stick with it, and you won't be disappointed."]
+     [:p "But don't take our word for it, here's what XKCD has to say:"]
+     [:p [:img {:src "http://imgs.xkcd.com/comics/lisp_cycles.png"}]]
+     [:p "Seems like more than a few, these days. Happy coding!"]]
+    [:div.col-sm-6
+     [:pre.code-example
+      (slurp "src/examples/clj/first.clj")]]]
+   [:div.row
+    [:div.col-sm-12.used-by
+     [:h3 "Clojure in Production"]
+     [:ul
+      (for [{:keys [src url]}
+            [{:src "https://g.twimg.com/Twitter_logo_blue.png"
+              :url "https://twitter.com"}
+             {:src "http://www.akamai.com/images/img/bg/akamai-logo.png"
+              :url "http://www.akamai.com/"}
+             {:src "http://www.climate.com/preso/assets/imgs/shared/logos/tcc_logo_marcom.png"
+              :url "http://www.climate.com/"}
+             {:src "http://www.factual.com/assets/factual_logo_small-9d5ae614ae5422b251648ca62d6b4e51.png"
+              :url "http://www.factual.com"}
+             {:src "https://d1lpkba4w1baqt.cloudfront.net/heroku-logo-light-234x60.png"
+              :url "https://www.heroku.com"}
+             {:src "https://www.simple.com/img/logo-a2236763875.png"
+              :url "https://simple.com"}
+             {:src "http://upload.wikimedia.org/wikipedia/commons/c/cc/Groupon_logo.png"
+              :url "http://www.groupon.com/"}
+             {:src "http://img.brightcove.com/logo-corporate-new.png"
+              :url "http://www.brightcove.com"}
+             {:src "http://f.cl.ly/items/3D0u2W0H322U1V2Z2u0P/80x50_orange.png"
+              :url "https://soundcloud.com"}
+             {:src "https://d36r1a7iisq7tk.cloudfront.net/img/rfz_logo@2x__Vdbaeec7636c1e9aa5b7951ae71b2a7e8__.png"
+              :url "https://www.readyforzero.com/"}
+             {:src "http://a.disquscdn.com/dotcom/d-2d5f885/img/brand/disqus-social-icon-blue-transparent.png"
+              :url "http://disqus.com/"}]]
+        [:li [:a {:href url} [:img {:src src}]]])]]]
+   [:div.row
+    [:div.col-sm-6
      [:section
       [:h3 "Contribute to ClojureDocs"]
       [:p "We need your help to make ClojureDocs a great community resource. Here are a couple of ways you can contribute."]
@@ -42,14 +93,12 @@
         [:h4 [:i.icon-indent-right] "Add an Example"]
         [:p "Sharing your knowledge with fellow Clojurists is easy:"]
         [:p "First, take a look at the examples style guide, and then add an example for your favorite var (or pick one from the list)."]
-        [:p "In addition to examples, you also have the ability to add 'see also' references between vars."]]]]]
-    [:div.col-md-5.col-md-offset-1
-     [:h3 "Top Contributors"]]]])
+        [:p "In addition to examples, you also have the ability to add 'see also' references between vars."]]]]]]])
 
 (defroutes routes
   (GET "/" []
     (fn [{:keys [ user]}]
-      (-> {:content $index
+      (-> {:content ($index)
            :body-class "intro-page"
            :hide-search true
            :user user}
@@ -59,3 +108,62 @@
     (fn [{:keys [params]}]
       {:headers {"Content-Type" "application/edn"}
        :body (pr-str (search/query (:query params)))})))
+
+
+
+;; Scratch for front page example code
+(comment
+
+;; Function definition
+
+(defn get-subject [scene]
+  (get scene :subject))
+
+
+;; Functions are first-class in Clojure
+
+(map get-subject theater)
+;;=> ("Frankie", "Lucy")
+
+
+;; And can be anonymous
+
+(map (fn [scene] (get scene :object)) theater)
+;;=> ("relax" "Clojure")
+
+
+;; And short-handed (hah!)
+
+(map #(get % :action) theater)
+;;=> ("says" "❤s")
+
+
+;; Though idiomatically, it's:
+
+(map :action theater)
+;;=> ("says" "❤s")
+
+
+;; baby shoes, never used.
+
+
+;; Let's define a variable
+
+(def story ["used" "never" "shoes" "baby" "sale" "for"])
+
+;; Clojure has literals for keywords,
+;; lists, maps, and much more.
+
+(println story) ;;=> [:used :never :shoes :baby :sale :for]
+
+;; Not much of a story, yet. We need to
+;; reorder, and insert some punctuation
+
+(->> story
+     (reverse)                          ; reverse the list
+     (partition 2)                      ; break it up into chunks of 2
+     (map #(interpose " " %))
+     (interpose ", ")                   ; insert spaces
+     flatten
+     (apply str))
+)

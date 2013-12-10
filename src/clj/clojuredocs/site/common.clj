@@ -48,13 +48,14 @@
     [:link {:rel :stylesheet :href "/css/bootstrap.min.css"}]
     [:link {:rel :stylesheet :href "/css/font-awesome.min.css"}]
     [:link {:rel :stylesheet :href "/css/app.css"}]
+    [:link {:rel :stylesheet :href "//fonts.googleapis.com/css?family=Open+Sans:400" :type "text/css"}]
     [:body
      (when body-class
        {:class body-class})
      ($navbar opts)
      [:div.container
       [:div.row
-       [:div.col-md-10.col-md-offset-1
+       [:div.col-sm-10.col-sm-offset-1
         content]]]
      [:script {:type "text/javascript" :src "/cljs/goog/base.js"}]
      [:script {:type "text/javascript" :src "/cljs/clojuredocs.js"}]
