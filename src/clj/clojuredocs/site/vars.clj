@@ -20,8 +20,16 @@
       (str/replace #"_qm" "?")))
 
 (defn $example [{:keys [body]}]
-  [:li
-   [:pre {:class "brush: clj"} body]])
+  [:div.row
+   [:div.col-md-10
+    [:pre {:class "brush: clj"} body]]
+   [:div.col-md-2
+    [:div.contributors
+     (repeat 4 [:div.fake-avatar])]
+    [:div.created
+     "Created 10 days ago."]
+    [:div.last-updated
+     "Last updated 5 days ago."]]])
 
 (defn source-url [{:keys [file line]}]
   (str "https://github.com/clojure/clojure/blob/clojure-1.5.1/src/clj/" file "#L" line))
@@ -61,5 +69,4 @@
                        "Eclipse Public License 1.0"]]]
                     [:pre (pr-str v)]
                     [:h3 (count examples) " Examples"]
-                    [:ul
-                     (map $example examples)]]]}))))
+                    (map $example examples)]]}))))
