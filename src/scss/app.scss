@@ -23,7 +23,7 @@ html, body {
 
 body {
   font-size: 16px;
-  line-height: 1.5em;
+  line-height: 1em;
 }
 
 img {
@@ -295,6 +295,20 @@ table.ac-results {
     }
   }
 
+  .example {
+    margin-bottom: 30px;
+  }
+
+  .example-code {
+    margin-bottom: 15px;
+    background-color: #fafafa;
+    border-top: solid #ccc 5px;
+  }
+
+  .example-meta {
+    margin-bottom:30px;
+  }
+
   .syntaxhighlighter {
     font-size: 15px;
 
@@ -306,27 +320,25 @@ table.ac-results {
   .fake-avatar {
     display: inline-block;
     margin-right: 5px;
+    margin-bottom: 2px;
     border: solid #ccc 1px;
     border-radius: 3px;
-    width: 40px;
-    height: 40px;
+    width: 35px;
+    height: 35px;
   }
 
   .created,
   .last-updated {
-    font-size: 11px;
+    font-size: 10px;
     line-height: 1.3em;
     color: #aaa;
-    margin-bottom: 3px;
+    display: inline-block;
+    margin-right: 5px;
   }
 }
 
 .syntaxhighlighter {
-  background-color: #fafafa;
-  border-top: solid #ccc 5px;
   padding: 15px;
-  padding-bottom: 30px;
-  margin-bottom: 30px;
   padding-top: 30px;
   overflow: auto;
   overflow-y: hidden;
