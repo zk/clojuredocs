@@ -6,7 +6,7 @@
 (defn $index []
   [:div
    [:div.row
-    [:div.col-sm-12
+    [:div.col-md-12
      [:section
       [:h1 "ClojureDocs is a community-powered documentation and examples repository for the " [:a {:href "http://clojure.org"} "Clojure programming language"] "."]]
      [:section
@@ -18,7 +18,7 @@
                              :autocomplete "off"}]]
       [:table.ac-results]]]]
    [:div.row
-    [:div.col-sm-6
+    [:div.col-md-6
      [:section
       [:h3 "Getting started with ClojureDocs"]
       [:p "Finding the right tool for the job can be tough, so we've outlined a few ways to go about your search below."]
@@ -26,10 +26,10 @@
        [:li [:i.icon-search] "Use the search box above to find what you're looking for."]
        [:li [:i.icon-map-marker] "Take a look at the Clojure Core quickref, which displays Clojure vars grouped by category."]
        [:li [:i.icon-book] "Browse an alphabetical list of vars defined in Clojure Core or Contrib."]]]]
-    [:div.col-sm-6
+    [:div.col-md-6
      [:h3 "Top Contributors"]]]
    [:div.row
-    [:div.col-sm-6
+    [:div.col-md-6
      [:h3 "Clojure is concise, powerful, and performant."]
      [:p
       "New to Clojure and not sure where to start? If you'd like to get a good background on Clojure's design origins (and be entertained at the same time), start "
@@ -49,11 +49,12 @@
      [:p "But don't take our word for it, here's what XKCD has to say:"]
      [:p [:img {:src "http://imgs.xkcd.com/comics/lisp_cycles.png"}]]
      [:p "Seems like more than a few, these days. Happy coding!"]]
-    [:div.col-sm-6
-     [:pre.code-example
+    [:div.col-md-6
+     [:pre
+      {:class "brush: clj"}
       (slurp "src/examples/clj/first.clj")]]]
    [:div.row
-    [:div.col-sm-12.used-by
+    [:div.col-md-12.used-by
      [:h3 "Clojure in Production"]
      [:ul
       (for [{:keys [src url]}
@@ -81,7 +82,7 @@
               :url "http://disqus.com/"}]]
         [:li [:a {:href url} [:img {:src src}]]])]]]
    [:div.row
-    [:div.col-sm-6
+    [:div.col-md-6
      [:section
       [:h3 "Contribute to ClojureDocs"]
       [:p "We need your help to make ClojureDocs a great community resource. Here are a couple of ways you can contribute."]

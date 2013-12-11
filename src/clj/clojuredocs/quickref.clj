@@ -70,9 +70,9 @@
      :user user
      :content
      [:div.row
-      [:div.col-sm-3
+      [:div.col-md-3
        ($toc quickref-data)]
-      [:div.col-sm-9
+      [:div.col-md-9
        [:h1 "Quickref for Clojure Core"]
        (map $sphere quickref-data)]]}))
 

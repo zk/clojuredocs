@@ -55,7 +55,7 @@
      ($navbar opts)
      [:div.container
       [:div.row
-       [:div.col-sm-10.col-sm-offset-1
+       [:div.col-md-10.col-md-offset-1
         content]]]
      [:script {:type "text/javascript" :src "/cljs/goog/base.js"}]
      [:script {:type "text/javascript" :src "/cljs/clojuredocs.js"}]
