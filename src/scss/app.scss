@@ -23,7 +23,7 @@ html, body {
 
 body {
   font-size: 16px;
-  line-height: 1em;
+  line-height: 1.5em;
 }
 
 img {
@@ -41,7 +41,7 @@ h3 {
   font-weight: normal;
   line-height: 1.5em;
   margin-top: 0;
-  margin-bottom: 20px;
+  margin-bottom: 0.5em;
   //font-family: 'Open Sans', sans-serif;
 }
 
@@ -306,7 +306,8 @@ table.ac-results {
   }
 
   .example-meta {
-    margin-bottom:30px;
+    margin-bottom: 30px;
+    line-height: 1em;
   }
 
   .syntaxhighlighter {
