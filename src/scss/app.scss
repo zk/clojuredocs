@@ -129,13 +129,6 @@ header.navbar {
 }
 
 .intro-page {
-  .on-clojure {
-    background-color: #fafafa;
-    padding-top: 20px;
-    padding-bottom: 20px;
-    margin-bottom: 20px;
-  }
-
   form.search {
     margin-bottom: 1em;
 
@@ -303,11 +296,63 @@ table.ac-results {
   }
 
   .syntaxhighlighter {
+    font-size: 15px;
+
+    table {
+      margin: 0;
+    }
+  }
+
+  .fake-avatar {
+    display: inline-block;
+    margin-right: 5px;
     border: solid #ccc 1px;
-    overflow: hidden;
-    padding: 10px;
+    border-radius: 3px;
+    width: 40px;
+    height: 40px;
+  }
+
+  .created,
+  .last-updated {
+    font-size: 11px;
+    line-height: 1.3em;
+    color: #aaa;
+    margin-bottom: 3px;
   }
 }
+
+.syntaxhighlighter {
+  background-color: #fafafa;
+  border-top: solid #ccc 5px;
+  padding: 15px;
+  padding-bottom: 30px;
+  margin-bottom: 30px;
+  padding-top: 30px;
+  overflow: auto;
+  overflow-y: hidden;
+  font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+
+  font-size: 15px;
+  line-height: 1.3em;
+
+  @media (max-width: 1199px) {
+    font-size: 13.8px;
+  }
+
+
+  @media (max-width: 991px) {
+    font-size: 13px;
+  }
+
+  @media (max-width: 767px) {
+    font-size: 12px;
+  }
+
+  table {
+    margin: 0 auto;
+  }
+}
+
 
 // QUICKREF
 
