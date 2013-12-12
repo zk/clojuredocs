@@ -41,10 +41,10 @@
          [:div.contributors
           (count users) " contributors total."])
        [:div.created
-        "Created " (util/timeago created-at) " ago"]
+        "Created " (util/timeago created-at) " ago."]
        (when-not (= created-at updated-at)
          [:div.last-updated
-          "Updated " (util/timeago updated-at) " ago"])
+          "Updated " (util/timeago updated-at) " ago."])
        [:div.links
         [:a {:href (str "#example_" _id)}
          "link"]
@@ -102,7 +102,7 @@
     [:div.example-meta
      ($avatar user)
      [:div.created
-      (util/timeago created-at) " ago"]]]])
+      (util/timeago created-at) " ago."]]]])
 
 (defn example-page [id]
   (fn [{:keys [user]}]
