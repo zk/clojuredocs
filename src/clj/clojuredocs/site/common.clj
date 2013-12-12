@@ -1,5 +1,6 @@
 (ns clojuredocs.site.common
-  (:require [clojuredocs.config :as config]
+  (:require [clojuredocs.util :as util]
+            [clojuredocs.config :as config]
             [clojuredocs.github :as gh]))
 
 (def gh-auth-url (gh/auth-redirect-url
@@ -60,3 +61,7 @@
      [:script {:type "text/javascript" :src "/cljs/goog/base.js"}]
      [:script {:type "text/javascript" :src "/cljs/clojuredocs.js"}]
      [:script {:type "text/javascript"} "goog.require(\"clojuredocs.main\");"]]]])
+
+(defn $avatar [{:keys [email login] :as user}]
+  [:a {:href (str "/u/" login)}
+   [:img.avatar {:src (str "https://www.gravatar.com/avatar/" (util/md5 email) "?r=PG&s=64&default=identicon") }]])

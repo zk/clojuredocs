@@ -21,7 +21,8 @@
                  [org.clojure/java.jdbc "0.3.0-beta2"]
                  [mysql/mysql-connector-java "5.1.25"]
                  #_[lein-light-nrepl "0.0.9"]
-                 [congomongo "0.4.1"]]
+                 [congomongo "0.4.1"]
+                 [unk "0.9.1"]]
   :repl-options {:init (do (require 'clojuredocs.main)
                            (clojuredocs.main/-main))
                  :port 7888
