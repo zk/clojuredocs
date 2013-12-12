@@ -50,9 +50,10 @@
      [:p [:img {:src "http://imgs.xkcd.com/comics/lisp_cycles.png"}]]
      [:p "Seems like more than a few, these days. Happy coding!"]]
     [:div.col-md-6
-     [:pre
-      {:class "brush: clj"}
-      (slurp "src/examples/clj/first.clj")]]]
+     [:div.example-code
+      [:pre
+       {:class "brush: clj"}
+       (slurp "src/examples/clj/first.clj")]]]]
    [:div.row
     [:div.col-md-12.used-by
      [:h3 "Clojure in Production"]
