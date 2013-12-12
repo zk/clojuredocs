@@ -40,24 +40,27 @@
       "."]
      [:p "If you're ready to jump in, then "
       [:a {:href ""} "here you go"]
-      "."]
-     [:h3 "On Clojure"]
-     [:p "There's no denying that Clojure is just so "
-      " *different* "
-      " from what most of us are used to. "
-      [:em "What is up with all those parentheses?!"]]
-     [:p ]
-     [:p "So it's no surprise that it"
-      " takes a bit to get your head around. Stick with it, and you won't be disappointed."]
-     [:p "But don't take our word for it, here's what XKCD has to say:"]
-     [:p [:img {:src "http://imgs.xkcd.com/comics/lisp_cycles.png"}]]
-     [:p "Seems like more than a few, these days. Happy coding!"]]
+      "."]]
     [:div.col-md-6
      [:div.example-code
       [:pre
        {:class "brush: clj"}
        (slurp "src/examples/clj/first.clj")]]]]
    [:div.row
+    [:div.col-md-12
+     [:h3 "On Clojure"]]
+    [:div.col-md-6
+     [:p "There's no denying that Clojure is just so "
+      " *different* "
+      " from what most of us are used to. "
+      [:em "What is up with all those parentheses?!"]]
+     [:p ]
+     [:p "So it's no surprise that it"
+      " takes a bit to get your head around. Stick with it, and you won't be disappointed."]]
+    [:div.col-md-6
+     [:p "But don't take our word for it, here's what XKCD has to say:"]
+     [:p [:img {:src "http://imgs.xkcd.com/comics/lisp_cycles.png"}]]
+     [:p "Seems like more than a few, these days. Happy coding!"]]
     [:div.col-md-12.used-by
      [:h3 "Clojure in Production"]
      [:ul
