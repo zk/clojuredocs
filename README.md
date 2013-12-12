@@ -10,6 +10,7 @@ The clojuredocs.org webapp
 * lein
 * foreman (see `Procfile`, `bin/dev`)
 * scss (`gem install scss`)
+* MongoDB
 
 
 ## Dev
