@@ -14,12 +14,6 @@
   [:li.arglist (str
                  "(" name " " a ")")])
 
-(defn unmunge-name [s]
-  (-> s
-      (str/replace #"_dot" ".")
-      (str/replace #"_div" "/")
-      (str/replace #"_qm" "?")))
-
 (defn $avatar [{:keys [email login] :as user}]
   [:a {:href (str "/u/" login)}
    [:img.avatar {:src (str "https://www.gravatar.com/avatar/" (util/md5 email) "?r=PG&s=64&default=identicon") }]])
@@ -28,7 +22,7 @@
   [:div.example-code
    [:pre {:class "brush: clj"} body]])
 
-(defn $example [{:keys [body _id history] :as ex}]
+(defn $example [{:keys [body _id history created-at updated-at] :as ex}]
   [:div.row
    [:div.col-md-10
     [:a {:id (str "example_" _id)}]
@@ -36,7 +30,8 @@
    [:div.col-md-2
     (let [users (->> history
                      (map :user)
-                     distinct)]
+                     distinct
+                     reverse)]
       [:div.example-meta
        [:div.contributors
         (->> users
@@ -46,9 +41,10 @@
          [:div.contributors
           (count users) " contributors total."])
        [:div.created
-        "Created 10 days ago."]
-       [:div.last-updated
-        "Last updated 5 days ago."]
+        "Created " (util/timeago created-at) " ago"]
+       (when-not (= created-at updated-at)
+         [:div.last-updated
+          "Updated " (util/timeago updated-at) " ago"])
        [:div.links
         [:a {:href (str "#example_" _id)}
          "link"]
@@ -60,7 +56,7 @@
 
 (defn var-page [ns name]
   (fn [{:keys [user]}]
-    (let [name (unmunge-name name)
+    (let [name (util/unmunge-name name)
 
           {:keys [arglists name ns doc runtimes added file] :as v}
           (mon/fetch-one :vars :where {:name name :ns ns})
@@ -95,7 +91,7 @@
                     [:h3 (count examples) " Examples"]
                     (map $example examples)]]}))))
 
-(defn $example-history-point [{:keys [user body] :as ex}]
+(defn $example-history-point [{:keys [user body created-at updated-at] :as ex}]
   [:div.row
    [:div.col-md-10
     [:div.example-code
@@ -103,7 +99,10 @@
                (str/replace #"<" "&lt;")
                (str/replace #">" "&gt;"))]]]
    [:div.col-md-2
-    "By " (:login user)]])
+    [:div.example-meta
+     ($avatar user)
+     [:div.created
+      (util/timeago created-at) " ago"]]]])
 
 (defn example-page [id]
   (fn [{:keys [user]}]
@@ -116,16 +115,15 @@
                    [:div.col-md-12
                     [:h3 "Example History"]
                     [:p
-                     "Example history for id "
+                     "Example history for example "
                      [:em id]
                      ", in order from oldest to newest. "
                      "This is an example for "
-                     ns "/" name
+                     (util/$var-link ns name (str ns "/" name))
                      ". The currrent version is highlighted in yellow."]
                     [:div.current-example
                      ($example ex)]
                     (->> history
                          reverse
-                         (map $raw-example))
-
+                         (map $example-history-point))
                     [:pre (pr-str ex)]]]}))))

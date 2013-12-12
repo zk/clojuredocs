@@ -1,15 +1,10 @@
 (ns clojuredocs.quickref
   (:require [clojure.string :as str]
+            [clojuredocs.util :as util]
             [clojuredocs.site.common :as common]
             [clojuredocs.search :as search]))
 
 (declare quickref-data)
-
-(defn munge-name [s]
-  (-> s
-      str
-      (str/replace #"\." "_dot")
-      (str/replace #"\/" "_div")))
 
 (defn title->id [k]
   (-> k
@@ -26,7 +21,7 @@
    [:dl.dl-horizontal
     (mapcat #(vector
                [:div.dl-row
-                [:dt [:a {:href (str "/clojure.core/" (munge-name %))} (str %)]]
+                [:dt (util/$var-link "clojure.core" % (str %))]
                 [:dd (->> (str "clojure.core/" %)
                           search/lookup-vars
                           :doc
