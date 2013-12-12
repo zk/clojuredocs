@@ -48,6 +48,7 @@
   (GET "/logout" [] (fn [r] (-> (redirect "/")
                                 (assoc :session nil))))
   (GET "/quickref" [] quickref/index)
+  (GET "/ex/:id" [id] (site-vars/example-page id))
   (GET "/:ns/:name" [ns name] (site-vars/var-page ns name)))
 
 (def session-store
