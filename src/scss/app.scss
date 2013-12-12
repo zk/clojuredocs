@@ -67,6 +67,15 @@ ul {
   padding: 0;
 }
 
+.avatar {
+  display: inline-block;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  border-radius: 3px;
+  width: 48px;
+  height: 48px;
+}
+
 header.navbar {
   border-radius: 0;
 
@@ -312,10 +321,6 @@ table.ac-results {
     margin-right: 5px;
 
     .avatar {
-      display: inline-block;
-      margin-right: 5px;
-      margin-bottom: 5px;
-      border-radius: 3px;
       width: 35px;
       height: 35px;
       opacity: 0.8;

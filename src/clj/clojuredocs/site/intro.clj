@@ -1,9 +1,11 @@
 (ns clojuredocs.site.intro
   (:require [compojure.core :refer (defroutes GET)]
+            [somnium.congomongo :as mon]
+            [fogus.unk :refer (memo-ttl)]
             [clojuredocs.search :as search]
             [clojuredocs.site.common :as common]))
 
-(defn $index []
+(defn $index [top-contribs]
   [:div
    [:div.row
     [:div.col-md-12
@@ -27,7 +29,8 @@
        [:li [:i.icon-map-marker] "Take a look at the Clojure Core quickref, which displays Clojure vars grouped by category."]
        [:li [:i.icon-book] "Browse an alphabetical list of vars defined in Clojure Core or Contrib."]]]]
     [:div.col-md-6
-     [:h3 "Top Contributors"]]]
+     [:h3 "Top Contributors"]
+     (map common/$avatar top-contribs)]]
    [:div.row
     [:div.col-md-6
      [:h3 "Clojure is concise, powerful, and performant."]
@@ -97,10 +100,26 @@
         [:p "First, take a look at the examples style guide, and then add an example for your favorite var (or pick one from the list)."]
         [:p "In addition to examples, you also have the ability to add 'see also' references between vars."]]]]]]])
 
+(defn top-contribs []
+  (let [scores (atom {})]
+    (doseq [{:keys [history]} (mon/fetch :examples)]
+      (let [history (reverse history)
+            first-user (-> history first :user)]
+        (swap! scores update-in [first-user] #(+ 4 (or % 0)))
+        (doseq [user (->> history rest (map :user))]
+          (swap! scores update-in [user] #(inc (or % 0))))))
+    (->> @scores
+         (sort-by second)
+         reverse
+         (take 35)
+         (map #(assoc (first %) :score (second %))))))
+
+(def top-contribs (memo-ttl top-contribs (* 1000 60 60 6)))
+
 (defroutes routes
   (GET "/" []
-    (fn [{:keys [ user]}]
-      (-> {:content ($index)
+    (fn [{:keys [user]}]
+      (-> {:content ($index (top-contribs))
            :body-class "intro-page"
            :hide-search true
            :user user}

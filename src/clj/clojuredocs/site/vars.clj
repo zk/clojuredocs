@@ -14,10 +14,6 @@
   [:li.arglist (str
                  "(" name " " a ")")])
 
-(defn $avatar [{:keys [email login] :as user}]
-  [:a {:href (str "/u/" login)}
-   [:img.avatar {:src (str "https://www.gravatar.com/avatar/" (util/md5 email) "?r=PG&s=64&default=identicon") }]])
-
 (defn $example-body [{:keys [body]}]
   [:div.example-code
    [:pre {:class "brush: clj"} body]])
@@ -36,7 +32,7 @@
        [:div.contributors
         (->> users
              (take 10)
-             (map $avatar))]
+             (map common/$avatar))]
        (when (> (count users) 10)
          [:div.contributors
           (count users) " contributors total."])
@@ -100,7 +96,7 @@
                (str/replace #">" "&gt;"))]]]
    [:div.col-md-2
     [:div.example-meta
-     ($avatar user)
+     (common/$avatar user)
      [:div.created
       (util/timeago created-at) " ago."]]]])
 
