@@ -10,9 +10,15 @@
                                :ns ns
                                :library-url "https://github.com/clojure/clojure"}))
 
+(defn see-alsos-for [{:keys [ns name]}]
+  (->> (mon/fetch-one :see-alsos :where {:name name
+                                         :ns ns
+                                         :library-url "https://github.com/clojure/clojure"})
+       :vars))
+
 (defn $arglist [name a]
   [:li.arglist (str
-                 "(" name " " a ")")])
+                 "(" name (when-not (empty? a) " ") a ")")])
 
 (defn $example-body [{:keys [body]}]
   [:div.example-code
@@ -44,48 +50,65 @@
        [:div.links
         [:a {:href (str "#example_" _id)}
          "link"]
+        " / "
         [:a {:href (str "/ex/" _id)}
          "history"]]])]])
 
 (defn source-url [{:keys [file line]}]
   (str "https://github.com/clojure/clojure/blob/clojure-1.5.1/src/clj/" file "#L" line))
 
+(defn $see-also [{:keys [ns name created-at doc] :as sa}]
+  [:div.see-also
+   [:div
+    ns "/" name]
+   [:div
+    (->> doc
+         (take 50)
+         (apply str))]])
+
 (defn var-page [ns name]
   (fn [{:keys [user]}]
     (let [name (util/unmunge-name name)
-
           {:keys [arglists name ns doc runtimes added file] :as v}
           (mon/fetch-one :vars :where {:name name :ns ns})
-          examples (examples-for v)]
+          examples (examples-for v)
+          see-alsos (see-alsos-for v)]
       (common/$main
         {:body-class "var-page"
          :user user
-         :content [:div.row
-                   [:div.col-sm-12
-                    [:h1 name]
-                    [:h2 ns]
-                    [:ul.arglists
-                     (map #($arglist name %) arglists)]
-                    [:ul.runtimes
-                     (for [r runtimes]
-                       [:li (str r)])]
-                    (when added
-                      [:div.added
-                       "Available since version " added])
-                    (when file
-                      [:div.source-code
-                       [:a {:href (source-url v)} "Source"]])
-                    [:div.docstring
-                     [:pre (-> doc
-                               (str/replace #"\n\s\s" "\n"))]
-                     [:div.copyright
-                      "&copy; Rich Hickey. All rights reserved."
-                      " "
-                      [:a {:href "http://www.eclipse.org/legal/epl-v10.html"}
-                       "Eclipse Public License 1.0"]]]
-                    [:pre (pr-str v)]
-                    [:h3 (count examples) " Examples"]
-                    (map $example examples)]]}))))
+         :content [:div
+                   [:div.row
+                    [:div.col-sm-4
+                     [:section
+                      [:h1 name]
+                      [:h2 ns]]]
+                    [:div.col-sm-4
+                     [:section
+                      [:ul.arglists
+                       (map #($arglist name %) arglists)]]]
+                    [:div.col-sm-4
+                     [:section.var-meta
+                      "Available in "
+                      (->> ["clj" "cljs" "clj.net"]
+                           (interpose ", ")
+                           (apply str))
+                      (when file
+                        [:div.source-code
+                         [:a {:href (source-url v)} "Source"]])]]]
+                   [:div.row
+                    [:div.col-sm-12
+                     [:div.docstring
+                      [:pre (-> doc
+                                (str/replace #"\n\s\s" "\n"))]
+                      [:div.copyright
+                       "&copy; Rich Hickey. All rights reserved."
+                       " "
+                       [:a {:href "http://www.eclipse.org/legal/epl-v10.html"}
+                        "Eclipse Public License 1.0"]]]
+                     [:h3 (count examples) " Examples"]
+                     (map $example examples)
+                     [:h3 "See Alsos"]
+                     (map $see-also see-alsos)]]]}))))
 
 (defn $example-history-point [{:keys [user body created-at updated-at] :as ex}]
   [:div.row
