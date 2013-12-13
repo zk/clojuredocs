@@ -29,11 +29,14 @@
        [:li [:i.icon-map-marker] "Take a look at the Clojure Core quickref, which displays Clojure vars grouped by category."]
        [:li [:i.icon-book] "Browse an alphabetical list of vars defined in Clojure Core or Contrib."]]]]
     [:div.col-md-6
-     [:h3 "Top Contributors"]
-     (map common/$avatar top-contribs)]]
+     [:section
+      [:h3 "Top Contributors"]
+      [:div.top-contribs
+       (map common/$avatar top-contribs)]]]]
    [:div.row
+    [:div.col-md-12
+     [:h3 "Clojure is concise, powerful, and performant."]]
     [:div.col-md-6
-     [:h3 "Clojure is concise, powerful, and performant."]
      [:p
       "New to Clojure and not sure where to start? If you'd like to get a good background on Clojure's design origins (and be entertained at the same time), start "
       [:a {:href "http://www.infoq.com/presentations/Are-We-There-Yet-Rich-Hickey"} "here"]
@@ -114,7 +117,7 @@
     (->> @scores
          (sort-by second)
          reverse
-         (take 35)
+         (take (* 9 5))
          (map #(assoc (first %) :score (second %))))))
 
 (def top-contribs (memo-ttl top-contribs (* 1000 60 60 6)))
