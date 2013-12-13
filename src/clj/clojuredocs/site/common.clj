@@ -10,7 +10,6 @@
 (defn $user-area [user]
   [:li.user-area
    [:img.avatar {:src (:avatar-url user)}]
-   [:span.login  (:login user)]
    " | "
    [:a {:href "/logout"}
     "Log Out"]])
