@@ -67,6 +67,10 @@ ul {
   padding: 0;
 }
 
+section {
+  margin-bottom: 1em;
+}
+
 .avatar {
   display: inline-block;
   margin-right: 5px;
@@ -137,6 +141,19 @@ header.navbar {
   margin-bottom: 30px;
 }
 
+.var-meta {
+  font-size: 12px;
+  line-height: 1.3em;
+
+  h2, ul, li, .added {
+    margin-bottom: 3px;
+  }
+
+  li {
+    display: inline-block;
+  }
+}
+
 .intro-page {
   form.search {
     margin-bottom: 1em;
@@ -160,7 +177,17 @@ header.navbar {
   }
 
   .row {
-    margin-bottom: 40px;
+    margin-bottom: 0px;
+  }
+
+  .top-contribs .avatar {
+    width: 9.77%;
+    height: auto;
+
+    @media (max-width: 991px) {
+      width: 35px;
+      height: auto;
+    }
   }
 }
 
@@ -236,10 +263,6 @@ table.ac-results {
 .intro-page {
   section {
     margin-bottom: 4em;
-
-    img {
-      margin-bottom: 1.6em;
-    }
   }
 
   .used-by {
@@ -273,12 +296,13 @@ table.ac-results {
 .var-page,
 .example-page {
   h1 {
-    margin-top: 0;
+    margin: 0;
   }
 
   h2 {
     margin-top: 0;
     font-size: 16px;
+    font-weight: normal;
   }
 
   pre {
@@ -292,6 +316,10 @@ table.ac-results {
   .arglists {
     margin-left: 0;
     padding-left: 0;
+
+    li {
+      margin: 0;
+    }
   }
 
   .docstring {
@@ -343,7 +371,7 @@ table.ac-results {
       margin-bottom: 5px;
 
       a {
-        margin-right: 5px;
+
       }
     }
   }
@@ -359,6 +387,7 @@ table.ac-results {
   .created,
   .last-updated {
   }
+
 }
 
 .example-page {
@@ -380,6 +409,10 @@ table.ac-results {
   margin-bottom: 15px;
   background-color: #fafafa;
   border-top: solid #ccc 4px;
+}
+
+.syntaxhighlighter * {
+  font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
 }
 
 .syntaxhighlighter {
@@ -445,7 +478,7 @@ table.ac-results {
     position: fixed;
     top: 10px;
 
-    @media (max-width: 767px) {
+    @media (max-width: 991px) {
       top: auto;
       position: relative;
     }
