@@ -1,6 +1,7 @@
 (ns clojuredocs.site.common
   (:require [clojuredocs.util :as util]
             [clojuredocs.config :as config]
+            [clojuredocs.env :as env]
             [clojuredocs.github :as gh]))
 
 (def gh-auth-url (gh/auth-redirect-url
@@ -57,9 +58,11 @@
       [:div.row
        [:div.col-md-10.col-md-offset-1
         content]]]
-     [:script {:type "text/javascript" :src "/cljs/goog/base.js"}]
+     (when (env/bool :cljs-dev)
+       [:script {:type "text/javascript" :src "/cljs/goog/base.js"}])
      [:script {:type "text/javascript" :src "/cljs/clojuredocs.js"}]
-     [:script {:type "text/javascript"} "goog.require(\"clojuredocs.main\");"]]]])
+     (when (env/bool :cljs-dev)
+       [:script {:type "text/javascript"} "goog.require(\"clojuredocs.main\");"])]]])
 
 (defn $avatar [{:keys [email login] :as user}]
   [:a {:href (str "/u/" login)}
