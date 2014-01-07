@@ -22,10 +22,14 @@
                  [mysql/mysql-connector-java "5.1.25"]
                  #_[lein-light-nrepl "0.0.9"]
                  [congomongo "0.4.1"]
-                 [unk "0.9.1"]]
-  :repl-options {:init (do (require 'clojuredocs.main)
-                           (clojuredocs.main/-main))
-                 :port 7888
+                 [unk "0.9.1"]
+                 [cljsbuild "1.0.1"]
+                 [org.clojure/core.async "0.1.267.0-0d7780-alpha"]
+                 [org.clojure/core.logic "0.8.5"]]
+  :profiles {:nrepl {:source-paths ["dev"]
+                     :dependencies [[org.clojure/tools.namespace "0.2.4"]]
+                     :repl-options {:init (user/restart)}}}
+  :repl-options {:port 7888
                  :nrepl-middleware [#_lighttable.nrepl.handler/lighttable-ops]}
   :plugins [[lein-cljsbuild "1.0.0"]] ;; required for heroku deploy
   :cljsbuild {:builds

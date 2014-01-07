@@ -1,16 +1,9 @@
 (ns clojuredocs.main
-  (:require [ring.adapter.jetty :as jetty]
-            [aleph.http :as ah]
+  (:require [aleph.http :as ah]
             [somnium.congomongo :as mon]
             [clojuredocs.env :as env]
             [clojuredocs.entry :as entry]
             [clojuredocs.config :as config]))
-
-(mon/set-connection!
-  (mon/make-connection (env/str :mongo-url)))
-
-(mon/add-index! :examples [:ns :name :library-url])
-(mon/add-index! :vars [:ns :name :library-url])
 
 (defn start-http-server [entry-point opts]
   (ah/start-http-server
@@ -38,10 +31,27 @@
       (println)
       #_(System/exit 1))))
 
+(defn create-app []
+  {:port (env/int :port 8080)
+   :entry entry/routes
+   :mongo-url (env/str :mongo-url)})
+
+(defn start [{:keys [port mongo-url entry] :as opts}]
+  (mon/set-connection! (mon/make-connection mongo-url))
+  (mon/add-index! :examples [:ns :name :library-url])
+  (mon/add-index! :vars [:ns :name :library-url])
+  (let [stop-server (start-http-server entry
+                      {:port port :join? false})]
+    (println (format "Server running on port %d" port))
+    (merge
+      opts
+      {:stop-server stop-server})))
+
+(defn stop [{:keys [stop-server] :as opts}]
+  (when stop-server
+    @(stop-server))
+  (dissoc opts :stop-server))
+
 (defn -main []
   (valid-env-or-exit)
-  (let [port (env/int :port 8080)]
-    (start-http-server
-      (var entry/routes)
-      {:port port :join? false})
-    (println (format "Server running on port %d" port))))
+  (start (create-app)))
