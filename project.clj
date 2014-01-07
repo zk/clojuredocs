@@ -53,7 +53,7 @@
                       :compiler {:output-to "resources/public/cljs/clojuredocs.js"
                                  :optimizations :advanced
                                  :pretty-print false
-                                 :foreign-libs [{:file "js/syntaxhighlighter.js"
+                                 :foreign-libs [{:file "resources/public/js/syntaxhighlighter.js"
                                                  :provides ["highlight"]}]
                                  :externs ["externs/syntaxhighlighter.js"]}
                       :jar true}}})
