@@ -52,5 +52,8 @@
                :prod {:source-paths ["src/cljs"]
                       :compiler {:output-to "resources/public/cljs/clojuredocs.js"
                                  :optimizations :advanced
-                                 :pretty-print false}
+                                 :pretty-print false
+                                 :foreign-libs [{:file "js/syntaxhighlighter.js"
+                                                 :provides ["highlight"]}]
+                                 :externs ["externs/syntaxhighlighter.js"]}
                       :jar true}}})
