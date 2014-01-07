@@ -62,7 +62,7 @@
       " takes a bit to get your head around. Stick with it, and you won't be disappointed."]]
     [:div.col-md-6
      [:p "But don't take our word for it, here's what XKCD has to say:"]
-     [:p [:img {:src "http://imgs.xkcd.com/comics/lisp_cycles.png"}]]
+     [:p [:img {:src "https://imgs.xkcd.com/comics/lisp_cycles.png"}]]
      [:p "Seems like more than a few, these days. Happy coding!"]]
     [:div.col-md-12.used-by
      [:h3 "Clojure in Production"]
@@ -70,23 +70,23 @@
       (for [{:keys [src url]}
             [{:src "https://g.twimg.com/Twitter_logo_blue.png"
               :url "https://twitter.com"}
-             {:src "http://www.akamai.com/images/img/bg/akamai-logo.png"
+             {:src "https://upload.wikimedia.org/wikipedia/en/8/8b/Akamai_logo.svg"
               :url "http://www.akamai.com/"}
-             {:src "http://www.climate.com/preso/assets/imgs/shared/logos/tcc_logo_marcom.png"
+             {:src "https://upload.wikimedia.org/wikipedia/en/2/22/The_Climate_Corporation_Logo2.jpg"
               :url "http://www.climate.com/"}
-             {:src "http://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Netflix_logo.svg/200px-Netflix_logo.svg.png"
+             {:src "https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Netflix_logo.svg/200px-Netflix_logo.svg.png"
               :url "https://www.netflix.com"}
-             {:src "http://www.factual.com/assets/factual_logo_small-9d5ae614ae5422b251648ca62d6b4e51.png"
+             {:src "https://www.factual.com/assets/factual_logo_small-9d5ae614ae5422b251648ca62d6b4e51.png"
               :url "http://www.factual.com"}
              {:src "https://www.simple.com/img/logo-a2236763875.png"
               :url "https://simple.com"}
-             {:src "http://upload.wikimedia.org/wikipedia/commons/c/cc/Groupon_logo.png"
+             {:src "https://upload.wikimedia.org/wikipedia/commons/c/cc/Groupon_logo.png"
               :url "http://www.groupon.com/"}
              {:src "https://d1lpkba4w1baqt.cloudfront.net/heroku-logo-light-234x60.png"
               :url "https://www.heroku.com"}
-             {:src "http://img.brightcove.com/logo-corporate-new.png"
+             {:src "https://img.brightcove.com/logo-corporate-new.png"
               :url "http://www.brightcove.com"}
-             {:src "http://f.cl.ly/items/3D0u2W0H322U1V2Z2u0P/80x50_orange.png"
+             {:src "https://upload.wikimedia.org/wikipedia/en/9/92/SoundCloud_logo.svg"
               :url "https://soundcloud.com"}]]
         [:li [:a {:href url} [:img {:src src}]]])]]]
    [:div.row
