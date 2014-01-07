@@ -16,9 +16,10 @@
             [hiccup.page :refer (html5)]
             [clojuredocs.env :as env]
             [clojuredocs.quickref :as quickref]
-            [clojuredocs.site.intro :as site-intro]
-            [clojuredocs.site.gh-auth :as site-gh-auth]
-            [clojuredocs.site.vars :as site-vars]
+            [clojuredocs.site.intro :as site.intro]
+            [clojuredocs.site.gh-auth :as site.gh-auth]
+            [clojuredocs.site.vars :as site.vars]
+            [clojuredocs.site.user :as site.user]
             [clojure.pprint :refer (pprint)]))
 
 (defn hiccup->html-string [body]
@@ -43,13 +44,14 @@
              resp-map))))
 
 (defroutes _routes
-  (var site-intro/routes)
-  (var site-gh-auth/routes)
+  (var site.intro/routes)
+  (var site.gh-auth/routes)
+  (var site.user/routes)
   (GET "/logout" [] (fn [r] (-> (redirect "/")
                                 (assoc :session nil))))
   (GET "/quickref" [] quickref/index)
-  (GET "/ex/:id" [id] (site-vars/example-page id))
-  (GET "/:ns/:name" [ns name] (site-vars/var-page ns name)))
+  (GET "/ex/:id" [id] (site.vars/example-page id))
+  (GET "/:ns/:name" [ns name] (site.vars/var-page ns name)))
 
 (def session-store
   (cookie-store
