@@ -57,7 +57,8 @@
     clojure.test
     clojure.walk
     clojure.xml
-    clojure.zip])
+    clojure.zip
+    clojure.core.async])
 
 (def searchable-vars
   (do
