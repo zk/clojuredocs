@@ -42,9 +42,9 @@
        (when (> (count users) 10)
          [:div.contributors
           (count users) " contributors total."])
-       [:div.created
+       #_[:div.created
         "Created " (util/timeago created-at) " ago."]
-       (when-not (= created-at updated-at)
+       #_(when-not (= created-at updated-at)
          [:div.last-updated
           "Updated " (util/timeago updated-at) " ago."])
        [:div.links
@@ -57,20 +57,30 @@
 (defn source-url [{:keys [file line]}]
   (str "https://github.com/clojure/clojure/blob/clojure-1.5.1/src/clj/" file "#L" line))
 
-(defn $see-also [{:keys [ns name created-at doc] :as sa}]
-  [:div.see-also
+(defn $see-also [{:keys [ns name created-at doc user] :as sa}]
+  [:div.col-sm-6.see-also
    [:div
-    ns "/" name]
-   [:div
+    (util/$var-link ns name
+      [:span.ns ns "/"]
+      [:span.name name])]
+   [:p
     (->> doc
-         (take 50)
-         (apply str))]])
+         (take 100)
+         (apply str))
+    (when (> (count doc) 100)
+      "...")]
+   [:div.meta
+    "Added by " [:a {:href (str "/u/" (:login user))} (:login user)]]])
+
+(defn lookup-var [ns name]
+  (or (mon/fetch-one :vars :where {:name name :ns ns})
+      (search/lookup (str ns "/" name))))
 
 (defn var-page [ns name]
   (fn [{:keys [user]}]
     (let [name (util/unmunge-name name)
           {:keys [arglists name ns doc runtimes added file] :as v}
-          (mon/fetch-one :vars :where {:name name :ns ns})
+          (lookup-var ns name)
           examples (examples-for v)
           see-alsos (see-alsos-for v)]
       (common/$main
@@ -79,7 +89,7 @@
          :content [:div
                    [:div.row
                     [:div.col-sm-4
-                     [:section
+                     [:section.var-data
                       [:h1 name]
                       [:h2 ns]]]
                     [:div.col-sm-4
@@ -97,18 +107,34 @@
                          [:a {:href (source-url v)} "Source"]])]]]
                    [:div.row
                     [:div.col-sm-12
-                     [:div.docstring
-                      [:pre (-> doc
-                                (str/replace #"\n\s\s" "\n"))]
-                      [:div.copyright
-                       "&copy; Rich Hickey. All rights reserved."
-                       " "
-                       [:a {:href "http://www.eclipse.org/legal/epl-v10.html"}
-                        "Eclipse Public License 1.0"]]]
-                     [:h3 (count examples) " Examples"]
-                     (map $example examples)
-                     [:h3 "See Alsos"]
-                     (map $see-also see-alsos)]]]}))))
+                     [:section
+                      [:div.docstring
+                       (when doc
+                         [:pre (-> doc
+                                   (str/replace #"\n\s\s" "\n"))])
+                       [:div.copyright
+                        "&copy; Rich Hickey. All rights reserved."
+                        " "
+                        [:a {:href "http://www.eclipse.org/legal/epl-v10.html"}
+                         "Eclipse Public License 1.0"]]]]
+                     [:section
+                      [:h3 (util/pluralize (count examples) "Example" "Examples")]
+                      (if (empty? examples)
+                        [:div.null-state
+                         "No examples for " name ", "
+                         [:a {:href "#"} "add one"]
+                         "?"]
+                        (map $example examples))]
+                     [:section
+                      [:h3 "See Also"]
+                      (if (empty? see-alsos)
+                        [:div.null-state
+                         "No see-alsos for " [:code name] ", "
+                         [:a
+                          {:href "#"} "add one"]
+                         "?"]
+                        [:div.row
+                         (map $see-also see-alsos)])]]]]}))))
 
 (defn $example-history-point [{:keys [user body created-at updated-at] :as ex}]
   [:div.row
