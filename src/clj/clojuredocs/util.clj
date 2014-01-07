@@ -70,5 +70,10 @@
       (str/replace #"_div" "/")
       (str/replace #"_qm" "?")))
 
-(defn $var-link [ns name text]
-  [:a {:href (str "/" ns "/" (munge-name name))} text])
+(defn $var-link [ns name & contents]
+  (vec (concat
+         [:a {:href (str "/" ns "/" (munge-name name))}]
+         contents)))
+
+(defn pluralize [n single plural]
+  (str n " " (if (= 1 n) single plural)))
