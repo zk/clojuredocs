@@ -7,6 +7,8 @@
             [highlight])
   (:use-macros [dommy.macros :only [node sel sel1]]))
 
+(enable-console-print!)
+
 (defn log [& args]
   (.log js/console args))
 
