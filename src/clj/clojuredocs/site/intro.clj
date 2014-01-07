@@ -74,22 +74,20 @@
               :url "http://www.akamai.com/"}
              {:src "http://www.climate.com/preso/assets/imgs/shared/logos/tcc_logo_marcom.png"
               :url "http://www.climate.com/"}
+             {:src "http://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Netflix_logo.svg/200px-Netflix_logo.svg.png"
+              :url "https://www.netflix.com"}
              {:src "http://www.factual.com/assets/factual_logo_small-9d5ae614ae5422b251648ca62d6b4e51.png"
               :url "http://www.factual.com"}
-             {:src "https://d1lpkba4w1baqt.cloudfront.net/heroku-logo-light-234x60.png"
-              :url "https://www.heroku.com"}
              {:src "https://www.simple.com/img/logo-a2236763875.png"
               :url "https://simple.com"}
              {:src "http://upload.wikimedia.org/wikipedia/commons/c/cc/Groupon_logo.png"
               :url "http://www.groupon.com/"}
+             {:src "https://d1lpkba4w1baqt.cloudfront.net/heroku-logo-light-234x60.png"
+              :url "https://www.heroku.com"}
              {:src "http://img.brightcove.com/logo-corporate-new.png"
               :url "http://www.brightcove.com"}
              {:src "http://f.cl.ly/items/3D0u2W0H322U1V2Z2u0P/80x50_orange.png"
-              :url "https://soundcloud.com"}
-             {:src "https://d36r1a7iisq7tk.cloudfront.net/img/rfz_logo@2x__Vdbaeec7636c1e9aa5b7951ae71b2a7e8__.png"
-              :url "https://www.readyforzero.com/"}
-             {:src "http://a.disquscdn.com/dotcom/d-2d5f885/img/brand/disqus-social-icon-blue-transparent.png"
-              :url "http://disqus.com/"}]]
+              :url "https://soundcloud.com"}]]
         [:li [:a {:href url} [:img {:src src}]]])]]]
    [:div.row
     [:div.col-md-6
