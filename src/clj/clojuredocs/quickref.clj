@@ -54,22 +54,28 @@
     (map $toc-category categories)]])
 
 (defn $toc [quickref-data]
-  [:div.toc
-   {:data-sticky-offset "70"}
-   [:h2 "Table of Contents"]
-   (map $toc-sphere quickref-data)])
+  (let [toc-groups (partition-all 2 quickref-data)]
+    [:div.toc.clearfix
+     {:data-sticky-offset "130"}
+     [:h2 "Table of Contents"]
+     (for [tg toc-groups]
+       [:div.col-sm-4.col-md-12
+        (map $toc-sphere tg)])]))
 
 (defn index [{:keys [user]}]
   (common/$main
     {:body-class "quickref-page"
      :user user
      :content
-     [:div.row
-      [:div.col-md-3
-       ($toc quickref-data)]
-      [:div.col-md-9
-       [:h1 "Quickref for Clojure Core"]
-       (map $sphere quickref-data)]]}))
+     [:div
+      [:div.row
+       [:div.col-md-12
+        [:h1 "Quickref for Clojure Core"]]]
+      [:div.row
+       [:div.col-md-3
+        ($toc quickref-data)]
+       [:div.col-md-9
+        (map $sphere quickref-data)]]]}))
 
 (def quickref-data '({:title "Simple Values",
                       :categories
