@@ -1,4 +1,4 @@
 web: lein with-profile +nrepl repl :headless
-sass: sass --watch src/scss:resources/public/css
+less: find ./src/less -name '*.less' | entr lessc src/less/app.less resources/public/css/app.css --verbose
 cljs: lein trampoline cljsbuild auto dev
 mongo: mongod
