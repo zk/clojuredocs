@@ -640,3 +640,13 @@ table.ac-results {
     font-weight: normal;
   }
 }
+
+.add-example {
+  textarea {
+    font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+  }
+
+  form {
+    margin-bottom: 10px;
+  }
+}
