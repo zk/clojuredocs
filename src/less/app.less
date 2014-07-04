@@ -1,18 +1,18 @@
-@import "font-awesome.min";
-@import "bootstrap.min";
-@import "highlighting";
+@import "font-awesome.min.less";
+@import "bootstrap.min.less";
+@import "highlighting.less";
 
-@mixin blue-bg($alpha: 1) { background-color: rgba(53,151,202,$alpha); }
-@mixin green-bg($alpha: 1) { background-color: rgba(57,202,116,$alpha); }
-@mixin yellow-bg($alpha: 1) { background-color: rgba(236,192,47,$alpha); }
-@mixin red-bg($alpha: 1) { background-color: rgba(229,77,66,$alpha); }
+// @mixin blue-bg($alpha: 1) { background-color: rgba(53,151,202,$alpha); }
+// @mixin green-bg($alpha: 1) { background-color: rgba(57,202,116,$alpha); }
+// @mixin yellow-bg($alpha: 1) { background-color: rgba(236,192,47,$alpha); }
+// @mixin red-bg($alpha: 1) { background-color: rgba(229,77,66,$alpha); }
 
-@mixin flex($val) {
-  -webkit-box-flex: $val;
-  -webkit-flex: $val;
-  -moz-box-flex: $val;
-  -ms-flex: $val;
-}
+// @mixin flex($val) {
+//   -webkit-box-flex: $val;
+//   -webkit-flex: $val;
+//   -moz-box-flex: $val;
+//   -ms-flex: $val;
+// }
 
 html, body {
   -webkit-font-smothing: antialiased;
@@ -260,6 +260,29 @@ ul i {
 
 ul i.icon-map-marker {
   padding: 0 3px;
+}
+
+ul.ac-results {
+  margin-left: 0px;
+
+  li {
+    margin-left: 0px;
+    list-style-type: none;
+    cursor: pointer;
+    padding: 10px;
+
+    &:hover {
+      background-color: #fafafa;
+    }
+
+    p {
+      margin-bottom: 0;
+    }
+
+    i {
+      margin-left: -26px;
+    }
+  }
 }
 
 table.ac-results {
@@ -649,4 +672,10 @@ table.ac-results {
   form {
     margin-bottom: 10px;
   }
+}
+
+.not-finding {
+  text-align: right;
+  font-size: 12px;
+  opacity: 0.8;
 }
