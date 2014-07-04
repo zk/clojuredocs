@@ -124,7 +124,20 @@
                          "No examples for " name ", "
                          [:a {:href "#"} "add one"]
                          "?"]
-                        (map $example examples))]
+                        (map $example examples))
+                      [:div
+                       [:div
+                        [:a {:href "#"} "Add an Example"]]
+                       [:div.add-example
+                        [:form
+                         [:textarea.form-control
+                          {:cols "80"}]]
+                        [:div.add-example-controls.clearfix
+                         [:button.btn.btn-default "Cancel"]
+                         [:button.btn.btn-success.pull-right "Add Example"]]
+                        [:div.add-example-preview
+                         [:pre {:class "brush: clojure"}
+                          "(foo bar \"baz\")"]]]]]
                      [:section
                       [:h3 "See Also"]
                       (if (empty? see-alsos)
