@@ -2,18 +2,28 @@
 
 * Checklist
 
-+ Example history page x
-+ Footer
-+ User account move over
-+ Claiming old user accounts
-+ Clojure intro for home page
-+ Landing search feedback
-+ Quickref update
-+ Supported libs blurb
-+ Namespace pages
-+ Source link hookup on var page
-+ "Available in" backend
-+ Intro tutorials
-  + Data processing
-  + Web dev
-  + ClojureScript?
+** DONE Example history page
+** DONE Footer
+*** DONE GH / Twitter Links
+** User account move over
+** Claiming old user accounts
+** Clojure intro for home page
+** Landing search feedback
+** Quickref update
+** Supported libs blurb
+** Namespace pages
+** Source link hookup on var page
+** "Available in" backend
+** Intro tutorials
+*** Data processing
+*** Web dev
+*** ClojureScript?
+** User page
+
+
+<a href="https://twitter.com/share" class="twitter-share-button" data-url="http://clojuredocs.org" data-text="Community-powered documentation and examples for #Clojure" data-via="heyzk">Tweet</a>
+<script>!function(d,s,id){var
+js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document,
+'script', 'twitter-wjs');</script>
+
+"!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');"
