@@ -20,6 +20,7 @@
             [clojuredocs.site.gh-auth :as site.gh-auth]
             [clojuredocs.site.vars :as site.vars]
             [clojuredocs.site.user :as site.user]
+            [clojuredocs.site.styleguide :as styleguide]
             [clojure.pprint :refer (pprint)]))
 
 (defn hiccup->html-string [body]
@@ -50,8 +51,10 @@
   (GET "/logout" [] (fn [r] (-> (redirect "/")
                                 (assoc :session nil))))
   (GET "/quickref" [] quickref/index)
+  (GET "/styleguide" [] styleguide/index)
   (GET "/ex/:id" [id] (site.vars/example-page id))
-  (GET "/:ns/:name" [ns name] (site.vars/var-page ns name)))
+  (GET "/:ns/:name" [ns name] (site.vars/var-page ns name))
+  )
 
 (def session-store
   (cookie-store

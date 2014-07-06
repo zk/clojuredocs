@@ -41,7 +41,7 @@
        [:div.col-md-10.col-md-offset-1
         [:table.ac-results]]])]])
 
-(defn $main [{:keys [content title body-class user] :as opts}]
+(defn $main [{:keys [content title body-class user page-data] :as opts}]
   [:html5
    [:head
     [:meta {:name "viewport" :content "width=device-width, maximum-scale=1.0"}]
@@ -50,20 +50,23 @@
     [:link {:rel :stylesheet :href "/css/font-awesome.min.css"}]
     [:link {:rel :stylesheet :href "/css/app.css"}]
     [:link {:rel :stylesheet :href "//fonts.googleapis.com/css?family=Open+Sans:400" :type "text/css"}]
-    [:body
-     (when body-class
-       {:class body-class})
-     ($navbar opts)
-     [:div.container
-      [:div.row
-       [:div.col-md-10.col-md-offset-1
-        content]]]
-     (when (env/bool :cljs-dev)
-       [:script {:type "text/javascript" :src "/cljs/goog/base.js"}])
-     [:script {:type "text/javascript" :src "/cljs/clojuredocs.js"}]
-     (when (env/bool :cljs-dev)
-       [:script {:type "text/javascript"} "goog.require(\"clojuredocs.main\");"])]]])
+    [:script "window.PAGE_DATA=" (util/to-json (pr-str page-data)) ";"]]
+   [:body
+    (when body-class
+      {:class body-class})
+    ($navbar opts)
+    [:div.container
+     [:div.row
+      [:div.col-md-10.col-md-offset-1
+       content]]]
+    (when (env/bool :cljs-dev)
+      [:script {:src "http://fb.me/react-0.9.0.js"}])
+    (when (env/bool :cljs-dev)
+      [:script {:type "text/javascript" :src "/cljs/goog/base.js"}])
+    [:script {:type "text/javascript" :src "/cljs/clojuredocs.js"}]
+    (when (env/bool :cljs-dev)
+      [:script {:type "text/javascript"} "goog.require(\"clojuredocs.main\");"])]])
 
 (defn $avatar [{:keys [email login] :as user}]
   [:a {:href (str "/u/" login)}
-   [:img.avatar {:src (str "https://www.gravatar.com/avatar/" (util/md5 email) "?r=PG&s=64&default=identicon") }]])
+   [:img.avatar {:src (str "https://www.gravatar.com/avatar/" (util/md5 email) "?r=PG&s=32&default=identicon") }]])

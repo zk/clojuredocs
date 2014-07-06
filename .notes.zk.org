@@ -1,0 +1,19 @@
+<2014-07-06 Sun 13:48>
+
+* Checklist
+
++ Example history page x
++ Footer
++ User account move over
++ Claiming old user accounts
++ Clojure intro for home page
++ Landing search feedback
++ Quickref update
++ Supported libs blurb
++ Namespace pages
++ Source link hookup on var page
++ "Available in" backend
++ Intro tutorials
+  + Data processing
+  + Web dev
+  + ClojureScript?

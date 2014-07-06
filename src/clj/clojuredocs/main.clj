@@ -33,7 +33,7 @@
 
 (defn create-app []
   {:port (env/int :port 8080)
-   :entry entry/routes
+   :entry #'entry/routes
    :mongo-url (env/str :mongo-url)})
 
 (defn start [{:keys [port mongo-url entry] :as opts}]
