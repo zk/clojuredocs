@@ -12,13 +12,16 @@
      [:section
       [:h1 "ClojureDocs is a community-powered documentation and examples repository for the " [:a {:href "http://clojure.org"} "Clojure programming language"] "."]]
      [:section
-      [:form.search {:method :get :action "/search" :autocomplete "off"}
-       [:input.form-control {:type "text"
-                             :name "query"
-                             :placeholder "Looking for?"
-                             :autofocus "autofocus"
-                             :autocomplete "off"}]]
-      [:table.ac-results]]]]
+      [:div.search-widget
+       [:form.search {:method :get :action "/search" :autocomplete "off"}
+        [:input.form-control {:type "text"
+                              :name "query"
+                              :placeholder "Looking for?"
+                              :autoFocus "autofocus"
+                              :autoComplete "off"}]
+        [:ul.ac-results]
+        [:div.not-finding
+         "Can't find what you're looking for? " [:a {:href "/search-feedback"} "Help make ClojureDocs better"] "."]]]]]]
    [:div.row
     [:div.col-md-6
      [:section
@@ -26,7 +29,9 @@
       [:p "Finding the right tool for the job can be tough, so we've outlined a few ways to go about your search below."]
       [:ul
        [:li [:i.icon-search] "Use the search box above to find what you're looking for."]
-       [:li [:i.icon-map-marker] "Take a look at the Clojure Core quickref, which displays Clojure vars grouped by category."]
+       [:li [:i.icon-map-marker] "Take a look at the "
+        [:a {:href "/quickref"} "quickref"]
+        ", which displays Clojure vars grouped by category."]
        [:li [:i.icon-book] "Browse an alphabetical list of vars defined in Clojure Core or Contrib."]]]]
     [:div.col-md-6
      [:section
@@ -55,14 +60,14 @@
     [:div.col-md-6
      [:p "There's no denying that Clojure is just so "
       " *different* "
-      " from what most of us are used to. "
-      [:em "What is up with all those parentheses?!"]]
+      " from what most of us are used to (what is up with all those parentheses?!)."
+      [:em ""]]
      [:p ]
      [:p "So it's no surprise that it"
       " takes a bit to get your head around. Stick with it, and you won't be disappointed."]]
     [:div.col-md-6
      [:p "But don't take our word for it, here's what XKCD has to say:"]
-     [:p [:img {:src "https://imgs.xkcd.com/comics/lisp_cycles.png"}]]
+     [:p [:img {:src "http://imgs.xkcd.com/comics/lisp_cycles.png"}]]
      [:p "Seems like more than a few, these days. Happy coding!"]]
     [:div.col-md-12.used-by
      [:h3 "Clojure in Production"]
@@ -70,18 +75,14 @@
       (for [{:keys [src url]}
             [{:src "https://g.twimg.com/Twitter_logo_blue.png"
               :url "https://twitter.com"}
-             {:src "https://upload.wikimedia.org/wikipedia/en/8/8b/Akamai_logo.svg"
-              :url "http://www.akamai.com/"}
              {:src "https://upload.wikimedia.org/wikipedia/en/2/22/The_Climate_Corporation_Logo2.jpg"
               :url "http://www.climate.com/"}
              {:src "https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Netflix_logo.svg/200px-Netflix_logo.svg.png"
               :url "https://www.netflix.com"}
              {:src "https://www.factual.com/assets/factual_logo_small-9d5ae614ae5422b251648ca62d6b4e51.png"
               :url "http://www.factual.com"}
-             {:src "https://www.simple.com/img/logo-a2236763875.png"
+             {:src "https://www.simple.com/img/logo-a_2x.CREAM-bbc497f18505b852.png"
               :url "https://simple.com"}
-             {:src "https://upload.wikimedia.org/wikipedia/commons/c/cc/Groupon_logo.png"
-              :url "http://www.groupon.com/"}
              {:src "https://d1lpkba4w1baqt.cloudfront.net/heroku-logo-light-234x60.png"
               :url "https://www.heroku.com"}
              {:src "https://img.brightcove.com/logo-corporate-new.png"

@@ -12,7 +12,7 @@
                  [aleph "0.3.0-rc2"]
                  [hiccup "1.0.4"]
                  [prismatic/dommy "0.1.2"]
-                 [org.clojure/clojurescript "0.0-2080"]
+                 [org.clojure/clojurescript "0.0-2234"]
                  [clucy "0.4.0"]
                  [watchtower "0.1.1"]
                  [org.clojure/tools.reader "0.7.10"]
@@ -25,13 +25,13 @@
                  [unk "0.9.1"]
                  [cljsbuild "1.0.1"]
                  [org.clojure/core.async "0.1.267.0-0d7780-alpha"]
-                 [org.clojure/core.logic "0.8.5"]]
+                 [org.clojure/core.logic "0.8.5"]
+                 [om "0.6.4"]
+                 [prismatic/om-tools "0.2.2"]]
   :profiles {:nrepl {:source-paths ["dev"]
                      :dependencies [[org.clojure/tools.namespace "0.2.4"]]
                      :repl-options {:init (user/restart)}}}
-  :repl-options {:port 7888
-                 :nrepl-middleware [#_lighttable.nrepl.handler/lighttable-ops]}
-  :plugins [[lein-cljsbuild "1.0.0"]] ;; required for heroku deploy
+  :plugins [[lein-cljsbuild "1.0.3"]] ;; required for heroku deploy
   :cljsbuild {:builds
               {:dev  {:source-paths ["src/cljs"]
                       :compiler {:output-to "resources/public/cljs/clojuredocs.js"

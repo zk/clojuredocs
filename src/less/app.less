@@ -490,10 +490,69 @@ table.ac-results {
 
 }
 
+.var-examples {
+  h3 {
+    font-size: 15px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #777;
+  }
+}
+
+.var-example {
+    .example {
+    margin-bottom: 30px;
+  }
+
+  .example-meta {
+    margin-bottom: 30px;
+    font-size: 10px;
+    line-height: 1.3em;
+    color: #aaa;
+    margin-right: 5px;
+
+    .avatar {
+      width: 35px;
+      height: 35px;
+      opacity: 0.8;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+
+    .contributors,
+    .created,
+    .last-updated,
+    .links {
+      display: inline-block;
+      margin-right: 5px;
+      margin-bottom: 5px;
+
+      a {
+
+      }
+    }
+  }
+
+  .syntaxhighlighter {
+    font-size: 15px;
+
+    table {
+      margin: 0;
+    }
+  }
+
+  .created,
+  .last-updated {
+  }
+}
+
 .example-page {
   .current-example {
-    background-color: #ffd;
-    padding: 20px;
+    border: solid rgba(255,243,109, 0.6) 20px;
+    background-color: transparent;
     margin: 0 -20px;
     margin-bottom: 20px;
   }
@@ -667,9 +726,12 @@ table.ac-results {
 .add-example {
   textarea {
     font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+    margin-bottom: 10px;
+    padding: 10px;
+    height: 200px;
   }
 
-  form {
+  .add-example-controls {
     margin-bottom: 10px;
   }
 }
@@ -678,4 +740,45 @@ table.ac-results {
   text-align: right;
   font-size: 12px;
   opacity: 0.8;
+}
+
+.checker-bg {
+  @checker-color: #f0f0f0;
+  @checker-size: 40px;
+  background-color: #fafafa;
+  background-image: linear-gradient(45deg, @checker-color 25%, transparent 25%, transparent 75%, @checker-color 75%, @checker-color),
+  linear-gradient(45deg, @checker-color 25%, transparent 25%, transparent 75%, @checker-color 75%, @checker-color);
+  background-size: @checker-size @checker-size;
+  background-position:0 0, @checker-size/2 @checker-size/2;
+
+  padding: 20px;
+}
+
+.styleguide-page {
+  h2 {
+    font-size: 20px;
+  }
+
+  .example {
+    margin-bottom: 10px;
+  }
+}
+
+.example-body {
+  white-space: pre;
+  font-family: monospace;
+  font-size: 14px;
+  background-color: #fafafa;
+  margin-bottom: 10px;
+
+  pre.raw-example {
+    background-color: #fafafa;
+    margin-bottom: 0px;
+    padding: 15px;
+    font-size: 14px;
+  }
+}
+
+.syntaxhighlighter .container:before {
+  content: ""
 }

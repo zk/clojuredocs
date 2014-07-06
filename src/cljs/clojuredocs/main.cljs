@@ -4,6 +4,8 @@
             [clojure.string :as str]
             [clojuredocs.ajax :refer [ajax]]
             [clojuredocs.sticky :as sticky]
+            [clojuredocs.widgets :as widgets]
+            [clojuredocs.styleguide :as styleguide]
             [highlight])
   (:use-macros [dommy.macros :only [node sel sel1]]))
 
@@ -101,9 +103,12 @@
 (defn navigate-to [url]
   (aset (.-location js/window) "href" url))
 
-(init
-  [:form.search :input]
-  (fn [$el]
+(apply init widgets/init)
+(apply init styleguide/init)
+
+#_(init
+  #_[:form.search :input]
+  #_(fn [$el]
     (let [$input (sel1 [$el :input])
           $ac (sel1 [:table.ac-results])
           results (atom [])]
@@ -127,15 +132,15 @@
                         (->> body
                              (map $ac-result)
                              (dom/append! $ac)))})))))
-  [:form.search]
-  (fn [$el]
+  #_[:form.search]
+  #_(fn [$el]
     (dom/listen! $el :submit
       (fn [e]
         (prevent e))))
 
   "[data-sticky-offset]" sticky/init
 
-  :body (fn [$el]
+  #_:body #_(fn [$el]
           (dom/listen! $el :keydown
             (fn [e]
               (when (and (ctrl? e)

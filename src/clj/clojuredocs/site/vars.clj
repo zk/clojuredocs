@@ -3,7 +3,8 @@
             [clojure.string :as str]
             [somnium.congomongo :as mon]
             [clojuredocs.search :as search]
-            [clojuredocs.site.common :as common]))
+            [clojuredocs.site.common :as common]
+            [hiccup.core :as hc]))
 
 (defn examples-for [{:keys [ns name]}]
   (mon/fetch :examples :where {:name name
@@ -21,11 +22,11 @@
                  "(" name (when-not (empty? a) " ") a ")")])
 
 (defn $example-body [{:keys [body]}]
-  [:div.example-code
-   [:pre {:class "brush: clj"} body]])
+  [:div.example-body
+   [:pre.raw-example {:class "brush: clojure"} body]])
 
 (defn $example [{:keys [body _id history created-at updated-at] :as ex}]
-  [:div.row
+  [:div.row.var-example
    [:div.col-md-10
     [:a {:id (str "example_" _id)}]
     ($example-body ex)]
@@ -33,20 +34,19 @@
     (let [users (->> history
                      (map :user)
                      distinct
-                     reverse)]
+                     reverse)
+          num-to-show 6]
       [:div.example-meta
        [:div.contributors
         (->> users
-             (take 10)
-             (map common/$avatar))]
-       (when (> (count users) 10)
-         [:div.contributors
-          (count users) " contributors total."])
-       #_[:div.created
-        "Created " (util/timeago created-at) " ago."]
-       #_(when-not (= created-at updated-at)
-         [:div.last-updated
-          "Updated " (util/timeago updated-at) " ago."])
+             (take num-to-show)
+             (map common/$avatar))
+        (when (> (count users) 10)
+          [:div.contributors
+           "+ "
+           (- (count users) num-to-show)
+           " more"])]
+
        [:div.links
         [:a {:href (str "#example_" _id)}
          "link"]
@@ -76,6 +76,16 @@
   (or (mon/fetch-one :vars :where {:name name :ns ns})
       (search/lookup (str ns "/" name))))
 
+(defn $examples [examples ns name]
+  [:div.var-examples
+   [:h3 (util/pluralize (count examples) "Example" "Examples")]
+   (if (empty? examples)
+     [:div.null-state
+      "No examples for " ns "/" name ", "
+      [:a {:href "#"} "add one"]
+      "?"]
+     (map $example examples))])
+
 (defn var-page [ns name]
   (fn [{:keys [user]}]
     (let [name (util/unmunge-name name)
@@ -85,6 +95,8 @@
           see-alsos (see-alsos-for v)]
       (common/$main
         {:body-class "var-page"
+         :page-data {:examples (map #(assoc % :_id (str (:_id %))) examples)
+                     :var (assoc v :_id (str (:_id v)))}
          :user user
          :content [:div
                    [:div.row
@@ -118,26 +130,9 @@
                         [:a {:href "http://www.eclipse.org/legal/epl-v10.html"}
                          "Eclipse Public License 1.0"]]]]
                      [:section
-                      [:h3 (util/pluralize (count examples) "Example" "Examples")]
-                      (if (empty? examples)
-                        [:div.null-state
-                         "No examples for " name ", "
-                         [:a {:href "#"} "add one"]
-                         "?"]
-                        (map $example examples))
-                      [:div
-                       [:div
-                        [:a {:href "#"} "Add an Example"]]
-                       [:div.add-example
-                        [:form
-                         [:textarea.form-control
-                          {:cols "80"}]]
-                        [:div.add-example-controls.clearfix
-                         [:button.btn.btn-default "Cancel"]
-                         [:button.btn.btn-success.pull-right "Add Example"]]
-                        [:div.add-example-preview
-                         [:pre {:class "brush: clojure"}
-                          "(foo bar \"baz\")"]]]]]
+                      [:div.examples-widget
+                       ($examples examples ns name)]
+                      [:div.add-example-widget]]
                      [:section
                       [:h3 "See Also"]
                       (if (empty? see-alsos)
@@ -153,9 +148,10 @@
   [:div.row
    [:div.col-md-10
     [:div.example-code
-     [:pre (-> body
-               (str/replace #"<" "&lt;")
-               (str/replace #">" "&gt;"))]]]
+     [:pre {:class "brush: clojure"}
+      (-> body
+          (str/replace #"<" "&lt;")
+          (str/replace #">" "&gt;"))]]]
    [:div.col-md-2
     [:div.example-meta
      (common/$avatar user)
@@ -173,15 +169,12 @@
                    [:div.col-md-12
                     [:h3 "Example History"]
                     [:p
-                     "Example history for example "
-                     [:em id]
-                     ", in order from oldest to newest. "
-                     "This is an example for "
+                     "Example history for "
                      (util/$var-link ns name (str ns "/" name))
-                     ". The currrent version is highlighted in yellow."]
+                     ", in order from newest to oldest. "
+                     "The currrent version is highlighted in yellow."]
                     [:div.current-example
                      ($example ex)]
                     (->> history
                          reverse
-                         (map $example-history-point))
-                    [:pre (pr-str ex)]]]}))))
+                         (map $example-history-point))]]}))))
