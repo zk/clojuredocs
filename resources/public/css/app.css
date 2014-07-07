@@ -16172,6 +16172,11 @@ header.navbar input[type='text'] {
 .null-state a {
   color: rgba(66, 139, 202, 0.7);
 }
+form.search input[name='query'].loading {
+  background-image: url("/img/loading.gif");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+}
 .intro-page form.search {
   margin-bottom: 1em;
 }

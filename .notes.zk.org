@@ -1,11 +1,11 @@
 <2014-07-06 Sun 13:48>
 
-* Checklist
+* Release Checklist
 
 ** DONE Example history page
 ** DONE Footer
 *** DONE GH / Twitter Links
-** Deploy less
+** DONE Deploy less
 ** User account move over
 ** Claiming old user accounts
 ** Clojure intro for home page
@@ -23,4 +23,6 @@
 *** ClojureScript?
 ** User page
 ** Add example
-** Check SSL resources
+** DONE Check SSL resources
+** Search Widget
+*** DONE Loading indicator

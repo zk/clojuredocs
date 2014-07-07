@@ -31,4 +31,12 @@ f should accept number-of-colls arguments."}
                                      :doc "Fundamental library of the Clojure language"}
                                     {:type :page
                                      :title "Getting Started"
-                                     :desc "Where to go to get started with Clojure. Provides a host of information on the language, core concepts, tutorials, books, and videos to help you learn Clojure."}]}}))])
+                                     :desc "Where to go to get started with Clojure. Provides a host of information on the language, core concepts, tutorials, books, and videos to help you learn Clojure."}]}}))
+
+   [:div.quick-lookup-loading]
+   (fn [$el]
+     (om/root
+       widgets/quick-lookup
+       {}
+       {:target $el
+        :init-state {:loading? true}}))])

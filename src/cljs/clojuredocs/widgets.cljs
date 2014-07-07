@@ -235,9 +235,10 @@
 (defmethod ac-entry :default [{:keys [type]}]
   (.log js/console (str "Couldn't render ac entry:" type)))
 
-(defn put-text [e text-chan]
+(defn put-text [e text-chan owner]
   (let [text (.. e -target -value)]
-    (put! text-chan text)))
+    (put! text-chan text))
+  (om/set-state! owner :loading? true))
 
 (defn navigate-to [url]
   (aset (.-location js/window) "href" url))
@@ -249,20 +250,20 @@
       (let [ac-chan (or (om/get-state owner :ac-chan) (chan))]
         (go
           (while true
-            (om/set-state! owner :autocomplete (<! ac-chan))))))
+            (om/set-state! owner :autocomplete (<! ac-chan))
+            (om/set-state! owner :loading? false)))))
     om/IRenderState
-    (render-state [this {:keys [text-chan autocomplete] :or {text-chan (chan)}}]
+    (render-state [this {:keys [text-chan autocomplete loading? text] :or {text-chan (chan)}}]
       (dom/form {:class "search" :autoComplete "off" :on-submit identity}
-        (dom/input {:class "form-control"
+        (dom/input {:class (str "form-control" (when loading? " loading"))
                     :placeholder "Looking for?"
                     :name "query"
                     :autoComplete "off"
                     :autoFocus "autofocus"
-                    :on-input #(put-text % text-chan)})
+                    :on-input #(put-text % text-chan owner)})
         (dom/ul {:class "ac-results"}
           (for [{:keys [type href] :as res} autocomplete]
             (dom/li {:on-click #(when href (navigate-to href))}
-              (prn href)
               (ac-entry res))))
         (dom/div {:class "not-finding"}
           "Can't find what you're looking for? "
