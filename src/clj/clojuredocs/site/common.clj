@@ -82,7 +82,7 @@
                 :width "80"
                 :height "20"}]
       [:a.twitter-share-button {:href "https://twitter.com/share"
-                                :data-url "https://www.clojuredocs.org"
+                                :data-url "http://clojuredocs.org"
                                 :data-text "Community-powered docs and examples for #Clojure"
                                 :data-via "heyzk"}
        "Tweet"]
