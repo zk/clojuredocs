@@ -69,13 +69,13 @@
       [:a {:href "https://twitter.com/heyzk"} "@heyzk"]
       ". "
       "&nbsp; / "
-      [:iframe {:src "http://ghbtns.com/github-btn.html?user=zk&repo=clojuredocs&type=watch&count=true"
+      [:iframe {:src "/github-btn.html?user=zk&repo=clojuredocs&type=watch&count=true"
                 :allowtransparency "true"
                 :frameborder "0"
                 :scrolling "0"
                 :width "80"
                 :height "20"}]
-      [:iframe {:src "http://ghbtns.com/github-btn.html?user=zk&repo=clojuredocs&type=fork&count=true"
+      [:iframe {:src "/github-btn.html?user=zk&repo=clojuredocs&type=fork&count=true"
                 :allowtransparency "true"
                 :frameborder "0"
                 :scrolling "0"
