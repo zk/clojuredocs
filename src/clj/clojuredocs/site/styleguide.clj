@@ -18,6 +18,8 @@
       (section "Landing Search"
         [:p "The main search widget on the home page. This should feel immediately accessible and get users where they want to go, fast."]
         [:div.example.checker-bg.quick-lookup]
+        [:p "When loading autocomplete"]
+        [:div.example.checker-bg.quick-lookup-loading]
         [:p "Landing search w/ autocomplete: heterogenous results linking to vars, namespaces, and concept pages."]
         [:div.example.checker-bg.quick-lookup-autocomplete])
       (section "Examples"
