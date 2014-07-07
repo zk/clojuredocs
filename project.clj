@@ -20,7 +20,6 @@
                  [cheshire "5.2.0"]
                  [org.clojure/java.jdbc "0.3.0-beta2"]
                  [mysql/mysql-connector-java "5.1.25"]
-                 #_[lein-light-nrepl "0.0.9"]
                  [congomongo "0.4.1"]
                  [unk "0.9.1"]
                  [cljsbuild "1.0.1"]
@@ -55,5 +54,7 @@
                                  :pretty-print false
                                  :foreign-libs [{:file "resources/public/js/syntaxhighlighter.js"
                                                  :provides ["highlight"]}]
-                                 :externs ["externs/syntaxhighlighter.js"]}
+                                 :preamble ["react/react.min.js"]
+                                 :externs ["externs/syntaxhighlighter.js"
+                                           "react/externs/react.js"]}
                       :jar true}}})
