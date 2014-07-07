@@ -12,6 +12,11 @@ The clojuredocs.org webapp
 * scss (`gem install scss`)
 * MongoDB
 
+## Deploy
+
+* Force add resources/public/app.css, commit with message `deploy commit`
+* Run `bin/ship`
+
 
 ## Dev
 
@@ -19,7 +24,6 @@ Run `bin/dev`, which will start all the things (repl, web process,
 scss compiler, etc). See `Procfile` for more info.
 
 Connect from cider (emacs) or Light Table, repl port 7888.
-
 
 ### CLJS Source Maps
 
