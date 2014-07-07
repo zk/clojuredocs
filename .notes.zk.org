@@ -22,3 +22,5 @@
 *** Web dev
 *** ClojureScript?
 ** User page
+** Add example
+** Check SSL resources

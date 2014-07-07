@@ -31,8 +31,7 @@
 
 (defn go []
   (init)
-  (start)
-  (refresh-chrome))
+  (start))
 
 (defn restart []
   (stop)
