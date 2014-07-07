@@ -67,7 +67,7 @@
       " takes a bit to get your head around. Stick with it, and you won't be disappointed."]]
     [:div.col-md-6
      [:p "But don't take our word for it, here's what XKCD has to say:"]
-     [:p [:img {:src "http://imgs.xkcd.com/comics/lisp_cycles.png"}]]
+     [:p [:img {:src "/img/lisp_cycles.png"}]]
      [:p "Seems like more than a few, these days. Happy coding!"]]
     [:div.col-md-12.used-by
      [:h3 "Clojure in Production"]
