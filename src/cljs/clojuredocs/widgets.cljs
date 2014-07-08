@@ -207,29 +207,35 @@
 
 (defmulti ac-entry :type)
 
-(defmethod ac-entry :function [{:keys [name ns doc] :as func}]
+(defmethod ac-entry :function [{:keys [name ns doc type] :as func}]
   (dom/div {:class "ac-entry"}
-    (dom/i )
+    (dom/span {:class "ac-type"} "fn")
     (dom/h4
+      #_(dom/i {:class "fa fa-exclamation"})
       (dom/a {:href (var-url func)}
         name " (" ns ")"))
     (dom/p (ellipsis 225 doc))))
 
-(defmethod ac-entry :macro [{:keys [name ns doc]}]
-  (dom/div
+(defmethod ac-entry :macro [{:keys [name ns doc type]}]
+  (dom/div {:class "ac-entry"}
+    (dom/span {:class "ac-type"} "macro")
     (dom/h4
       name " (" ns ")")
     (dom/p (ellipsis 225 doc))))
 
-(defmethod ac-entry :ns [{:keys [ns doc]}]
-  (dom/div
+(defmethod ac-entry :ns [{:keys [ns doc type]}]
+  (dom/div {:class "ac-entry"}
+    (dom/span {:class "ac-type"} "ns")
     (dom/h4
+      #_(dom/i {:class "fa fa-cube"})
       (dom/a {:href "#"} ns))
     (dom/p (ellipsis 225 doc))))
 
-(defmethod ac-entry :page [{:keys [title desc]}]
-  (dom/div
+(defmethod ac-entry :page [{:keys [title desc type]}]
+  (dom/div {:class "ac-entry"}
+    (dom/span {:class "ac-type"} "page")
     (dom/h4
+      #_(dom/i {:class "fa fa-bolt"})
       (dom/a {:href "#"} title))
     (dom/p (ellipsis 255 desc))))
 
