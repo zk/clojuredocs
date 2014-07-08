@@ -22,7 +22,7 @@
     [:div.row
      [:div.col-md-10.col-md-offset-1
       [:a.navbar-brand {:href "/"}
-       [:i.icon-rocket]
+       [:i.fa.fa-rocket]
        "ClojureDocs"]
       [:ul.navbar-nav.nav.navbar-right
        [:li [:a {:href "/"} "Home"]]
