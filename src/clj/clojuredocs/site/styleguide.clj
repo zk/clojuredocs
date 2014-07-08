@@ -15,6 +15,19 @@
      [:div
       [:h1 "Styleguide"]
       [:p "Here you'll find various UI elements used on the ClojureDocs site."]
+      (section "General"
+        [:p "Namespace nav tree, nests namespaces to save on horizontal space. Namespaces are linked, non-namespace bridge parts (e.g. "
+         [:code "clojure"]
+         ", "
+         [:code "java"]
+         ") are unlinked."]
+        [:div.example.checker-bg
+         (common/$namespaces ["clojure.core"
+                              "clojure.java.shell"
+                              "clojure.test"
+                              "clojure.test.junit"
+                              "clojure.test.tap"
+                              "clojure.zip"])])
       (section "Landing Search"
         [:p "The main search widget on the home page. This should feel immediately accessible and get users where they want to go, fast."]
         [:div.example.checker-bg.quick-lookup]

@@ -6,6 +6,15 @@
             [clojuredocs.site.common :as common]
             [hiccup.core :as hc]))
 
+(defn ellipsis [s n]
+  (cond
+    (<= (count s) 3) s
+    (> n (count s))  s
+    :else (str (->> s
+                    (take n)
+                    (apply str))
+               "...")))
+
 (defn examples-for [{:keys [ns name]}]
   (mon/fetch :examples :where {:name name
                                :ns ns
@@ -17,6 +26,9 @@
                                          :library-url "https://github.com/clojure/clojure"})
        :vars))
 
+(defn library-for [{:keys [ns]}]
+  (mon/fetch-one :libraries :where {:namespaces ns}))
+
 (defn $arglist [name a]
   [:li.arglist (str
                  "(" name (when-not (empty? a) " ") a ")")])
@@ -26,16 +38,13 @@
    [:pre.raw-example {:class "brush: clojure"} body]])
 
 (defn $example [{:keys [body _id history created-at updated-at] :as ex}]
-  [:div.row.var-example
-   [:div.col-md-10
-    [:a {:id (str "example_" _id)}]
-    ($example-body ex)]
-   [:div.col-md-2
+  [:div.var-example
+   [:div
     (let [users (->> history
                      (map :user)
                      distinct
                      reverse)
-          num-to-show 6]
+          num-to-show 7]
       [:div.example-meta
        [:div.contributors
         (->> users
@@ -49,10 +58,13 @@
 
        [:div.links
         [:a {:href (str "#example_" _id)}
-         "link"]
+         "permalink"]
         " / "
         [:a {:href (str "/ex/" _id)}
-         "history"]]])]])
+         "history"]]])]
+   [:div
+    [:a {:id (str "example_" _id)}]
+    ($example-body ex)]])
 
 (defn source-url [{:keys [file line]}]
   (str "https://github.com/clojure/clojure/blob/clojure-1.5.1/src/clj/" file "#L" line))
@@ -87,62 +99,79 @@
      (map $example examples))])
 
 (defn var-page [ns name]
-  (fn [{:keys [user]}]
+  (fn [{:keys [user session]}]
     (let [name (util/unmunge-name name)
           {:keys [arglists name ns doc runtimes added file] :as v}
           (lookup-var ns name)
           examples (examples-for v)
-          see-alsos (see-alsos-for v)]
-      (common/$main
-        {:body-class "var-page"
-         :page-data {:examples (map #(assoc % :_id (str (:_id %))) examples)
-                     :var (assoc v :_id (str (:_id v)))}
-         :user user
-         :content [:div
-                   [:div.row
-                    [:div.col-sm-4
-                     [:section.var-data
-                      [:h1 name]
-                      [:h2 ns]]]
-                    [:div.col-sm-4
-                     [:section
-                      [:ul.arglists
-                       (map #($arglist name %) arglists)]]]
-                    [:div.col-sm-4
-                     [:section.var-meta
-                      "Available in "
-                      (->> ["clj" "cljs" "clj.net"]
-                           (interpose ", ")
-                           (apply str))
-                      (when file
-                        [:div.source-code
-                         [:a {:href (source-url v)} "Source"]])]]]
-                   [:div.row
-                    [:div.col-sm-12
-                     [:section
-                      [:div.docstring
-                       (when doc
-                         [:pre (-> doc
-                                   (str/replace #"\n\s\s" "\n"))])
-                       [:div.copyright
-                        "&copy; Rich Hickey. All rights reserved."
-                        " "
-                        [:a {:href "http://www.eclipse.org/legal/epl-v10.html"}
-                         "Eclipse Public License 1.0"]]]]
-                     [:section
-                      [:div.examples-widget
-                       ($examples examples ns name)]
-                      [:div.add-example-widget]]
-                     [:section
-                      [:h3 "See Also"]
-                      (if (empty? see-alsos)
-                        [:div.null-state
-                         "No see-alsos for " [:code name] ", "
-                         [:a
-                          {:href "#"} "add one"]
-                         "?"]
-                        [:div.row
-                         (map $see-also see-alsos)])]]]]}))))
+          see-alsos (see-alsos-for v)
+          library (library-for v)
+          recent (:recent session)]
+      {:session (update-in session [:recent]
+                  #(->> %
+                        (concat [{:text name
+                                  :href (str "/" ns "/" name)}])
+                        distinct
+                        (take 4)))
+       :body
+       (common/$main
+         {:body-class "var-page"
+          :page-data {:examples (map #(assoc % :_id (str (:_id %))) examples)
+                      :var (assoc v :_id (str (:_id v)))}
+          :user user
+          :content [:div
+                    [:div.row
+                     [:div.col-sm-4
+                      [:section.var-data
+                       [:h1 name]
+                       [:h2 [:a {:href (str "/" ns)} ns]]]]
+                     [:div.col-sm-4
+                      [:section
+                       [:ul.arglists
+                        (map #($arglist name %) arglists)]]]
+                     [:div.col-sm-4
+                      [:section.var-meta
+                       "Available in "
+                       (->> ["clj" "cljs" "clj.net"]
+                            (interpose ", ")
+                            (apply str))
+                       (when file
+                         [:div.source-code
+                          [:a {:href (source-url v)} "Source"]])]]]
+                    [:div.row
+                     [:div.col-sm-2
+                      (when-not (empty? recent)
+                        [:div
+                         [:h3 "Recent"]
+                         [:ul.recent-pages
+                          (for [{:keys [text href]} recent]
+                            [:li [:a {:href href} (ellipsis text 10)]])]])
+                      (common/$library-nav library ns)]
+                     [:div.col-sm-10
+                      [:section
+                       [:div.docstring
+                        (when doc
+                          [:pre (-> doc
+                                    (str/replace #"\n\s\s" "\n"))])
+                        [:div.copyright
+                         "&copy; Rich Hickey. All rights reserved."
+                         " "
+                         [:a {:href "http://www.eclipse.org/legal/epl-v10.html"}
+                          "Eclipse Public License 1.0"]]]]
+                      [:section
+                       [:div.examples-widget
+                        ($examples examples ns name)]
+                       [:div.add-example-widget]]
+                      [:section
+                       [:h3 "See Also"]
+                       (if (empty? see-alsos)
+                         [:div.null-state
+                          "No see-alsos for " [:code name] ", "
+                          [:a
+                           {:href "#"} "add one"]
+                          "?"]
+                         [:div.row
+                          (map $see-also see-alsos)])]]]]})})))
 
 (defn $example-history-point [{:keys [user body created-at updated-at] :as ex}]
   [:div.row
@@ -159,22 +188,22 @@
       (util/timeago created-at) " ago."]]]])
 
 (defn example-page [id]
-  (fn [{:keys [user]}]
+  (fn [{:keys [user session]}]
     (let [{:keys [history name ns] :as ex}
           (mon/fetch-one :examples :where {:_id (util/bson-id id)})]
       (common/$main
-        {:body-class "example-page"
-         :user user
-         :content [:div.row
-                   [:div.col-md-12
-                    [:h3 "Example History"]
-                    [:p
-                     "Example history for "
-                     (util/$var-link ns name (str ns "/" name))
-                     ", in order from newest to oldest. "
-                     "The currrent version is highlighted in yellow."]
-                    [:div.current-example
-                     ($example ex)]
-                    (->> history
-                         reverse
-                         (map $example-history-point))]]}))))
+         {:body-class "example-page"
+          :user user
+          :content [:div.row
+                    [:div.col-md-12
+                     [:h3 "Example History"]
+                     [:p
+                      "Example history for "
+                      (util/$var-link ns name (str ns "/" name))
+                      ", in order from newest to oldest. "
+                      "The currrent version is highlighted in yellow."]
+                     [:div.current-example
+                      ($example ex)]
+                     (->> history
+                          reverse
+                          (map $example-history-point))]]}))))

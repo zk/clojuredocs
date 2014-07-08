@@ -208,7 +208,8 @@
 (defmulti ac-entry :type)
 
 (defmethod ac-entry :function [{:keys [name ns doc] :as func}]
-  (dom/div
+  (dom/div {:class "ac-entry"}
+    (dom/i )
     (dom/h4
       (dom/a {:href (var-url func)}
         name " (" ns ")"))

@@ -20,6 +20,7 @@
             [clojuredocs.site.gh-auth :as site.gh-auth]
             [clojuredocs.site.vars :as site.vars]
             [clojuredocs.site.user :as site.user]
+            [clojuredocs.site.nss :as site.nss]
             [clojuredocs.site.styleguide :as styleguide]
             [clojure.pprint :refer (pprint)]))
 
@@ -40,7 +41,9 @@
   clojure.lang.APersistentMap
   (render [resp-map _]
     (if (-> resp-map :body vector?)
-      (assoc resp-map :body (-> resp-map :body hiccup->html-string))
+      (-> resp-map
+          (update-in [:headers "Content-Type"] #(or % "text/html;charset=utf-8"))
+          (assoc :body (-> resp-map :body hiccup->html-string)))
       (merge (with-meta (response "") (meta resp-map))
              resp-map))))
 
@@ -53,7 +56,15 @@
   (GET "/quickref" [] quickref/index)
   (GET "/styleguide" [] styleguide/index)
   (GET "/ex/:id" [id] (site.vars/example-page id))
+
+
+  ;; Redirect old urls
+  (GET "/clojure_core/:ns/:name" [ns name] (fn [r]
+                                             {:status 301
+                                              :headers {"Location" (str "/" ns "/" name)}}))
+
   (GET "/:ns/:name" [ns name] (site.vars/var-page ns name))
+  (GET "/:ns" [ns] (site.nss/index ns))
   )
 
 (def session-store
