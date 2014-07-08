@@ -43,7 +43,7 @@
   (mon/update! :examples (select-keys e [:library-url :ns :name :body]) e))
 
 ;; examples
-(time
+#_(time
   (let [examples (->> (core-nss)
                       (map (fn [{:keys [library_id name id]}]
                              {:library-id library_id
@@ -166,8 +166,8 @@
   (mon/update! :vars (select-keys v [:library-url :ns :name]) v))
 
 ;; Vars
-(doseq [v searchable-vars]
-  (insert-or-update-var v))
+#_(doseq [v searchable-vars]
+    (insert-or-update-var v))
 
 
 ;; See Alsos
@@ -213,3 +213,51 @@
 
 
 #_(mon/fetch-one :see-alsos :where {:name "fnil"})
+
+
+
+#_(mon/update! :libraries
+  {:name "Clojure"}
+  {:name "Clojure"
+   :namespaces (->> clojure-namespaces
+                    (map str))})
+
+
+(def libs
+  [{:name "Clojure"
+    :version "1.6"
+    :nss ["clojure.core"
+          "clojure.data"
+          "clojure.edn"
+          "clojure.inspector"
+          "clojure.instant"
+          "clojure.java.browse"
+          "clojure.java.classpath"
+          "clojure.java.io"
+          "clojure.java.javadoc"
+          "clojure.java.shell"
+          "clojure.main"
+          "clojure.pprint"
+          "clojure.reflect"
+          "clojure.repl"
+          "clojure.set"
+          "clojure.stacktrace"
+          "clojure.string"
+          "clojure.template"
+          "clojure.test"
+          "clojure.walk"
+          "clojure.xml"
+          "clojure.zip"]}
+   {:name "core.async"
+    :version "??"
+    :nss ["clojure.core.async"]}
+   {:name "core.logic"
+    :version "0.8.8"}])
+
+(doseq [{:keys [name meta]} (->> (all-ns)
+                                 (filter #(re-find #"^clojure\.core\.logic" (str %)))
+                                 #_(remove #(re-find #"^clojure.tools" (str %)))
+                                 (map #(hash-map :name (str %) :meta (meta %)))
+                                 (remove #(-> % :meta :skip-wiki))
+                                 (sort-by :name))]
+  (prn name))

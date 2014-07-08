@@ -6,7 +6,7 @@
   :min-lein-version "2.0.0"
   :source-paths ["src/clj"]
   :test-paths ["test/clj"]
-  :dependencies [[org.clojure/clojure "1.5.1"]
+  :dependencies [[org.clojure/clojure "1.6.0"]
                  [ring "1.2.1"]
                  [compojure "1.1.6"]
                  [aleph "0.3.0-rc2"]
@@ -24,7 +24,7 @@
                  [unk "0.9.1"]
                  [cljsbuild "1.0.1"]
                  [org.clojure/core.async "0.1.267.0-0d7780-alpha"]
-                 [org.clojure/core.logic "0.8.5"]
+                 [org.clojure/core.logic "0.8.8"]
                  [om "0.6.4"]
                  [prismatic/om-tools "0.2.2"]]
   :profiles {:nrepl {:source-paths ["dev"]

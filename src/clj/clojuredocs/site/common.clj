@@ -1,5 +1,6 @@
 (ns clojuredocs.site.common
-  (:require [clojuredocs.util :as util]
+  (:require [clojure.string :as str]
+            [clojuredocs.util :as util]
             [clojuredocs.config :as config]
             [clojuredocs.env :as env]
             [clojuredocs.github :as gh]))
@@ -46,10 +47,10 @@
    [:head
     [:meta {:name "viewport" :content "width=device-width, maximum-scale=1.0"}]
     [:title (or title "Community-Powered Clojure Documentation and Examples | ClojureDocs")]
-    [:link {:rel :stylesheet :href "/css/bootstrap.min.css"}]
-    [:link {:rel :stylesheet :href "/css/font-awesome.min.css"}]
-    [:link {:rel :stylesheet :href "/css/app.css"}]
+    [:link {:rel :stylesheet :href "//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css"}]
+    [:link {:rel :stylesheet :href "//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"}]
     [:link {:rel :stylesheet :href "//fonts.googleapis.com/css?family=Open+Sans:400" :type "text/css"}]
+    [:link {:rel :stylesheet :href "/css/app.css"}]
     [:script "window.PAGE_DATA=" (util/to-json (pr-str page-data)) ";"]]
    [:body
     [:div.sticky-wrapper
@@ -99,3 +100,43 @@
 (defn $avatar [{:keys [email login] :as user}]
   [:a {:href (str "/u/" login)}
    [:img.avatar {:src (str "https://www.gravatar.com/avatar/" (util/md5 email) "?r=PG&s=32&default=identicon") }]])
+
+
+(defn group-levels [path ns-lookup current-ns ls]
+  (when-not (empty? ls)
+    (->> ls
+         (group-by first)
+         (map (fn [[k vs]]
+                (let [path (str path (when path ".") k)
+                      vs (map #(drop 1 %) vs)
+                      vs (remove empty? vs)]
+                  {:part k
+                   :path path
+                   :ns (get ns-lookup path)
+                   :current? (= current-ns path)
+                   :cs (group-levels path ns-lookup current-ns vs)})))
+         (sort-by :part))))
+
+(defn group-namespaces [nss & [current-ns]]
+  (->> nss
+       (map #(str/split % #"\."))
+       (group-levels nil (set nss) current-ns)))
+
+(defn $ns-tree [{:keys [part path ns cs current?]}]
+  [:li
+   [:span {:class (when current? "current")}
+    (if ns
+      [:a {:href (str "/" ns)} part]
+      part)]
+   (when-not (empty? cs)
+     [:ul (map $ns-tree cs)])])
+
+(defn $namespaces [namespaces & [current-ns]]
+  (let [ns-trees (group-namespaces namespaces current-ns)]
+     [:ul.ns-tree
+     (map $ns-tree ns-trees)]))
+
+(defn $library-nav [{:keys [name namespaces]} & [current-ns]]
+  [:div.library-nav
+   [:h3 name]
+   ($namespaces namespaces current-ns)])
