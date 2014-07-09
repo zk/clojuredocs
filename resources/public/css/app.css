@@ -156,6 +156,11 @@ h1 {
   line-height: 1.3em;
   font-weight: 400;
 }
+@media (max-width: 767px) {
+  h1 {
+    font-size: 20px;
+  }
+}
 h3 {
   font-size: 24px;
   font-weight: normal;
@@ -176,6 +181,7 @@ li {
 }
 pre {
   border-radius: 0px;
+  border: none;
 }
 ul {
   padding: 0;
@@ -262,6 +268,11 @@ header.navbar input[type='text'] {
   padding: 10px;
   min-width: 200px;
 }
+.xkcd {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
 .intro {
   margin-bottom: 30px;
 }
@@ -327,12 +338,14 @@ form.search input[name='query'].loading {
   margin-bottom: 0px;
 }
 .intro-page .top-contribs .avatar {
-  width: 9.77%;
+  width: 3.63%;
+  margin-right: 0.53%;
+  margin-bottom: 0.53%;
   height: auto;
 }
-@media (max-width: 991px) {
+@media (max-width: 767px) {
   .intro-page .top-contribs .avatar {
-    width: 35px;
+    width: 7.80%;
     height: auto;
   }
 }
@@ -367,6 +380,9 @@ ul.ac-results li {
   list-style-type: none;
   cursor: pointer;
   padding: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  padding-bottom: 15px;
 }
 ul.ac-results li:hover {
   background-color: #fafafa;
@@ -375,7 +391,22 @@ ul.ac-results li p {
   margin-bottom: 0;
 }
 ul.ac-results li i {
-  margin-left: -26px;
+  margin-left: 0;
+  color: #666;
+  width: 15px;
+  text-align: right;
+}
+.ac-entry {
+  position: relative;
+}
+.ac-entry .ac-type {
+  position: absolute;
+  right: 0px;
+  top: 0;
+  font-size: 10px;
+  text-transform: uppercase;
+  color: #aaa;
+  line-height: 12px;
 }
 table.ac-results {
   width: 100%;
@@ -775,6 +806,37 @@ table.ac-results .ac-metadata {
   font-size: 14px;
   margin-bottom: 30px;
 }
+.recent-pages h3 {
+  font-size: 15px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #777;
+}
 .recent-pages li {
   margin-bottom: 0px;
+}
+.ns-page h1 {
+  margin-bottom: 20px;
+}
+.ns-page pre.doc {
+  margin-bottom: 20px;
+}
+.ns-table .name {
+  text-align: right;
+}
+.ns-table .name > span {
+  padding-right: 20px;
+  font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+  font-size: 12px;
+  line-height: 24px;
+  vertical-align: middle;
+}
+.ns-table .doc {
+  width: 450px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 24px;
+  font-size: 14px;
 }

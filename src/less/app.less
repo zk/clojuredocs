@@ -36,6 +36,13 @@ h1 {
   font-weight: 400;
 }
 
+@media (max-width: 767px) {
+  h1 {
+    font-size: 20px;
+  }
+}
+
+
 h3 {
   font-size: 24px;
   font-weight: normal;
@@ -61,6 +68,7 @@ li {
 
 pre {
   border-radius: 0px;
+  border: none;
 }
 
 ul {
@@ -173,6 +181,12 @@ header.navbar {
   }
 }
 
+.xkcd {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .intro {
   margin-bottom: 30px;
 }
@@ -262,11 +276,13 @@ form.search {
   }
 
   .top-contribs .avatar {
-    width: 9.77%;
+    width: 3.63%;
+    margin-right: 0.53%;
+    margin-bottom: 0.53%;
     height: auto;
 
-    @media (max-width: 991px) {
-      width: 35px;
+    @media (max-width: 767px) {
+      width: 7.80%;
       height: auto;
     }
   }
@@ -857,10 +873,46 @@ table.ac-results {
 }
 
 .recent-pages {
+  h3 {
+    font-size: 15px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #777;
+  }
+
   font-size: 14px;
   margin-bottom: 30px;
 
   li {
     margin-bottom: 0px;
+  }
+}
+
+.ns-page {
+  h1 { margin-bottom: 20px; }
+  pre.doc { margin-bottom: 20px; }
+}
+
+.ns-table {
+  .name {
+    text-align: right;
+  }
+
+  .name > span {
+    padding-right: 20px;
+    font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+    font-size: 12px;
+    line-height: 24px;
+    vertical-align: middle;
+  }
+
+  .doc {
+    width: 450px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 24px;
+    font-size: 14px;
   }
 }

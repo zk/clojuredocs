@@ -140,12 +140,7 @@
                           [:a {:href (source-url v)} "Source"]])]]]
                     [:div.row
                      [:div.col-sm-2
-                      (when-not (empty? recent)
-                        [:div
-                         [:h3 "Recent"]
-                         [:ul.recent-pages
-                          (for [{:keys [text href]} recent]
-                            [:li [:a {:href href} (ellipsis text 10)]])]])
+                      (common/$recent recent)
                       (common/$library-nav library ns)]
                      [:div.col-sm-10
                       [:section
