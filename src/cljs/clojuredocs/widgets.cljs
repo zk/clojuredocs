@@ -2,7 +2,7 @@
   (:require [om.core :as om :include-macros true]
             [om-tools.dom :as dom :include-macros true]
             [cljs.core.async :as async
-             :refer [<! >! chan close! sliding-buffer put! alts! timeout]]
+             :refer [<! >! chan close! sliding-buffer put! alts! timeout pipe]]
             [clojuredocs.ajax :refer [ajax]]
             [clojure.string :as str]
             [cljs.reader :as reader]
@@ -250,24 +250,52 @@
 (defn navigate-to [url]
   (aset (.-location js/window) "href" url))
 
+;; from https://github.com/swannodette/async-tests
+
+(defn throttle
+  ([source msecs]
+     (throttle (chan) source msecs))
+  ([c source msecs]
+     (go
+       (loop [state ::init last nil cs [source]]
+         (let [[_ sync] cs]
+           (let [[v sc] (alts! cs)]
+             (condp = sc
+               source (condp = state
+                        ::init (do (>! c v)
+                                   (recur ::throttling last
+                                     (conj cs (timeout msecs))))
+                        ::throttling (recur state v cs))
+               sync (if last
+                      (do (>! c last)
+                          (recur state nil
+                            (conj (pop cs) (timeout msecs))))
+                      (recur ::init last (pop cs))))))))
+     c))
+
 (defn quick-lookup [app owner]
   (reify
     om/IWillMount
     (will-mount [_]
-      (let [ac-chan (or (om/get-state owner :ac-chan) (chan))]
+      (let [ac-chan (or (om/get-state owner :ac-chan) (chan))
+            text-chan (or (om/get-state owner :text-chan) (chan))
+            internal-text-chan (chan)
+            throttled (throttle internal-text-chan 250)]
+        (pipe throttled text-chan)
+        (om/set-state! owner :internal-text-chan internal-text-chan)
         (go
           (while true
             (om/set-state! owner :autocomplete (<! ac-chan))
             (om/set-state! owner :loading? false)))))
     om/IRenderState
-    (render-state [this {:keys [text-chan autocomplete loading? text] :or {text-chan (chan)}}]
+    (render-state [this {:keys [internal-text-chan autocomplete loading? text]}]
       (dom/form {:class "search" :autoComplete "off" :on-submit identity}
         (dom/input {:class (str "form-control" (when loading? " loading"))
                     :placeholder "Looking for?"
                     :name "query"
                     :autoComplete "off"
                     :autoFocus "autofocus"
-                    :on-input #(put-text % text-chan owner)})
+                    :on-input #(put-text % internal-text-chan owner)})
         (dom/ul {:class "ac-results"}
           (for [{:keys [type href] :as res} autocomplete]
             (dom/li {:on-click #(when href (navigate-to href))}
