@@ -23,52 +23,38 @@
         [:div.not-finding
          "Can't find what you're looking for? " [:a {:href "/search-feedback"} "Help make ClojureDocs better"] "."]]]]]]
    [:div.row
-    [:div.col-md-6
-     [:section
-      [:h3 "Getting started with ClojureDocs"]
-      [:p "Finding the right tool for the job can be tough, so we've outlined a few ways to go about your search below."]
-      [:ul
-       [:li [:i.fa.fa-search] "Use the search box above to find what you're looking for."]
-       [:li [:i.fa.fa-map-marker] "Take a look at the "
-        [:a {:href "/quickref"} "quickref"]
-        ", which displays Clojure vars grouped by category."]
-       [:li [:i.fa.fa-book] "Browse an alphabetical list of vars defined in Clojure Core or Contrib."]]]]
-    [:div.col-md-6
+    [:div.col-md-12
      [:section
       [:h3 "Top Contributors"]
       [:div.top-contribs
        (map common/$avatar top-contribs)]]]]
    [:div.row
     [:div.col-md-12
-     [:h3 "Clojure is concise, powerful, and performant."]]
+     [:h3 "On Clojure"]]
     [:div.col-md-6
+     [:p "Clojure is a concise, powerful, and performant general-purpose programming language that favors simplicity, composibility, functional and data-oriented way of
+solving problems (holy buzzwords, fix this)."]
      [:p
       "New to Clojure and not sure where to start? If you'd like to get a good background on Clojure's design origins (and be entertained at the same time), start "
       [:a {:href "http://www.infoq.com/presentations/Are-We-There-Yet-Rich-Hickey"} "here"]
       "."]
      [:p "If you're ready to jump in, then "
       [:a {:href ""} "here you go"]
-      "."]]
+      "."]
+     [:p "There's no denying that Clojure is just so "
+      " *different* "
+      " from what most of us are used to (what is up with all those parentheses?!). "
+      "So it's no surprise that it"
+      " takes a bit to get your head around. Stick with it, and you won't be disappointed."]
+     [:p "But don't take our word for it, here's what XKCD has to say:"]
+     [:p [:img.xkcd {:src "/img/lisp_cycles.png"}]]
+     [:p "Seems like more than a few, these days. Happy coding!"]]
     [:div.col-md-6
      [:div.example-code
       [:pre
        {:class "brush: clj"}
        (slurp "src/examples/clj/first.clj")]]]]
    [:div.row
-    [:div.col-md-12
-     [:h3 "On Clojure"]]
-    [:div.col-md-6
-     [:p "There's no denying that Clojure is just so "
-      " *different* "
-      " from what most of us are used to (what is up with all those parentheses?!)."
-      [:em ""]]
-     [:p ]
-     [:p "So it's no surprise that it"
-      " takes a bit to get your head around. Stick with it, and you won't be disappointed."]]
-    [:div.col-md-6
-     [:p "But don't take our word for it, here's what XKCD has to say:"]
-     [:p [:img {:src "/img/lisp_cycles.png"}]]
-     [:p "Seems like more than a few, these days. Happy coding!"]]
     [:div.col-md-12.used-by
      [:h3 "Clojure in Production"]
      [:ul
@@ -116,10 +102,10 @@
     (->> @scores
          (sort-by second)
          reverse
-         (take (* 9 5))
+         (take (* 24 3))
          (map #(assoc (first %) :score (second %))))))
 
-(def top-contribs (memo-ttl top-contribs (* 1000 60 60 6)))
+#_(def top-contribs (memo-ttl top-contribs (* 1000 60 60 6)))
 
 (defroutes routes
   (GET "/" []

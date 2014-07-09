@@ -1,11 +1,25 @@
+* App Goals
++ Find var doc & examples when you know exactly what you're looking for
+  + optimize for speed
++ Find things when you don't know what you're looking for
+  + see alsos
+  + namespace nav
+  + quickref / area (string manipulation)
+  + concept (I want to do x)
+
+** Non-goals (ATM)
++ How do I build a web app | desktop | mobile
++ Libraries?
+
+
 * Release Checklist
 ** DONE Example history page
 ** DONE Footer
 *** DONE GH / Twitter Links
 ** DONE Deploy less
 ** TODO User accounts
-*** Move over from old db
-*** Claiming old user accounts
+*** TODO Move over from old db
+*** TODO Claiming old user accounts
 ** TODO Clojure intro for home page
 ** TODO Landing search feedback
 ** TODO Quickref update
@@ -15,8 +29,8 @@
 *** TODO quick lookup
 *** DONE sidebar
 ** TODO Libs
-*** library page
-*** include in ns tree?
+*** TODO library page
+*** TODO include in ns tree?
 ** TODO Source link hookup on var page
 ** TODO "Available in" backend
 ** TODO Intro tutorials
@@ -34,3 +48,4 @@
 ** TODO Consitent h3 styling (quickref page)
 ** TODO Switch to avatar url instead of email
 ** TODO Clean data export for dev distribution
+** TODO Mobile comb-through

@@ -254,10 +254,43 @@
    {:name "core.logic"
     :version "0.8.8"}])
 
-(doseq [{:keys [name meta]} (->> (all-ns)
+#_(doseq [{:keys [name meta]} (->> (all-ns)
                                  (filter #(re-find #"^clojure\.core\.logic" (str %)))
                                  #_(remove #(re-find #"^clojure.tools" (str %)))
                                  (map #(hash-map :name (str %) :meta (meta %)))
                                  (remove #(-> % :meta :skip-wiki))
                                  (sort-by :name))]
   (prn name))
+
+(defn update-ns! [ns-map]
+  (mon/update! :namespaces {:name (:name ns-map)} ns-map))
+
+
+(let [nss ["clojure.core"
+           "clojure.data"
+           "clojure.edn"
+           "clojure.inspector"
+           "clojure.instant"
+           "clojure.java.browse"
+           "clojure.java.classpath"
+           "clojure.java.io"
+           "clojure.java.javadoc"
+           "clojure.java.shell"
+           "clojure.main"
+           "clojure.pprint"
+           "clojure.reflect"
+           "clojure.repl"
+           "clojure.set"
+           "clojure.stacktrace"
+           "clojure.string"
+           "clojure.template"
+           "clojure.test"
+           "clojure.walk"
+           "clojure.xml"
+           "clojure.zip"]]
+  (->> nss
+       (map symbol)
+       (map find-ns)
+       (map #(merge (meta %) {:name (str %)}))
+       (map update-ns!)
+       doall))

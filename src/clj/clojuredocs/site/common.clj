@@ -133,10 +133,28 @@
 
 (defn $namespaces [namespaces & [current-ns]]
   (let [ns-trees (group-namespaces namespaces current-ns)]
-     [:ul.ns-tree
+    [:ul.ns-tree
      (map $ns-tree ns-trees)]))
 
 (defn $library-nav [{:keys [name namespaces]} & [current-ns]]
-  [:div.library-nav
-   [:h3 name]
-   ($namespaces namespaces current-ns)])
+  (when-not (empty? namespaces)
+    [:div.library-nav
+     [:h3 "Namespaces"]
+     ($namespaces namespaces current-ns)]))
+
+(defn ellipsis [s n]
+  (cond
+    (<= (count s) 3) s
+    (> n (count s))  s
+    :else (str (->> s
+                    (take n)
+                    (apply str))
+               "...")))
+
+(defn $recent [recent]
+  (when-not (empty? recent)
+    [:div.recent-pages
+     [:h3 "Recent"]
+     [:ul
+      (for [{:keys [text href]} recent]
+        [:li [:a {:href href} (ellipsis text 10)]])]]))
