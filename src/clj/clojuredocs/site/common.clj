@@ -24,23 +24,26 @@
       [:a.navbar-brand {:href "/"}
        [:i.fa.fa-rocket]
        "ClojureDocs"]
-      [:ul.navbar-nav.nav.navbar-right
+      [:ul.navbar-nav.nav.navbar-right.collapse.navbar-collapse
        [:li [:a {:href "/"} "Home"]]
        [:li [:a {:href "/quickref"} "Quick Reference"]]
        (if user
          ($user-area user)
-         [:li [:a {:href gh-auth-url} "Log In"]])]
+         [:li
+          [:a {:href gh-auth-url}
+           [:i.fa.fa-github-square] "Log In"]])]
       (when-not hide-search
-        [:form.search.navbar-form.navbar-right
-         {:method :get :action "/search" :autocomplete "off"}
-         [:input.form-control {:type "text"
-                               :name "query"
-                               :placeholder "Quick Lookup (ctrl-s)"
-                               :autocomplete "off"}]])]]
+        [:div.quick-search-widget.navbar-right.navbar-form
+         [:form.search
+          {:autocomplete "off"}
+          [:input.form-control {:type "text"
+                                :name "query"
+                                :placeholder "Looking for? (ctrl-s)"
+                                :autocomplete "off"}]]])]]
     (when-not hide-search
       [:div.row
        [:div.col-md-10.col-md-offset-1
-        [:table.ac-results]]])]])
+        [:div.ac-results-widget]]])]])
 
 (defn $main [{:keys [content title body-class user page-data] :as opts}]
   [:html5

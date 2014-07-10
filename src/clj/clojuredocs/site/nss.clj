@@ -12,6 +12,26 @@
 (defn vars-for [ns]
   (mon/fetch :vars :where {:ns ns} :sort {:name 1}))
 
+(defn group-vars [vars]
+  (->> vars
+       (group-by
+         (fn [v]
+           (first (:name v))))
+       (sort-by #(-> % first str/lower-case))
+       (map (fn [[c vs]]
+              {:heading c
+               :vars vs}))))
+
+(defn $var-group [{:keys [heading vars]}]
+  (concat
+    [[:tr
+       [:td {:colspan 2}
+        [:div.heading heading]]]]
+    (for [{:keys [ns name doc]} vars]
+      [:tr
+       [:td.name [:span [:a {:href (str "/" ns "/" name)} name]]]
+       [:td [:div.doc doc]]])))
+
 (defn index [ns-str]
   (fn [r]
     (let [lib (library-for ns-str)
@@ -29,7 +49,6 @@
                      (when (:doc ns)
                        [:pre.doc (:doc ns)])
                      [:table {:class "ns-table"}
-                      (for [{:keys [name doc]} vars]
-                        [:tr
-                         [:td.name [:span [:a {:href (str "/" ns-str "/" name)} name]]]
-                         [:td [:div.doc doc]]])]]]]}))))
+                      (->> vars
+                           group-vars
+                           (mapcat $var-group))]]]]}))))

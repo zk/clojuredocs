@@ -152,3 +152,8 @@
 (aset (aget js/SyntaxHighlighter "defaults") "toolbar" false)
 (aset (aget js/SyntaxHighlighter "defaults") "gutter" false)
 (.all js/SyntaxHighlighter)
+
+(dom/listen! (sel1 :body) :keydown
+  (fn [e]
+    (when (and (.-ctrlKey e) (= 83 (.-keyCode e)))
+      (.focus (sel1 ".search input[name='query']")))))

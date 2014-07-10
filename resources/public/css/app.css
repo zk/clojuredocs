@@ -221,8 +221,6 @@ footer .ctas iframe {
 }
 .avatar {
   display: inline-block;
-  margin-right: 5px;
-  margin-bottom: 5px;
   border-radius: 3px;
   width: 48px;
   height: 48px;
@@ -262,11 +260,8 @@ header.navbar .navbar-nav li {
   margin-bottom: 0;
   font-size: 14px;
 }
-header.navbar input[type='text'] {
-  border-radius: 0;
-  font-size: 14px;
-  padding: 10px;
-  min-width: 200px;
+header.navbar .quick-search-widget form {
+  margin-right: 10px;
 }
 .xkcd {
   display: block;
@@ -311,6 +306,12 @@ header.navbar input[type='text'] {
 }
 .null-state a {
   color: rgba(66, 139, 202, 0.7);
+}
+form.search input[name='query'] {
+  border-radius: 0;
+  font-size: 14px;
+  padding: 10px;
+  min-width: 200px;
 }
 form.search input[name='query'].loading {
   background-image: url("/img/loading.gif");
@@ -365,15 +366,9 @@ form.search input[name='query'].loading {
 .ac-result:hover a {
   text-decoration: none;
 }
-ul i {
-  margin-right: 12px;
-  margin-left: -30px;
-}
-ul i.fa-map-marker {
-  padding: 0 3px;
-}
 ul.ac-results {
   margin-left: 0px;
+  margin-bottom: 0px;
 }
 ul.ac-results li {
   margin-left: 0px;
@@ -384,8 +379,11 @@ ul.ac-results li {
   margin-bottom: 5px;
   padding-bottom: 15px;
 }
+ul.ac-results li.highlighted {
+  background-color: #f8f8f8;
+}
 ul.ac-results li:hover {
-  background-color: #fafafa;
+  background-color: #f0f0f0;
 }
 ul.ac-results li p {
   margin-bottom: 0;
@@ -435,6 +433,13 @@ table.ac-results .ac-metadata {
   color: #999;
   font-size: 12px;
   white-space: nowrap;
+}
+.intro-page ul h4 i {
+  margin-right: 12px;
+  margin-left: -30px;
+}
+.intro-page ul h4 i.fa-map-marker {
+  padding: 0 3px;
 }
 .intro-page section {
   margin-bottom: 4em;
@@ -584,6 +589,7 @@ table.ac-results .ac-metadata {
   width: 25px;
   height: 25px;
   opacity: 0.8;
+  margin-right: 5px;
 }
 .var-example .example-meta .avatar:hover {
   opacity: 1;
@@ -765,6 +771,7 @@ table.ac-results .ac-metadata {
   text-align: right;
   font-size: 12px;
   opacity: 0.8;
+  margin-top: 5px;
 }
 .checker-bg {
   background-color: #fafafa;
@@ -839,4 +846,9 @@ table.ac-results .ac-metadata {
   text-overflow: ellipsis;
   line-height: 24px;
   font-size: 14px;
+}
+.ns-table .heading {
+  margin-top: 20px;
+  margin-bottom: 5px;
+  border-bottom: solid #ccc 2px;
 }
