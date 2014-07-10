@@ -116,8 +116,6 @@ footer {
 
 .avatar {
   display: inline-block;
-  margin-right: 5px;
-  margin-bottom: 5px;
   border-radius: 3px;
   width: 48px;
   height: 48px;
@@ -173,11 +171,8 @@ header.navbar {
     }
   }
 
-  input[type='text'] {
-    border-radius: 0;
-    font-size: 14px;
-    padding: 10px;
-    min-width: 200px;
+  .quick-search-widget form {
+    margin-right: 10px;
   }
 }
 
@@ -241,10 +236,17 @@ header.navbar {
 }
 
 form.search {
-  input[name='query'].loading {
-    background-image: url("/img/loading.gif");
-    background-repeat: no-repeat;
-    background-position: right 8px center;
+  input[name='query'] {
+    border-radius: 0;
+    font-size: 14px;
+    padding: 10px;
+    min-width: 200px;
+
+    &.loading {
+      background-image: url("/img/loading.gif");
+      background-repeat: no-repeat;
+      background-position: right 8px center;
+    }
   }
 }
 
@@ -311,17 +313,9 @@ form.search {
   }
 }
 
-ul i {
-  margin-right: 12px;
-  margin-left: -30px;
-}
-
-ul i.fa-map-marker {
-  padding: 0 3px;
-}
-
 ul.ac-results {
   margin-left: 0px;
+  margin-bottom: 0px;
 
   li {
     margin-left: 0px;
@@ -332,9 +326,12 @@ ul.ac-results {
     margin-bottom: 5px;
     padding-bottom: 15px;
 
+    &.highlighted {
+      background-color: #f8f8f8;
+    }
 
     &:hover {
-      background-color: #fafafa;
+      background-color: #f0f0f0;
     }
 
     h4 {
@@ -410,6 +407,15 @@ table.ac-results {
 }
 
 .intro-page {
+  ul h4 i {
+    margin-right: 12px;
+    margin-left: -30px;
+  }
+
+  ul h4 i.fa-map-marker {
+    padding: 0 3px;
+  }
+
   section {
     margin-bottom: 4em;
   }
@@ -575,6 +581,7 @@ table.ac-results {
       width: 25px;
       height: 25px;
       opacity: 0.8;
+      margin-right: 5px;
 
       &:hover {
         opacity: 1;
@@ -819,6 +826,7 @@ table.ac-results {
   text-align: right;
   font-size: 12px;
   opacity: 0.8;
+  margin-top: 5px;
 }
 
 .checker-bg {
@@ -914,5 +922,11 @@ table.ac-results {
     text-overflow: ellipsis;
     line-height: 24px;
     font-size: 14px;
+  }
+
+  .heading {
+    margin-top: 20px;
+    margin-bottom: 5px;
+    border-bottom: solid #ccc 2px;
   }
 }

@@ -2,7 +2,7 @@
   (:require [om.core :as om :include-macros true]
             [om-tools.dom :as dom :include-macros true]
             [cljs.core.async :as async
-             :refer [<! >! chan close! sliding-buffer put! alts! timeout pipe]]
+             :refer [<! >! chan close! sliding-buffer put! alts! timeout pipe mult tap]]
             [clojuredocs.ajax :refer [ajax]]
             [clojure.string :as str]
             [cljs.reader :as reader]
@@ -250,6 +250,10 @@
 (defn navigate-to [url]
   (aset (.-location js/window) "href" url))
 
+(defn search-submit [ac-result]
+  (navigate-to (var-url ac-result))
+  false)
+
 ;; from https://github.com/swannodette/async-tests
 
 (defn throttle
@@ -273,6 +277,79 @@
                       (recur ::init last (pop cs))))))))
      c))
 
+(defn set-nav [e app]
+  (let [ctrl? (.-ctrlKey e)
+        key-code (.-keyCode e)]
+    (let [f (cond
+              (and ctrl? (= 78 key-code)) inc   ; ctrl-n
+              (= 40 key-code) inc               ; down arrow
+              (and ctrl? (= 80 key-code)) dec   ; ctrl-p
+              (= 38 key-code) dec               ; up arrow
+              :else identity)]
+      (when (not (= identity f))
+        (om/transact! app :highlighted-index f)
+        false))))
+
+(defn quick-search [{:keys [highlighted-index] :as app} owner]
+  (reify
+    om/IWillMount
+    (will-mount [_]
+      (let [text-chan (or (om/get-state owner :text-chan) (chan))
+            internal-text-chan (chan)
+            throttled (throttle internal-text-chan 250)
+            ac-chan (or (om/get-state owner :ac-chan) (chan))]
+        (pipe throttled text-chan)
+        (om/set-state! owner :internal-text-chan internal-text-chan)
+        (go
+          (while true
+            (om/set-state! owner :autocomplete (<! ac-chan))
+            (om/set-state! owner :loading? false)))))
+    om/IRenderState
+    (render-state [this {:keys [internal-text-chan text
+                                loading? autocomplete]}]
+      (dom/form {:class "search" :autoComplete "off"
+                 ;; the search widget should prob not need to know about
+                 ;; autocomplete results (or act on them)
+                 :on-submit #(search-submit (nth autocomplete highlighted-index))}
+        (dom/input {:class (str "form-control" (when loading? " loading"))
+                    :placeholder "Looking for? (ctrl-s)"
+                    :name "query"
+                    :autoComplete "off"
+                    :on-input #(put-text % internal-text-chan owner)
+                    :on-key-down #(set-nav % app)})))))
+
+(defn ac-results [{:keys [highlighted-index]
+                   :or {highlighted-index 0}
+                   :as app} owner]
+  (reify
+    om/IWillMount
+    (will-mount [_]
+      (let [ac-chan (or (om/get-state owner :ac-chan) (chan))]
+        (go
+          (while true
+            (om/set-state! owner :autocomplete (<! ac-chan))))))
+    om/IRenderState
+    (render-state [this {:keys [autocomplete]}]
+      (dom/ul {:class "ac-results"}
+        (map-indexed
+          (fn [i {:keys [href type] :as res}]
+            (dom/li {:on-click #(when href (navigate-to href))
+                     :class (when (= i highlighted-index)
+                              "highlighted")}
+              (ac-entry res)))
+          autocomplete)))))
+
+(defn maybe-nav [e owner]
+  (when (.-ctrlKey e)
+    (let [f (cond
+              ;; ctrl-n
+              (= 78 (.-keyCode e)) inc
+              ;; ctrl-p
+              (= 80 (.-keyCode e)) dec
+              :else identity)]
+      (om/update-state! owner :highlighted-index f)
+      false)))
+
 (defn quick-lookup [app owner]
   (reify
     om/IWillMount
@@ -288,18 +365,30 @@
             (om/set-state! owner :autocomplete (<! ac-chan))
             (om/set-state! owner :loading? false)))))
     om/IRenderState
-    (render-state [this {:keys [internal-text-chan autocomplete loading? text]}]
-      (dom/form {:class "search" :autoComplete "off" :on-submit identity}
+    (render-state [this {:keys [internal-text-chan
+                                autocomplete
+                                loading?
+                                text
+                                highlighted-index]
+                         :or {highlighted-index 0}}]
+      (dom/form {:class "search"
+                 :autoComplete "off"
+                 :on-submit #(search-submit (nth autocomplete highlighted-index))}
         (dom/input {:class (str "form-control" (when loading? " loading"))
                     :placeholder "Looking for?"
                     :name "query"
                     :autoComplete "off"
                     :autoFocus "autofocus"
-                    :on-input #(put-text % internal-text-chan owner)})
+                    :on-input #(put-text % internal-text-chan owner)
+                    :on-key-down #(maybe-nav % owner)})
         (dom/ul {:class "ac-results"}
-          (for [{:keys [type href] :as res} autocomplete]
-            (dom/li {:on-click #(when href (navigate-to href))}
-              (ac-entry res))))
+          (map-indexed
+            (fn [i {:keys [href type] :as res}]
+              (dom/li {:on-click #(when href (navigate-to href))
+                       :class (when (= i highlighted-index)
+                                "highlighted")}
+                (ac-entry res)))
+            autocomplete))
         (dom/div {:class "not-finding"}
           "Can't find what you're looking for? "
           (dom/a {:href "search-feedback"} "Help make ClojureDocs better")
@@ -335,7 +424,7 @@ f should accept number-of-colls arguments."}
       (assoc :type :function)
       (assoc :href (var-url res))))
 
-(defn wire-search [text-chan ac-chan]
+(defn wire-search [text-chan ac-chan app-state]
   (go
     (while true
       (let [ac-text (<! text-chan)
@@ -351,21 +440,44 @@ f should accept number-of-colls arguments."}
 (def app-state
   (atom (reader/read-string (aget js/window "PAGE_DATA"))))
 
-#_(def app-state (atom {:examples []
-                      :var {:name "hi"}}))
+(def text-chan (chan))
+(def ac-chan (chan))
+(def ac-mult (mult ac-chan))
+
+(wire-search text-chan ac-chan app-state)
 
 (def init
   [[:div.search-widget]
    (fn [$el]
-     (let [text-chan (chan)
-           ac-chan (chan)]
-       (wire-search text-chan ac-chan)
+     (let [acc (chan)]
+       (tap ac-mult acc)
        (om/root
          quick-lookup
          {}
          {:target $el
           :init-state {:text-chan text-chan
-                       :ac-chan ac-chan}})))
+                       :ac-chan acc}})))
+
+   [:div.quick-search-widget]
+   (fn [$el]
+     (let [acc (chan)]
+       (tap ac-mult acc)
+       (om/root
+         quick-search
+         app-state
+         {:target $el
+          :init-state {:text-chan text-chan
+                       :ac-chan acc}})))
+
+   [:div.ac-results-widget]
+   (fn [$el]
+     (let [acc (chan)]
+       (tap ac-mult acc)
+       (om/root
+         ac-results
+         app-state
+         {:target $el
+          :init-state {:ac-chan acc}})))
 
    [:div.add-example-widget]
    (fn [$el]

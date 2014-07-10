@@ -6,6 +6,8 @@
   + namespace nav
   + quickref / area (string manipulation)
   + concept (I want to do x)
++ Mobile: main use case as linked-to from blog posts and such
+  + think about removing all the extra parts for mobile
 
 ** Non-goals (ATM)
 + How do I build a web app | desktop | mobile
@@ -22,11 +24,16 @@
 *** TODO Claiming old user accounts
 ** TODO Clojure intro for home page
 ** TODO Landing search feedback
-** TODO Quickref update
+** Quickref
+*** TODO Attribution
+*** TODO Quickref update
+*** TODO Consitent h3 styling (quickref page)
+*** TODO Floating toc
 ** TODO Supported libs blurb
 ** TODO Namespaces
 *** TODO pages
-*** TODO quick lookup
+*** TODO core-specific page
+*** DONE quick lookup
 *** DONE sidebar
 ** TODO Libs
 *** TODO library page
@@ -45,7 +52,7 @@
 *** TODO Quick lookup in top bar
 ** TODO Redirect old urls to new
 ** DONE Recently viewed
-** TODO Consitent h3 styling (quickref page)
 ** TODO Switch to avatar url instead of email
 ** TODO Clean data export for dev distribution
 ** TODO Mobile comb-through
+** TODO Versioning
