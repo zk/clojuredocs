@@ -4,15 +4,15 @@
             [cljs.core.async :as async
              :refer [<! >! chan close! sliding-buffer put! alts! timeout pipe mult tap]]
             [clojuredocs.ajax :refer [ajax]]
+            [clojuredocs.anim :as anim]
             [clojure.string :as str]
             [cljs.reader :as reader]
-            [goog.crypt     :as gcrypt]
+            [goog.crypt :as gcrypt]
             [goog.crypt.Md5 :as Md5]
             [goog.crypt.Sha1 :as Sha1]
-            [dommy.core :as dommy]
-            )
+            [dommy.core :as dommy])
   (:require-macros [cljs.core.async.macros :refer [go]]
-                   [dommy.macros :refer [node]]))
+                   [dommy.macros :refer [node sel1]]))
 
 (enable-console-print!)
 
@@ -277,18 +277,25 @@
                       (recur ::init last (pop cs))))))))
      c))
 
-(defn maybe-nav [e app]
-  (let [ctrl? (.-ctrlKey e)
-        key-code (.-keyCode e)]
-    (let [f (cond
-              (and ctrl? (= 78 key-code)) inc   ; ctrl-n
-              (= 40 key-code) inc               ; down arrow
-              (and ctrl? (= 80 key-code)) dec   ; ctrl-p
-              (= 38 key-code) dec               ; up arrow
-              :else identity)]
-      (when (not (= identity f))
-        (om/transact! app :highlighted-index f)
-        false))))
+(defn maybe-nav [e app ac-results]
+  (when app
+    (let [ctrl? (.-ctrlKey e)
+          key-code (.-keyCode e)
+          {:keys [highlighted-index]} @app]
+      (let [f (cond
+                (and ctrl? (= 78 key-code)) inc ; ctrl-n
+                (= 40 key-code) inc             ; down arrow
+                (and ctrl? (= 80 key-code)) dec ; ctrl-p
+                (= 38 key-code) dec             ; up arrow
+                :else identity)]
+        (when (and (not (= identity f))
+                   (not (and (= inc f)
+                             (= highlighted-index (dec (count ac-results)))))
+                   (not (and (= dec f)
+                             (= highlighted-index 0))))
+          (om/transact! app :highlighted-index f))
+        (when (not (= identity f))
+          false)))))
 
 (defn quick-search [{:keys [highlighted-index loading? ac-results] :as app} owner]
   (reify
@@ -310,12 +317,20 @@
                     :name "query"
                     :autoComplete "off"
                     :on-input #(put-text % internal-text-chan owner)
-                    :on-key-down #(maybe-nav % app)})))))
+                    :on-key-down #(maybe-nav % app ac-results)})))))
 
 (defn ac-results [{:keys [highlighted-index ac-results]
                    :or {highlighted-index 0}
-                   :as app} owner]
+                   :as app}
+                  owner]
   (reify
+    om/IDidUpdate
+    (did-update [_ prev-props prev-state]
+      (let [el (om/get-node owner (:highlighted-index app))]
+        (when (and (not= (:highlighted-index prev-props)
+                         (:highlighted-index app))
+                   el)
+          (anim/scroll-into-view  {:pad 30}))))
     om/IRender
     (render [this]
       (dom/ul {:class "ac-results"}
@@ -323,13 +338,15 @@
           (fn [i {:keys [href type] :as res}]
             (dom/li {:on-click #(when href (navigate-to href))
                      :class (when (= i highlighted-index)
-                              "highlighted")}
+                              "highlighted")
+                     :ref i}
               (ac-entry res)))
           ac-results)))))
 
 (defn quick-lookup [{:keys [highlighted-index ac-results loading?]
                      :or {highlighted-index 0}
-                     :as app} owner]
+                     :as app}
+                    owner]
   (reify
     om/IWillMount
     (will-mount [_]
@@ -338,6 +355,12 @@
             throttled (throttle internal-text-chan 250)]
         (pipe throttled text-chan)
         (om/set-state! owner :internal-text-chan internal-text-chan)))
+    om/IDidUpdate
+    (did-update [_ prev-props prev-state]
+      (when (and (not= (:highlighted-index prev-props)
+                       (:highlighted-index app))
+                 (> (count ac-results) 0))
+        (anim/scroll-into-view (om/get-node owner (:highlighted-index app)) {:pad 30})))
     om/IRenderState
     (render-state [this {:keys [internal-text-chan text]}]
       (dom/form {:class "search"
@@ -349,13 +372,14 @@
                     :autoComplete "off"
                     :autoFocus "autofocus"
                     :on-input #(put-text % internal-text-chan owner)
-                    :on-key-down #(maybe-nav % app)})
+                    :on-key-down #(maybe-nav % app ac-results)})
         (dom/ul {:class "ac-results"}
           (map-indexed
             (fn [i {:keys [href type] :as res}]
               (dom/li {:on-click #(when href (navigate-to href))
                        :class (when (= i highlighted-index)
-                                "highlighted")}
+                                "highlighted")
+                       :ref i}
                 (ac-entry res)))
             ac-results))
         (dom/div {:class "not-finding"}
@@ -389,6 +413,7 @@
                                         :data-type :edn}))
             data (-> ac-response :res :body)]
         (when (:success ac-response)
+          #_(anim/scroll-to (sel1 :div.search-widget) {:pad 30})
           (swap! app-state
             assoc
             :highlighted-index 0
