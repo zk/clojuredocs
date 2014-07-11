@@ -121,23 +121,19 @@
           :user user
           :content [:div
                     [:div.row
+                     [:div.col-sm-8
+                      [:h1.var-name name]]
                      [:div.col-sm-4
-                      [:section.var-data
-                       [:h1 name]
-                       [:h2 [:a {:href (str "/" ns)} ns]]]]
-                     [:div.col-sm-4
-                      [:section
-                       [:ul.arglists
-                        (map #($arglist name %) arglists)]]]
-                     [:div.col-sm-4
-                      [:section.var-meta
+                      [:div.var-meta
+                       [:h2 [:a {:href (str "/" ns)} ns]]
                        "Available in "
                        (->> ["clj" "cljs" "clj.net"]
                             (interpose ", ")
-                            (apply str))
-                       (when file
-                         [:div.source-code
-                          [:a {:href (source-url v)} "Source"]])]]]
+                            (apply str))]]
+                     [:div.col-sm-12
+                      [:section
+                       [:ul.arglists
+                        (map #($arglist name %) arglists)]]]]
                     [:div.row
                      [:div.col-sm-2
                       (common/$recent recent)
@@ -145,14 +141,16 @@
                      [:div.col-sm-10
                       [:section
                        [:div.docstring
-                        (when doc
+                        (if doc
                           [:pre (-> doc
-                                    (str/replace #"\n\s\s" "\n"))])
-                        [:div.copyright
-                         "&copy; Rich Hickey. All rights reserved."
-                         " "
-                         [:a {:href "http://www.eclipse.org/legal/epl-v10.html"}
-                          "Eclipse Public License 1.0"]]]]
+                                    (str/replace #"\n\s\s" "\n"))]
+                          [:div.null-state "No Doc"])
+                        (when doc
+                          [:div.copyright
+                           "&copy; Rich Hickey. All rights reserved."
+                           " "
+                           [:a {:href "http://www.eclipse.org/legal/epl-v10.html"}
+                            "Eclipse Public License 1.0"]])]]
                       [:section
                        [:div.examples-widget
                         ($examples examples ns name)]
