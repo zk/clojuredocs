@@ -277,7 +277,7 @@
                       (recur ::init last (pop cs))))))))
      c))
 
-(defn set-nav [e app]
+(defn maybe-nav [e app]
   (let [ctrl? (.-ctrlKey e)
         key-code (.-keyCode e)]
     (let [f (cond
@@ -290,46 +290,34 @@
         (om/transact! app :highlighted-index f)
         false))))
 
-(defn quick-search [{:keys [highlighted-index] :as app} owner]
+(defn quick-search [{:keys [highlighted-index loading? ac-results] :as app} owner]
   (reify
     om/IWillMount
     (will-mount [_]
       (let [text-chan (or (om/get-state owner :text-chan) (chan))
             internal-text-chan (chan)
-            throttled (throttle internal-text-chan 250)
-            ac-chan (or (om/get-state owner :ac-chan) (chan))]
+            throttled (throttle internal-text-chan 250)]
         (pipe throttled text-chan)
-        (om/set-state! owner :internal-text-chan internal-text-chan)
-        (go
-          (while true
-            (om/set-state! owner :autocomplete (<! ac-chan))
-            (om/set-state! owner :loading? false)))))
+        (om/set-state! owner :internal-text-chan internal-text-chan)))
     om/IRenderState
-    (render-state [this {:keys [internal-text-chan text
-                                loading? autocomplete]}]
+    (render-state [this {:keys [internal-text-chan text]}]
       (dom/form {:class "search" :autoComplete "off"
                  ;; the search widget should prob not need to know about
                  ;; autocomplete results (or act on them)
-                 :on-submit #(search-submit (nth autocomplete highlighted-index))}
+                 :on-submit #(search-submit (nth ac-results highlighted-index))}
         (dom/input {:class (str "form-control" (when loading? " loading"))
                     :placeholder "Looking for? (ctrl-s)"
                     :name "query"
                     :autoComplete "off"
                     :on-input #(put-text % internal-text-chan owner)
-                    :on-key-down #(set-nav % app)})))))
+                    :on-key-down #(maybe-nav % app)})))))
 
-(defn ac-results [{:keys [highlighted-index]
+(defn ac-results [{:keys [highlighted-index ac-results]
                    :or {highlighted-index 0}
                    :as app} owner]
   (reify
-    om/IWillMount
-    (will-mount [_]
-      (let [ac-chan (or (om/get-state owner :ac-chan) (chan))]
-        (go
-          (while true
-            (om/set-state! owner :autocomplete (<! ac-chan))))))
-    om/IRenderState
-    (render-state [this {:keys [autocomplete]}]
+    om/IRender
+    (render [this]
       (dom/ul {:class "ac-results"}
         (map-indexed
           (fn [i {:keys [href type] :as res}]
@@ -337,50 +325,31 @@
                      :class (when (= i highlighted-index)
                               "highlighted")}
               (ac-entry res)))
-          autocomplete)))))
+          ac-results)))))
 
-(defn maybe-nav [e owner]
-  (when (.-ctrlKey e)
-    (let [f (cond
-              ;; ctrl-n
-              (= 78 (.-keyCode e)) inc
-              ;; ctrl-p
-              (= 80 (.-keyCode e)) dec
-              :else identity)]
-      (om/update-state! owner :highlighted-index f)
-      false)))
-
-(defn quick-lookup [app owner]
+(defn quick-lookup [{:keys [highlighted-index ac-results loading?]
+                     :or {highlighted-index 0}
+                     :as app} owner]
   (reify
     om/IWillMount
     (will-mount [_]
-      (let [ac-chan (or (om/get-state owner :ac-chan) (chan))
-            text-chan (or (om/get-state owner :text-chan) (chan))
+      (let [text-chan (or (om/get-state owner :text-chan) (chan))
             internal-text-chan (chan)
             throttled (throttle internal-text-chan 250)]
         (pipe throttled text-chan)
-        (om/set-state! owner :internal-text-chan internal-text-chan)
-        (go
-          (while true
-            (om/set-state! owner :autocomplete (<! ac-chan))
-            (om/set-state! owner :loading? false)))))
+        (om/set-state! owner :internal-text-chan internal-text-chan)))
     om/IRenderState
-    (render-state [this {:keys [internal-text-chan
-                                autocomplete
-                                loading?
-                                text
-                                highlighted-index]
-                         :or {highlighted-index 0}}]
+    (render-state [this {:keys [internal-text-chan text]}]
       (dom/form {:class "search"
                  :autoComplete "off"
-                 :on-submit #(search-submit (nth autocomplete highlighted-index))}
+                 :on-submit #(search-submit (nth ac-results highlighted-index))}
         (dom/input {:class (str "form-control" (when loading? " loading"))
                     :placeholder "Looking for?"
                     :name "query"
                     :autoComplete "off"
                     :autoFocus "autofocus"
                     :on-input #(put-text % internal-text-chan owner)
-                    :on-key-down #(maybe-nav % owner)})
+                    :on-key-down #(maybe-nav % app)})
         (dom/ul {:class "ac-results"}
           (map-indexed
             (fn [i {:keys [href type] :as res}]
@@ -388,25 +357,11 @@
                        :class (when (= i highlighted-index)
                                 "highlighted")}
                 (ac-entry res)))
-            autocomplete))
+            ac-results))
         (dom/div {:class "not-finding"}
           "Can't find what you're looking for? "
           (dom/a {:href "search-feedback"} "Help make ClojureDocs better")
           ".")))))
-
-(def test-ac
-  [{:type :function
-    :name "map"
-    :ns "clojure.core"
-    :doc "Returns a lazy sequence consisting of the result of applying f to the
-set of first items of each coll, followed by applying f to the set
-of second items in each coll, until any one of the colls is
-exhausted. Any remaining items in other colls are ignored. Function
-f should accept number-of-colls arguments."}
-   {:type :macro
-    :name "apply"
-    :ns "clojure.core"
-    :doc "Applies fn f to the argument list formed by prepending intervening arguments to args."}])
 
 (defn ajax-chan [opts]
   (let [c (chan)]
@@ -424,60 +379,52 @@ f should accept number-of-colls arguments."}
       (assoc :type :function)
       (assoc :href (var-url res))))
 
-(defn wire-search [text-chan ac-chan app-state]
+(defn wire-search [text-chan app-state]
   (go
     (while true
       (let [ac-text (<! text-chan)
+            _ (swap! app-state assoc :loading? true)
             ac-response (<! (ajax-chan {:method :get
                                         :path (str "/search?query=" (url-encode ac-text))
                                         :data-type :edn}))
             data (-> ac-response :res :body)]
         (when (:success ac-response)
-          (->> data
-               (map format-ac-result)
-               (>! ac-chan)))))))
+          (swap! app-state
+            assoc
+            :highlighted-index 0
+            :loading? false
+            :ac-results (map format-ac-result data)))))))
 
 (def app-state
   (atom (reader/read-string (aget js/window "PAGE_DATA"))))
 
 (def text-chan (chan))
-(def ac-chan (chan))
-(def ac-mult (mult ac-chan))
 
-(wire-search text-chan ac-chan app-state)
+(wire-search text-chan app-state)
 
 (def init
   [[:div.search-widget]
    (fn [$el]
-     (let [acc (chan)]
-       (tap ac-mult acc)
-       (om/root
+     (om/root
          quick-lookup
-         {}
+         app-state
          {:target $el
-          :init-state {:text-chan text-chan
-                       :ac-chan acc}})))
+          :init-state {:text-chan text-chan}}))
 
    [:div.quick-search-widget]
    (fn [$el]
-     (let [acc (chan)]
-       (tap ac-mult acc)
-       (om/root
-         quick-search
-         app-state
-         {:target $el
-          :init-state {:text-chan text-chan
-                       :ac-chan acc}})))
+     (om/root
+       quick-search
+       app-state
+       {:target $el
+        :init-state {:text-chan text-chan}}))
 
    [:div.ac-results-widget]
    (fn [$el]
-     (let [acc (chan)]
-       (tap ac-mult acc)
-       (om/root
-         ac-results
-         app-state
-         {:target $el
-          :init-state {:ac-chan acc}})))
+     (om/root
+       ac-results
+       app-state
+       {:target $el}))
 
    [:div.add-example-widget]
    (fn [$el]

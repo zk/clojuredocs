@@ -88,12 +88,6 @@
           (+ y (.-offsetTop $el))
           parent)))))
 
-(defn scroll-to [$el]
-  (let [scroll (.-pageYOffset js/window)
-        top (offset-top $el)]
-    (clog (- top scroll))
-    (.scrollBy js/window 0 (- (- top scroll) 20))))
-
 (defn key-code [e]
   (.-keyCode e))
 
@@ -106,7 +100,8 @@
 (apply init widgets/init)
 (apply init styleguide/init)
 
-#_(init
+
+(init
   #_[:form.search :input]
   #_(fn [$el]
     (let [$input (sel1 [$el :input])
