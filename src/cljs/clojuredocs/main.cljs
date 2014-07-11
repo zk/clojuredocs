@@ -6,7 +6,8 @@
             [clojuredocs.sticky :as sticky]
             [clojuredocs.widgets :as widgets]
             [clojuredocs.styleguide :as styleguide]
-            [highlight])
+            [highlight]
+            [clojuredocs.anim :as anim])
   (:use-macros [dommy.macros :only [node sel sel1]]))
 
 (enable-console-print!)
@@ -99,7 +100,6 @@
 
 (apply init widgets/init)
 (apply init styleguide/init)
-
 
 (init
   #_[:form.search :input]

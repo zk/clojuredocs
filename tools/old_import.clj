@@ -294,3 +294,38 @@
        (map #(merge (meta %) {:name (str %)}))
        (map update-ns!)
        doall))
+
+
+
+(->> (mon/fetch :vars)
+     (sort-by #(-> % :name count))
+     reverse
+     first)
+
+
+(->> (mon/fetch :namespaces)
+     (sort-by #(-> % :name count))
+     #_reverse
+     (map (fn [{:keys [name ns]}]
+            {:ns ns
+             :name name
+             :len (count name)}))
+     first)
+
+(->> (mon/fetch :vars)
+     (mapcat (fn [{:keys [ns name arglists]}]
+               (map #(hash-map :ns ns :name name :arglist % :len (count %)) arglists)))
+     (sort-by #(-> % :arglist count))
+     (drop-while #(= 0 (-> % :arglist count)))
+     reverse
+     #_(map (fn [{:keys [name ns]}]
+            {:ns ns
+             :name name
+             :len (count name)}))
+     (take 10))
+
+(->> (mon/fetch :vars)
+     (sort-by #(-> % :doc count))
+     reverse
+     first
+     )

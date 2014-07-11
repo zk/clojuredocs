@@ -38,8 +38,11 @@
                                  :optimizations :none
                                  :source-map true
                                  :foreign-libs [{:file "js/syntaxhighlighter.js"
-                                                 :provides ["highlight"]}]
-                                 :externs ["externs/syntaxhighlighter.js"]}}
+                                                 :provides ["highlight"]}
+                                                {:file "js/morpheus.js"
+                                                 :provides ["morpheus"]}]
+                                 :externs ["externs/syntaxhighlighter.js"
+                                           "externs/morpheus.js"]}}
 
                ;; for debugging advanced compilation problems
                :dev-advanced  {:source-paths ["src/cljs"]
