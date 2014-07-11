@@ -487,26 +487,43 @@ table.ac-results {
     margin-bottom: 1em;
   }
 
-  .var-data {
-    h2 {
-      color: #888;
-    }
-  }
-
   .arglists {
     margin-left: 0;
     padding-left: 0;
+    font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+    font-size: 14px;
 
     li {
       margin: 0;
+      display: inline-block;
+      margin-right: 10px;
+      margin-bottom: 10px;
+      padding: 0 5px;
+      background-color: #f8f8f8;
     }
   }
 
-  .var-meta {
-    font-size: 14px;
-    line-height: 1.3em;
+  h1.var-name {
+    margin-bottom: 5px;
+  }
 
-    h2, ul, li, .added {
+  .var-meta {
+    margin-bottom: 5px;
+
+    h2 {
+      margin-bottom: 5px;
+    }
+
+    font-size: 13px;
+    line-height: 1.3em;
+    color: #888;
+    text-align: right;
+
+    @media(max-width: 767px) {
+      text-align: left;
+    }
+
+    ul, li, .added {
       margin-bottom: 3px;
     }
 
