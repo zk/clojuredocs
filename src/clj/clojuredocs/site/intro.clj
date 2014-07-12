@@ -38,9 +38,12 @@ solving problems (holy buzzwords, fix this)."]
       "New to Clojure and not sure where to start? If you'd like to get a good background on Clojure's design origins (and be entertained at the same time), start "
       [:a {:href "http://www.infoq.com/presentations/Are-We-There-Yet-Rich-Hickey"} "here"]
       "."]
-     [:p "If you're ready to jump in, then "
-      [:a {:href ""} "here you go"]
-      "."]
+     [:p "If you're ready to jump in, then start with the following resources:"]
+     [:ul.getting-started-resources
+      [:li [:a {:href "http://tryclj.com"} "Try Clojure (in your browser)"]]
+      [:li [:a {:href "http://www.braveclojure.com"} "Clojure for the Brave and True"]]
+      [:li [:a {:href "http://clojurescriptkoans.com/"} "ClojureScript Koans"]]
+      [:li [:a {:href "http://4clojure.org"} "4Clojure (learn Clojure interactively)"]]]
      [:p "There's no denying that Clojure is just so "
       " *different* "
       " from what most of us are used to (what is up with all those parentheses?!). "
