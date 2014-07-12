@@ -623,9 +623,9 @@ table.ac-results .ac-metadata {
   margin: 0;
 }
 .example-page .current-example {
-  border: solid rgba(255, 243, 109, 0.6) 20px;
+  border: solid rgba(255, 243, 109, 0.3) 5px;
+  padding: 10px;
   background-color: transparent;
-  margin: 0 -20px;
   margin-bottom: 20px;
 }
 .example-page .example-meta .created {
@@ -679,6 +679,93 @@ table.ac-results .ac-metadata {
 .syntaxhighlighter table {
   margin: 0 auto;
 }
+.toc {
+  margin-bottom: 20px;
+}
+.toc h2 {
+  font-size: 16px;
+  margin: 0;
+  margin-bottom: 5px;
+  margin-top: 3px;
+}
+.toc h3 {
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #777;
+}
+.toc ul {
+  margin-bottom: 5px;
+}
+.toc .toc-sphere h3 {
+  font-size: 12px;
+  margin-right: 0;
+  margin-bottom: 0;
+  margin-top: 0;
+}
+.toc .toc-sphere ul {
+  padding: 0;
+}
+.toc .toc-sphere li {
+  margin-left: 10px;
+  font-size: 12px;
+  margin-bottom: 0;
+  line-height: 1.5em;
+}
+.sticky {
+  position: fixed;
+  overflow-y: scroll;
+  overflow-x: auto;
+}
+@media (max-width: 991px) {
+  .sticky {
+    top: auto;
+    position: relative;
+    width: 100% !important;
+  }
+}
+.sphere .sphere-header {
+  border-bottom: solid orange 3px;
+  margin-bottom: 10px;
+}
+.sphere .category-header {
+  border-bottom: solid #ccc 2px;
+  margin-bottom: 10px;
+}
+.sphere .header-reference {
+  color: #bbb;
+  font-weight: normal;
+  float: right;
+  margin-right: 0;
+}
+.sphere .quickref-header .header-reference {
+  color: #999;
+  font-size: 14px;
+}
+.sphere .examples-count {
+  color: #bbb;
+}
+.sphere dl {
+  font-size: 13px;
+}
+.sphere .dl-row {
+  padding-right: 3px;
+  padding-left: 3px;
+}
+.sphere dl .dl-row:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+@media (max-width: 767px) {
+  .sphere .dl-row {
+    border-top: solid #ccc 1px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+  }
+}
+.sphere dt {
+  font-weight: normal;
+}
 .quickref-page h1 {
   font-size: 24px;
   margin-top: 0;
@@ -693,85 +780,6 @@ table.ac-results .ac-metadata {
 .quickref-page h5 {
   display: inline-block;
   margin-right: 10px;
-}
-.quickref-page .toc {
-  margin-bottom: 20px;
-}
-.quickref-page .toc h2 {
-  font-size: 16px;
-  margin: 0;
-  margin-bottom: 5px;
-  margin-top: 3px;
-}
-.quickref-page .toc ul {
-  margin-bottom: 5px;
-}
-.quickref-page .toc.sticky {
-  position: fixed;
-  overflow-y: scroll;
-}
-@media (max-width: 991px) {
-  .quickref-page .toc.sticky {
-    top: auto;
-    position: relative;
-    width: 100% !important;
-  }
-}
-.quickref-page .toc-sphere h3 {
-  font-size: 12px;
-  margin-right: 0;
-  margin-bottom: 0;
-  margin-top: 0;
-}
-.quickref-page .toc-sphere ul {
-  padding: 0;
-}
-.quickref-page .toc-sphere li {
-  margin-left: 10px;
-  font-size: 12px;
-  margin-bottom: 0;
-  line-height: 1.5em;
-}
-.quickref-page .sphere-header {
-  border-bottom: solid orange 3px;
-  margin-bottom: 10px;
-}
-.quickref-page .category-header {
-  border-bottom: solid #ccc 2px;
-  margin-bottom: 10px;
-}
-.quickref-page .header-reference {
-  color: #bbb;
-  font-weight: normal;
-  float: right;
-  margin-right: 0;
-}
-.quickref-page .quickref-header .header-reference {
-  color: #999;
-  font-size: 14px;
-}
-.quickref-page .examples-count {
-  color: #bbb;
-}
-.quickref-page dl {
-  font-size: 13px;
-}
-.quickref-page .dl-row {
-  padding-right: 3px;
-  padding-left: 3px;
-}
-.quickref-page dl .dl-row:hover {
-  background-color: rgba(0, 0, 0, 0.04);
-}
-@media (max-width: 767px) {
-  .quickref-page .dl-row {
-    border-top: solid #ccc 1px;
-    padding-bottom: 10px;
-    padding-top: 10px;
-  }
-}
-.quickref-page dt {
-  font-weight: normal;
 }
 .add-example textarea {
   font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
