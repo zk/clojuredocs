@@ -1,6 +1,5 @@
 (ns clojuredocs.anim
-  (:require [dommy.core :as dom]
-            [morpheus])
+  (:require [dommy.core :as dom])
   (:require-macros [dommy.macros :refer [node sel1]]))
 
 (defn offset-parents

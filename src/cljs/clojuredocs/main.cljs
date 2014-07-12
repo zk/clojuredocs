@@ -116,7 +116,6 @@
   "[data-sticky-offset]" sticky/init
   "[data-animate-scroll]" animated-scroll-init)
 
-
 (aset (aget js/SyntaxHighlighter "defaults") "toolbar" false)
 (aset (aget js/SyntaxHighlighter "defaults") "gutter" false)
 (.all js/SyntaxHighlighter)
