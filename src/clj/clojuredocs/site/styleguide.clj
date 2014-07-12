@@ -1,6 +1,7 @@
 (ns clojuredocs.site.styleguide
   (:require [clojuredocs.site.common :as common]
-            [clojuredocs.site.vars :as vars-page]))
+            [clojuredocs.site.vars :as vars-page]
+            [clojuredocs.quickref :as quickref]))
 
 (defn section [title & body]
   [:secton
@@ -88,4 +89,15 @@ user=> (into {} *1)
                                           {:user {:email "masondesu@gmail.com"}}
                                           {:user {:email "lee@writequit.org"}}
                                           {:user {:email "zachary.kim@gmail.com"}}]}]
-           "clojure.core" "map")])]}))
+           "clojure.core" "map")])
+      (let [sphere '{:title "Simple Values",
+                     :categories
+                     ({:title "Regular Expressions",
+                       :groups
+                       ({:syms (re-pattern re-matcher), :title "Create"}
+                        {:syms (re-find re-matches re-seq re-groups), :title "Use"})})}]
+        (section "Quickref"
+          [:div.example.checker-bg
+           (quickref/$toc [sphere])]
+          [:div.example.checker-bg
+           (quickref/$sphere sphere)]))]}))

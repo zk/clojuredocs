@@ -626,9 +626,9 @@ table.ac-results {
 
 .example-page {
   .current-example {
-    border: solid rgba(255,243,109, 0.6) 20px;
+    border: solid rgba(255,243,109, 0.3) 5px;
+    padding: 10px;
     background-color: transparent;
-    margin: 0 -20px;
     margin-bottom: 20px;
   }
 
@@ -696,50 +696,26 @@ table.ac-results {
   }
 }
 
+.toc {
+  margin-bottom: 20px;
 
-// QUICKREF
-
-.quickref-page {
-  h1 {
-    font-size: 24px;
-    margin-top: 0;
-    margin-bottom: 20px;
+  h2 {
+    font-size: 16px;
+    margin: 0;
+    margin-bottom: 5px;
+    margin-top: 3px;
   }
 
   h3 {
-    font-size: 21px;
+    font-size: 14px;
     font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #777;
   }
 
-  h3, h4, h5 {
-    display: inline-block;
-    margin-right: 10px;
-  }
-
-  .toc {
-    margin-bottom: 20px;
-
-    h2 {
-      font-size: 16px;
-      margin: 0;
-      margin-bottom: 5px;
-      margin-top: 3px;
-    }
-
-    ul {
-      margin-bottom: 5px;
-    }
-  }
-
-  .toc.sticky {
-    position: fixed;
-    overflow-y: scroll;
-
-    @media (max-width: 991px) {
-      top: auto;
-      position: relative;
-      width: 100% !important;
-    }
+  ul {
+    margin-bottom: 5px;
   }
 
   .toc-sphere {
@@ -762,7 +738,22 @@ table.ac-results {
     }
   }
 
-  .sphere-header {
+}
+
+.sticky {
+  position: fixed;
+  overflow-y: scroll;
+  overflow-x: auto;
+
+  @media (max-width: 991px) {
+    top: auto;
+    position: relative;
+    width: 100% !important;
+  }
+}
+
+.sphere {
+    .sphere-header {
     border-bottom: solid orange 3px;
     margin-bottom: 10px;
   }
@@ -817,6 +808,27 @@ table.ac-results {
   dt {
     font-weight: normal;
   }
+}
+
+// QUICKREF
+
+.quickref-page {
+  h1 {
+    font-size: 24px;
+    margin-top: 0;
+    margin-bottom: 20px;
+  }
+
+  h3 {
+    font-size: 21px;
+    font-weight: 500;
+  }
+
+  h3, h4, h5 {
+    display: inline-block;
+    margin-right: 10px;
+  }
+
 }
 
 .add-example {

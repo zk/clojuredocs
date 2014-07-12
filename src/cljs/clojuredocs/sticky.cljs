@@ -38,7 +38,6 @@
                       (dom/attr :data-sticky-offset)
                       (parse-int 100))
         $parent (-> $el dom/ancestor-nodes second)
-        _ (prn )
         initial-offset (offset-top $el)
         f (fn [_]
             (if (> (.-pageYOffset js/window) (- initial-offset px-offset))
@@ -48,11 +47,13 @@
                                         dom/bounding-client-rect)
                     left-padding (computed-style $parent :padding-left)
                     right-padding (computed-style $parent :padding-right)
-                    width (- width left-padding right-padding)]
+                    left-margin (computed-style $parent :margin-left)
+                    right-margin (computed-style $parent :margin-right)
+                    width (- width left-padding right-padding left-margin right-margin)]
                 (dom/add-class! $el :sticky)
                 (dom/set-style! $el
                   :width (str width "px")
-                  :height (str js/window.innerHeight "px")
+                  :max-height (str js/window.innerHeight "px")
                   :top (str px-offset "px")))
               (dom/remove-class! $el :sticky)))]
     (dom/listen! js/window :scroll f)
