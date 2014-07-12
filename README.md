@@ -2,7 +2,7 @@
 
 The clojuredocs.org webapp
 
-![](http://cl.ly/image/3X2Y2Y3N2b2R/Screen%20Shot%202014-07-12%20at%202.01.15%20AM.png)
+![](http://cl.ly/image/1C2o2d181716/Screen%20Shot%202014-07-12%20at%202.03.25%20AM.png)
 
 
 ## Reqs
