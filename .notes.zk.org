@@ -20,8 +20,9 @@
 *** DONE GH / Twitter Links
 ** DONE Deploy less
 ** TODO User accounts
-*** TODO Move over from old db
+*** DONE Move over from old db
 *** TODO Claiming old user accounts
+*** TODO Investigate bitbucket login
 ** TODO Clojure intro for home page
 ** TODO Landing search feedback
 ** Quickref
