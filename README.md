@@ -25,6 +25,11 @@ scss compiler, etc). See `Procfile` for more info.
 
 Connect from cider (emacs) or Light Table, repl port 7888.
 
+### Prod Local
+
+Occasionally you'll need to compile and run things as they would be in production: `bin/prod-local`
+
+
 ### CLJS Source Maps
 
 The ClojureDocs project is set-up to emit source-maps for compiled javascript. To enable in Chrome, check the 'Enable JS source maps' option in the Developer Tools settings pane.
