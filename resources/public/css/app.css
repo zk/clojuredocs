@@ -349,6 +349,13 @@ form.search input[name='query'].loading {
     height: auto;
   }
 }
+.intro-page .getting-started-resources {
+  margin-bottom: 20px;
+}
+.intro-page .getting-started-resources li {
+  list-style-type: disc;
+  margin-left: 30px;
+}
 .ac-result-link:hover {
   text-decoration: none;
   width: 100%;
@@ -625,6 +632,7 @@ table.ac-results .ac-metadata {
 .example-code {
   margin-bottom: 15px;
   background-color: #fafafa;
+  border-top: solid #ddd 5px;
 }
 .ns-tree {
   font-size: 14px;
