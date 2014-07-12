@@ -12,6 +12,8 @@
 //   -ms-flex: $val;
 // }
 
+// Fix for bootstrap border-box on firefox
+
 html, body {
   -webkit-font-smothing: antialiased;
   height: 100%;
@@ -242,9 +244,10 @@ header.navbar {
 form.search {
   input[name='query'] {
     border-radius: 0;
-    font-size: 14px;
-    padding: 10px;
     min-width: 200px;
+    height: 100%;
+    font-size: 14px;
+    padding: 6px 12px;
 
     &.loading {
       background-image: url("/img/loading.gif");
@@ -257,12 +260,9 @@ form.search {
 
 .intro-page {
   form.search {
-    margin-bottom: 1em;
-
     input[name='query'] {
       font-size: 20px;
-      padding: 20px 10px;
-      border-radius: 0;
+      padding: 10px 15px;
     }
   }
 
@@ -271,10 +271,6 @@ form.search {
     padding: 20px;
     border: solid transparent 1px;
     background-color: #fafafa;
-  }
-
-  h4 {
-    font-weight: 300;
   }
 
   .row {
