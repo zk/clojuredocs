@@ -22,7 +22,6 @@
                  [mysql/mysql-connector-java "5.1.25"]
                  [congomongo "0.4.1"]
                  [unk "0.9.1"]
-                 [cljsbuild "1.0.1"]
                  [org.clojure/core.async "0.1.267.0-0d7780-alpha"]
                  [org.clojure/core.logic "0.8.8"]
                  [om "0.6.4"]
@@ -49,17 +48,23 @@
                                :compiler {:output-to "resources/public/cljs/clojuredocs.js"
                                           :output-dir "resources/public/cljs-advanced"
                                           :source-map "resources/public/cljs/clojuredocs.js.map"
-                                          :optimizations :advanced}}
+                                          :optimizations :advanced
+                                          :foreign-libs [{:file "resources/public/js/syntaxhighlighter.js"
+                                                          :provides ["highlight"]}]
+                                          :preamble ["public/js/morpheus.min.js"
+                                                     "react/react.min.js"]
+                                          :externs ["externs/syntaxhighlighter.js"
+                                                    "react/externs/react.js"
+                                                    "externs/morpheus.js"]}}
 
                :prod {:source-paths ["src/cljs"]
                       :compiler {:output-to "resources/public/cljs/clojuredocs.js"
                                  :optimizations :advanced
                                  :pretty-print false
                                  :foreign-libs [{:file "resources/public/js/syntaxhighlighter.js"
-                                                 :provides ["highlight"]}
-                                                {:file "js/morpheus.js"
-                                                 :provides ["morpheus"]}]
-                                 :preamble ["react/react.min.js"]
+                                                 :provides ["highlight"]}]
+                                 :preamble ["public/js/morpheus.min.js"
+                                            "react/react.min.js"]
                                  :externs ["externs/syntaxhighlighter.js"
                                            "react/externs/react.js"
                                            "externs/morpheus.js"]}
