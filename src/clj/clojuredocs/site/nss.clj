@@ -16,8 +16,11 @@
   (->> vars
        (group-by
          (fn [v]
-           (-> v :name first str/lower-case)))
-       (sort-by #(-> % first str/lower-case))
+           (let [char (-> v :name first str/lower-case)]
+             (if (< (int (first char)) 97)
+               "*^%"
+               char))))
+       (sort-by #(-> % first))
        (map (fn [[c vs]]
               {:heading c
                :vars vs}))))

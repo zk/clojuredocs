@@ -57,7 +57,7 @@
   (let [toc-groups (partition-all 2 quickref-data)]
     [:div.toc.clearfix
      {:data-sticky-offset "10"}
-     [:h3 "Table of Contents"]
+     [:h3 "TOC"]
      (for [tg toc-groups]
        [:div.col-sm-4.col-md-12
         (map $toc-sphere tg)])]))
@@ -290,7 +290,7 @@
                           :title "Create"}
                          {:syms (proxy-mappings proxy-super update-proxy),
                           :title "Misc"})})}
-                     {:title "Collections / Sequences",
+                     {:title "Collections",
                       :categories
                       ({:title "Collections",
                         :groups
