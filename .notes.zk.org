@@ -45,3 +45,4 @@
 ** TODO Mobile comb-through
 ** TODO Versioning
 ** TODO cache-bust assets
+** DONE encode special url characters

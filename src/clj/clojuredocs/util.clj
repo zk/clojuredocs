@@ -70,9 +70,31 @@
       (str/replace #"_div" "/")
       (str/replace #"_qm" "?")))
 
+(defn cd-decode [s]
+  (cond
+    (= "_dot" s) "."
+    (= "_." s) "."
+    (= "_.." s) ".."
+    :else (-> s
+              (str/replace #"_fs" "/")
+              (str/replace #"_bs" "\\")
+              (str/replace #"_q" "?")
+
+              ;; legacy
+              (str/replace #"_dot" "."))))
+
+(defn cd-encode [s]
+  (cond
+    (= "." s) "_."
+    (= ".." s) "_.."
+    :else (-> s
+              (str/replace #"/" "_fs")
+              (str/replace #"\\" "_bs")
+              (str/replace #"\?" "_q"))))
+
 (defn $var-link [ns name & contents]
   (vec (concat
-         [:a {:href (str "/" ns "/" (munge-name name))}]
+         [:a {:href (str "/" ns "/" (cd-encode name))}]
          contents)))
 
 (defn pluralize [n single plural]

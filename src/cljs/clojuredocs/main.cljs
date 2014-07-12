@@ -44,26 +44,6 @@
                     (apply str))
                "...")))
 
-(defn munge-name [s]
-  (-> s
-      str
-      (str/replace #"\." "_dot")
-      (str/replace #"/" "_div")
-      (str/replace #"\?" "_qm")))
-
-(defn path-for-var [{:keys [ns name]}]
-  (str "/" ns "/" (munge-name name)))
-
-(defn $ac-result [{:keys [name ns doc] :as v}]
-  (node [:a.ac-result-link {:href (path-for-var v)}
-         [:tr.ac-result
-          [:td.name
-           (str name)
-           [:div.ac-metadata
-            [:a {:href (str "/" ns)} (str ns)]]]
-          [:td.docstring
-           (ellipsis (str doc) 200)]]]))
-
 (defn prevent [e]
   (.preventDefault e))
 

@@ -16,6 +16,15 @@
 
 (enable-console-print!)
 
+(defn cd-encode [s]
+  (cond
+    (= "." s) "_."
+    (= ".." s) "_.."
+    :else (-> s
+              (str/replace #"/" "_fs")
+              (str/replace #"\\" "_bs")
+              (str/replace #"\?" "_q"))))
+
 (defn pluralize [n single plural]
   (str n " " (if (= 1 n) single plural)))
 
@@ -27,12 +36,6 @@
          "...")
     s))
 
-(defn cd-encode [s]
-  (-> s
-      (str/replace #"^\.\.$" "_.")
-      (str/replace #"^\.$" "_..")
-      (str/replace #"\+" "_plus")))
-
 (defn url-encode
   [string]
   (some-> string
@@ -41,7 +44,7 @@
     (.replace "+" "%20")))
 
 (defn var-url [{:keys [ns name]}]
-  (str "/" (url-encode (cd-encode ns)) "/" (url-encode (cd-encode name))))
+  (str "/" (url-encode ns) "/" (url-encode (cd-encode name))))
 
 
 ;; Add an example

@@ -100,7 +100,7 @@
 
 (defn var-page [ns name]
   (fn [{:keys [user session]}]
-    (let [name (util/unmunge-name name)
+    (let [name (util/cd-decode name)
           {:keys [arglists name ns doc runtimes added file] :as v}
           (lookup-var ns name)
           examples (examples-for v)
@@ -110,7 +110,7 @@
       {:session (update-in session [:recent]
                   #(->> %
                         (concat [{:text name
-                                  :href (str "/" ns "/" name)}])
+                                  :href (str "/" ns "/" (util/cd-encode name))}])
                         distinct
                         (filter :text)
                         (take 4)))

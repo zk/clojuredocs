@@ -15,6 +15,7 @@
             [clojure.string :as str]
             [hiccup.page :refer (html5)]
             [clojuredocs.env :as env]
+            [clojuredocs.util :as util]
             [clojuredocs.quickref :as quickref]
             [clojuredocs.site.intro :as site.intro]
             [clojuredocs.site.gh-auth :as site.gh-auth]
@@ -59,9 +60,13 @@
 
 
   ;; Redirect old urls
-  (GET "/clojure_core/:ns/:name" [ns name] (fn [r]
-                                             {:status 301
-                                              :headers {"Location" (str "/" ns "/" name)}}))
+  (GET "/clojure_core/:ns/:name" [ns name]
+    (fn [r]
+      (let [name (->> name
+                      util/cd-decode
+                      util/cd-encode)]
+        {:status 301
+         :headers {"Location" (str "/" ns "/" name)}})))
 
   (GET "/:ns/:name" [ns name] (site.vars/var-page ns name))
   (GET "/:ns" [ns] (site.nss/index ns))
