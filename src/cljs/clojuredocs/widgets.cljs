@@ -326,11 +326,11 @@
   (reify
     om/IDidUpdate
     (did-update [_ prev-props prev-state]
-      (let [el (om/get-node owner (:highlighted-index app))]
+      (let [$el (om/get-node owner (:highlighted-index app))]
         (when (and (not= (:highlighted-index prev-props)
                          (:highlighted-index app))
-                   el)
-          (anim/scroll-into-view  {:pad 30}))))
+                   $el)
+          (anim/scroll-into-view $el {:pad 30}))))
     om/IRender
     (render [this]
       (dom/ul {:class "ac-results"}

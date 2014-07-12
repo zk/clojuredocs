@@ -15,27 +15,17 @@
 
 
 * Release Checklist
-** DONE Example history page
-** DONE Footer
-*** DONE GH / Twitter Links
-** DONE Deploy less
 ** TODO User accounts
-*** DONE Move over from old db
+*** TODO Move over from old db
 *** TODO Claiming old user accounts
 *** TODO Investigate bitbucket login
 ** TODO Clojure intro for home page
 ** TODO Landing search feedback
-** Quickref
-*** DONE Attribution
+** TODO Quickref
 *** TODO Quickref update
-*** DONE Consitent h3 styling (quickref page)*
-*** DONE Floating toc
 ** TODO Supported libs blurb
 ** TODO Namespaces
-*** DONE pages
 *** TODO core-specific page
-*** DONE quick lookup
-*** DONE sidebar
 ** TODO Libs
 *** TODO library page
 *** TODO include in ns tree?
@@ -47,14 +37,11 @@
 *** TODO ClojureScript?
 ** TODO User page
 ** TODO Add example
-** DONE Check SSL ersources
-** DONE Search Widget
-*** DONE Loading indicator
-*** DONE Quick lookup in top bar
+** TODO Search Widget
+*** TODO Better throttling
 ** TODO Redirect old urls to new
-** DONE Recently viewed
 ** TODO Switch to avatar url instead of email
 ** TODO Clean data export for dev distribution
 ** TODO Mobile comb-through
 ** TODO Versioning
-** DONE animate scroll-to links
+** TODO cache-bust assets
