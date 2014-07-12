@@ -61,8 +61,8 @@
 (defn $toc [quickref-data]
   (let [toc-groups (partition-all 2 quickref-data)]
     [:div.toc.clearfix
-     {:data-sticky-offset "10"}
-     [:h3 "TOC"]
+     [:h3 "Table of Contents"]
+     [:br]
      (for [tg toc-groups]
        [:div.col-sm-4.col-md-12
         (map $toc-sphere tg)])]))
@@ -75,7 +75,9 @@
      [:div
       [:div.row
        [:div.col-md-3.sidebar
-        ($toc quickref-data)]
+        [:div.page-toc
+         {:data-sticky-offset "10"}
+         ($toc quickref-data)]]
        [:div.col-md-9
         [:h1 "Quickref for Clojure Core"]
         [:p

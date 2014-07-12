@@ -168,18 +168,18 @@
                           (map $see-also see-alsos)])]]]]})})))
 
 (defn $example-history-point [{:keys [user body created-at updated-at] :as ex}]
-  [:div.row
-   [:div.col-md-10
-    [:div.example-code
-     [:pre {:class "brush: clojure"}
-      (-> body
-          (str/replace #"<" "&lt;")
-          (str/replace #">" "&gt;"))]]]
-   [:div.col-md-2
-    [:div.example-meta
-     (common/$avatar user)
-     [:div.created
-      (util/timeago created-at) " ago."]]]])
+  [:div.var-example
+   [:div
+    (let [num-to-show 7]
+      [:div.example-meta
+       [:div.contributors
+        "Created by &nbsp;"
+        (common/$avatar user)
+        ""
+        (util/timeago created-at) " ago."]
+       [:div.links
+        ]])]
+   [:div ($example-body ex)]])
 
 (defn example-page [id]
   (fn [{:keys [user session]}]
@@ -190,12 +190,11 @@
           :user user
           :content [:div.row
                     [:div.col-md-12
-                     [:h3 "Example History"]
                      [:p
                       "Example history for "
                       (util/$var-link ns name (str ns "/" name))
                       ", in order from newest to oldest. "
-                      "The currrent version is highlighted in yellow."]
+                      "The currrent version is outlined in yellow."]
                      [:div.current-example
                       ($example ex)]
                      (->> history
