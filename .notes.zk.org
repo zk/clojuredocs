@@ -19,7 +19,7 @@
 *** TODO Move over from old db
 *** TODO Claiming old user accounts
 *** TODO Investigate bitbucket login
-** TODO Clojure intro for home page
+** DONE Clojure intro for home page
 ** TODO Landing search feedback
 ** TODO Quickref
 *** TODO Quickref update
