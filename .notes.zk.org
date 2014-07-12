@@ -10,7 +10,7 @@
   + think about removing all the extra parts for mobile
 
 ** Non-goals (ATM)
-+ How do I build a web app | desktop | mobile
++ How-tos on web app | desktop | mobile
 + Libraries?
 
 
@@ -25,10 +25,10 @@
 ** TODO Clojure intro for home page
 ** TODO Landing search feedback
 ** Quickref
-*** TODO Attribution
+*** DONE Attribution
 *** TODO Quickref update
-*** TODO Consitent h3 styling (quickref page)
-*** TODO Floating toc
+*** DONE Consitent h3 styling (quickref page)*
+** DONE Floating toc
 ** TODO Supported libs blurb
 ** TODO Namespaces
 *** TODO pages
@@ -56,3 +56,4 @@
 ** TODO Clean data export for dev distribution
 ** TODO Mobile comb-through
 ** TODO Versioning
+** TODO animate scroll-to links

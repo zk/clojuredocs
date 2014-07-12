@@ -56,8 +56,8 @@
 (defn $toc [quickref-data]
   (let [toc-groups (partition-all 2 quickref-data)]
     [:div.toc.clearfix
-     {:data-sticky-offset "130"}
-     [:h2 "Table of Contents"]
+     {:data-sticky-offset "10"}
+     [:h3 "Table of Contents"]
      (for [tg toc-groups]
        [:div.col-sm-4.col-md-12
         (map $toc-sphere tg)])]))
@@ -69,12 +69,14 @@
      :content
      [:div
       [:div.row
-       [:div.col-md-12
-        [:h1 "Quickref for Clojure Core"]]]
-      [:div.row
-       [:div.col-md-3
+       [:div.col-md-3.sidebar
         ($toc quickref-data)]
        [:div.col-md-9
+        [:h1 "Quickref for Clojure Core"]
+        [:p
+         "Adapted from Johannes Friestad's "
+         [:a {:href "http://faustus.webatu.com/clj-quick-ref.html"} "excellent quick ref"]
+         ". "]
         (map $sphere quickref-data)]]]}))
 
 (def quickref-data '({:title "Simple Values",

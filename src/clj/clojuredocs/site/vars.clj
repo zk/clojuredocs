@@ -112,6 +112,7 @@
                         (concat [{:text name
                                   :href (str "/" ns "/" name)}])
                         distinct
+                        (filter :text)
                         (take 4)))
        :body
        (common/$main
@@ -121,24 +122,24 @@
           :user user
           :content [:div
                     [:div.row
-                     [:div.col-sm-8
-                      [:h1.var-name name]]
-                     [:div.col-sm-4
-                      [:div.var-meta
-                       [:h2 [:a {:href (str "/" ns)} ns]]
-                       "Available in "
-                       (->> ["clj" "cljs" "clj.net"]
-                            (interpose ", ")
-                            (apply str))]]
-                     [:div.col-sm-12
-                      [:section
-                       [:ul.arglists
-                        (map #($arglist name %) arglists)]]]]
-                    [:div.row
                      [:div.col-sm-2
                       (common/$recent recent)
                       (common/$library-nav library ns)]
                      [:div.col-sm-10
+                      [:div.row
+                       [:div.col-sm-8
+                        [:h1.var-name name]]
+                       [:div.col-sm-4
+                        [:div.var-meta
+                         [:h2 [:a {:href (str "/" ns)} ns]]
+                         "Available in "
+                         (->> ["clj" "cljs" "clj.net"]
+                              (interpose ", ")
+                              (apply str))]]
+                       [:div.col-sm-12
+                        [:section
+                         [:ul.arglists
+                          (map #($arglist name %) arglists)]]]]
                       [:section
                        [:div.docstring
                         (if doc
