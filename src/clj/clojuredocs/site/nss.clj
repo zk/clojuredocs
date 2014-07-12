@@ -1,5 +1,6 @@
 (ns clojuredocs.site.nss
   (:require [somnium.congomongo :as mon]
+            [clojuredocs.util :as util]
             [clojuredocs.site.common :as common]
             [clojure.string :as str]))
 
@@ -32,7 +33,7 @@
         [:div.heading heading]]]]
     (for [{:keys [ns name doc]} vars]
       [:tr
-       [:td.name [:span [:a {:href (str "/" ns "/" name)} name]]]
+       [:td.name [:span (util/$var-link ns name name)]]
        [:td [:div.doc doc]]])))
 
 (defn index [ns-str]

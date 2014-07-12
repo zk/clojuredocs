@@ -21,7 +21,7 @@
    [:dl.dl-horizontal
     (mapcat #(vector
                [:div.dl-row
-                [:dt (util/$var-link "clojure.core" % (str %))]
+                [:dt (util/$var-link "clojure.core" (str %) (str %))]
                 [:dd (->> (str "clojure.core/" %)
                           search/lookup-vars
                           :doc
