@@ -101,47 +101,20 @@
 (apply init widgets/init)
 (apply init styleguide/init)
 
+(defn animated-scroll-init [$el]
+  (let [$target (-> $el
+                    (dom/attr :href)
+                    sel1)
+        buffer (-> $el
+                   (dom/attr :data-animate-buffer))
+        buffer (if (and buffer (string? buffer))
+                 (js/parseInt buffer)
+                 10)]
+    (dom/listen! $el :click #(anim/scroll-to $target {:pad buffer}))))
+
 (init
-  #_[:form.search :input]
-  #_(fn [$el]
-    (let [$input (sel1 [$el :input])
-          $ac (sel1 [:table.ac-results])
-          results (atom [])]
-      (dom/listen! $el :keydown
-        (fn [e]
-          (condp = (key-code e)
-            ;; esc
-            27 (do (dom/set-value! $el "")
-                   (dom/clear! $ac))
-            13 (navigate-to (path-for-var (first @results)))
-            (clog (key-code e)))))
-      (dom/listen! $el :input
-        (fn [e]
-          (prevent e)
-          (ajax
-            {:method :get
-             :path (str "/search?query=" (-> $input dom/value url-encode))
-             :success (fn [{:keys [body]}]
-                        (dom/clear! $ac)
-                        (reset! results body)
-                        (->> body
-                             (map $ac-result)
-                             (dom/append! $ac)))})))))
-  #_[:form.search]
-  #_(fn [$el]
-    (dom/listen! $el :submit
-      (fn [e]
-        (prevent e))))
-
   "[data-sticky-offset]" sticky/init
-
-  #_:body #_(fn [$el]
-          (dom/listen! $el :keydown
-            (fn [e]
-              (when (and (ctrl? e)
-                         ;; s
-                         (= 83 (key-code e)))
-                (.focus (sel1 [:form.search :input])))))))
+  "[data-animate-scroll]" animated-scroll-init)
 
 
 (aset (aget js/SyntaxHighlighter "defaults") "toolbar" false)

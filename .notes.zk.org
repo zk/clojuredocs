@@ -28,10 +28,10 @@
 *** DONE Attribution
 *** TODO Quickref update
 *** DONE Consitent h3 styling (quickref page)*
-** DONE Floating toc
+*** DONE Floating toc
 ** TODO Supported libs blurb
 ** TODO Namespaces
-*** TODO pages
+*** DONE pages
 *** TODO core-specific page
 *** DONE quick lookup
 *** DONE sidebar
@@ -47,13 +47,13 @@
 ** TODO User page
 ** TODO Add example
 ** DONE Check SSL ersources
-** TODO Search Widget
+** DONE Search Widget
 *** DONE Loading indicator
-*** TODO Quick lookup in top bar
+*** DONE Quick lookup in top bar
 ** TODO Redirect old urls to new
 ** DONE Recently viewed
 ** TODO Switch to avatar url instead of email
 ** TODO Clean data export for dev distribution
 ** TODO Mobile comb-through
 ** TODO Versioning
-** TODO animate scroll-to links
+** DONE animate scroll-to links
