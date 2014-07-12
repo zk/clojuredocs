@@ -45,11 +45,16 @@
    (map $category categories)])
 
 (defn $toc-category [{:keys [title]}]
-  [:li [:a {:href (str "#" (title->id title))} title]])
+  [:li [:a {:href (str "#" (title->id title))
+            :data-animate-scroll "true"
+            :data-animate-buffer "10"}
+        title]])
 
 (defn $toc-sphere [{:keys [title categories]}]
   [:div.toc-sphere
-   [:h3 [:a {:href (str "#" (title->id title))} title]]
+   [:h3 [:a {:href (str "#" (title->id title))
+             :data-animate-scroll "true"
+             :data-animate-buffer "10"} title]]
    [:ul
     (map $toc-category categories)]])
 
