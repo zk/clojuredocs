@@ -16,7 +16,7 @@
   (->> vars
        (group-by
          (fn [v]
-           (first (:name v))))
+           (-> v :name first str/lower-case)))
        (sort-by #(-> % first str/lower-case))
        (map (fn [[c vs]]
               {:heading c

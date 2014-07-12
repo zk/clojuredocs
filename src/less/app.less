@@ -125,6 +125,10 @@ header.navbar {
   border-radius: 0;
   margin-bottom: 40px;
 
+  @media(max-width: 767px) {
+    margin-bottom: 10px;
+  }
+
   a {
   }
 
@@ -496,7 +500,7 @@ table.ac-results {
   }
 
   .var-meta {
-    margin-bottom: 5px;
+    margin-bottom: 10px;
 
     h2 {
       margin-bottom: 5px;
@@ -729,11 +733,12 @@ table.ac-results {
 
   .toc.sticky {
     position: fixed;
-    top: 10px;
+    overflow-y: scroll;
 
     @media (max-width: 991px) {
       top: auto;
       position: relative;
+      width: 100% !important;
     }
   }
 
@@ -883,9 +888,16 @@ table.ac-results {
     letter-spacing: 1px;
     color: #777;
   }
+
+  @media(max-width: 767px) {
+    display: none;
+  }
 }
 
 .recent-pages {
+  font-size: 14px;
+  margin-bottom: 30px;
+
   h3 {
     font-size: 15px;
     font-weight: 500;
@@ -894,11 +906,28 @@ table.ac-results {
     color: #777;
   }
 
-  font-size: 14px;
-  margin-bottom: 30px;
-
   li {
     margin-bottom: 0px;
+  }
+
+  @media(max-width: 767px) {
+    margin-bottom: 10px;
+
+    h3 {
+      display: inline-block;
+      margin-right: 20px;
+    }
+
+    ul {
+      display: inline-block;
+    }
+
+    li {
+      display: inline-block;
+      margin-right: 10px;
+      background-color: #fafafa;
+      padding: 0 5px;
+    }
   }
 }
 
@@ -933,5 +962,23 @@ table.ac-results {
     margin-top: 20px;
     margin-bottom: 5px;
     border-bottom: solid #ccc 2px;
+  }
+}
+
+.sidebar {
+  h3 {
+    font-size: 15px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #777;
+  }
+}
+
+.quickref-other {
+  display: inline-block;
+
+  li {
+    display: inline-block;
   }
 }
