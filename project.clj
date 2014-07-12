@@ -56,8 +56,11 @@
                                  :optimizations :advanced
                                  :pretty-print false
                                  :foreign-libs [{:file "resources/public/js/syntaxhighlighter.js"
-                                                 :provides ["highlight"]}]
+                                                 :provides ["highlight"]}
+                                                {:file "js/morpheus.js"
+                                                 :provides ["morpheus"]}]
                                  :preamble ["react/react.min.js"]
                                  :externs ["externs/syntaxhighlighter.js"
-                                           "react/externs/react.js"]}
+                                           "react/externs/react.js"
+                                           "externs/morpheus.js"]}
                       :jar true}}})
