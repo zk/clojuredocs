@@ -314,31 +314,25 @@ header.navbar .quick-search-widget form {
 }
 form.search input[name='query'] {
   border-radius: 0;
-  font-size: 14px;
-  padding: 10px;
   min-width: 200px;
+  height: 100%;
+  font-size: 14px;
+  padding: 6px 12px;
 }
 form.search input[name='query'].loading {
   background-image: url("/img/loading.gif");
   background-repeat: no-repeat;
   background-position: right 8px center;
 }
-.intro-page form.search {
-  margin-bottom: 1em;
-}
 .intro-page form.search input[name='query'] {
   font-size: 20px;
-  padding: 20px 10px;
-  border-radius: 0;
+  padding: 10px 15px;
 }
 .intro-page .code-example {
   font-size: 14px;
   padding: 20px;
   border: solid transparent 1px;
   background-color: #fafafa;
-}
-.intro-page h4 {
-  font-weight: 300;
 }
 .intro-page .row {
   margin-bottom: 0px;
