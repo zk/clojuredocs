@@ -11,11 +11,13 @@
         [ring.util.response :only (response content-type)])
   (:require [compojure.core :refer (defroutes GET POST PUT DELETE)]
             [compojure.response :refer (Renderable render)]
+            [compojure.route :refer (not-found)]
             [ring.util.response :refer (redirect)]
             [clojure.string :as str]
             [hiccup.page :refer (html5)]
             [clojuredocs.env :as env]
             [clojuredocs.util :as util]
+            [clojuredocs.site.common :as common]
             [clojuredocs.quickref :as quickref]
             [clojuredocs.site.intro :as site.intro]
             [clojuredocs.site.gh-auth :as site.gh-auth]
@@ -70,7 +72,8 @@
 
   (GET "/:ns/:name" [ns name] (site.vars/var-page ns name))
   (GET "/:ns" [ns] (site.nss/index ns))
-  )
+  (not-found (fn [r]
+               (common/four-oh-four r))))
 
 (def session-store
   (cookie-store

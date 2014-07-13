@@ -162,3 +162,14 @@
      [:ul
       (for [{:keys [text href]} recent]
         [:li [:a {:href href} (ellipsis text 10)]])]]))
+
+(defn four-oh-four [f]
+  ($main
+    {:body-class "four-oh-four"
+     :hide-search true
+     :content
+     [:div.row
+      [:div.col-sm-8.col-sm-offset-2
+       [:h1 "404"]
+       [:a.four-oh-four {:href "http://emareaf.deviantart.com/art/Rich-Hickey-321501046"}
+        [:img.four-oh-four {:src "http://fc04.deviantart.net/fs70/f/2012/229/a/6/rich_hickey_by_emareaf-d5bevsm.png"}]]]]}))
