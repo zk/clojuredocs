@@ -36,10 +36,11 @@
         [:div.quick-search-widget.navbar-right.navbar-form
          [:form.search
           {:autocomplete "off"}
-          [:input.form-control {:type "text"
-                                :name "query"
-                                :placeholder "Looking for? (ctrl-s)"
-                                :autocomplete "off"}]]])]]
+          [:input.placeholder.form-control
+           {:type "text"
+            :name "query"
+            :placeholder "Looking for? (ctrl-s)"
+            :autocomplete "off"}]]])]]
     (when-not hide-search
       [:div.row
        [:div.col-md-10.col-md-offset-1
