@@ -50,9 +50,8 @@
    [:head
     [:meta {:name "viewport" :content "width=device-width, maximum-scale=1.0"}]
     [:title (or title "Community-Powered Clojure Documentation and Examples | ClojureDocs")]
-    [:link {:rel :stylesheet :href "//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css"}]
-    [:link {:rel :stylesheet :href "//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"}]
-    [:link {:rel :stylesheet :href "//fonts.googleapis.com/css?family=Open+Sans:400" :type "text/css"}]
+    [:link {:rel :stylesheet :href "/css/font-awesome.min.css"}]
+    [:link {:rel :stylesheet :href "/css/bootstrap.min.css"}]
     [:link {:rel :stylesheet :href "/css/app.css"}]
     [:script "window.PAGE_DATA=" (util/to-json (pr-str page-data)) ";"]]
    [:body
@@ -95,12 +94,12 @@
     (when (env/bool :cljs-dev)
       [:script {:src "/js/morpheus.min.js"}])
     (when (env/bool :cljs-dev)
-      [:script {:src "http://fb.me/react-0.9.0.js"}])
+      [:script {:src "/js/react.js"}])
     (when (env/bool :cljs-dev)
-      [:script {:type "text/javascript" :src "/cljs/goog/base.js"}])
-    [:script {:type "text/javascript" :src "/cljs/clojuredocs.js"}]
+      [:script {:src "/cljs/goog/base.js"}])
+    [:script {:src "/cljs/clojuredocs.js"}]
     (when (env/bool :cljs-dev)
-      [:script {:type "text/javascript"} "goog.require(\"clojuredocs.main\");"])]])
+      [:script "goog.require(\"clojuredocs.main\");"])]])
 
 (defn $avatar [{:keys [email login] :as user}]
   [:a {:href (str "/u/" login)}
