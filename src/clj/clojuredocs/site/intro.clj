@@ -14,11 +14,12 @@
      [:section
       [:div.search-widget
        [:form.search {:method :get :action "/search" :autocomplete "off"}
-        [:input.form-control {:type "text"
-                              :name "query"
-                              :placeholder "Looking for?"
-                              :autoFocus "autofocus"
-                              :autoComplete "off"}]
+        [:input.form-control.placeholder
+         {:type "text"
+          :name "query"
+          :placeholder "Looking for?"
+          :autoFocus "autofocus"
+          :autoComplete "off"}]
         [:ul.ac-results]
         [:div.not-finding
          "Can't find what you're looking for? " [:a {:href "/search-feedback"} "Help make ClojureDocs better"] "."]]]]]]
@@ -68,7 +69,7 @@ solving problems (holy buzzwords, fix this)."]
               :url "http://www.climate.com/"}
              {:src "https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Netflix_logo.svg/200px-Netflix_logo.svg.png"
               :url "https://www.netflix.com"}
-             {:src "https://www.factual.com/assets/factual_logo_small-9d5ae614ae5422b251648ca62d6b4e51.png"
+             {:src "/img/factual-logo.png"
               :url "http://www.factual.com"}
              {:src "https://www.simple.com/img/logo-a_2x.CREAM-bbc497f18505b852.png"
               :url "https://simple.com"}
@@ -77,7 +78,9 @@ solving problems (holy buzzwords, fix this)."]
              {:src "https://img.brightcove.com/logo-corporate-new.png"
               :url "http://www.brightcove.com"}
              {:src "https://upload.wikimedia.org/wikipedia/en/9/92/SoundCloud_logo.svg"
-              :url "https://soundcloud.com"}]]
+              :url "https://soundcloud.com"}
+             {:src "https://puppetlabs.com/wp-content/uploads/2010/12/PL_logo_horizontal_RGB_sm.png"
+              :url "https://puppetlabs.com"}]]
         [:li [:a {:href url} [:img {:src src}]]])]]]
    [:div.row
     [:div.col-md-6

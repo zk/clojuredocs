@@ -46,3 +46,8 @@
 ** TODO Versioning
 ** TODO cache-bust assets
 ** DONE encode special url characters
+** TODO switch code and copy
+** DONE disable input until js loads
+** TODO reduce size of ac entries (fit more)
+** TODO Add puppet labs to who uses clojure
+** TODO fix footer on mobile
