@@ -324,6 +324,9 @@ form.search input[name='query'].loading {
   background-repeat: no-repeat;
   background-position: right 8px center;
 }
+form.search input.placeholder {
+  visibility: hidden;
+}
 .intro-page form.search input[name='query'] {
   font-size: 20px;
   padding: 10px 15px;
@@ -909,4 +912,15 @@ table.ac-results .ac-metadata {
 }
 .quickref-other li {
   display: inline-block;
+}
+.four-oh-four h1 {
+  text-align: center;
+  font-size: 20px;
+  color: #333;
+}
+.four-oh-four a.four-oh-four {
+  max-width: 300px;
+  max-height: 100%;
+  display: block;
+  margin: 20px auto;
 }

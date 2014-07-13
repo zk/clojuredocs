@@ -19,7 +19,6 @@
 *** TODO Move over from old db
 *** TODO Claiming old user accounts
 *** TODO Investigate bitbucket login
-** DONE Clojure intro for home page
 ** TODO Landing search feedback
 ** TODO Quickref
 *** TODO Quickref update
@@ -31,7 +30,6 @@
 *** TODO include in ns tree?
 ** TODO Source link hookup on var page
 ** TODO "Available in" backend
-** TODO Intro tutorials
 *** TODO Data processing
 *** TODO Web dev
 *** TODO ClojureScript?
@@ -45,9 +43,4 @@
 ** TODO Mobile comb-through
 ** TODO Versioning
 ** TODO cache-bust assets
-** DONE encode special url characters
-** TODO switch code and copy
-** DONE disable input until js loads
-** TODO reduce size of ac entries (fit more)
-** TODO Add puppet labs to who uses clojure
 ** TODO fix footer on mobile
