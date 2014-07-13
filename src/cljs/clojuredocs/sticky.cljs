@@ -57,4 +57,5 @@
                   :top (str px-offset "px")))
               (dom/remove-class! $el :sticky)))]
     (dom/listen! js/window :scroll f)
-    (dom/listen! js/window :resize f)))
+    (dom/listen! js/window :resize f)
+    (f nil)))
