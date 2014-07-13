@@ -217,7 +217,7 @@
       #_(dom/i {:class "fa fa-exclamation"})
       (dom/a {:href (var-url func)}
         name " (" ns ")"))
-    (dom/p (ellipsis 225 doc))))
+    (dom/p (ellipsis 100 doc))))
 
 (defmethod ac-entry :macro [{:keys [name ns doc type]}]
   (dom/div {:class "ac-entry"}
