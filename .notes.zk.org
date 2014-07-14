@@ -29,7 +29,7 @@
 ** TODO Libs
 *** TODO library page
 *** TODO include in ns tree?
-** TODO Source link hookup on var page
+** DONE Source link hookup on var page
 ** TODO "Available in" backend
 *** TODO Data processing
 *** TODO Web dev
