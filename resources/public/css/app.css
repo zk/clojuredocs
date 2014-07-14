@@ -261,9 +261,16 @@ header.navbar .avatar {
   height: 22px;
   margin-right: 5px;
 }
+header.navbar .navbar-nav {
+  padding-right: 0;
+}
 header.navbar .navbar-nav li {
   margin-bottom: 0;
   font-size: 14px;
+}
+header.navbar .navbar-nav li:last-child {
+  margin-right: 0;
+  padding-right: 0;
 }
 header.navbar .quick-search-widget form {
   margin-right: 10px;
