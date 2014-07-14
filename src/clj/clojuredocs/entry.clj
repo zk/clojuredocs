@@ -50,6 +50,17 @@
       (merge (with-meta (response "") (meta resp-map))
              resp-map))))
 
+(defroutes old-url-redirects
+  (GET "/clojure_core/:ns/:name" [ns name]
+    (fn [r]
+      (let [name (->> name
+                      util/cd-decode
+                      util/cd-encode)]
+        {:status 301
+         :headers {"Location" (str "/" ns "/" name)}})))
+  (GET "/quickref/*" [] {:status 301 :headers {"Location" "/quickref"}})
+  (GET "/clojure_core" [] {:status 301 :headers {"Location" "/"}}))
+
 (defroutes _routes
   (var site.intro/routes)
   (var site.gh-auth/routes)
@@ -62,13 +73,7 @@
 
 
   ;; Redirect old urls
-  (GET "/clojure_core/:ns/:name" [ns name]
-    (fn [r]
-      (let [name (->> name
-                      util/cd-decode
-                      util/cd-encode)]
-        {:status 301
-         :headers {"Location" (str "/" ns "/" name)}})))
+  (var old-url-redirects)
 
   (GET "/:ns/:name" [ns name] (site.vars/var-page ns name))
   (GET "/:ns" [ns] (site.nss/index ns))
