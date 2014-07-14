@@ -56,9 +56,12 @@
     [:link {:rel :stylesheet :href "/css/app.css"}]
     [:script "window.PAGE_DATA=" (util/to-json (pr-str page-data)) ";"]]
    [:body
+    (when body-class
+      {:class body-class})
     [:div.sticky-wrapper
-     (when body-class
-       {:class body-class})
+     (when config/staging?
+       [:div.staging-banner
+        "This is the ClojureDocs staging site, where you'll find all the neat things we're working on (don't link to here)."])
      ($navbar opts)
      [:div.container
       [:div.row
