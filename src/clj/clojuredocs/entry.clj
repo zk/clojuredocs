@@ -89,6 +89,21 @@
   (fn [{:keys [session] :as r}]
     (h (assoc r :user (:user session)))))
 
+(defn wrap-long-caching [h]
+  (fn [r]
+    (let [res (h r)
+          res-ct (get-in res [:headers "Content-Type"])
+          content-types #{"text/css"
+                          "text/javascript"
+                          "application/font-woff"
+                          "font/opentype"
+                          "application/vnd.ms-fontobject"
+                          "image/svg+xml"
+                          "application/x-font-ttf"}]
+      (if (get content-types res-ct)
+        (update-in res [:headers] merge {"Cache-Control" "public, max-age=31536000"})
+        res))))
+
 (def routes
   (-> _routes
       promote-session-user
@@ -97,4 +112,9 @@
       wrap-params
       (wrap-session {:store session-store})
       (wrap-file "resources/public" {:allow-symlinks? true})
-      wrap-file-info))
+      (wrap-file-info {"woff" "application/font-woff"
+                       "otf" "font/opentype"
+                       "eot" "application/vnd.ms-fontobject"
+                       "svg" "image/svg+xml"
+                       "ttf" "application/x-font-ttf"})
+      wrap-long-caching))
