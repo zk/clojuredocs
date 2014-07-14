@@ -139,7 +139,7 @@
                          (when-let [su (source-url v)]
                            [:span.source-link
                             " ("
-                            [:a {:href source-url} "source"]
+                            [:a {:href su} "source"]
                             ") "])]]
                        [:div.col-sm-12
                         [:section

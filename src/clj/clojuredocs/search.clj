@@ -59,8 +59,7 @@
     clojure.test
     clojure.walk
     clojure.xml
-    clojure.zip
-    clojure.core.async])
+    clojure.zip])
 
 (defn tokenize-name [s]
   (when s
