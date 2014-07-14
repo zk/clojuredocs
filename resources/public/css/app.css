@@ -406,6 +406,25 @@ ul.ac-results li i {
   color: #aaa;
   line-height: 12px;
 }
+.ac-entry p {
+  margin-bottom: 10px;
+}
+.ac-entry .see-alsos {
+  font-size: 14px;
+  color: #888;
+}
+.ac-entry .see-alsos span {
+  margin-right: 10px;
+}
+.ac-entry .see-alsos ul {
+  display: inline-block;
+}
+.ac-entry .see-alsos ul li {
+  margin: 0;
+  padding: 0;
+  margin-right: 10px;
+  display: inline-block;
+}
 table.ac-results {
   width: 100%;
   font-size: 15px;

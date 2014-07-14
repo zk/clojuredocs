@@ -210,40 +210,52 @@
 
 (defmulti ac-entry :type)
 
-(defmethod ac-entry "function" [{:keys [href name ns doc type] :as func}]
+(defn see-alsos-widget [see-alsos]
+  (when-not (empty? see-alsos)
+    (dom/div {:class "see-alsos"}
+      (dom/span "see also:")
+      (dom/ul
+        (for [{:keys [ns name href] :as sa} see-alsos]
+          (dom/li
+            (dom/a {:href href} (str ns "/" name))))))))
+
+(defmethod ac-entry "function" [{:keys [href name ns doc type see-alsos] :as func}]
   (dom/div {:class "ac-entry"}
     (dom/span {:class "ac-type"} "fn")
     (dom/h4
-      #_(dom/i {:class "fa fa-exclamation"})
       (dom/a {:href href}
         name " (" ns ")"))
-    (dom/p (ellipsis 100 doc))))
+    (dom/p (ellipsis 100 doc))
+    (see-alsos-widget see-alsos)))
 
-(defmethod ac-entry "var" [{:keys [href name ns doc type] :as func}]
+(defmethod ac-entry "var" [{:keys [href name ns doc type see-alsos] :as func}]
   (dom/div {:class "ac-entry"}
     (dom/span {:class "ac-type"} "var")
     (dom/h4
       #_(dom/i {:class "fa fa-exclamation"})
       (dom/a {:href href}
         name " (" ns ")"))
-    (dom/p (ellipsis 100 doc))))
+    (dom/p (ellipsis 100 doc))
+    (see-alsos-widget see-alsos)))
 
-(defmethod ac-entry "special-form" [{:keys [href name ns doc type] :as func}]
+(defmethod ac-entry "special-form" [{:keys [href name ns doc type see-alsos] :as func}]
   (dom/div {:class "ac-entry"}
     (dom/span {:class "ac-type"} "special form")
     (dom/h4
       #_(dom/i {:class "fa fa-exclamation"})
       (dom/a {:href href}
         name " (" ns ")"))
-    (dom/p (ellipsis 100 doc))))
+    (dom/p (ellipsis 100 doc))
+    (see-alsos-widget see-alsos)))
 
-(defmethod ac-entry "macro" [{:keys [href name ns doc type]}]
+(defmethod ac-entry "macro" [{:keys [href name ns doc type see-alsos]}]
   (dom/div {:class "ac-entry"}
     (dom/span {:class "ac-type"} "macro")
     (dom/h4
       (dom/a {:href href}
         name " (" ns ")"))
-    (dom/p (ellipsis 225 doc))))
+    (dom/p (ellipsis 225 doc))
+    (see-alsos-widget see-alsos)))
 
 (defmethod ac-entry "namespace" [{:keys [href name doc type desc]}]
   (dom/div {:class "ac-entry"}

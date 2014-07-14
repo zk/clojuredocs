@@ -1,6 +1,7 @@
 (ns clojuredocs.search
   (:require [clucy.core :as clucy]
-            [clojure.string :as str]))
+            [clojure.string :as str]
+            [clojuredocs.util :as util]))
 
 (def search-index (clucy/memory-index))
 
@@ -93,7 +94,7 @@
 
                    ))
          (map #(assoc % :keywords (tokenize-name (:name %))))
-         (map #(assoc % :href (str "/" (:ns %) "/" (:name %)))))))
+         (map #(assoc % :href (str "/" (:ns %) "/" (util/cd-encode (:name %))))))))
 
 (def additional-ns-data
   {"clojure.zip" {:desc "Functional tree navigation and manipulation"}
