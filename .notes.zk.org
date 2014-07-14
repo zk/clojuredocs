@@ -44,7 +44,8 @@
 ** TODO Switch to avatar url instead of email
 ** TODO Clean data export for dev distribution
 ** TODO Mobile comb-through
-** TODO Versioning
+** DONE Versioning
 ** TODO cache-bust assets
 ** DONE fix footer on mobile
 ** TODO move example submission styleguide over
+** TODO move over comments

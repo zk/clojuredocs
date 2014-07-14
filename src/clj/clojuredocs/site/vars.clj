@@ -132,10 +132,9 @@
                        [:div.col-sm-4
                         [:div.var-meta
                          [:h2 [:a {:href (str "/" ns)} ns]]
-                         "Available in "
-                         (->> ["clj" "cljs" "clj.net"]
-                              (interpose ", ")
-                              (apply str))]]
+                         (if added
+                           [:span "Available since " added]
+                           [:span "Available in 1.6"])]]
                        [:div.col-sm-12
                         [:section
                          [:ul.arglists
