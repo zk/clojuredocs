@@ -45,14 +45,32 @@
        [:div.col-md-10.col-md-offset-1
         [:div.ac-results-widget]]])]])
 
+(def clojuredocs-script
+  [:script {:src (str "/cljs/clojuredocs.js?"
+                      (util/md5 "resources/public/cljs/clojuredocs.js"))}])
+
+(def app-link
+  [:link {:rel :stylesheet
+          :href (str "/css/app.css?"
+                     (util/md5 "resources/public/css/app.css"))}])
+
+(def bootstrap-link
+  [:link {:rel :stylesheet
+          :href (str "/css/bootstrap.min.css?"
+                     (util/md5 "resources/public/css/bootstrap.min.css"))}])
+
+(def font-awesome-link
+  [:link {:rel :stylesheet :href (str "/css/font-awesome.min.css?"
+                                      (util/md5 "resources/public/css/font-awesome.min.css"))}])
+
 (defn $main [{:keys [content title body-class user page-data] :as opts}]
   [:html5
    [:head
     [:meta {:name "viewport" :content "width=device-width, maximum-scale=1.0"}]
     [:title (or title "Community-Powered Clojure Documentation and Examples | ClojureDocs")]
-    [:link {:rel :stylesheet :href "/css/font-awesome.min.css"}]
-    [:link {:rel :stylesheet :href "/css/bootstrap.min.css"}]
-    [:link {:rel :stylesheet :href "/css/app.css"}]
+    font-awesome-link
+    bootstrap-link
+    app-link
     [:script "window.PAGE_DATA=" (util/to-json (pr-str page-data)) ";"]]
    [:body
     (when body-class
@@ -69,7 +87,7 @@
      [:div.sticky-push]]
     [:footer
      [:div.divider
-      "⤜ ❦ ⤛"]
+      "- ❦ -"]
      [:div.ctas
       "Brought to you by "
       [:a {:href "https://twitter.com/heyzk"} "@heyzk"]
@@ -100,7 +118,7 @@
       [:script {:src "/js/react.js"}])
     (when (env/bool :cljs-dev)
       [:script {:src "/cljs/goog/base.js"}])
-    [:script {:src "/cljs/clojuredocs.js"}]
+    clojuredocs-script
     (when (env/bool :cljs-dev)
       [:script "goog.require(\"clojuredocs.main\");"])]])
 
