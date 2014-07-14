@@ -14,6 +14,4 @@ pom.xml.asc
 /resources/public/cljs
 
 resources/public/css/app.css
-resources/public/css/bootstrap.min.css
-resources/public/css/font-awesome.min.css
 resources/public/css/highlighting.css

@@ -210,36 +210,53 @@
 
 (defmulti ac-entry :type)
 
-(defmethod ac-entry :function [{:keys [name ns doc type] :as func}]
+(defmethod ac-entry "function" [{:keys [href name ns doc type] :as func}]
   (dom/div {:class "ac-entry"}
     (dom/span {:class "ac-type"} "fn")
     (dom/h4
       #_(dom/i {:class "fa fa-exclamation"})
-      (dom/a {:href (var-url func)}
+      (dom/a {:href href}
         name " (" ns ")"))
     (dom/p (ellipsis 100 doc))))
 
-(defmethod ac-entry :macro [{:keys [name ns doc type]}]
+(defmethod ac-entry "var" [{:keys [href name ns doc type] :as func}]
+  (dom/div {:class "ac-entry"}
+    (dom/span {:class "ac-type"} "var")
+    (dom/h4
+      #_(dom/i {:class "fa fa-exclamation"})
+      (dom/a {:href href}
+        name " (" ns ")"))
+    (dom/p (ellipsis 100 doc))))
+
+(defmethod ac-entry "special-form" [{:keys [href name ns doc type] :as func}]
+  (dom/div {:class "ac-entry"}
+    (dom/span {:class "ac-type"} "special form")
+    (dom/h4
+      #_(dom/i {:class "fa fa-exclamation"})
+      (dom/a {:href href}
+        name " (" ns ")"))
+    (dom/p (ellipsis 100 doc))))
+
+(defmethod ac-entry "macro" [{:keys [href name ns doc type]}]
   (dom/div {:class "ac-entry"}
     (dom/span {:class "ac-type"} "macro")
     (dom/h4
-      name " (" ns ")")
+      (dom/a {:href href}
+        name " (" ns ")"))
     (dom/p (ellipsis 225 doc))))
 
-(defmethod ac-entry :ns [{:keys [ns doc type]}]
+(defmethod ac-entry "namespace" [{:keys [href name doc type desc]}]
   (dom/div {:class "ac-entry"}
-    (dom/span {:class "ac-type"} "ns")
+    (dom/span {:class "ac-type"} "namespace")
     (dom/h4
-      #_(dom/i {:class "fa fa-cube"})
-      (dom/a {:href "#"} ns))
-    (dom/p (ellipsis 225 doc))))
+      (dom/a {:href href} name))
+    (dom/p (ellipsis 225 (or doc desc)))))
 
-(defmethod ac-entry :page [{:keys [title desc type]}]
+(defmethod ac-entry "page" [{:keys [href name desc type href]}]
   (dom/div {:class "ac-entry"}
     (dom/span {:class "ac-type"} "page")
     (dom/h4
-      #_(dom/i {:class "fa fa-bolt"})
-      (dom/a {:href "#"} title))
+      (dom/a {:href href} name))
     (dom/p (ellipsis 255 desc))))
 
 (defmethod ac-entry :default [{:keys [type]}]
@@ -254,7 +271,7 @@
   (aset (.-location js/window) "href" url))
 
 (defn search-submit [ac-result]
-  (navigate-to (var-url ac-result))
+  (navigate-to (:href ac-result))
   false)
 
 ;; from https://github.com/swannodette/async-tests
@@ -401,11 +418,6 @@
                   (put! c {:success false :res res}))}))
     c))
 
-(defn format-ac-result [res]
-  (-> res
-      (assoc :type :function)
-      (assoc :href (var-url res))))
-
 (defn wire-search [text-chan app-state]
   (go
     (while true
@@ -421,7 +433,7 @@
             assoc
             :highlighted-index 0
             :loading? false
-            :ac-results (map format-ac-result data)))))))
+            :ac-results data))))))
 
 (def app-state
   (atom (reader/read-string (aget js/window "PAGE_DATA"))))
