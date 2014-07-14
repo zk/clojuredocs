@@ -37,13 +37,14 @@
        [:td [:div.doc doc]]])))
 
 (defn index [ns-str]
-  (fn [r]
+  (fn [{:keys [user] :as r}]
     (let [lib (library-for ns-str)
           ns (namespace-for ns-str)
           vars (sort-by #(-> % :name str/lower-case) (vars-for ns-str))]
       (when ns
         (common/$main
           {:body-class "ns-page"
+           :user user
            :content [:div
                      [:div.row
                       [:div.col-sm-2
