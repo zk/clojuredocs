@@ -7,9 +7,9 @@ The clojuredocs.org webapp
 
 ## Reqs
 
-* lein
-* foreman (see `Procfile`, `bin/dev`)
-* scss (`gem install scss`)
+* [lein](http://leiningen.org)
+* [foreman](https://github.com/ddollar/foreman) (see `Procfile`, `bin/dev`)
+* [less](http://lesscss.org/)
 * MongoDB
 
 ## Deploy
