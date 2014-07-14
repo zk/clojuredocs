@@ -66,8 +66,9 @@
     [:a {:id (str "example_" _id)}]
     ($example-body ex)]])
 
-(defn source-url [{:keys [file line]}]
-  (str "https://github.com/clojure/clojure/blob/clojure-1.5.1/src/clj/" file "#L" line))
+(defn source-url [{:keys [file line ns]}]
+  (when (= "clojure.core" ns)
+    (str "https://github.com/clojure/clojure/blob/clojure-1.6.0/src/clj/" file "#L" line)))
 
 (defn $see-also [{:keys [ns name created-at doc user] :as sa}]
   [:div.col-sm-6.see-also
@@ -134,7 +135,12 @@
                          [:h2 [:a {:href (str "/" ns)} ns]]
                          (if added
                            [:span "Available since " added]
-                           [:span "Available in 1.6"])]]
+                           [:span "Available in 1.6"])
+                         (when-let [su (source-url v)]
+                           [:span.source-link
+                            " ("
+                            [:a {:href source-url} "source"]
+                            ") "])]]
                        [:div.col-sm-12
                         [:section
                          [:ul.arglists
