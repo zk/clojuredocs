@@ -63,9 +63,12 @@
 
 (defn tokenize-name [s]
   (when s
-    (->> (str/split s #"-")
-         (interpose " ")
-         (apply str))))
+    (str
+      s
+      " "
+      (->> (str/split s #"-")
+           (interpose " ")
+           (apply str)))))
 
 (def searchable-vars
   (do
