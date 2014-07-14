@@ -418,9 +418,9 @@ ul.ac-results li i {
 }
 .ac-entry .see-alsos {
   font-size: 14px;
-  color: #888;
+  color: #aaa;
 }
-.ac-entry .see-alsos span {
+.ac-entry .see-alsos .see-also-label {
   margin-right: 10px;
 }
 .ac-entry .see-alsos ul {
@@ -604,6 +604,16 @@ table.ac-results .ac-metadata {
 .var-page .syntaxhighlighter table,
 .example-page .syntaxhighlighter table {
   margin: 0;
+}
+.var-page .toggle-controls,
+.example-page .toggle-controls {
+  text-align: right;
+  margin-bottom: 4px;
+  font-size: 12px;
+}
+.var-page .toggle-link,
+.example-page .toggle-link {
+  color: rgba(66, 139, 202, 0.8);
 }
 .var-examples h3 {
   font-size: 15px;
@@ -949,4 +959,20 @@ table.ac-results .ac-metadata {
   max-height: 100%;
   display: block;
   margin: 20px auto;
+}
+.add-see-also form {
+  border: solid #eee 1px;
+  padding: 20px;
+}
+.add-see-also input {
+  border-radius: 0;
+}
+.muted {
+  color: #aaa;
+}
+.var-link .namespace {
+  color: #888;
+}
+.var-link .name {
+  color: #428bca;
 }
