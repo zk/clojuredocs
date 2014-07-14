@@ -25,7 +25,6 @@
        [:i.fa.fa-rocket]
        "ClojureDocs"]
       [:ul.navbar-nav.nav.navbar-right.collapse.navbar-collapse
-       [:li [:a {:href "/"} "Home"]]
        [:li [:a {:href "/quickref"} "Quick Reference"]]
        (if user
          ($user-area user)
