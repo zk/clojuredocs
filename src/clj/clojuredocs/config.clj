@@ -6,5 +6,7 @@
 
 (def base-url (env/str :base-url))
 
+(def staging? (env/bool :staging false))
+
 (defn url [& s]
   (apply str base-url s))

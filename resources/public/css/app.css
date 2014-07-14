@@ -976,3 +976,11 @@ table.ac-results .ac-metadata {
 .var-link .name {
   color: #428bca;
 }
+.staging-banner {
+  text-align: center;
+  background-color: #c9302c;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 14px;
+  font-weight: 400;
+  padding: 3px;
+}
