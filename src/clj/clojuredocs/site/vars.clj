@@ -164,7 +164,8 @@
                            {:href "#"} "add one"]
                           "?"]
                          [:div.row
-                          (map $see-also see-alsos)])]]]]})})))
+                          (map $see-also see-alsos)])
+                       [:div.add-see-also-widget]]]]]})})))
 
 (defn $example-history-point [{:keys [user body created-at updated-at] :as ex}]
   [:div.var-example

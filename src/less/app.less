@@ -12,6 +12,9 @@
 //   -ms-flex: $val;
 // }
 
+@blue: rgba(66, 139, 202, 1);
+@light-blue: rgba(66, 139, 202, 0.8);
+
 // Fix for bootstrap border-box on firefox
 
 html, body {
@@ -382,10 +385,13 @@ ul.ac-results {
 
   .see-alsos {
     font-size: 14px;
-    color: #888;
+    color: #aaa;
 
-    span {
+    .see-also-label {
       margin-right: 10px;
+    }
+
+    .remaining-label {
     }
 
     ul {
@@ -594,6 +600,16 @@ table.ac-results {
 
   .created,
   .last-updated {
+  }
+
+  .toggle-controls {
+    text-align: right;
+    margin-bottom: 4px;
+    font-size: 12px;
+  }
+
+  .toggle-link {
+    color: @light-blue;
   }
 }
 
@@ -1046,5 +1062,30 @@ table.ac-results {
     max-height: 100%;
     display: block;
     margin: 20px auto;
+  }
+}
+
+.add-see-also {
+  form {
+    border: solid #eee 1px;
+    padding: 20px;
+  }
+
+  input {
+    border-radius: 0;
+  }
+}
+
+.muted {
+  color: #aaa;
+}
+
+.var-link {
+  .namespace {
+    color: #888;
+  }
+
+  .name {
+    color: @blue;
   }
 }

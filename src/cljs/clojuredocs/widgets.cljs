@@ -73,7 +73,11 @@
     om/IRenderState
     (render-state [this {:keys [expanded? text]}]
       (dom/div {:class "add-example"}
-        (dom/a {:href "" :on-click #(set-expanded owner (not expanded?))} "Add an Example")
+        (dom/div {:class "toggle-controls"}
+          (dom/a {:class "toggle-link"
+                  :href ""
+                  :on-click #(set-expanded owner (not expanded?))}
+            "Add an Example"))
         (dom/form {:class (when-not expanded? "hidden") :on-submit #(validate-and-submit app owner)}
           (dom/textarea {:class "form-control" :cols 80 :on-input #(update-text % owner)
                          :ref "textarea"}
@@ -212,12 +216,20 @@
 
 (defn see-alsos-widget [see-alsos]
   (when-not (empty? see-alsos)
-    (dom/div {:class "see-alsos"}
-      (dom/span "see also:")
-      (dom/ul
-        (for [{:keys [ns name href] :as sa} see-alsos]
-          (dom/li
-            (dom/a {:href href} (str ns "/" name))))))))
+    (let [limit 5
+          num-left (- (count see-alsos) limit)
+          see-alsos (take limit see-alsos)]
+      (dom/div {:class "see-alsos"}
+        (dom/span {:class "see-also-label"} "see also:")
+        (dom/ul
+          (for [{:keys [ns name href] :as sa} see-alsos]
+            (dom/li
+              (dom/a {:href href :class "var-link"}
+                (dom/span {:class "namespace"} ns)
+                "/"
+                (dom/span {:class "name"} name)))))
+        (when (> num-left 0)
+          (dom/span {:class "remaining-label"} "+ " num-left " more"))))))
 
 (defmethod ac-entry "function" [{:keys [href name ns doc type see-alsos] :as func}]
   (dom/div {:class "ac-entry"}
@@ -419,6 +431,33 @@
           (dom/a {:href "search-feedback"} "Help make ClojureDocs better")
           ".")))))
 
+(defn toggle [owner key]
+  (om/update-state! owner (fn [state]
+                            (assoc state key (not (get state key)))))
+  false)
+
+(defn add-see-also [{:keys [user]} owner]
+  (reify
+    om/IDidUpdate
+    (did-update [_ _ _]
+      (.focus (om/get-node owner "input")))
+    om/IRenderState
+    (render-state [this {:keys [expanded?]}]
+      (dom/div {:class "add-see-also"}
+        (dom/div {:class "toggle-controls"}
+          (if true
+            (dom/a {:class "toggle-link" :href "#" :on-click #(toggle owner :expanded?)} "Add See Also")
+            (dom/span {:class "muted"} "log in to add a see also")))
+        (dom/div {:class (when-not expanded? "hidden")}
+          (dom/form {:on-submit (constantly false) :autoComplete "off"}
+            (dom/div {:class "input-group"}
+              (dom/input {:class "form-control"
+                          :name "see-also-name"
+                          :ref "input"
+                          :placeholder "Var Name"})
+              (dom/span {:class "input-group-btn"}
+                (dom/button {:class "btn btn-success"} "Add See-Also")))))))))
+
 (defn ajax-chan [opts]
   (let [c (chan)]
     (ajax
@@ -482,5 +521,12 @@
    (fn [$el]
      (om/root
        add-example
+       {}
+       {:target $el}))
+
+   [:div.add-see-also-widget]
+   (fn [$el]
+     (om/root
+       add-see-also
        {}
        {:target $el}))])
