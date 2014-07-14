@@ -39,6 +39,7 @@
 ** TODO Search Widget
 *** TODO Better throttling
 *** DONE Add namespaces and pages to search
+*** DONE add see alsos
 ** TODO Redirect old urls to new
 ** TODO Switch to avatar url instead of email
 ** TODO Clean data export for dev distribution
@@ -46,3 +47,4 @@
 ** TODO Versioning
 ** TODO cache-bust assets
 ** DONE fix footer on mobile
+** TODO move example submission styleguide over

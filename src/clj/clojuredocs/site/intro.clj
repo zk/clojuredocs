@@ -113,6 +113,20 @@ solving problems (holy buzzwords, fix this)."]
 
 #_(def top-contribs (memo-ttl top-contribs (* 1000 60 60 6)))
 
+(defn add-see-alsos [results]
+  (let [sa-lookup (->> results
+                       (map #(select-keys % [:ns :name]))
+                       (map (fn [l]
+                              [l (->> (mon/fetch-one :see-alsos :where l)
+                                      :vars
+                                      (map (fn [{:keys [ns name]}]
+                                             {:ns ns
+                                              :name name
+                                              :href (str "/" ns "/" name)})))]))
+                       (into {}))]
+    (->> results
+         (map #(assoc % :see-alsos (get sa-lookup (select-keys % [:ns :name])))))))
+
 (defroutes routes
   (GET "/" []
     (fn [{:keys [user]}]
@@ -125,7 +139,7 @@ solving problems (holy buzzwords, fix this)."]
   (GET "/search" []
     (fn [{:keys [params]}]
       {:headers {"Content-Type" "application/edn"}
-       :body (pr-str (search/query (:query params)))})))
+       :body (pr-str (add-see-alsos (search/query (:query params))))})))
 
 
 
