@@ -8,5 +8,6 @@
 
 (def staging? (env/bool :staging false))
 
-(defn url [& s]
-  (apply str base-url s))
+(def ga-tracking-id (env/str :ga-tracking-id "UA-17348828-3"))
+
+(defn url [& s] (apply str base-url s))
