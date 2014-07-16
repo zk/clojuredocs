@@ -9,6 +9,16 @@
                    (merge config/gh-creds
                           {:redirect-uri (config/url "/gh-callback")})))
 
+(defn $ga-script-tag [ga-tracking-id]
+  (when ga-tracking-id
+    [:script "(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', '" ga-tracking-id "', 'auto');
+  ga('send', 'pageview');"]))
+
 (defn $user-area [user]
   [:li.user-area
    [:img.avatar {:src (:avatar-url user)}]
@@ -195,13 +205,3 @@
        [:h1 "404"]
        [:a.four-oh-four {:href "http://emareaf.deviantart.com/art/Rich-Hickey-321501046"}
         [:img.four-oh-four {:src "http://fc04.deviantart.net/fs70/f/2012/229/a/6/rich_hickey_by_emareaf-d5bevsm.png"}]]]]}))
-
-(defn $ga-script-tag [ga-tracking-id]
-  (when ga-tracking-id
-    [:script "(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-  ga('create', '" ga-tracking-id "', 'auto');
-  ga('send', 'pageview');"]))
