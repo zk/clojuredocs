@@ -522,6 +522,15 @@ table.ac-results .ac-metadata {
 .example-page section {
   margin-bottom: 2em;
 }
+.var-page section h3,
+.example-page section h3 {
+  font-size: 15px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #777;
+  margin-bottom: 20px;
+}
 .var-page section.search,
 .example-page section.search {
   margin-bottom: 1em;
@@ -623,6 +632,27 @@ table.ac-results .ac-metadata {
   color: #777;
   margin-bottom: 20px;
 }
+.example-meta,
+.comment-meta {
+  font-size: 10px;
+  margin-bottom: 0px;
+  line-height: 1.3em;
+  margin-right: 5px;
+  color: #888;
+}
+.example-meta .avatar,
+.comment-meta .avatar {
+  width: 25px;
+  height: 25px;
+  opacity: 0.8;
+}
+.example-meta .avatar:hover,
+.comment-meta .avatar:hover {
+  opacity: 1;
+}
+.comment-meta {
+  margin-bottom: 5px;
+}
 .var-example {
   margin-bottom: 30px;
 }
@@ -630,20 +660,10 @@ table.ac-results .ac-metadata {
   margin-bottom: 30px;
 }
 .var-example .example-meta {
-  font-size: 10px;
-  margin-bottom: 0px;
-  line-height: 1.3em;
   color: #aaa;
-  margin-right: 5px;
 }
 .var-example .example-meta .avatar {
-  width: 25px;
-  height: 25px;
-  opacity: 0.8;
   margin-right: 5px;
-}
-.var-example .example-meta .avatar:hover {
-  opacity: 1;
 }
 .var-example .example-meta .contributors,
 .var-example .example-meta .created,

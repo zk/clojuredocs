@@ -29,6 +29,11 @@
 (defn library-for [{:keys [ns]}]
   (mon/fetch-one :libraries :where {:namespaces ns}))
 
+(defn comments-for [{:keys [ns name library-url]}]
+  (mon/fetch :var-comments
+    :where {:var.ns ns :var.name name :var.library-url library-url}
+    :sort {:created-at 1}))
+
 (defn $arglist [name a]
   [:li.arglist (str
                  "(" name (when-not (empty? a) " ") a ")")])
@@ -99,6 +104,29 @@
       "?"]
      (map $example examples))])
 
+(defn $comment [{:keys [body user created-at]}]
+  [:div.comment
+   [:div.comment-meta
+    "By "
+    (common/$avatar user)
+    " "
+    (:login user)
+    ", "
+    (util/timeago created-at)
+    " ago."]
+   (-> (util/markdown body)
+       (str/replace #"<pre><code>" "<pre class=\"brush: clojure\">")
+       (str/replace #"</code></pre>" "</pre>"))])
+
+(defn $comments [comments name]
+  [:div.var-comments
+   [:h3 (util/pluralize (count comments) "Comment" "Comments")]
+   (if (empty? comments)
+     [:div.null-state "No comments for " [:code name]]
+     [:ul
+      (for [c comments]
+        ($comment c))])])
+
 (defn var-page [ns name]
   (fn [{:keys [user session]}]
     (let [name (util/cd-decode name)
@@ -107,7 +135,8 @@
           examples (examples-for v)
           see-alsos (see-alsos-for v)
           library (library-for v)
-          recent (:recent session)]
+          recent (:recent session)
+          comments (comments-for v)]
       {:session (update-in session [:recent]
                   #(->> %
                         (concat [{:text name
@@ -165,13 +194,12 @@
                        [:h3 "See Also"]
                        (if (empty? see-alsos)
                          [:div.null-state
-                          "No see-alsos for " [:code name] ", "
-                          [:a
-                           {:href "#"} "add one"]
-                          "?"]
+                          "No see-alsos for " [:code name]]
                          [:div.row
                           (map $see-also see-alsos)])
-                       [:div.add-see-also-widget]]]]]})})))
+                       [:div.add-see-also-widget]]
+                      [:section
+                       ($comments comments name)]]]]})})))
 
 (defn $example-history-point [{:keys [user body created-at updated-at] :as ex}]
   [:div.var-example

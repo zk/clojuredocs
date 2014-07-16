@@ -25,7 +25,8 @@
                  [org.clojure/core.async "0.1.267.0-0d7780-alpha"]
                  [org.clojure/core.logic "0.8.8"]
                  [om "0.6.4"]
-                 [prismatic/om-tools "0.2.2"]]
+                 [prismatic/om-tools "0.2.2"]
+                 [org.pegdown/pegdown "1.4.2"]]
   :profiles {:nrepl {:source-paths ["dev"]
                      :dependencies [[org.clojure/tools.namespace "0.2.4"]]
                      :repl-options {:init (user/restart)}}}

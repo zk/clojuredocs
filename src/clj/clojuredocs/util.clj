@@ -1,6 +1,15 @@
 (ns clojuredocs.util
   (:require [cheshire.core :as json]
-            [clojure.string :as str]))
+            [clojure.string :as str])
+  (:import [org.pegdown PegDownProcessor]
+           [org.pegdown Parser]
+           [org.pegdown Extensions]))
+
+(defn markdown [s]
+  (let [pd (PegDownProcessor. (int (bit-or Extensions/AUTOLINKS
+                                           Extensions/FENCED_CODE_BLOCKS
+                                           Extensions/TABLES)))]
+    (.markdownToHtml pd s)))
 
 (defn url-encode [s]
   (when s

@@ -42,3 +42,4 @@
 ** TODO move over comments
 ** TODO UPDATE / REMOVE ROBOTS.TXT
 ** DONE staging site header
+** TODO check db indexes

@@ -21,8 +21,23 @@
 (defn all-libs []
   (j/query mysql-db ["SELECT * FROM libraries"]))
 
+(defn all-comments []
+  (j/query mysql-db ["SELECT * FROM comments"]))
+
 (defn lookup-user [user-id]
   (select-keys (first (j/query mysql-db ["SELECT * FROM users WHERE id=?" user-id])) [:email :login]))
+
+(defn lookup-ns [nsid]
+  {:ns (->> (j/query mysql-db ["SELECT * FROM namespaces WHERE id=?" nsid])
+            first
+            :name)})
+
+(defn lookup-function [fid]
+  (let [func (first (j/query mysql-db ["SELECT * FROM functions WHERE id=?" fid]))
+        ns (lookup-ns (:namespace_id func))]
+    {:name (:name func)
+     :ns (:ns ns)
+     :library-url "https://github.com/clojure/clojure"}))
 
 (defn history-for [example-id]
   (->> (j/query mysql-db ["SELECT * FROM example_versions WHERE example_id=?" example-id])
@@ -160,14 +175,14 @@
          (map #(assoc % :arglists (map format-arglist (:arglists %))))
          (map #(assoc % :runtimes ["clj"])))))
 
-(def version "1.5.1")
+(def version "1.6.0")
 
 (defn insert-or-update-var [v]
   (mon/update! :vars (select-keys v [:library-url :ns :name]) v))
 
 ;; Vars
-#_(doseq [v searchable-vars]
-    (insert-or-update-var v))
+(doseq [v searchable-vars]
+  (insert-or-update-var v))
 
 
 ;; See Alsos
@@ -329,3 +344,21 @@
      reverse
      first
      )
+
+
+(defn ins-or-update-comment [cmt]
+  (mon/update! :var-comments
+    (select-keys cmt [:user :created-at :var])
+    cmt))
+
+(defn import-comments []
+  (let [comments (->> (all-comments)
+                      (map #(assoc % :user (lookup-user (:user_id %))))
+                      (map #(assoc % :var (lookup-function (:commentable_id %))))
+                      (map #(assoc % :created-at (:created_at %)))
+                      (map #(assoc % :updated-at (:updated_at %)))
+                      (map #(select-keys % [:updated-at :var :body :created-at :user])))]
+    (doseq [c comments]
+      (ins-or-update-comment c))))
+
+(import-comments)
