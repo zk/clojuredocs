@@ -298,29 +298,6 @@
   (navigate-to (:href ac-result))
   false)
 
-;; from https://github.com/swannodette/async-tests
-
-(defn throttle
-  ([source msecs]
-     (throttle (chan) source msecs))
-  ([c source msecs]
-     (go
-       (loop [state ::init last nil cs [source]]
-         (let [[_ sync] cs]
-           (let [[v sc] (alts! cs)]
-             (condp = sc
-               source (condp = state
-                        ::init (do (>! c v)
-                                   (recur ::throttling last
-                                     (conj cs (timeout msecs))))
-                        ::throttling (recur state v cs))
-               sync (if last
-                      (do (>! c last)
-                          (recur state nil
-                            (conj (pop cs) (timeout msecs))))
-                      (recur ::init last (pop cs))))))))
-     c))
-
 (defn maybe-nav [e app ac-results]
   (when app
     (let [ctrl? (.-ctrlKey e)
@@ -341,17 +318,17 @@
         (when (not (= identity f))
           false)))))
 
+(defn throttle [ms f]
+  (let [timer (atom nil)]
+    (fn [e]
+      (.persist e)
+      (js/clearTimeout @timer)
+      (reset! timer (js/setTimeout #(f e) ms)))))
+
 (defn quick-search [{:keys [highlighted-index loading? ac-results] :as app} owner]
   (reify
-    om/IWillMount
-    (will-mount [_]
-      (let [text-chan (or (om/get-state owner :text-chan) (chan))
-            internal-text-chan (chan)
-            throttled (throttle internal-text-chan 250)]
-        (pipe throttled text-chan)
-        (om/set-state! owner :internal-text-chan internal-text-chan)))
     om/IRenderState
-    (render-state [this {:keys [internal-text-chan text]}]
+    (render-state [this {:keys [text-chan text]}]
       (dom/form {:class "search" :autoComplete "off"
                  ;; the search widget should prob not need to know about
                  ;; autocomplete results (or act on them)
@@ -360,7 +337,7 @@
                     :placeholder "Looking for? (ctrl-s)"
                     :name "query"
                     :autoComplete "off"
-                    :on-input #(put-text % internal-text-chan owner)
+                    :on-input (throttle 200 #(put-text % text-chan owner))
                     :on-key-down #(maybe-nav % app ac-results)})))))
 
 (defn ac-results [{:keys [highlighted-index ac-results]
@@ -392,13 +369,6 @@
                      :as app}
                     owner]
   (reify
-    om/IWillMount
-    (will-mount [_]
-      (let [text-chan (or (om/get-state owner :text-chan) (chan))
-            internal-text-chan (chan)
-            throttled (throttle internal-text-chan 250)]
-        (pipe throttled text-chan)
-        (om/set-state! owner :internal-text-chan internal-text-chan)))
     om/IDidUpdate
     (did-update [_ prev-props prev-state]
       (when (and (not= (:highlighted-index prev-props)
@@ -406,7 +376,7 @@
                  (> (count ac-results) 0))
         (anim/scroll-into-view (om/get-node owner (:highlighted-index app)) {:pad 30})))
     om/IRenderState
-    (render-state [this {:keys [internal-text-chan text]}]
+    (render-state [this {:keys [text-chan text]}]
       (dom/form {:class "search"
                  :autoComplete "off"
                  :on-submit #(search-submit (nth ac-results highlighted-index))}
@@ -415,7 +385,7 @@
                     :name "query"
                     :autoComplete "off"
                     :autoFocus "autofocus"
-                    :on-input #(put-text % internal-text-chan owner)
+                    :on-input (throttle 200 #(put-text % text-chan owner))
                     :on-key-down #(maybe-nav % app ac-results)})
         (dom/ul {:class "ac-results"}
           (map-indexed
