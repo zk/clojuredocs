@@ -100,4 +100,6 @@ user=> (into {} *1)
           [:div.example.checker-bg
            (quickref/$toc [sphere])]
           [:div.example.checker-bg
-           (quickref/$sphere sphere)]))]}))
+           (quickref/$sphere sphere)]))
+      (section "Comments"
+        [:div.example.checker-bg.add-comment-example])]}))

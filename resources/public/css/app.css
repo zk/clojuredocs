@@ -614,16 +614,6 @@ table.ac-results .ac-metadata {
 .example-page .syntaxhighlighter table {
   margin: 0;
 }
-.var-page .toggle-controls,
-.example-page .toggle-controls {
-  text-align: right;
-  margin-bottom: 4px;
-  font-size: 12px;
-}
-.var-page .toggle-link,
-.example-page .toggle-link {
-  color: rgba(66, 139, 202, 0.8);
-}
 .var-examples h3 {
   font-size: 15px;
   font-weight: 500;
@@ -1003,4 +993,39 @@ table.ac-results .ac-metadata {
   font-size: 14px;
   font-weight: 400;
   padding: 3px;
+}
+.toggle-controls {
+  text-align: right;
+  margin-bottom: 4px;
+  font-size: 12px;
+}
+.toggle-link {
+  color: rgba(66, 139, 202, 0.8);
+}
+.comment-body {
+  background-color: #fafafa;
+  padding: 10px;
+}
+.comment-body p {
+  margin-bottom: 10px;
+}
+.add-comment .add-comment-form {
+  border: solid #eee 1px;
+  padding: 20px;
+}
+.add-comment .instructions {
+  color: #555;
+  font-size: 12px;
+}
+.add-comment textarea {
+  height: 200px;
+}
+.add-comment .live-preview {
+  padding: 10px;
+  background-color: #fafafa;
+}
+.add-comment .live-preview li {
+  margin-left: 20px;
+  list-style-type: disc;
+  margin-bottom: 0;
 }

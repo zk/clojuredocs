@@ -108,3 +108,18 @@
 
 (defn pluralize [n single plural]
   (str n " " (if (= 1 n) single plural)))
+
+(defn decode-body [content-length body]
+  (when (and content-length
+             (> content-length 0))
+    (let [buf (byte-array content-length)]
+      (.read body buf 0 content-length)
+      (.close body)
+      (String. buf))))
+
+(defn response-body
+  "Turn a InputStream into a string."
+  [{:keys [content-length body]}]
+  (if (string? body)
+    body
+    (decode-body content-length body)))
