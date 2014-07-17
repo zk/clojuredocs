@@ -294,8 +294,9 @@
 (defn navigate-to [url]
   (aset (.-location js/window) "href" url))
 
-(defn search-submit [ac-result]
-  (navigate-to (:href ac-result))
+(defn search-submit [{:keys [href]}]
+  (when href
+    (navigate-to href))
   false)
 
 (defn maybe-nav [e app ac-results]
@@ -416,7 +417,10 @@
       (dom/div {:class "add-see-also"}
         (dom/div {:class "toggle-controls"}
           (if true
-            (dom/a {:class "toggle-link" :href "#" :on-click #(toggle owner :expanded?)} "Add See Also")
+            (dom/a {:class "toggle-link" :href "#" :on-click #(toggle owner :expanded?)}
+              (if-not expanded?
+                "Add See Also"
+                "Close"))
             (dom/span {:class "muted"} "log in to add a see also")))
         (dom/div {:class (when-not expanded? "hidden")}
           (dom/form {:on-submit (constantly false) :autoComplete "off"}
@@ -427,6 +431,43 @@
                           :placeholder "Var Name"})
               (dom/span {:class "input-group-btn"}
                 (dom/button {:class "btn btn-success"} "Add See-Also")))))))))
+
+(defn $add-comment [{:keys [user]} owner]
+  (reify
+    om/IDidUpdate
+    (did-update [_ _ _]
+      (.focus (om/get-node owner "input"))
+      #_(when-let [text (om/get-state owner :text)]
+        (aset (om/get-node owner "live-preview")
+          "innerHTML"
+          (-> text
+              md->html
+              (str/replace #"<pre>" "<pre class=\"brush: clojure\">")))))
+    om/IRenderState
+    (render-state [this {:keys [expanded? text]}]
+      (dom/div {:class "add-comment"}
+        (dom/div {:class "toggle-controls"}
+          (if true
+            (dom/a {:class "toggle-link" :href "#" :on-click #(toggle owner :expanded?)}
+              (if-not expanded?
+                "Add Comment"
+                "Close"))
+            (dom/span {:class "muted"} "log in to add a comment")))
+        (dom/div {:class (when-not expanded? "hidden")}
+          (dom/form {:on-submit (constantly false) :autoComplete "off" :class "add-comment-form"}
+            (dom/div {:class "form-group"}
+              (dom/div {:class "instructions"}
+                (dom/p "Markdown allowed, code in <pre />"))
+              (dom/textarea
+                {:class "form-control"
+                 :name "comment-name"
+                 :ref "input"
+                 :value text
+                 :placeholder "Comment goes here"
+                 :on-input #(do
+                              (om/set-state! owner :text (.. % -target -value))
+                              false)})))
+          (dom/div {:class "live-preview" :ref "live-preview"}))))))
 
 (defn ajax-chan [opts]
   (let [c (chan)]

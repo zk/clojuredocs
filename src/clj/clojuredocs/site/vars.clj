@@ -114,92 +114,96 @@
     ", "
     (util/timeago created-at)
     " ago."]
-   (-> (util/markdown body)
-       (str/replace #"<pre><code>" "<pre class=\"brush: clojure\">")
-       (str/replace #"</code></pre>" "</pre>"))])
+   [:div.comment-body
+    (-> (util/markdown body)
+        (str/replace #"<pre><code>" "<pre class=\"brush: clojure\">")
+        (str/replace #"</code></pre>" "</pre>"))]])
 
 (defn $comments [comments name]
   [:div.var-comments
    [:h3 (util/pluralize (count comments) "Comment" "Comments")]
-   (if (empty? comments)
-     [:div.null-state "No comments for " [:code name]]
-     [:ul
-      (for [c comments]
-        ($comment c))])])
+   [:div
+    (if (empty? comments)
+      [:div.null-state "No comments for " [:code name]]
+      [:ul
+       (for [c comments]
+         ($comment c))])]
+   [:div.add-comment-widget]])
 
 (defn var-page [ns name]
-  (fn [{:keys [user session]}]
-    (let [name (util/cd-decode name)
-          {:keys [arglists name ns doc runtimes added file] :as v}
-          (lookup-var ns name)
-          examples (examples-for v)
-          see-alsos (see-alsos-for v)
-          library (library-for v)
-          recent (:recent session)
-          comments (comments-for v)]
-      {:session (update-in session [:recent]
-                  #(->> %
-                        (concat [{:text name
-                                  :href (str "/" ns "/" (util/cd-encode name))}])
-                        distinct
-                        (filter :text)
-                        (take 4)))
-       :body
-       (common/$main
-         {:body-class "var-page"
-          :page-data {:examples (map #(assoc % :_id (str (:_id %))) examples)
-                      :var (assoc v :_id (str (:_id v)))}
-          :user user
-          :content [:div
-                    [:div.row
-                     [:div.col-sm-2
-                      (common/$recent recent)
-                      (common/$library-nav library ns)]
-                     [:div.col-sm-10
-                      [:div.row
-                       [:div.col-sm-8
-                        [:h1.var-name name]]
-                       [:div.col-sm-4
-                        [:div.var-meta
-                         [:h2 [:a {:href (str "/" ns)} ns]]
-                         (if added
-                           [:span "Available since " added]
-                           [:span "Available in 1.6"])
-                         (when-let [su (source-url v)]
-                           [:span.source-link
-                            " ("
-                            [:a {:href su} "source"]
-                            ") "])]]
-                       [:div.col-sm-12
-                        [:section
-                         [:ul.arglists
-                          (map #($arglist name %) arglists)]]]]
-                      [:section
-                       [:div.docstring
-                        (if doc
-                          [:pre (-> doc
-                                    (str/replace #"\n\s\s" "\n"))]
-                          [:div.null-state "No Doc"])
-                        (when doc
-                          [:div.copyright
-                           "&copy; Rich Hickey. All rights reserved."
-                           " "
-                           [:a {:href "http://www.eclipse.org/legal/epl-v10.html"}
-                            "Eclipse Public License 1.0"]])]]
-                      [:section
-                       [:div.examples-widget
-                        ($examples examples ns name)]
-                       [:div.add-example-widget]]
-                      [:section
-                       [:h3 "See Also"]
-                       (if (empty? see-alsos)
-                         [:div.null-state
-                          "No see-alsos for " [:code name]]
-                         [:div.row
-                          (map $see-also see-alsos)])
-                       [:div.add-see-also-widget]]
-                      [:section
-                       ($comments comments name)]]]]})})))
+  (let [name (util/cd-decode name)
+        {:keys [arglists name ns doc runtimes added file] :as v}
+        (lookup-var ns name)]
+    (fn [{:keys [user session]}]
+      (when v
+        (let [examples (examples-for v)
+              see-alsos (see-alsos-for v)
+              library (library-for v)
+              recent (:recent session)
+              comments (comments-for v)]
+          {:session (update-in session [:recent]
+                      #(->> %
+                            (concat [{:text name
+                                      :href (str "/" ns "/" (util/cd-encode name))}])
+                            distinct
+                            (filter :text)
+                            (take 4)))
+           :body
+           (common/$main
+             {:body-class "var-page"
+              :page-data {:examples (map #(assoc % :_id (str (:_id %))) examples)
+                          :var (assoc v :_id (str (:_id v)))}
+              :user user
+              :content [:div
+                        [:div.row
+                         [:div.col-sm-2
+                          (common/$recent recent)
+                          (common/$library-nav library ns)]
+                         [:div.col-sm-10
+                          [:div.row
+                           [:div.col-sm-8
+                            [:h1.var-name name]]
+                           [:div.col-sm-4
+                            [:div.var-meta
+                             [:h2 [:a {:href (str "/" ns)} ns]]
+                             (if added
+                               [:span "Available since " added]
+                               [:span "Available in 1.6"])
+                             (when-let [su (source-url v)]
+                               [:span.source-link
+                                " ("
+                                [:a {:href su} "source"]
+                                ") "])]]
+                           [:div.col-sm-12
+                            [:section
+                             [:ul.arglists
+                              (map #($arglist name %) arglists)]]]]
+                          [:section
+                           [:div.docstring
+                            (if doc
+                              [:pre (-> doc
+                                        (str/replace #"\n\s\s" "\n"))]
+                              [:div.null-state "No Doc"])
+                            (when doc
+                              [:div.copyright
+                               "&copy; Rich Hickey. All rights reserved."
+                               " "
+                               [:a {:href "http://www.eclipse.org/legal/epl-v10.html"}
+                                "Eclipse Public License 1.0"]])]]
+                          [:section
+                           [:div.examples-widget
+                            ($examples examples ns name)]
+                           [:div.add-example-widget]]
+                          [:section
+                           [:h3 "See Also"]
+                           (if (empty? see-alsos)
+                             [:div.null-state
+                              "No see-alsos for " [:code name]]
+                             [:div.row
+                              (map $see-also see-alsos)])
+                           [:div.add-see-also-widget]]
+                          [:section
+                           ($comments comments name)]]]]})})))))
 
 (defn $example-history-point [{:keys [user body created-at updated-at] :as ex}]
   [:div.var-example

@@ -9,7 +9,7 @@
          keyword-params]
         [ring.middleware.session.cookie :only (cookie-store)]
         [ring.util.response :only (response content-type)])
-  (:require [compojure.core :refer (defroutes GET POST PUT DELETE)]
+  (:require [compojure.core :refer (defroutes GET POST PUT DELETE context)]
             [compojure.response :refer (Renderable render)]
             [compojure.route :refer (not-found)]
             [ring.util.response :refer (redirect)]
@@ -25,7 +25,8 @@
             [clojuredocs.site.user :as site.user]
             [clojuredocs.site.nss :as site.nss]
             [clojuredocs.site.styleguide :as styleguide]
-            [clojure.pprint :refer (pprint)]))
+            [clojure.pprint :refer (pprint)]
+            [clojuredocs.api :as api]))
 
 (defn hiccup->html-string [body]
   (if-not (vector? body)
@@ -65,6 +66,8 @@
   (var site.intro/routes)
   (var site.gh-auth/routes)
   (var site.user/routes)
+  (context "/api" [] api/routes)
+
   (GET "/logout" [] (fn [r] (-> (redirect "/")
                                 (assoc :session nil))))
   (GET "/quickref" [] quickref/index)
@@ -77,6 +80,7 @@
 
   (GET "/:ns/:name" [ns name] (site.vars/var-page ns name))
   (GET "/:ns" [ns] (site.nss/index ns))
+
   (not-found (fn [r]
                (common/four-oh-four r))))
 

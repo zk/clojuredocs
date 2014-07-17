@@ -39,4 +39,12 @@ f should accept number-of-colls arguments."}
        widgets/quick-lookup
        {}
        {:target $el
-        :init-state {:loading? true}}))])
+        :init-state {:loading? true}}))
+
+   [:div.add-comment-example]
+   (fn [$el]
+     (om/root
+       widgets/$add-comment
+       {}
+       {:target $el
+        :init-state {:expanded? true}}))])
