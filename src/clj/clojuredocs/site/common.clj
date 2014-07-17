@@ -55,23 +55,27 @@
        [:div.col-md-10.col-md-offset-1
         [:div.ac-results-widget]]])]])
 
+(defn md5-path [path]
+  (-> path slurp util/md5))
+
 (def clojuredocs-script
   [:script {:src (str "/cljs/clojuredocs.js?"
-                      (util/md5 "resources/public/cljs/clojuredocs.js"))}])
+                      (md5-path "resources/public/cljs/clojuredocs.js"))}])
 
 (def app-link
   [:link {:rel :stylesheet
           :href (str "/css/app.css?"
-                     (util/md5 "resources/public/css/app.css"))}])
+                     (md5-path "resources/public/css/app.css"))}])
 
 (def bootstrap-link
   [:link {:rel :stylesheet
           :href (str "/css/bootstrap.min.css?"
-                     (util/md5 "resources/public/css/bootstrap.min.css"))}])
+                     (md5-path "resources/public/css/bootstrap.min.css"))}])
 
 (def font-awesome-link
-  [:link {:rel :stylesheet :href (str "/css/font-awesome.min.css?"
-                                      (util/md5 "resources/public/css/font-awesome.min.css"))}])
+  [:link {:rel :stylesheet
+          :href (str "/css/font-awesome.min.css?"
+                     (md5-path "resources/public/css/font-awesome.min.css"))}])
 
 (defn $main [{:keys [content title body-class user page-data] :as opts}]
   [:html5
