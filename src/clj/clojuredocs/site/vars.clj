@@ -132,8 +132,7 @@
 
 (defn var-page [ns name]
   (let [name (util/cd-decode name)
-        {:keys [arglists name ns doc runtimes added file] :as v}
-        (lookup-var ns name)]
+        {:keys [arglists name ns doc runtimes added file] :as v} (lookup-var ns name)]
     (fn [{:keys [user session]}]
       (when v
         (let [examples (examples-for v)
