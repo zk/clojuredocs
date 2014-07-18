@@ -16,13 +16,11 @@
 
 * Release Checklist
 
-+ URL shortener
-+ User accounts page
++ URL shortener howto
 + Landing search feedback
 + Move over from old db
 + Claiming old user accounts
 + Investigate bitbucket login
-+ Landing search feedback
 + Quickref update
 + Supported libs blurb
 + Core-specific namespace page
@@ -41,6 +39,10 @@
 
 ** Done
 
++ Expand and redirect shortened namespaces
++ Handle abbreviated namespaces `c.c` -> `clojure.core`
++ Landing search feedback
++ User accounts page
 + Fingerprint & caching on assets
 + CLJS refactor
 + Better throttling for search widgets
