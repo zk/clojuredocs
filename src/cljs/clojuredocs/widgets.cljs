@@ -495,7 +495,7 @@
     (will-mount [_]
       (let [query (om/get-state owner :query)]
         (om/set-state! owner
-          :text (when query
+          :text (when-not (empty? query)
                   (str
                     "Hey ClojureDocs, I searched for \""
                     query
