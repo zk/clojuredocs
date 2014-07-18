@@ -56,7 +56,10 @@
         [:div.ac-results-widget]]])]])
 
 (defn md5-path [path]
-  (-> path slurp util/md5))
+  (try
+    (-> path slurp util/md5)
+    (catch java.io.FileNotFoundException e
+      nil)))
 
 (def clojuredocs-script
   [:script {:src (str "/cljs/clojuredocs.js?"

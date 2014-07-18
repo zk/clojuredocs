@@ -288,8 +288,9 @@
 
 (defn put-text [e text-chan owner]
   (let [text (.. e -target -value)]
-    (put! text-chan text))
-  (om/set-state! owner :loading? true))
+    (put! text-chan text)
+    (om/set-state! owner :loading? true)
+    (om/set-state! owner :text text)))
 
 (defn navigate-to [url]
   (aset (.-location js/window) "href" url))
@@ -348,11 +349,12 @@
   (reify
     om/IDidUpdate
     (did-update [_ prev-props prev-state]
-      (let [$el (om/get-node owner (:highlighted-index app))]
-        (when (and (not= (:highlighted-index prev-props)
-                         (:highlighted-index app))
-                   $el)
-          (anim/scroll-into-view $el {:pad 30}))))
+      (when (> (count ac-results) 0)
+        (let [$el (om/get-node owner (:highlighted-index app))]
+          (when (and (not= (:highlighted-index prev-props)
+                           (:highlighted-index app))
+                     $el)
+            (anim/scroll-into-view $el {:pad 30})))))
     om/IRender
     (render [this]
       (dom/ul {:class "ac-results"}
@@ -388,6 +390,10 @@
                     :autoFocus "autofocus"
                     :on-input (throttle 200 #(put-text % text-chan owner))
                     :on-key-down #(maybe-nav % app ac-results)})
+        (dom/div {:class "not-finding"}
+          "Can't find what you're looking for? "
+          (dom/a {:href (str "search-feedback" (when text (str "?query=" (url-encode text))))} "Help make ClojureDocs better")
+          ".")
         (dom/ul {:class "ac-results"}
           (map-indexed
             (fn [i {:keys [href type] :as res}]
@@ -396,11 +402,7 @@
                                 "highlighted")
                        :ref i}
                 (ac-entry res)))
-            ac-results))
-        (dom/div {:class "not-finding"}
-          "Can't find what you're looking for? "
-          (dom/a {:href "search-feedback"} "Help make ClojureDocs better")
-          ".")))))
+            ac-results))))))
 
 (defn toggle [owner key]
   (om/update-state! owner (fn [state]
@@ -468,6 +470,80 @@
                               (om/set-state! owner :text (.. % -target -value))
                               false)})))
           (dom/div {:class "live-preview" :ref "live-preview"}))))))
+
+(defn submit-feedback [owner query clojure-level text]
+  (om/set-state! owner :loading? true)
+  (om/set-state! owner :error-message nil)
+  (ajax
+    {:method :post
+     :path (str "/search-feedback")
+     :data {:query query
+            :clojure-level clojure-level
+            :text text}
+     :success (fn [_]
+                (navigate-to "/search-feedback/success"))
+     :error (fn [_]
+              (om/set-state! owner
+                :error-message
+                "There was a problem sending your feedback, try again.")
+              (om/set-state! owner :loading? false))})
+  false)
+
+(defn $search-feedback [app owner]
+  (reify
+    om/IWillMount
+    (will-mount [_]
+      (om/set-state! owner
+        :text (str
+                "Hey ClojureDocs, I searched for \""
+                (om/get-state owner :query)
+                "\", but couldn't find what I was looking for. Here's a description of what I would have liked to find:")))
+    om/IRenderState
+    (render-state [_ {:keys [text loading? clojure-level query error-message]}]
+      (dom/form {:class "form" :on-submit #(submit-feedback owner query clojure-level text)}
+        (dom/div {:class "form-group"}
+          (dom/label {:for "clojure-level"}
+            "Level of Clojuring")
+          (dom/div {:class "radio"}
+            (dom/label {:class "radio"}
+              (dom/input {:type "radio"
+                          :name "clojure-level"
+                          :value "beginner"
+                          :on-click #(om/set-state! owner :clojure-level "beginner")
+                          :disabled (if loading? "disabled")})
+              "I haven't written any Clojure")
+            (dom/label {:class "radio"}
+              (dom/input {:type "radio"
+                          :name "clojure-level"
+                          :value "intermediate"
+                          :on-click #(om/set-state! owner :clojure-level "intermediate")
+                          :disabled (if loading? "disabled")})
+              "I've done a few things in Clojure")
+            (dom/label {:class "radio"}
+              (dom/input {:type "radio"
+                          :name "clojure-level"
+                          :value "advanced"
+                          :on-click #(om/set-state! owner :clojure-level "advanced")
+                          :disabled (if loading? "disabled")})
+              "I'm comfortable contributing to Clojure projects")))
+        (dom/div {:class "form-group"}
+          (dom/label {:for "feedback"} "Feedback")
+          (dom/textarea {:class "form-control"
+                         :autoFocus "autofocus"
+                         :rows 10
+                         :name "feedback"
+                         :value text
+                         :on-input #(om/set-state! owner :text (.. % -target -value))
+                         :disabled (if loading? "disabled")}))
+        (dom/div {:class "form-group"}
+          (dom/span {:class (str "error-message" (when-not error-message " hidden"))}
+            (dom/i {:class "fa fa-exclamation-circle"})
+            error-message)
+          (dom/button {:class "btn btn-default pull-right"
+                       :disabled (if loading? "disabled")}
+            "Send Feedback")
+          (dom/img {:class (str "pull-right loading" (when-not loading? " hidden"))
+                    :src "/img/loading.gif"}))))))
 
 (defn ajax-chan [opts]
   (let [c (chan)]
@@ -540,4 +616,12 @@
      (om/root
        add-see-also
        {}
-       {:target $el}))])
+       {:target $el}))
+
+   [:div.search-feedback-widget]
+   (fn [$el]
+     (om/root
+       $search-feedback
+       {}
+       {:target $el
+        :init-state {:query (dommy/attr $el :data-query)}}))])

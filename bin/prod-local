@@ -27,4 +27,6 @@ lein cljsbuild clean
 
 bin/build
 
+lein cljsbuild clean
+
 foreman start -f Procfile.prod-local

@@ -1,9 +1,11 @@
 (ns clojuredocs.site.intro
-  (:require [compojure.core :refer (defroutes GET)]
+  (:require [compojure.core :refer (defroutes GET POST)]
             [somnium.congomongo :as mon]
             [fogus.unk :refer (memo-ttl)]
             [clojuredocs.search :as search]
-            [clojuredocs.site.common :as common]))
+            [clojuredocs.util :as util]
+            [clojuredocs.site.common :as common]
+            [clojure.edn :as edn]))
 
 (defn $index [top-contribs]
   [:div
@@ -80,7 +82,9 @@ solving problems (holy buzzwords, fix this)."]
              {:src "https://upload.wikimedia.org/wikipedia/en/9/92/SoundCloud_logo.svg"
               :url "https://soundcloud.com"}
              {:src "https://puppetlabs.com/wp-content/uploads/2010/12/PL_logo_horizontal_RGB_sm.png"
-              :url "https://puppetlabs.com"}]]
+              :url "https://puppetlabs.com"}
+             {:src "/img/living-social-logo.png"
+              :url "https://livingsocial.com"}]]
         [:li [:a {:href url} [:img {:src src}]]])]]]
    [:div.row
     [:div.col-md-6
@@ -127,6 +131,18 @@ solving problems (holy buzzwords, fix this)."]
     (->> results
          (map #(assoc % :see-alsos (get sa-lookup (select-keys % [:ns :name])))))))
 
+
+(defn search-feedback [{:keys [params]}]
+  (common/$main
+    {:body-class "search-feedback-page"
+     :content
+     [:div.row
+      [:div.col-md-12
+       [:h3 "Send us a note on how we can improve ClojureDocs."]
+       [:p "We're sorry you couldn't find what you were looking for. If you leave us a note below with what you were looking for and how you tried to find it, we can use your feedback to make the site better."]
+       [:div.search-feedback-widget
+        {:data-query (:query params)}]]]}))
+
 (defroutes routes
   (GET "/" []
     (fn [{:keys [user]}]
@@ -139,7 +155,30 @@ solving problems (holy buzzwords, fix this)."]
   (GET "/search" []
     (fn [{:keys [params]}]
       {:headers {"Content-Type" "application/edn"}
-       :body (pr-str (add-see-alsos (search/query (:query params))))})))
+       :body (pr-str (add-see-alsos (search/query (:query params))))}))
+
+  (GET "/search-feedback" [] search-feedback)
+  (POST "/search-feedback" [] (fn [r]
+                                (try
+                                  (let [body (edn/read-string (util/response-body r))]
+                                    (mon/insert! :search-feedback
+                                      (assoc body :created-at (util/now)))
+                                    {:status 200
+                                     :body "Ok!"})
+                                  (catch Exception e
+                                    {:body (str "Whoops, something went wrong. " (.getMessage e))
+                                     :status 500}))))
+  (GET "/search-feedback/success"
+    [] (fn [r]
+         (common/$main
+           {:body-class "search-feedback-page"
+            :content
+            [:div.row
+             [:div.col-md-12
+              [:h3 "Thanks for your feedback"]
+              [:p "Perhaps you can find what you're looking for using our "
+               [:a {:href "/quickref"} "Clojure quick reference"]
+               "."]]]}))))
 
 
 
