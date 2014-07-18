@@ -67,6 +67,6 @@
                                  :preamble ["public/js/morpheus.min.js"
                                             "react/react.min.js"]
                                  :externs ["externs/syntaxhighlighter.js"
-                                           "react/externs/react.js"
+                                           "externs/react.js"
                                            "externs/morpheus.js"]}
                       :jar true}}})

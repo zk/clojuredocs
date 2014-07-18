@@ -1,5 +1,6 @@
 (ns clojuredocs.ajax
   (:require [goog.net.XhrIo]
+            [goog.net.EventType :as EventType]
             [clojure.string :as str]
             [cljs.reader :as reader]))
 
@@ -68,6 +69,18 @@
                body)]
     (assoc r :body body)))
 
+;; To get around https://code.google.com/p/closure-library/issues/detail?id=642
+(defn xhrio-send [url callback method content headers timeout-interval]
+  (let [x (goog.net.XhrIo.)]
+    (when callback
+      (.listen x EventType/COMPLETE callback))
+    (.listenOnce x EventType/READY (fn [] (.-dispose x)))
+    (when timeout-interval
+      (.setTimeoutInterval x timeout-interval))
+    (when with-creds
+      (.setWithCredentials x with-creds))
+    (.send x url method content headers)))
+
 (defn ajax [opts]
   (let [opts (merge ajax-defaults opts)
         opts (if-not (:headers opts)
@@ -89,7 +102,7 @@
                :else opts)
         {:keys [path method data headers success error data-type]} opts]
     (validate-ajax-args opts)
-    (goog.net.XhrIo/send
+    (xhrio-send
       path
       (fn [e]
         (try

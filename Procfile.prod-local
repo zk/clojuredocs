@@ -1,2 +1,4 @@
 web: lein run -m clojuredocs.main
 mongo: mongod
+
+cljs: lein cljsbuild auto dev-advanced

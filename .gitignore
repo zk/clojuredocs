@@ -12,6 +12,7 @@ pom.xml.asc
 .sass-cache
 
 /resources/public/cljs
+/resources/public/cljs-advanced
 
 resources/public/css/app.css
 resources/public/css/highlighting.css

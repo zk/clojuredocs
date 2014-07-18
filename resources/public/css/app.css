@@ -1029,3 +1029,23 @@ table.ac-results .ac-metadata {
   list-style-type: disc;
   margin-bottom: 0;
 }
+.search-feedback-page .radio {
+  margin-top: 0;
+}
+.search-feedback-page .radio label {
+  font-size: 14px;
+  line-height: 20px;
+  margin-bottom: 5px;
+}
+.search-feedback-page .loading {
+  margin-top: 9px;
+  margin-right: 10px;
+}
+.search-feedback-page .error-message {
+  line-height: 28px;
+  display: inline-block;
+  color: #555;
+}
+.search-feedback-page .error-message i {
+  margin-right: 5px;
+}
