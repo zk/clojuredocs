@@ -16,7 +16,6 @@
 
 * Release Checklist
 
-+ TODO foo bar
 + URL shortener
 + User accounts page
 + Landing search feedback
