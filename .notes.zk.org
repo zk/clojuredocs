@@ -15,31 +15,54 @@
 
 
 * Release Checklist
-** TODO User accounts page
-** TODO Landing search feedback
-*** TODO Move over from old db
-*** TODO Claiming old user accounts
-*** TODO Investigate bitbucket login
-** TODO Landing search feedback
-** TODO Quickref
-*** TODO Quickref update
-** TODO Supported libs blurb
-** TODO Namespaces
-*** TODO core-specific page
-** TODO Libs
-*** TODO library page
-*** TODO include in ns tree?
-** TODO User page
-** TODO Add example
-** TODO Search Widget
-*** TODO Better throttling
-** TODO Redirect old urls to new
-** TODO Switch to avatar url instead of email
-** TODO Clean data export for dev distribution
-** TODO Mobile comb-through
-** TODO cache-bust assets
-** TODO move example submission styleguide over
-** TODO move over comments
-** TODO UPDATE / REMOVE ROBOTS.TXT
-** DONE staging site header
-** TODO check db indexes
+
++ TODO foo bar
++ URL shortener
++ User accounts page
++ Landing search feedback
++ Move over from old db
++ Claiming old user accounts
++ Investigate bitbucket login
++ Landing search feedback
++ Quickref update
++ Supported libs blurb
++ Core-specific namespace page
++ Add libraries page
++ Add user page
++ Add example widget
++ Redirect old urls to new
++ Switch to avatar url instead of email
++ Clean data export for dev distribution
++ Mobile comb-through
++ move example submission styleguide over
++ move over comments
++ UPDATE / REMOVE ROBOTS.TXT
++ check db indexes
+
+
+** Done
+
++ Fingerprint & caching on assets
++ CLJS refactor
++ Better throttling for search widgets
++ Staging site header
++ Source link on var page
++ See alsos rendering
++ Fix footer on mobile
++ Update clojure tutorials
++ Encode clojure names for urls
++ Disable input until js loads
++ Example history page
++ Footer
++ GH / Twitter links in footer
++ Switch sass -> less
++ Quickref attribution
++ Consistent h3 styling on quickref page
++ Float quickref TOC
++ Quick lookup in top bar
++ Namespace sidebar on var page
++ Use ssl for external resources
++ Landing page search widget
++ Loading indicator on search widget
++ Add recently viewed vars to sidebar
++ Animate scroll-to links

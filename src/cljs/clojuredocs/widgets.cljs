@@ -493,11 +493,13 @@
   (reify
     om/IWillMount
     (will-mount [_]
-      (om/set-state! owner
-        :text (str
-                "Hey ClojureDocs, I searched for \""
-                (om/get-state owner :query)
-                "\", but couldn't find what I was looking for. Here's a description of what I would have liked to find:")))
+      (let [query (om/get-state owner :query)]
+        (om/set-state! owner
+          :text (when query
+                  (str
+                    "Hey ClojureDocs, I searched for \""
+                    query
+                    "\", but couldn't find what I was looking for. Here's a description of what I would have liked to find:")))))
     om/IRenderState
     (render-state [_ {:keys [text loading? clojure-level query error-message]}]
       (dom/form {:class "form" :on-submit #(submit-feedback owner query clojure-level text)}
