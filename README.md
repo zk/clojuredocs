@@ -4,6 +4,11 @@ The clojuredocs.org webapp
 
 ![](http://cl.ly/image/1C2o2d181716/Screen%20Shot%202014-07-12%20at%202.03.25%20AM.png)
 
+
+## Rewrite In Progress
+
+https://clojuredocs.herokuapp.com
+
 [Rewrite Release Checklist](https://github.com/zk/clojuredocs/blob/clj-rewrite/.notes.zk.org#release-checklist)
 
 
