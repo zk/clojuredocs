@@ -62,7 +62,6 @@
   (let [toc-groups (partition-all 2 quickref-data)]
     [:div.toc.clearfix
      [:h3 "Table of Contents"]
-     [:br]
      (for [tg toc-groups]
        [:div.col-sm-4.col-md-12
         (map $toc-sphere tg)])]))

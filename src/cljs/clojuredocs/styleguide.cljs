@@ -41,6 +41,13 @@ f should accept number-of-colls arguments."}
        {:target $el
         :init-state {:loading? true}}))
 
+   [:div.styleguide-add-example]
+   (fn [$el]
+     (om/root
+       widgets/add-example
+       {}
+       {:target $el :init-state {:expanded? true}}))
+
    [:div.add-comment-example]
    (fn [$el]
      (om/root

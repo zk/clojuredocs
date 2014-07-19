@@ -879,6 +879,7 @@ table.ac-results .ac-metadata {
 }
 .styleguide-page h2 {
   font-size: 20px;
+  font-weight: normal;
 }
 .styleguide-page .example {
   margin-bottom: 30px;
@@ -1037,7 +1038,6 @@ table.ac-results .ac-metadata {
   margin-bottom: 10px;
 }
 .add-comment .add-comment-form {
-  border: solid #eee 1px;
   padding: 20px;
 }
 .add-comment .instructions {
