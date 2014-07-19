@@ -1,6 +1,7 @@
 (ns clojuredocs.widgets
   (:require [om.core :as om :include-macros true]
             [om-tools.dom :as dom :include-macros true]
+            [dommy.core :as dommy]
             [cljs.core.async :as async
              :refer [<! >! chan close! sliding-buffer put! alts! timeout pipe mult tap]]
             [clojuredocs.ajax :refer [ajax]]
@@ -9,8 +10,7 @@
             [cljs.reader :as reader]
             [goog.crypt :as gcrypt]
             [goog.crypt.Md5 :as Md5]
-            [goog.crypt.Sha1 :as Sha1]
-            [dommy.core :as dommy])
+            [goog.crypt.Sha1 :as Sha1])
   (:require-macros [cljs.core.async.macros :refer [go]]
                    [dommy.macros :refer [node sel1]]))
 
@@ -64,32 +64,66 @@
 
 (defn add-example [app owner]
   (reify
+    om/IDidMount
+    (did-mount [_]
+      (dommy/append!
+        (om/get-node owner "live-preview")
+        (node [:div.empty-live-preview "Live Preview"])))
     om/IDidUpdate
     (did-update [this prev-props prev-state]
       (when (and (om/get-state owner :should-focus?)
                  (om/get-state owner :expanded?))
         (om/set-state! owner :should-focus? false)
-        (.focus (om/get-node owner "textarea"))))
+        (.focus (om/get-node owner "textarea"))
+        (anim/scroll-to (om/get-node owner "wrapper") {:pad 10}))
+      (let [text (om/get-state owner :text)
+            preview (om/get-node owner "live-preview")
+            el (node [:pre {:class "brush: clojure"} text])]
+        (dommy/clear! preview)
+        (if-not (empty? text)
+          (do
+            (dommy/append! preview el)
+            (try
+              (.highlight js/SyntaxHighlighter el)
+              ;; Not handling this error prevents subsequent
+              ;; highlights from succeeding
+              (catch js/Error e (prn "Error highlighting example"))))
+          (dommy/append! preview (node [:div.empty-live-preview "Live Preview"])))))
     om/IRenderState
     (render-state [this {:keys [expanded? text]}]
-      (dom/div {:class "add-example"}
+      (dom/div {:class "add-example" :ref "wrapper"}
         (dom/div {:class "toggle-controls"}
           (dom/a {:class "toggle-link"
                   :href ""
                   :on-click #(set-expanded owner (not expanded?))}
-            "Add an Example"))
-        (dom/form {:class (when-not expanded? "hidden") :on-submit #(validate-and-submit app owner)}
-          (dom/textarea {:class "form-control" :cols 80 :on-input #(update-text % owner)
-                         :ref "textarea"}
-            text)
-          (dom/div {:class "add-example-controls clearfix"}
-            (dom/button {:class "btn btn-default" :on-click #(set-expanded owner (not expanded?))}
-              "Cancel")
-            (dom/button {:class "btn btn-success pull-right"} "Add Example"))
+            (if-not expanded? "Add an Example" "Close")))
+        (dom/div {:class (str "add-example-content" (when-not expanded? " hidden"))}
+          (dom/h4 "Your Example")
           (dom/div {:class "add-example-preview"}
-            (dom/h4 "Live Preview")
-            (dom/pre #_{:class "brush: clojure"}
-              text)))))))
+            (dom/div {:ref "live-preview" :class "live-preview"}))
+          (dom/form {:on-submit #(validate-and-submit app owner)}
+            (dom/textarea {:class "form-control"
+                           :cols 80 :on-input #(update-text % owner)
+                           :ref "textarea"}
+              text)
+            (dom/p {:class "instructions"}
+              "See our "
+              (dom/a {:href "/examples-styleguide"} "examples style guide")
+              " for content and formatting guidelines. "
+              "Examples submitted to ClojureDocs are licensed under the "
+              (dom/a {:href "https://creativecommons.org/publicdomain/zero/1.0/"}
+                "Creative Commons CC0 license")
+              ".")
+            (dom/div {:class "add-example-controls clearfix"}
+              (dom/button {:class "btn btn-default"
+                           :on-click (fn [e]
+                                       (set-expanded owner (not expanded?))
+                                       (om/set-state! owner :text nil)
+                                       false)}
+                "Cancel")
+              (dom/button {:class "btn btn-success pull-right"} "Add Example")
+              (dom/img {:class (str "pull-right loading" (when-not loading? " hidden"))
+                        :src "/img/loading.gif"}))))))))
 
 ;; Examples
 
@@ -611,7 +645,8 @@
      (om/root
        add-example
        {}
-       {:target $el}))
+       {:target $el
+        :init-state {:expanded? true}}))
 
    [:div.add-see-also-widget]
    (fn [$el]

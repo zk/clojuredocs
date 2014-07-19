@@ -32,6 +32,9 @@
         start
         end)))
 
+(defn scroll-to-top []
+  (scroll-to (sel1 :body)))
+
 (defn scroll-into-view
   [elem & [opts]]
   (dom/scroll-into-view elem false)

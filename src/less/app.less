@@ -128,7 +128,7 @@ footer {
 
 header.navbar {
   border-radius: 0;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
 
   @media(max-width: 767px) {
     margin-bottom: 10px;
@@ -311,6 +311,37 @@ form.search {
       margin-left: 30px;
     }
   }
+
+  .syntaxhighlighter {
+    padding: 15px;
+    overflow: auto;
+    overflow-y: hidden;
+    font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+
+    font-size: 15px;
+    line-height: 1.3em;
+
+    @media (max-width: 1199px) {
+      font-size: 13.8px;
+    }
+
+
+    @media (max-width: 991px) {
+      font-size: 13px;
+    }
+
+    @media (max-width: 767px) {
+      font-size: 12px;
+    }
+
+    table {
+      margin: 0 auto;
+    }
+  }
+}
+
+.syntaxhighlighter {
+  padding: 10px;
 }
 
 .ac-result-link:hover {
@@ -730,33 +761,6 @@ table.ac-results {
   font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
 }
 
-.syntaxhighlighter {
-  padding: 15px;
-  overflow: auto;
-  overflow-y: hidden;
-  font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
-
-  font-size: 15px;
-  line-height: 1.3em;
-
-  @media (max-width: 1199px) {
-    font-size: 13.8px;
-  }
-
-
-  @media (max-width: 991px) {
-    font-size: 13px;
-  }
-
-  @media (max-width: 767px) {
-    font-size: 12px;
-  }
-
-  table {
-    margin: 0 auto;
-  }
-}
-
 .toc {
   margin-bottom: 20px;
 
@@ -896,6 +900,10 @@ table.ac-results {
 }
 
 .add-example {
+  form {
+    margin-bottom: 20px;
+  }
+
   textarea {
     font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
     margin-bottom: 10px;
@@ -905,6 +913,31 @@ table.ac-results {
 
   .add-example-controls {
     margin-bottom: 10px;
+  }
+
+  p.instructions {
+    margin-bottom: 10px;
+    font-size: 12px;
+    line-height: 20px;
+    color: #888;
+  }
+
+  .live-preview {
+    background-color: #fafafa;
+    margin-bottom: 10px;
+  }
+
+  .add-example-content {
+    padding: 30px;
+    background-color: #f8f8f8;
+  }
+
+  .empty-live-preview {
+    text-align: center;
+    color: #aaa;
+    font-size: 14px;
+    padding: 10px;
+
   }
 }
 
@@ -933,7 +966,7 @@ table.ac-results {
   }
 
   .example {
-    margin-bottom: 10px;
+    margin-bottom: 30px;
   }
 }
 
@@ -943,6 +976,7 @@ table.ac-results {
   font-size: 14px;
   background-color: #fafafa;
   margin-bottom: 10px;
+  overflow-x: scroll;
 
   pre.raw-example {
     background-color: #fafafa;
@@ -1182,5 +1216,60 @@ table.ac-results {
     i {
       margin-right: 5px;
     }
+  }
+}
+
+.examples-styleguide-content {
+  .syntaxhighlighter {
+    margin-bottom: 20px;
+    background-color: #fafafa;
+  }
+
+  h1, h2, h3, h4, h5 {
+    font-weight: normal;
+    margin-bottom: 20px;
+  }
+
+  h1 {
+    font-size: 30px;
+    padding-bottom: 5px;
+  }
+
+  h2 {
+    margin-top: 50px;
+    font-size: 25px;
+  }
+
+  ul {
+    margin-bottom: 30px;
+  }
+
+  li {
+    list-style-type: disc;
+    margin-left: 25px;
+  }
+
+  p {
+  }
+}
+
+.sidenav {
+  font-size: 14px;
+
+  h3 {
+    font-size: 14px;
+    font-weight: normal;
+  }
+
+  li {
+    margin-bottom: 0px;
+  }
+
+  li > ul {
+    margin-left: 10px;
+  }
+
+  .current {
+    font-weight: bold;
   }
 }
