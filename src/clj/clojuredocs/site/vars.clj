@@ -20,6 +20,9 @@
                                :ns ns
                                :library-url "https://github.com/clojure/clojure"}))
 
+(use 'clojure.pprint)
+(pprint (mon/fetch-one :examples))
+
 (defn see-alsos-for [{:keys [ns name]}]
   (->> (mon/fetch-one :see-alsos :where {:name name
                                          :ns ns

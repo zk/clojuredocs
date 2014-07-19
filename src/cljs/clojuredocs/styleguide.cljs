@@ -1,7 +1,8 @@
 (ns clojuredocs.styleguide
   (:require [clojuredocs.widgets :as widgets]
             [om.core :as om :include-macros true]
-            [om-tools.dom :as dom :include-macros true]))
+            [om-tools.dom :as dom :include-macros true]
+            [clojuredocs.examples :as examples]))
 
 (enable-console-print!)
 
@@ -44,7 +45,7 @@ f should accept number-of-colls arguments."}
    [:div.styleguide-add-example]
    (fn [$el]
      (om/root
-       widgets/add-example
+       examples/$add
        {}
        {:target $el :init-state {:expanded? true}}))
 
