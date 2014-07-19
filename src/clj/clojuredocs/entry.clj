@@ -82,7 +82,7 @@
   (var site.intro/routes)
   (var site.gh-auth/routes)
   (var site.user/routes)
-  (context "/api" [] api/routes)
+  (context "/api" [] api/_routes)
 
   (GET "/logout" [] (fn [r] (-> (redirect "/")
                                 (assoc :session nil))))

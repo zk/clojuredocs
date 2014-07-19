@@ -6,6 +6,8 @@
              :refer [<! >! chan close! sliding-buffer put! alts! timeout pipe mult tap]]
             [clojuredocs.ajax :refer [ajax]]
             [clojuredocs.anim :as anim]
+            [clojuredocs.examples :as examples]
+            [clojuredocs.pubsub :as pubsub]
             [clojure.string :as str]
             [cljs.reader :as reader]
             [goog.crypt :as gcrypt]
@@ -47,115 +49,7 @@
   (str "/" (url-encode ns) "/" (url-encode (cd-encode name))))
 
 
-;; Add an example
-
-(defn validate-and-submit [app owner]
-  (om/set-state! owner :expanded? false)
-  false)
-
-(defn set-expanded [owner expanded?]
-  (om/set-state! owner :expanded? expanded?)
-  (om/set-state! owner :should-focus? true)
-  false)
-
-(defn update-text [e owner]
-  (om/set-state! owner :text (.. e -target -value))
-  false)
-
-(defn add-example [app owner]
-  (reify
-    om/IDidMount
-    (did-mount [_]
-      (dommy/append!
-        (om/get-node owner "live-preview")
-        (node [:div.empty-live-preview "Live Preview"])))
-    om/IDidUpdate
-    (did-update [this prev-props prev-state]
-      (when (and (om/get-state owner :should-focus?)
-                 (om/get-state owner :expanded?))
-        (om/set-state! owner :should-focus? false)
-        (.focus (om/get-node owner "textarea"))
-        (anim/scroll-to (om/get-node owner "wrapper") {:pad 10}))
-      (let [text (om/get-state owner :text)
-            preview (om/get-node owner "live-preview")
-            el (node [:pre {:class "brush: clojure"} text])]
-        (dommy/clear! preview)
-        (if-not (empty? text)
-          (do
-            (dommy/append! preview el)
-            (try
-              (.highlight js/SyntaxHighlighter el)
-              ;; Not handling this error prevents subsequent
-              ;; highlights from succeeding
-              (catch js/Error e (prn "Error highlighting example"))))
-          (dommy/append! preview (node [:div.empty-live-preview "Live Preview"])))))
-    om/IRenderState
-    (render-state [this {:keys [expanded? text]}]
-      (dom/div {:class "add-example" :ref "wrapper"}
-        (dom/div {:class "toggle-controls"}
-          (dom/a {:class "toggle-link"
-                  :href ""
-                  :on-click #(set-expanded owner (not expanded?))}
-            (if-not expanded? "Add an Example" "Close")))
-        (dom/div {:class (str "add-example-content" (when-not expanded? " hidden"))}
-          (dom/h4 "Your Example")
-          (dom/div {:class "add-example-preview"}
-            (dom/div {:ref "live-preview" :class "live-preview"}))
-          (dom/form {:on-submit #(validate-and-submit app owner)}
-            (dom/textarea {:class "form-control"
-                           :cols 80 :on-input #(update-text % owner)
-                           :ref "textarea"}
-              text)
-            (dom/p {:class "instructions"}
-              "See our "
-              (dom/a {:href "/examples-styleguide"} "examples style guide")
-              " for content and formatting guidelines. "
-              "Examples submitted to ClojureDocs are licensed under the "
-              (dom/a {:href "https://creativecommons.org/publicdomain/zero/1.0/"}
-                "Creative Commons CC0 license")
-              ".")
-            (dom/div {:class "add-example-controls clearfix"}
-              (dom/button {:class "btn btn-default"
-                           :on-click (fn [e]
-                                       (set-expanded owner (not expanded?))
-                                       (om/set-state! owner :text nil)
-                                       false)}
-                "Cancel")
-              (dom/button {:class "btn btn-success pull-right"} "Add Example")
-              (dom/img {:class (str "pull-right loading" (when-not loading? " hidden"))
-                        :src "/img/loading.gif"}))))))))
-
 ;; Examples
-
-#_(defn $example [{:keys [body _id history created-at updated-at] :as ex}]
-  [:div.row
-   [:div.col-md-10
-    [:a {:id (str "example_" _id)}]
-    ($example-body ex)]
-   [:div.col-md-2
-    (let [users (->> history
-                     (map :user)
-                     distinct
-                     reverse)]
-      [:div.example-meta
-       [:div.contributors
-        (->> users
-             (take 10)
-             (map common/$avatar))]
-       (when (> (count users) 10)
-         [:div.contributors
-          (count users) " contributors total."])
-       #_[:div.created
-        "Created " (util/timeago created-at) " ago."]
-       #_(when-not (= created-at updated-at)
-         [:div.last-updated
-          "Updated " (util/timeago updated-at) " ago."])
-       [:div.links
-        [:a {:href (str "#example_" _id)}
-         "link"]
-        " / "
-        [:a {:href (str "/ex/" _id)}
-         "history"]]])]])
 
 (defn string->bytes [s]
   (gcrypt/stringToUtf8ByteArray s))  ;; must be utf8 byte array
@@ -612,6 +506,8 @@
 (def app-state
   (atom (reader/read-string (aget js/window "PAGE_DATA"))))
 
+(def app-bus (pubsub/mk-bus))
+
 (def text-chan (chan))
 
 (wire-search text-chan app-state)
@@ -643,7 +539,7 @@
    [:div.add-example-widget]
    (fn [$el]
      (om/root
-       add-example
+       examples/$add
        {}
        {:target $el
         :init-state {:expanded? true}}))
