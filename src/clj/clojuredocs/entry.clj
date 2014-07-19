@@ -74,7 +74,7 @@
 (defn lookup-var [ns name]
   (mon/fetch-one :vars :where {:name name :ns ns}))
 
-(defn find-var [ns name]
+(defn lookup-var-expand [ns name]
   (or (lookup-var ns name)
       (lookup-var (expand-ns ns) name)))
 
@@ -88,10 +88,19 @@
                                 (assoc :session nil))))
   (GET "/quickref" [] quickref/index)
   (GET "/styleguide" [] styleguide/index)
+  (GET "/examples-styleguide" []
+    (fn [r]
+      (common/$main
+        {:body-class "examples-styleguide-page"
+         :content
+         [:div.row
+          [:div.col-md-12.examples-styleguide-content
+           (-> "src/md/examples-styleguide.md"
+               slurp
+               util/markdown)]]})))
   (GET "/ex/:id" [id] (site.vars/example-page id))
 
-
-  ;; Redirect old urls
+    ;; Redirect old urls
   (var old-url-redirects)
 
   (GET "/:ns/:name" [ns name] (site.vars/var-page ns name))
@@ -99,7 +108,7 @@
 
   (GET "/:ns/:name" [ns name]
     (fn [r]
-      (let [{:keys [ns name]} (find-var ns name)]
+      (let [{:keys [ns name]} (lookup-var-expand ns name)]
         {:status 307
          :headers {"Location" (str "/" ns "/" (util/cd-encode name))}})))
 

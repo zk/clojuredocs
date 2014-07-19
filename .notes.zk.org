@@ -17,7 +17,6 @@
 * Release Checklist
 
 + URL shortener howto
-+ Landing search feedback
 + Move over from old db
 + Claiming old user accounts
 + Investigate bitbucket login
@@ -31,14 +30,15 @@
 + Switch to avatar url instead of email
 + Clean data export for dev distribution
 + Mobile comb-through
-+ move example submission styleguide over
-+ move over comments
++ Move over comments
 + UPDATE / REMOVE ROBOTS.TXT
-+ check db indexes
++ Check db indexes
 
 
 ** Done
 
++ Move example submission styleguide over
++ Landing search feedback
 + Expand and redirect shortened namespaces
 + Handle abbreviated namespaces `c.c` -> `clojure.core`
 + Landing search feedback

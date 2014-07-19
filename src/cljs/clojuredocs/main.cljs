@@ -82,15 +82,21 @@
 (apply init styleguide/init)
 
 (defn animated-scroll-init [$el]
-  (let [$target (-> $el
-                    (dom/attr :href)
-                    sel1)
+  (let [href (dom/attr $el :href)
+        $target (if (= "#" href)
+                  (sel1 :body)
+                  (-> $el
+                      (dom/attr :href)
+                      sel1))
         buffer (-> $el
                    (dom/attr :data-animate-buffer))
         buffer (if (and buffer (string? buffer))
                  (js/parseInt buffer)
                  10)]
-    (dom/listen! $el :click #(anim/scroll-to $target {:pad buffer}))))
+    (dom/listen! $el :click
+      (fn [e]
+        (anim/scroll-to $target {:pad buffer})
+        (.preventDefault e)))))
 
 (init
   "[data-sticky-offset]" sticky/init
