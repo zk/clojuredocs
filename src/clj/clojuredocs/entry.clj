@@ -27,7 +27,8 @@
             [clojuredocs.site.styleguide :as styleguide]
             [clojure.pprint :refer (pprint)]
             [clojuredocs.api :as api]
-            [somnium.congomongo :as mon]))
+            [somnium.congomongo :as mon]
+            [clojure.edn :as edn]))
 
 (defn hiccup->html-string [body]
   (if-not (vector? body)
@@ -139,9 +140,20 @@
         (update-in res [:headers] merge {"Cache-Control" "public, max-age=31536000"})
         res))))
 
+(defn decode-edn-body [h]
+  (fn [r]
+    (if (= "application/edn" (get-in r [:headers "content-type"]))
+      (try
+        (h (assoc r :edn-body (-> r util/response-body edn/read-string)))
+        (catch Exception e
+          {:status 400
+           :body "Malformed edn"}))
+      (h r))))
+
 (def routes
   (-> _routes
       promote-session-user
+      decode-edn-body
       wrap-keyword-params
       wrap-nested-params
       wrap-params
