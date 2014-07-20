@@ -96,7 +96,7 @@
 
 (defn $examples [examples ns name]
   [:div.var-examples
-   [:h3 (util/pluralize (count examples) "Example" "Examples")]
+   [:h6 (util/pluralize (count examples) "Example" "Examples")]
    (if (empty? examples)
      [:div.null-state
       "No examples for " ns "/" name ", "
@@ -121,7 +121,7 @@
 
 (defn $comments [comments name]
   [:div.var-comments
-   [:h3 (util/pluralize (count comments) "Comment" "Comments")]
+   [:h6 (util/pluralize (count comments) "Comment" "Comments")]
    [:div
     (if (empty? comments)
       [:div.null-state "No comments for " [:code name]]
@@ -164,7 +164,7 @@
                             [:h1.var-name name]]
                            [:div.col-sm-4
                             [:div.var-meta
-                             [:h2 [:a {:href (str "/" ns)} ns]]
+                             [:h4 [:a {:href (str "/" ns)} ns]]
                              (if added
                                [:span "Available since " added]
                                [:span "Available in 1.6"])
@@ -194,7 +194,7 @@
                             ($examples examples ns name)]
                            [:div.add-example-widget]]
                           [:section
-                           [:h3 "See Also"]
+                           [:h6 "See Also"]
                            (if (empty? see-alsos)
                              [:div.null-state
                               "No see-alsos for " [:code name]]

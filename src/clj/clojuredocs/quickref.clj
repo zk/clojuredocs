@@ -16,8 +16,8 @@
 (defn $group [{:keys [title syms]}]
   [:div.group
    [:div.quickref-header.clearfix
-    [:h5 title]
-    [:h5.header-reference "Simple Values > Numbers"]]
+    [:h4 title]
+    [:h4.header-reference "Simple Values > Numbers"]]
    [:dl.dl-horizontal
     (mapcat #(vector
                [:div.dl-row
@@ -34,14 +34,14 @@
 (defn $category [{:keys [title groups]}]
   [:div.category
    [:div.category-header.clearfix
-    [:h4 {:id (title->id title)} title]
-    [:h4.header-reference "Simple Values"]]
+    [:h3 {:id (title->id title)} title]
+    [:h3.header-reference "Simple Values"]]
    (map $group groups)])
 
 (defn $sphere [{:keys [title categories]}]
   [:div.sphere
    [:div.sphere-header
-    [:h3 {:id (title->id title)} title]]
+    [:h2 {:id (title->id title)} title]]
    (map $category categories)])
 
 (defn $toc-category [{:keys [title]}]
@@ -52,7 +52,7 @@
 
 (defn $toc-sphere [{:keys [title categories]}]
   [:div.toc-sphere
-   [:h3 [:a {:href (str "#" (title->id title))
+   [:h6 [:a {:href (str "#" (title->id title))
              :data-animate-scroll "true"
              :data-animate-buffer "10"} title]]
    [:ul
@@ -61,7 +61,7 @@
 (defn $toc [quickref-data]
   (let [toc-groups (partition-all 2 quickref-data)]
     [:div.toc.clearfix
-     [:h3 "Table of Contents"]
+     [:h6 "Table of Contents"]
      (for [tg toc-groups]
        [:div.col-sm-4.col-md-12
         (map $toc-sphere tg)])]))

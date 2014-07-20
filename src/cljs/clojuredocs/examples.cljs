@@ -46,7 +46,7 @@
 
 (defn $editor [owner {:keys [expanded? text ns name loading? error-message] :as state}]
   (dom/div {:class (str "add-example-content" (when-not expanded? " hidden"))}
-    (dom/h3 "New Example")
+    (dom/h6 "New Example")
     (dom/div {:class "add-example-preview"}
       (dom/div {:ref "live-preview" :class "live-preview"}))
     (dom/form {:on-submit #(validate-and-submit app owner

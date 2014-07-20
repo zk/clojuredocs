@@ -15,11 +15,11 @@
 
 (defn $nav [sections]
   [:ul.sidenav {:data-sticky-offset "20"}
-   [:li [:h3 [:a {:href "#"
+   [:li [:h5 [:a {:href "#"
                   :data-animate-scroll "true"} "Top"]]]
    (for [{:keys [nav-target title]} sections]
      [:li
-      [:h3
+      [:h5
        [:a {:href (str "#" nav-target)
             :data-animate-scroll "true"
             :data-animate-buffer "20"} title]]])])
@@ -29,25 +29,48 @@
     :nav-target "bootstrap-overrides"
     :content
     [[:p
-       "ClojureDocs is built on the amazing "
-       [:a {:href "https://getbootstrap.com"} "Bootstrap framework"]
-       ". In this section, you'll find the ways we've overridden the Bootstrap defaults. "
-      [:em "Bstro, help. We still have all the default bootstrap colors here, we need a color palette, stat."]]
-     [:div.buttons-ex
-      [:h4 "Buttons"]
+      "ClojureDocs is built on, among other things, the amazing "
+      [:a {:href "https://getbootstrap.com"} "Bootstrap framework"]
+      ". In this section, you'll find the ways we've overridden the Bootstrap defaults."]
+     [:section.headers-ex
+      [:h3 "Headers"]
+      [:h1 "h1. Heading 1 " [:small "With small"]]
+      [:h2 "h2. Heading 2 " [:small "With small"]]
+      [:h3 "h3. Heading 3 " [:small "With small"]]
+      [:h4 "h4. Heading 4 " [:small "With small"]]
+      [:h5 "h5. Heading 5 " [:small "With small"]]
+      [:h6 "h6. Heading 6 " [:small "With small"]]]
+     [:section.buttons-ex
+      [:p [:em "Bstro, help, we still have all the default bootstrap colors here. We need a color palette, stat."]]
+      [:h3 "Buttons"]
       [:button.btn.btn-default "Default"]
       [:button.btn.btn-primary "Primary"]
       [:button.btn.btn-success "Success"]
       [:button.btn.btn-info "Info"]
       [:button.btn.btn-warning "Warning"]
       [:button.btn.btn-danger "Danger"]]
-     [:div.contextual-bgs
-      [:h4 "Contextual Backgrounds"]
+     [:section.contextual-bgs
+      [:h3 "Contextual Backgrounds"]
       [:div.bg-primary "Primary"]
       [:div.bg-success "Success"]
       [:div.bg-info "Info"]
       [:div.bg-warning "Warning"]
-      [:div.bg-danger "Danger"]]]}
+      [:div.bg-danger "Danger"]]
+     [:section.forms-ex
+      [:h3 "Forms"]
+      [:form {:role "form"}
+       [:div.form-group
+        [:label {:for "email"} "Email"]
+        [:input.form-control {:type "email" :id "email" :placeholder "Enter email"}]]
+       [:div.form-group
+        [:label {:for "password"} "Password"]
+        [:input.form-control {:type "password" :id "password" :placeholder "Password"}]]
+       [:div.form-group
+        [:div.checkbox
+         [:label
+          [:input {:type "checkbox"}]
+          "Check me out"]]]
+       [:button.btn.btn-default {:type "submit"} "Submit"]]]]}
    {:title "Common Elements"
     :nav-target "common-elements"
     :content
