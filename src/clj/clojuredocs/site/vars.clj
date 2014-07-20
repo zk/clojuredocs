@@ -96,7 +96,7 @@
 
 (defn $examples [examples ns name]
   [:div.var-examples
-   [:h6 (util/pluralize (count examples) "Example" "Examples")]
+   [:h5 (util/pluralize (count examples) "Example" "Examples")]
    (if (empty? examples)
      [:div.null-state
       "No examples for " ns "/" name ", "
@@ -121,7 +121,7 @@
 
 (defn $comments [comments name]
   [:div.var-comments
-   [:h6 (util/pluralize (count comments) "Comment" "Comments")]
+   [:h5 (util/pluralize (count comments) "Comment" "Comments")]
    [:div
     (if (empty? comments)
       [:div.null-state "No comments for " [:code name]]
@@ -155,7 +155,7 @@
               :user user
               :content [:div
                         [:div.row
-                         [:div.col-sm-2
+                         [:div.col-sm-2.sidenav
                           (common/$recent recent)
                           (common/$library-nav library ns)]
                          [:div.col-sm-10
@@ -194,7 +194,7 @@
                             ($examples examples ns name)]
                            [:div.add-example-widget]]
                           [:section
-                           [:h6 "See Also"]
+                           [:h5 "See Also"]
                            (if (empty? see-alsos)
                              [:div.null-state
                               "No see-alsos for " [:code name]]

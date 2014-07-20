@@ -52,7 +52,7 @@
 
 (defn $toc-sphere [{:keys [title categories]}]
   [:div.toc-sphere
-   [:h6 [:a {:href (str "#" (title->id title))
+   [:h5 [:a {:href (str "#" (title->id title))
              :data-animate-scroll "true"
              :data-animate-buffer "10"} title]]
    [:ul
@@ -61,7 +61,7 @@
 (defn $toc [quickref-data]
   (let [toc-groups (partition-all 2 quickref-data)]
     [:div.toc.clearfix
-     [:h6 "Table of Contents"]
+     [:h5 "Table of Contents"]
      (for [tg toc-groups]
        [:div.col-sm-4.col-md-12
         (map $toc-sphere tg)])]))
@@ -73,7 +73,7 @@
      :content
      [:div
       [:div.row
-       [:div.col-md-3.sidebar
+       [:div.col-md-3.sidenav
         [:div.page-toc
          {:data-sticky-offset "10"}
          ($toc quickref-data)]]

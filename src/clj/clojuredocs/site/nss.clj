@@ -47,7 +47,7 @@
            :user user
            :content [:div
                      [:div.row
-                      [:div.col-sm-2
+                      [:div.col-sm-2.sidenav
                        (common/$recent (-> r :session :recent))
                        (common/$library-nav lib)]
                       [:div.col-sm-10
