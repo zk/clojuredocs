@@ -163,14 +163,17 @@ h1 {
   line-height: 36px;
   margin-bottom: 20px;
 }
+h1:first-of-type {
+  margin-top: 0;
+}
 h2 {
-  font-size: 28px;
+  font-size: 24px;
   font-weight: normal;
   line-height: 34px;
   margin-bottom: 20px;
 }
 h3 {
-  font-size: 24px;
+  font-size: 20px;
   line-height: 32px;
   margin-bottom: 15px;
 }
@@ -179,15 +182,13 @@ h3 {
     font-size: 20px;
   }
 }
-h6 {
+h5 {
   font-size: 15px;
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 1px;
   color: #777;
-}
-h4 {
-  font-weight: 400;
+  margin-bottom: 15px;
 }
 p {
   font-size: 16px;
@@ -205,7 +206,7 @@ ul {
   padding: 0;
 }
 section {
-  margin-bottom: 2em;
+  margin-bottom: 20px;
 }
 html,
 body {
@@ -731,22 +732,22 @@ table.ac-results .ac-metadata {
 .toc {
   margin-bottom: 20px;
 }
-.toc h6 {
+.toc h5 {
   margin: 0;
   margin-bottom: 10px;
 }
 .toc ul {
   margin-bottom: 5px;
 }
-.toc .toc-sphere h6 {
+.toc .toc-sphere h5 {
   font-size: 12px;
   margin-right: 0;
-  margin-bottom: 3px;
+  margin-bottom: 5px;
   margin-top: 0;
 }
 .toc .toc-sphere ul {
   padding: 0;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 .toc .toc-sphere li {
   margin-left: 10px;
@@ -770,6 +771,12 @@ table.ac-results .ac-metadata {
 .sphere h3,
 .sphere h4 {
   display: inline-block;
+  margin: 0;
+  margin-bottom: 10px;
+}
+.sphere h4 {
+  font-size: 14px;
+  font-weight: 500;
 }
 .sphere .sphere-header {
   border-bottom: solid orange 3px;
@@ -778,6 +785,9 @@ table.ac-results .ac-metadata {
 .sphere .category-header {
   border-bottom: solid #ccc 2px;
   margin-bottom: 10px;
+}
+.sphere .category {
+  margin-bottom: 40px;
 }
 .sphere .header-reference {
   color: #bbb;
@@ -1059,6 +1069,9 @@ table.ac-results .ac-metadata {
   margin-left: 25px;
 }
 .sidenav {
+  font-size: 14px;
+}
+.sidenav h5 {
   font-size: 14px;
 }
 .sidenav li {

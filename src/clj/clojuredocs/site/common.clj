@@ -182,7 +182,7 @@
 (defn $library-nav [{:keys [name namespaces]} & [current-ns]]
   (when-not (empty? namespaces)
     [:div.library-nav
-     [:h6 "Namespaces"]
+     [:h5 "Namespaces"]
      ($namespaces namespaces current-ns)]))
 
 (defn ellipsis [s n]
@@ -197,7 +197,7 @@
 (defn $recent [recent]
   (when-not (empty? recent)
     [:div.recent-pages
-     [:h6 "Recent"]
+     [:h5 "Recent"]
      [:ul
       (for [{:keys [text href]} recent]
         [:li [:a {:href href} (ellipsis text 10)]])]]))

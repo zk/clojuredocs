@@ -44,15 +44,19 @@ h1 {
   margin-bottom: 20px;
 }
 
+h1:first-of-type {
+  margin-top: 0;
+}
+
 h2 {
-  font-size: 28px;
+  font-size: 24px;
   font-weight: normal;
   line-height: 34px;
   margin-bottom: 20px;
 }
 
 h3 {
-  font-size: 24px;
+  font-size: 20px;
   line-height: 32px;
   margin-bottom: 15px;
 }
@@ -63,26 +67,13 @@ h3 {
   }
 }
 
-
-// h3 {
-//   font-size: 24px;
-//   font-weight: normal;
-//   line-height: 1.5em;
-//   margin-top: 0;
-//   margin-bottom: 0.5em;
-//   //font-family: 'Open Sans', sans-serif;
-// }
-
-h6 {
+h5 {
   font-size: 15px;
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 1px;
   color: #777;
-}
-
-h4 {
-  font-weight: 400;
+  margin-bottom: 15px;
 }
 
 p {
@@ -105,7 +96,7 @@ ul {
 }
 
 section {
-  margin-bottom: 2em;
+  margin-bottom: 20px;
 }
 
 html, body {
@@ -770,7 +761,7 @@ table.ac-results {
 .toc {
   margin-bottom: 20px;
 
-  h6 {
+  h5 {
     margin: 0;
     margin-bottom: 10px;
   }
@@ -783,16 +774,16 @@ table.ac-results {
   }
 
   .toc-sphere {
-    h6 {
+    h5 {
       font-size: 12px;
       margin-right: 0;
-      margin-bottom: 3px;
+      margin-bottom: 5px;
       margin-top: 0;
     }
 
     ul {
       padding: 0;
-      margin-bottom: 10px;
+      margin-bottom: 15px;
     }
 
     li {
@@ -820,6 +811,13 @@ table.ac-results {
 .sphere {
   h2, h3, h4 {
     display: inline-block;
+    margin: 0;
+    margin-bottom: 10px;
+  }
+
+  h4 {
+    font-size: 14px;
+    font-weight: 500;
   }
 
   .sphere-header {
@@ -830,6 +828,10 @@ table.ac-results {
   .category-header {
     border-bottom: solid #ccc 2px;
     margin-bottom: 10px;
+  }
+
+  .category {
+    margin-bottom: 40px;
   }
 
   .header-reference {
@@ -1209,6 +1211,10 @@ table.ac-results {
 
 .sidenav {
   font-size: 14px;
+
+  h5 {
+    font-size: 14px;
+  }
 
   li {
     margin-bottom: 0px;
