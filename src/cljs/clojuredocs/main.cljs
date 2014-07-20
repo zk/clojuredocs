@@ -12,6 +12,10 @@
 
 (enable-console-print!)
 
+(aset (aget js/SyntaxHighlighter "defaults") "toolbar" false)
+(aset (aget js/SyntaxHighlighter "defaults") "gutter" false)
+(.all js/SyntaxHighlighter)
+
 (defn log [& args]
   (.log js/console args))
 
@@ -101,10 +105,6 @@
 (init
   "[data-sticky-offset]" sticky/init
   "[data-animate-scroll]" animated-scroll-init)
-
-(aset (aget js/SyntaxHighlighter "defaults") "toolbar" false)
-(aset (aget js/SyntaxHighlighter "defaults") "gutter" false)
-(.all js/SyntaxHighlighter)
 
 (dom/listen! (sel1 :body) :keydown
   (fn [e]

@@ -49,6 +49,26 @@ f should accept number-of-colls arguments."}
        {}
        {:target $el :init-state {:expanded? true}}))
 
+   [:div.styleguide-add-example-loading]
+   (fn [$el]
+     (om/root
+       examples/$add
+       {}
+       {:target $el
+        :init-state {:expanded? true
+                     :loading? true
+                     :text "(defn greet [name]\n  (println \"Hello\" name))"}}))
+
+   [:div.styleguide-add-example-errors]
+   (fn [$el]
+     (om/root
+       examples/$add
+       {}
+       {:target $el
+        :init-state {:expanded? true
+                     :error-message "This is where error messages that apply to the whole form go. And here's some other text to show what happens with a very long error message."
+                     :text "(defn greet [name]\n  (println \"Hello\" name))"}}))
+
    [:div.add-comment-example]
    (fn [$el]
      (om/root
