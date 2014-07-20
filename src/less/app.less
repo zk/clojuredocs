@@ -126,6 +126,28 @@ footer {
   height: 48px;
 }
 
+
+/* forms */
+
+.form-group {
+  .loading {
+    margin-top: 9px;
+    margin-right: 10px;
+  }
+
+  .error-message {
+    margin-top: 5px;
+    margin-right: 10px;
+    padding: 10px;
+
+    i {
+      margin-right: 8px;
+    }
+  }
+}
+
+
+
 header.navbar {
   border-radius: 0;
   margin-bottom: 20px;
@@ -969,17 +991,36 @@ table.ac-results {
 }
 
 .styleguide-page {
-
   h1 {
   }
 
   h2 {
-    font-size: 20px;
+    font-size: 24px;
     font-weight: normal;
+    border-bottom: solid #555 1px;
+    padding-bottom: 5px;
+    margin-top: 50px;
+    margin-bottom: 20px;
   }
 
   .example {
     margin-bottom: 30px;
+  }
+
+  .buttons-ex {
+    margin-bottom: 20px;
+
+    button {
+      margin-right: 10px;
+    }
+  }
+
+  .contextual-bgs {
+    & > div {
+      display: inline-block;
+      padding: 10px 20px;
+      margin-right: 10px;
+    }
   }
 }
 

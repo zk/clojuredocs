@@ -7,7 +7,6 @@
             [clojuredocs.ajax :refer [ajax]]
             [clojuredocs.anim :as anim]
             [clojuredocs.examples :as examples]
-            [clojuredocs.pubsub :as pubsub]
             [clojure.string :as str]
             [cljs.reader :as reader]
             [goog.crypt :as gcrypt]
@@ -490,7 +489,6 @@
   (go
     (while true
       (let [ac-text (<! text-chan)
-            _ (swap! app-state assoc :loading? true)
             ac-response (<! (ajax-chan {:method :get
                                         :path (str "/search?query=" (url-encode ac-text))
                                         :data-type :edn}))
@@ -505,8 +503,6 @@
 
 (def app-state
   (atom (reader/read-string (aget js/window "PAGE_DATA"))))
-
-(def app-bus (pubsub/mk-bus))
 
 (def text-chan (chan))
 
@@ -537,12 +533,7 @@
        {:target $el}))
 
    [:div.add-example-widget]
-   (fn [$el]
-     (om/root
-       examples/$add
-       {}
-       {:target $el
-        :init-state {:expanded? true}}))
+   examples/add-example-widget
 
    [:div.add-see-also-widget]
    (fn [$el]

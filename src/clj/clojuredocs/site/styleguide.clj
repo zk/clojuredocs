@@ -3,7 +3,6 @@
             [clojuredocs.site.vars :as vars-page]
             [clojuredocs.quickref :as quickref]))
 
-
 (defn section [title & body]
   [:secton
    [:h2 title]
@@ -26,7 +25,30 @@
             :data-animate-buffer "20"} title]]])])
 
 (def sections
-  [{:title "Common Elements"
+  [{:title "Bootstrap Overrides"
+    :nav-target "bootstrap-overrides"
+    :content
+    [[:p
+       "ClojureDocs is built on the amazing "
+       [:a {:href "https://getbootstrap.com"} "Bootstrap framework"]
+       ". In this section, you'll find the ways we've overridden the Bootstrap defaults. "
+      [:em "Bstro, help. We still have all the default bootstrap colors here, we need a color palette, stat."]]
+     [:div.buttons-ex
+      [:h4 "Buttons"]
+      [:button.btn.btn-default "Default"]
+      [:button.btn.btn-primary "Primary"]
+      [:button.btn.btn-success "Success"]
+      [:button.btn.btn-info "Info"]
+      [:button.btn.btn-warning "Warning"]
+      [:button.btn.btn-danger "Danger"]]
+     [:div.contextual-bgs
+      [:h4 "Contextual Backgrounds"]
+      [:div.bg-primary "Primary"]
+      [:div.bg-success "Success"]
+      [:div.bg-info "Info"]
+      [:div.bg-warning "Warning"]
+      [:div.bg-danger "Danger"]]]}
+   {:title "Common Elements"
     :nav-target "common-elements"
     :content
     [[:p "Namespace nav tree, nests namespaces to save on horizontal space. Namespaces are linked, non-namespace bridge parts (e.g. "
@@ -107,7 +129,11 @@ user=> (into {} *1)
                                        {:user {:email "zachary.kim@gmail.com"}}]}]
         "clojure.core" "map")]
      [:p "Adding an example:"]
-     [:div.example.checker-bg.styleguide-add-example]]}
+     [:div.example.checker-bg.styleguide-add-example]
+     [:p "Loading:"]
+     [:div.example.checker-bg.styleguide-add-example-loading]
+     [:p "With general error:"]
+     [:div.example.checker-bg.styleguide-add-example-errors]]}
 
    (let [sphere '{:title "Simple Values",
                   :categories

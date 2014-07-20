@@ -225,6 +225,19 @@ footer .ctas iframe {
   width: 48px;
   height: 48px;
 }
+/* forms */
+.form-group .loading {
+  margin-top: 9px;
+  margin-right: 10px;
+}
+.form-group .error-message {
+  margin-top: 5px;
+  margin-right: 10px;
+  padding: 10px;
+}
+.form-group .error-message i {
+  margin-right: 8px;
+}
 header.navbar {
   border-radius: 0;
   margin-bottom: 20px;
@@ -885,11 +898,26 @@ table.ac-results .ac-metadata {
   padding: 20px;
 }
 .styleguide-page h2 {
-  font-size: 20px;
+  font-size: 24px;
   font-weight: normal;
+  border-bottom: solid #555 1px;
+  padding-bottom: 5px;
+  margin-top: 50px;
+  margin-bottom: 20px;
 }
 .styleguide-page .example {
   margin-bottom: 30px;
+}
+.styleguide-page .buttons-ex {
+  margin-bottom: 20px;
+}
+.styleguide-page .buttons-ex button {
+  margin-right: 10px;
+}
+.styleguide-page .contextual-bgs > div {
+  display: inline-block;
+  padding: 10px 20px;
+  margin-right: 10px;
 }
 .example-body {
   white-space: pre;
