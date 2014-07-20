@@ -33,7 +33,7 @@
   false)
 
 (defn cancel-clicked [e owner]
-  (set-expanded owner (not expanded?))
+  (set-expanded owner (not (om/get-state owner :expanded?)))
   (om/set-state! owner :text nil)
   false)
 
@@ -46,7 +46,7 @@
 
 (defn $editor [owner {:keys [expanded? text ns name loading? error-message] :as state}]
   (dom/div {:class (str "add-example-content" (when-not expanded? " hidden"))}
-    (dom/h6 "New Example")
+    (dom/h5 "New Example")
     (dom/div {:class "add-example-preview"}
       (dom/div {:ref "live-preview" :class "live-preview"}))
     (dom/form {:on-submit #(validate-and-submit app owner

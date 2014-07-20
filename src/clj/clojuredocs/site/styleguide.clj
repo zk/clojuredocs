@@ -14,15 +14,17 @@
    (vec (concat [:div.section-content] content))])
 
 (defn $nav [sections]
-  [:ul.sidenav {:data-sticky-offset "20"}
-   [:li [:h5 [:a {:href "#"
-                  :data-animate-scroll "true"} "Top"]]]
-   (for [{:keys [nav-target title]} sections]
-     [:li
-      [:h5
-       [:a {:href (str "#" nav-target)
-            :data-animate-scroll "true"
-            :data-animate-buffer "20"} title]]])])
+  [:div {:data-sticky-offset "20"}
+   [:h5 "Sections"]
+   [:ul.sidenav
+    [:li [:h6 [:a {:href "#"
+                   :data-animate-scroll "true"} "Top"]]]
+    (for [{:keys [nav-target title]} sections]
+      [:li
+       [:h6
+        [:a {:href (str "#" nav-target)
+             :data-animate-scroll "true"
+             :data-animate-buffer "20"} title]]])]])
 
 (def sections
   [{:title "Bootstrap Overrides"
@@ -41,7 +43,6 @@
       [:h5 "h5. Heading 5 " [:small "With small"]]
       [:h6 "h6. Heading 6 " [:small "With small"]]]
      [:section.buttons-ex
-      [:p [:em "Bstro, help, we still have all the default bootstrap colors here. We need a color palette, stat."]]
       [:h3 "Buttons"]
       [:button.btn.btn-default "Default"]
       [:button.btn.btn-primary "Primary"]
