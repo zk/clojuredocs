@@ -13,12 +13,16 @@
               :action   "tries"
               :object   "a new conditioner"}])
 
+;; Define a function
+(defn people-in-scenes [scenes]
+  (->> scenes
+       (map :subject)
+       (interpose ", ")
+       (reduce str)))
+
 
 ;; Who's in our scenes?
 
-(println "People:" (->> scenes
-                        (map :subject)
-                        (interpose ", ")
-                        (reduce str)))
+(println "People:" (people-in-scenes scenes))
 
 ;;=> People: Frankie, Lucy, Rich

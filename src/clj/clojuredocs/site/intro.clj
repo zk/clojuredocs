@@ -69,7 +69,7 @@ solving problems (holy buzzwords, fix this)."]
               :url "https://twitter.com"}
              {:src "https://upload.wikimedia.org/wikipedia/en/2/22/The_Climate_Corporation_Logo2.jpg"
               :url "http://www.climate.com/"}
-             {:src "https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Netflix_logo.svg/200px-Netflix_logo.svg.png"
+             {:src "/img/netflix-logo.png"
               :url "https://www.netflix.com"}
              {:src "/img/factual-logo.png"
               :url "http://www.factual.com"}
