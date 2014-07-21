@@ -669,7 +669,7 @@ table.ac-results .ac-metadata {
   opacity: 1;
 }
 .comment-meta {
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 }
 .var-example {
   margin-bottom: 30px;
@@ -867,6 +867,13 @@ table.ac-results .ac-metadata {
   background-position: 0 0, 20px 20px;
   padding: 20px;
 }
+.styleguide-page .styleguide-section {
+  margin-bottom: 50px;
+}
+.styleguide-page .styleguide-section > h2 {
+  border-bottom: solid #ddd 1px;
+  padding-bottom: 5px;
+}
 .styleguide-page .example {
   margin-bottom: 30px;
 }
@@ -884,7 +891,8 @@ table.ac-results .ac-metadata {
 .styleguide-page .headers-ex h4,
 .styleguide-page .headers-ex h5,
 .styleguide-page .headers-ex h6 {
-  line-height: 35px;
+  line-height: 50px;
+  margin: 0;
 }
 .example-body {
   white-space: pre;
