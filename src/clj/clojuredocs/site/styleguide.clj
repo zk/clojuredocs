@@ -9,7 +9,7 @@
    body])
 
 (defn $section [{:keys [title nav-target content]}]
-  [:section {:id nav-target}
+  [:section.styleguide-section {:id nav-target}
    [:h2 title]
    (vec (concat [:div.section-content] content))])
 
