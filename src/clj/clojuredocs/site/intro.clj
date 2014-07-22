@@ -1,5 +1,6 @@
 (ns clojuredocs.site.intro
-  (:require [compojure.core :refer (defroutes GET POST)]
+  (:require [clojuredocs.config :as config]
+            [compojure.core :refer (defroutes GET POST)]
             [somnium.congomongo :as mon]
             [fogus.unk :refer (memo-ttl)]
             [clojuredocs.search :as search]
@@ -117,7 +118,9 @@ solving problems (holy buzzwords, fix this)."]
          (take (* 24 3))
          (map #(assoc (first %) :score (second %))))))
 
-#_(def top-contribs (memo-ttl top-contribs (* 1000 60 60 6)))
+;; :|
+(when-not config/cljs-dev?
+  (def top-contribs (memo-ttl top-contribs (* 1000 60 60 6))))
 
 (defn add-see-alsos [results]
   (let [sa-lookup (->> results

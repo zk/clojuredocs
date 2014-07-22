@@ -10,4 +10,6 @@
 
 (def ga-tracking-id (env/str :ga-tracking-id "UA-17348828-3"))
 
+(def cljs-dev? (env/bool :cljs-dev false))
+
 (defn url [& s] (apply str base-url s))
