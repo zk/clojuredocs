@@ -9,7 +9,8 @@
          keyword-params]
         [ring.middleware.session.cookie :only (cookie-store)]
         [ring.util.response :only (response content-type)])
-  (:require [compojure.core :refer (defroutes GET POST PUT DELETE context)]
+  (:require [clojuredocs.config :as config]
+            [compojure.core :refer (defroutes GET POST PUT DELETE context)]
             [compojure.response :refer (Renderable render)]
             [compojure.route :refer (not-found)]
             [ring.util.response :refer (redirect)]
@@ -80,6 +81,12 @@
       (lookup-var (expand-ns ns) name)))
 
 (defroutes _routes
+  (GET "/robots.txt" []
+    (fn [r]
+      {:headers {"Content-Type" "text/plain"}
+       :body (if config/allow-robots?
+               "User-agent: *\nAllow: /"
+               "User-agent: *\nDisallow: /")}))
   (var site.intro/routes)
   (var site.gh-auth/routes)
   (var site.user/routes)
