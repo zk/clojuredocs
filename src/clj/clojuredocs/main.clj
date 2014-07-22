@@ -40,6 +40,10 @@
   (mon/set-connection! (mon/make-connection mongo-url))
   (mon/add-index! :examples [:ns :name :library-url])
   (mon/add-index! :vars [:ns :name :library-url])
+  (mon/add-index! :namespaces [:name])
+  (mon/add-index! :see-alsos [:name :ns :library-url])
+  (mon/add-index! :libraries [:namespaces])
+  (mon/add-index! :var-comments [:var.ns :var.name :var.library-url])
   (let [stop-server (start-http-server entry
                       {:port port :join? false})]
     (println (format "Server running on port %d" port))
