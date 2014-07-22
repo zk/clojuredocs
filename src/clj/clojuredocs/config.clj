@@ -12,4 +12,6 @@
 
 (def cljs-dev? (env/bool :cljs-dev false))
 
+(def allow-robots? (env/bool :allow-robots true))
+
 (defn url [& s] (apply str base-url s))
