@@ -187,5 +187,5 @@ user=> (into {} *1)
        ($nav sections)]
       [:div.col-md-10
        [:h1 "Styleguide"]
-       [:p "Here you'll find various UI elements used on the ClojureDocs site. This styleguide is designed to help you see how changes will the vairous states of our UI elements when making changes."]
+       [:p.lead "Here you'll find various UI elements used on the ClojureDocs site. This styleguide is designed to help you see how changes will the vairous states of our UI elements when making changes."]
        (map $section sections)]]}))

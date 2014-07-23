@@ -10,17 +10,24 @@
             [cljs.reader :as reader])
   (:require-macros [dommy.macros :refer [node sel1]]))
 
-(defn validate-and-submit [app owner example]
+(defn validate-and-submit [app owner {:keys [text var]}]
   (om/set-state! owner :loading? true)
   (om/set-state! owner :error-message nil)
   (ajax
     {:path "/api/examples"
      :method :post
      :data-type :edn
-     :success (fn [])
-     :error (fn [resp]
-              (om/set-state! owner :error-message "There was a problem contacting the server.")
-              (om/set-state! owner :loading? false))})
+     :data (merge var {:body text})
+     :success (fn []
+                (.reload js/location))
+     :error (fn [{:keys [status body]}]
+              (om/set-state! owner :loading? false)
+              (cond
+                (= 422 status)
+                (om/set-state! owner :error-message (:error-message body))
+
+                :else
+                (om/set-state! owner :error-message "There was a problem contacting the server.")))})
   false)
 
 (defn set-expanded [owner expanded?]
@@ -44,15 +51,14 @@
             :on-click #(set-expanded owner (not expanded?))}
       (if-not expanded? "Add an Example" "Close"))))
 
-(defn $editor [owner {:keys [expanded? text ns name loading? error-message] :as state}]
+(defn $editor [owner {:keys [expanded? text var loading? error-message] :as state}]
   (dom/div {:class (str "add-example-content" (when-not expanded? " hidden"))}
     (dom/h5 "New Example")
     (dom/div {:class "add-example-preview"}
       (dom/div {:ref "live-preview" :class "live-preview"}))
     (dom/form {:on-submit #(validate-and-submit app owner
                              {:text text
-                              :ns ns
-                              :name name})}
+                              :var var})}
       (dom/textarea {:class "form-control"
                      :cols 80 :on-input #(update-text % owner)
                      :ref "textarea"
@@ -105,6 +111,7 @@
         (om/get-node owner "live-preview")
         (node [:div.empty-live-preview "Live Preview"]))
       (update-preview owner))
+
     om/IDidUpdate
     (did-update [this prev-props prev-state]
       (let [{:keys [should-focus? expanded? text]} (om/get-state owner)]
@@ -113,15 +120,21 @@
           (.focus (om/get-node owner "textarea"))
           (anim/scroll-to (om/get-node owner "wrapper") {:pad 10})))
       (update-preview owner))
+
     om/IRenderState
     (render-state [this {:keys [expanded? text loading?] :as state}]
       (dom/div {:class "add-example" :ref "wrapper"}
         ($toggle-controls owner state)
         ($editor owner state)))))
 
-(defn add-example-widget [mount-to]
-  (om/root
-    $add
-    {}
-    {:target mount-to
-     :init-state {:expanded? true}}))
+(defn add-example-widget [widget-el]
+  (let [var (dommy/attr widget-el :data-var)
+        [ns name] (when var (str/split var #"/"))]
+    (om/root
+      $add
+      {}
+      {:target widget-el
+       :init-state
+       {:var {:ns ns
+              :name name
+              :library-url "https://github.com/clojure/clojure"}}})))

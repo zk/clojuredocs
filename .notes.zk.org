@@ -30,13 +30,16 @@
 + Switch to avatar url instead of email
 + Clean data export for dev distribution
 + Mobile comb-through
-+ Move over comments
-+ UPDATE / REMOVE ROBOTS.TXT
-+ Check db indexes
-
++ Add comments widget
++ Jobs
++ Admin interface
++ Login redirects to current page
 
 ** Done
 
++ Move over comments
++ UPDATE / REMOVE ROBOTS.TXT
++ Check db indexes
 + Move example submission styleguide over
 + Landing search feedback
 + Expand and redirect shortened namespaces
@@ -67,3 +70,24 @@
 + Loading indicator on search widget
 + Add recently viewed vars to sidebar
 + Animate scroll-to links
+
+
+* Indexes
++ namespaces
+  + name
++ vars
+  + name
+  + ns
+  + library-url
++ see-alsos
+  + name
+  + ns
+  + library-url
++ libraries
+  + namespaces
++ examples
+  + name
+  + ns
+  + library-url
++ var-comments
+  + var (ns name library-url)

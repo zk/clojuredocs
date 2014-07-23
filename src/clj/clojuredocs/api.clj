@@ -1,7 +1,13 @@
 (ns clojuredocs.api
   (:require [compojure.core :refer (defroutes GET POST PUT DELETE ANY routes)]
             [clojuredocs.util :as util]
+            [somnium.congomongo :as mon]
             [clout.core :as clout]))
+
+(defn validate [ent schema context-name]
+  (let [validations (-> schema :contexts context-name :validations)]
+    (->> validations
+         (reduce #(merge %1 (%2 ent)) {}))))
 
 (def field-types
   [{:name :email
@@ -13,11 +19,20 @@
    {:name :avatar-url
     :type :string}])
 
+(defn body-not-empty [{:keys [body]}]
+  (when (empty? body)
+    {:error-message "Looks like your example is blank."}))
+
+(defn has-valid-var [{:keys [ns name library-url]}]
+  (when-not (and ns name library-url)
+    {:error-message "Please provide the library url, namespace, and name of the var."}))
+
 (def example-schema
   {:name :example
    :api-root "/examples"
    :contexts {:create {:required [:user]
-                       :http-method :put}}
+                       :http-method :put
+                       :validations [body-not-empty has-valid-var]}}
    :local-refs {:name :user :schema :user}})
 
 (def user-schema
@@ -52,11 +67,31 @@
          (map #(apply endpoint %))
          (apply routes))))
 
-(defn create-example [{:keys []}])
+(last (mon/fetch :examples :where {:ns "clojure.core" :name "map"}))
+
+
 
 (defroutes _routes
-  (endpoint example-schema :create create-example)
-  (ANY "/render-markdown" []
+  (POST "/examples" []
+    (fn [{:keys [edn-body user]}]
+      (if-not user
+        {:body (pr-str {:error-message "Sorry, you must be logged in to post an example."})
+         :headers {"Content-Type" "application/edn"}
+         :status 422}
+        (let [entity (-> edn-body
+                         (assoc :user (select-keys user [:login :avatar-url])))
+              errors (validate entity example-schema :create)]
+          (if-not (empty? errors)
+            {:body (pr-str errors)
+             :headers {"Content-Type" "application/edn"}
+             :status 422}
+            (do
+              (mon/insert! :examples entity)
+              {:body "ok"
+               :status 200
+               :headers {"Content-Type" "text/plain"}}))))))
+
+    (ANY "/render-markdown" []
     (fn [r]
       (let [body (util/response-body r)]
         {:body (when body (util/markdown body))
