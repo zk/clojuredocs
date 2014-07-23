@@ -192,7 +192,8 @@
                           [:section
                            [:div.examples-widget
                             ($examples examples ns name)]
-                           [:div.add-example-widget]]
+                           [:div.add-example-widget
+                            {:data-var (str (:ns v) "/" (:name v))}]]
                           [:section
                            [:h5 "See Also"]
                            (if (empty? see-alsos)
