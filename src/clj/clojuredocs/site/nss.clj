@@ -43,7 +43,7 @@
        [:td [:div.doc doc]]])))
 
 (defn index [ns-str]
-  (fn [{:keys [user] :as r}]
+  (fn [{:keys [user uri] :as r}]
     (let [lib (library-for ns-str)
           ns (namespace-for ns-str)
           vars (sort-by #(-> % :name str/lower-case) (vars-for ns-str))]
@@ -51,6 +51,7 @@
         (common/$main
           {:body-class "ns-page"
            :user user
+           :page-uri uri
            :content [:div
                      [:div.row
                       [:div.col-sm-2.sidenav

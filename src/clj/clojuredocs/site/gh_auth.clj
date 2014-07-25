@@ -11,12 +11,12 @@
    :login login})
 
 (defroutes routes
-  (GET "/gh-callback" []
+  (GET "/gh-callback*" {{path :*} :route-params}
     (fn [{:keys [params]}]
       (try
         (let [token (:access_token (gh/exchange-code config/gh-creds (:code params)))
               user (gh/user token)]
-          (-> (redirect "/")
+          (-> (redirect (if (empty? path) "/" path))
               (assoc :session {:user (gh-user->user user)})))
         (catch Exception e
           (println e)

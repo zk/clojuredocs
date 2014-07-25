@@ -139,9 +139,11 @@ solving problems (holy buzzwords, fix this)."]
          (map #(assoc % :see-alsos (get sa-lookup (select-keys % [:ns :name])))))))
 
 
-(defn search-feedback [{:keys [params]}]
+(defn search-feedback [{:keys [params uri user]}]
   (common/$main
     {:body-class "search-feedback-page"
+     :user user
+     :page-uri uri
      :content
      [:div.row
       [:div.col-md-12
@@ -176,9 +178,11 @@ solving problems (holy buzzwords, fix this)."]
                                     {:body (str "Whoops, something went wrong. " (.getMessage e))
                                      :status 500}))))
   (GET "/search-feedback/success"
-    [] (fn [r]
+    [] (fn [{:keys [user uri]}]
          (common/$main
            {:body-class "search-feedback-page"
+            :user user
+            :page-uri uri
             :content
             [:div.row
              [:div.col-md-12

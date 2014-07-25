@@ -134,7 +134,7 @@
 (defn var-page [ns name]
   (let [name (util/cd-decode name)
         {:keys [arglists name ns doc runtimes added file] :as v} (lookup-var ns name)]
-    (fn [{:keys [user session]}]
+    (fn [{:keys [user session uri]}]
       (when v
         (let [examples (examples-for v)
               see-alsos (see-alsos-for v)
@@ -153,6 +153,7 @@
              {:body-class "var-page"
               :page-data {:examples (map #(assoc % :_id (str (:_id %))) examples)
                           :var (assoc v :_id (str (:_id v)))}
+              :page-uri uri
               :user user
               :content [:div
                         [:div.row
@@ -193,8 +194,12 @@
                           [:section
                            [:div.examples-widget
                             ($examples examples ns name)]
-                           [:div.add-example-widget
-                            {:data-var (str (:ns v) "/" (:name v))}]]
+                           (if user
+                             [:div.add-example-widget
+                              {:data-var (str (:ns v) "/" (:name v))}]
+                             [:div.login-required-message
+                              [:a {:href (common/gh-auth-url uri)} "Log in"]
+                              " to add an example"])]
                           [:section
                            [:h5 "See Also"]
                            (if (empty? see-alsos)
@@ -221,12 +226,13 @@
    [:div ($example-body ex)]])
 
 (defn example-page [id]
-  (fn [{:keys [user session]}]
+  (fn [{:keys [user session uri]}]
     (let [{:keys [history name ns] :as ex}
           (mon/fetch-one :examples :where {:_id (util/bson-id id)})]
       (common/$main
          {:body-class "example-page"
           :user user
+          :page-uri uri
           :content [:div.row
                     [:div.col-md-12
                      [:p

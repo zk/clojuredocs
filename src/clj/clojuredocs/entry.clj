@@ -97,9 +97,11 @@
   (GET "/quickref" [] quickref/index)
   (GET "/styleguide" [] styleguide/index)
   (GET "/examples-styleguide" []
-    (fn [r]
+    (fn [{:keys [uri user]}]
       (common/$main
         {:body-class "examples-styleguide-page"
+         :user user
+         :page-uri uri
          :content
          [:div.row
           [:div.col-md-12.examples-styleguide-content
