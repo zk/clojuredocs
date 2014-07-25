@@ -186,7 +186,7 @@
   (when-not (empty? namespaces)
     [:div.library-nav
      [:h5 "Namespaces"]
-     ($namespaces namespaces current-ns)]))
+     ($namespaces (map :name namespaces) current-ns)]))
 
 (defn ellipsis [s n]
   (cond

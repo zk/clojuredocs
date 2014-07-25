@@ -30,7 +30,11 @@ https://clojuredocs.herokuapp.com
 Run `bin/dev`, which will start all the things (repl, web process,
 scss compiler, etc). See `Procfile` for more info.
 
-Connect from cider (emacs) or Light Table, repl port 7888.
+Connect to the repl and / or visit http://localhost:5000
+
+You'll notice that var information is already populated. In an effort for not make the same mistakes again, all core-related var info is loaded from the runtime version of Clojure on start up.
+
+OTOH, examples, see-alsos, and comments (and any other user-generated content) are stored in the database.
 
 ### Prod Local
 
@@ -67,16 +71,9 @@ CD is still kind of an MVC app, in that we separate datastore access, transforma
 * Dev starts the environment using `lein repl :headless`, prod uses `lein run -m clojuredocs.main`. See `:repl-options` in `project.clj` for initialization options.
 
 
-## TODO
-
-* Figure out how to get all the existing users hooked up to their GH accounts.
-* 301 old var urls to new
-* Tag / show which runtimes a var is available in (clj / cljs)
-
-
 ## License
 
-Copyright © 2013 Zachary Kim
+Copyright © 2013-present Zachary Kim
 
 Distributed under the Eclipse Public License either version 1.0 or (at
 your option) any later version.

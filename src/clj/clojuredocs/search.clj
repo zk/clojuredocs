@@ -1,7 +1,8 @@
 (ns clojuredocs.search
   (:require [clucy.core :as clucy]
             [clojure.string :as str]
-            [clojuredocs.util :as util]))
+            [clojuredocs.util :as util]
+            [clojure.pprint :refer [pprint]]))
 
 (def search-index (clucy/memory-index))
 
@@ -70,33 +71,101 @@
            (interpose " ")
            (apply str)))))
 
-(def searchable-vars
-  (do
-    (doseq [ns-sym clojure-namespaces]
-      (require ns-sym))
-    (->> clojure-namespaces
-         (mapcat ns-publics)
-         (map second)
-         (map meta)
-         (map #(update-in % [:ns] str))
-         (map #(update-in % [:name] str))
-         (map #(select-keys % [:ns :arglists :file :name
-                               :column :added :static :doc :line
-                               :added :static :tag :forms :deprecated]))
-         (concat special-forms)
-         (map #(-> %
-                   (update-in [:ns] str)
-                   (update-in [:name] str)
-                   (assoc :type (cond
-                                  (:type %) (:type %)
-                                  (:macro %) "macro"
-                                  (> (count (:arglists %)) 0) "function"
-                                  (:special-form %) "special-form"
-                                  :else "var"))
+(def var-keys
+    [:ns
+     :name
+     :file
+     :column
+     :line
+     :added
+     :arglists
+     :doc
+     :static
+     :tag ; convert to string
+     :macro
+     :dynamic
+     :special-form
+     :forms ; -> list of strings
+     :deprecated
+     :url
+     :no-doc])
 
-                   ))
-         (map #(assoc % :keywords (tokenize-name (:name %))))
-         (map #(assoc % :href (str "/" (:ns %) "/" (util/cd-encode (:name %))))))))
+(defn cond-update-in [m keys & rest]
+  (if (get-in m keys)
+    (apply update-in m keys rest)
+    m))
+
+(defn type-of [{:keys [type macro arglists special-form]}]
+  (cond
+    type type
+    macro "macro"
+    (> (count arglists) 0) "function"
+    special-form "special-form"
+    :else "var"))
+
+(defn transform-var-meta [m]
+  (-> m
+      (select-keys var-keys)
+      (cond-update-in [:tag] #(if (class? %)
+                                (.getName %)
+                                (str %)))
+      (cond-update-in [:forms] #(map str %))
+      (update-in [:ns] str)
+      (update-in [:arglists] #(map
+                                (fn [arg-list-coll]
+                                  (->> arg-list-coll
+                                       (map str)
+                                       (interpose " ")
+                                       (apply str)))
+                                %))
+      (update-in [:name] str)))
+
+(defn gather-var [ns-obj]
+  (->> ns-obj
+       ns-publics
+       (map second)
+       (map meta)))
+
+(defn gather-vars [{:keys [namespaces library-url] :as lib}]
+  (assoc lib :vars (->> namespaces
+                        (map :name)
+                        (map symbol)
+                        (map find-ns)
+                        (mapcat gather-var)
+                        (map #(assoc % :library-url library-url))
+                        (concat special-forms)
+                        (map transform-var-meta)
+                        (map #(assoc % :type (type-of %)))
+                        (map #(assoc % :href (str "/" (:ns %) "/" (util/cd-encode (:name %))))))))
+
+(defn gather-namespace [ns-name]
+  (require (symbol ns-name))
+  (let [sym (symbol ns-name)
+        namespace (find-ns sym)
+        meta (meta namespace)]
+    (merge
+      (select-keys meta [:doc :no-doc :added])
+      {:name (str ns-name)})))
+
+(defn gather-namespaces [{:keys [namespaces] :as lib}]
+  (assoc lib
+    :namespaces
+    (->> namespaces
+         (map gather-namespace)
+         (remove :no-doc))))
+
+(def clojure-lib
+  (-> {:library-url "https://github.com/clojure/clojure"
+       :version "1.6.0"
+       :source-base-url "https://github.com/clojure/clojure/1.6.0/blob"
+       :namespaces clojure-namespaces}
+      gather-namespaces
+      gather-vars))
+
+(def searchable-vars
+  (->> clojure-lib
+       :vars
+       (map #(assoc % :keywords (tokenize-name (:name %))))))
 
 (def additional-ns-data
   {"clojure.zip" {:desc "Functional tree navigation and manipulation"}

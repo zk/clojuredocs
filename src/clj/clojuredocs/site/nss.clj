@@ -2,16 +2,22 @@
   (:require [somnium.congomongo :as mon]
             [clojuredocs.util :as util]
             [clojuredocs.site.common :as common]
+            [clojuredocs.search :as search]
             [clojure.string :as str]))
 
 (defn library-for [ns]
-  (mon/fetch-one :libraries :where {:namespaces ns}))
+  search/clojure-lib)
 
 (defn namespace-for [ns]
-  (mon/fetch-one :namespaces :where {:name ns}))
+  (->> search/clojure-lib
+       :namespaces
+       (filter #(= ns (:name %)))
+       first))
 
 (defn vars-for [ns]
-  (mon/fetch :vars :where {:ns ns} :sort {:name 1}))
+  (->> search/clojure-lib
+       :vars
+       (filter #(= ns (:ns %)))))
 
 (defn group-vars [vars]
   (->> vars
