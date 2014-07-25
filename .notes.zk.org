@@ -33,13 +33,13 @@
 + Add comments widget
 + Jobs
 + Admin interface
-+ Login redirects to current page
 + Example editing
 + Null-state for top contribs
 
 
 ** Done
 
++ Fix login redirects to current page
 + Move over comments
 + UPDATE / REMOVE ROBOTS.TXT
 + Check db indexes
