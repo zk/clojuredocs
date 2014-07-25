@@ -1,8 +1,141 @@
 (ns clojuredocs.data.import
   (:require [clojure.pprint :refer [pprint]]
-            [somnium.congomongo :as mon]))
-
+            [somnium.congomongo :as mon]
+            [clojure.edn :as edn]))
 (comment
+  (def var-keys
+    [:ns
+     :name
+     :file
+     :column
+     :line
+     :added
+     :arglists
+     :doc
+     :static
+     :tag ; convert to string
+     :macro
+     :dynamic
+     :special-form
+     :forms ; -> list of strings
+     :deprecated
+     :url
+     :no-doc])
+
+  (defn cond-update-in [m keys & rest]
+    (if (get-in m keys)
+      (apply update-in m keys rest)
+      m))
+
+  (defn transform-var-meta [m]
+    (-> m
+        (select-keys var-keys)
+        (cond-update-in [:tag] #(if (class? %)
+                                  (.getName %)
+                                  (str %)))
+        (cond-update-in [:forms] #(map str %))
+        (update-in [:ns] str)
+        (update-in [:arglists] #(map
+                                  (fn [arg-list-coll]
+                                    (->> arg-list-coll
+                                         (map str)
+                                         (interpose " ")
+                                         (apply str)))
+                                  %))
+        (update-in [:name] str)))
+
+  (defn gather-var [ns-obj]
+    (->> ns-obj
+         ns-publics
+         (map second)
+         (map meta)
+         (map transform-var-meta)))
+
+  (defn gather-vars [{:keys [namespaces library-url] :as lib}]
+    (assoc lib :vars (->> namespaces
+                          (map :name)
+                          (map symbol)
+                          (map find-ns)
+                          (mapcat gather-var)
+                          (map #(assoc % :library-url library-url)))))
+
+  (defn gather-namespace [ns-name]
+    (require (symbol ns-name))
+    (let [sym (symbol ns-name)
+          namespace (find-ns sym)
+          meta (meta namespace)]
+      (merge
+        (select-keys meta [:doc :no-doc :added])
+        {:name ns-name})))
+
+  (defn gather-namespaces [{:keys [namespaces] :as lib}]
+    (assoc lib
+      :namespaces
+      (->> namespaces
+           (map gather-namespace)
+           (remove :no-doc))))
+
+  ["clojure.core"
+   "clojure.data"
+   "clojure.edn"
+   "clojure.inspector"
+   "clojure.instant"
+   "clojure.java.browse"
+   "clojure.java.io"
+   "clojure.java.javadoc"
+   "clojure.java.shell"
+   "clojure.main"
+   "clojure.pprint"
+   "clojure.reflect"
+   "clojure.repl"
+   "clojure.set"
+   "clojure.stacktrace"
+   "clojure.string"
+   "clojure.template"
+   "clojure.test"
+   "clojure.walk"
+   "clojure.xml"
+   "clojure.zip"]
+
+  (defn import-clojure []
+    (->> {:library-url "https://github.com/clojure/clojure"
+          :version "1.6.0"
+          :source-base-url "https://github.com/clojure/clojure/1.6.0/blob"
+          :namespaces ["clojure.data"
+                       "clojure.edn"
+                       "clojure.zip"]}
+         gather-namespaces
+         gather-vars))
+
+  (pprint (import-clojure))
+
+  #_(-> {:library-url "https://github.com/clojure/clojure"
+         :version "1.6.0"
+         :source-base-url "https://github.com/clojure/clojure/1.6.0/blob"
+         :namespaces ["clojure.core"
+                      "clojure.data"
+                      "clojure.edn"
+                      "clojure.inspector"
+                      "clojure.instant"
+                      "clojure.java.browse"
+                      "clojure.java.io"
+                      "clojure.java.javadoc"
+                      "clojure.java.shell"
+                      "clojure.main"
+                      "clojure.pprint"
+                      "clojure.reflect"
+                      "clojure.repl"
+                      "clojure.set"
+                      "clojure.stacktrace"
+                      "clojure.string"
+                      "clojure.template"
+                      "clojure.test"
+                      "clojure.walk"
+                      "clojure.xml"
+                      "clojure.zip"]}
+        (update-in [:namespaces] gather-namespaces)
+        (update-in [:vars] gather-vars)
+        pprint)
 
   (declare special-forms)
 
@@ -127,4 +260,5 @@
            :ns "clojure.core"
            :doc "Assignment special form. When the first operand is a field member access form, the assignment is to the corresponding field. If it is an instance field, the instance expr will be evaluated, then the expr. In all cases the value of expr is returned. Note - you cannot assign to function params or local bindings. Only Java fields, Vars, Refs and Agents are mutable in Clojure. See http://clojure.org/special_forms for more information."}]
          (map #(assoc % :type "special-form"))))
+
   )
