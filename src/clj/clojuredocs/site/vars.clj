@@ -42,13 +42,15 @@
   [:div.example-body
    [:pre.raw-example {:class "brush: clojure"} body]])
 
-(defn $example [{:keys [body _id history created-at updated-at] :as ex}]
+(defn $example [{:keys [body _id user history created-at updated-at] :as ex}]
   [:div.var-example
    [:div
-    (let [users (->> history
-                     (map :user)
-                     distinct
-                     reverse)
+    (let [users (distinct
+                  (concat
+                    [user]
+                    (->> history
+                         (map :user)
+                         reverse)))
           num-to-show 7]
       [:div.example-meta
        [:div.contributors
