@@ -140,10 +140,13 @@
       [:script "goog.require(\"clojuredocs.main\");"])
     ($ga-script-tag config/ga-tracking-id)]])
 
-(defn $avatar [{:keys [email login] :as user}]
+(defn $avatar [{:keys [email login avatar-url] :as user}]
   [:a {:href (str "/u/" login)}
-   [:img.avatar {:src (str "https://www.gravatar.com/avatar/" (util/md5 email) "?r=PG&s=32&default=identicon") }]])
-
+   [:img.avatar
+    {:src (or avatar-url
+              (str "https://www.gravatar.com/avatar/"
+                   (util/md5 email)
+                   "?r=PG&s=32&default=identicon")) }]])
 
 (defn group-levels [path ns-lookup current-ns ls]
   (when-not (empty? ls)
