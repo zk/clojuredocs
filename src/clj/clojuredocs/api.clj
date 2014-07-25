@@ -67,10 +67,6 @@
          (map #(apply endpoint %))
          (apply routes))))
 
-(last (mon/fetch :examples :where {:ns "clojure.core" :name "map"}))
-
-
-
 (defroutes _routes
   (POST "/examples" []
     (fn [{:keys [edn-body user]}]

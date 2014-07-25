@@ -76,6 +76,8 @@ solving problems (holy buzzwords, fix this)."]
                :url "https://www.netflix.com"}
               {:src "/img/factual-logo.png"
                :url "http://www.factual.com"}
+              {:src "/img/prismatic-logo.png"
+               :url "https://getprismatic.com"}
               {:src "https://www.simple.com/img/logo-a_2x.CREAM-bbc497f18505b852.png"
                :url "https://simple.com"}
               {:src "https://d1lpkba4w1baqt.cloudfront.net/heroku-logo-light-234x60.png"

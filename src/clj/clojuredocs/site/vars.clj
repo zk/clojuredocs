@@ -27,7 +27,7 @@
        :vars))
 
 (defn library-for [{:keys [ns]}]
-  (mon/fetch-one :libraries :where {:namespaces ns}))
+  search/clojure-lib)
 
 (defn comments-for [{:keys [ns name library-url]}]
   (mon/fetch :var-comments
@@ -93,8 +93,7 @@
     "Added by " [:a {:href (str "/u/" (:login user))} (:login user)]]])
 
 (defn lookup-var [ns name]
-  (or (mon/fetch-one :vars :where {:name name :ns ns})
-      (search/lookup (str ns "/" name))))
+  (search/lookup (str ns "/" name)))
 
 (defn $examples [examples ns name]
   [:div.var-examples

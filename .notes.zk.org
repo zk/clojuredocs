@@ -34,6 +34,9 @@
 + Jobs
 + Admin interface
 + Login redirects to current page
++ Example editing
++ Null-state for top contribs
+
 
 ** Done
 
@@ -91,3 +94,12 @@
   + library-url
 + var-comments
   + var (ns name library-url)
+
+
+* Import
+
++ Idempotency
++ Users
+  + Construct avatar url
++ Vars
+  + Import on startup
