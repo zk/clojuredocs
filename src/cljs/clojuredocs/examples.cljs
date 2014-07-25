@@ -62,8 +62,7 @@
       (dom/textarea {:class "form-control"
                      :cols 80 :on-input #(update-text % owner)
                      :ref "textarea"
-                     :disabled (when loading? "disabled")
-                     :value text})
+                     :disabled (when loading? "disabled")})
       (dom/p {:class "instructions"}
         "See our "
         (dom/a {:href "/examples-styleguide"} "examples style guide")

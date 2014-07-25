@@ -177,10 +177,11 @@ user=> (into {} *1)
       :content
       [[:div.example.checker-bg.add-comment-example]]})])
 
-(defn index [{:keys [user]}]
+(defn index [{:keys [user uri]}]
   (common/$main
     {:body-class "styleguide-page"
      :user user
+     :page-uri uri
      :content
      [:div.row
       [:div.col-md-2

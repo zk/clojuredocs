@@ -5,8 +5,9 @@
             [compojure.core :refer (defroutes GET)]))
 
 (defroutes routes
-  (GET "/u/:login" [] (fn [{:keys [user]}]
+  (GET "/u/:login" [] (fn [{:keys [user uri]}]
                         (let [user {}]
                           (common/$main
                             {:user user
+                             :page-uri uri
                              :content [:h1 "HELLO WORLD"]})))))

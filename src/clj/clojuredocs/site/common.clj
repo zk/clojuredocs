@@ -5,9 +5,12 @@
             [clojuredocs.env :as env]
             [clojuredocs.github :as gh]))
 
-(def gh-auth-url (gh/auth-redirect-url
-                   (merge config/gh-creds
-                          {:redirect-uri (config/url "/gh-callback")})))
+(defn gh-auth-url [& [redirect-to-after-auth-url]]
+  (let [redirect-url (str "/gh-callback" redirect-to-after-auth-url)]
+    (gh/auth-redirect-url
+      (merge config/gh-creds
+             {:redirect-uri (config/url redirect-url)}))))
+
 
 (defn $ga-script-tag [ga-tracking-id]
   (when ga-tracking-id
@@ -26,7 +29,7 @@
    [:a {:href "/logout"}
     "Log Out"]])
 
-(defn $navbar [{:keys [user hide-search]}]
+(defn $navbar [{:keys [user hide-search page-uri]}]
   [:header.navbar
    [:div.container
     [:div.row
@@ -39,7 +42,7 @@
        (if user
          ($user-area user)
          [:li
-          [:a {:href gh-auth-url}
+          [:a {:href (gh-auth-url page-uri)}
            [:i.fa.fa-github-square] "Log In"]])]
       (when-not hide-search
         [:div.quick-search-widget.navbar-right.navbar-form
@@ -80,7 +83,7 @@
           :href (str "/css/font-awesome.min.css?"
                      (md5-path "resources/public/css/font-awesome.min.css"))}])
 
-(defn $main [{:keys [content title body-class user page-data] :as opts}]
+(defn $main [{:keys [page-uri content title body-class user page-data] :as opts}]
   [:html5
    [:head
     [:meta {:name "viewport" :content "width=device-width, maximum-scale=1.0"}]

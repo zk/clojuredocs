@@ -66,10 +66,11 @@
        [:div.col-sm-4.col-md-12
         (map $toc-sphere tg)])]))
 
-(defn index [{:keys [user]}]
+(defn index [{:keys [user uri]}]
   (common/$main
     {:body-class "quickref-page"
      :user user
+     :page-uri uri
      :content
      [:div
       [:div.row
