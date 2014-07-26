@@ -207,7 +207,11 @@
                               "No see-alsos for " [:code name]]
                              [:div.row
                               (map $see-also see-alsos)])
-                           [:div.add-see-also-widget]]
+                           (if user
+                             [:div.add-see-also-widget]
+                             [:div.login-required-message
+                              [:a {:href (common/gh-auth-url uri)} "Log in"]
+                              " to add a see-also"])]
                           [:section
                            ($comments comments name)]]]]})})))))
 
