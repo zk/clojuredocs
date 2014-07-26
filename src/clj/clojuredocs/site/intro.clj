@@ -110,8 +110,10 @@ solving problems (holy buzzwords, fix this)."]
 
 (defn top-contribs []
   (let [scores (atom {})]
-    (doseq [{:keys [history]} (mon/fetch :examples)]
-      (let [history (reverse history)
+    (doseq [{:keys [history user]} (mon/fetch :examples)]
+      (let [history (->> history
+                         (concat [{:user user}])
+                         reverse)
             first-user (-> history first :user)]
         (swap! scores update-in [first-user] #(+ 4 (or % 0)))
         (doseq [user (->> history rest (map :user))]
@@ -123,7 +125,7 @@ solving problems (holy buzzwords, fix this)."]
          (map #(assoc (first %) :score (second %))))))
 
 ;; :|
-(when-not config/cljs-dev?
+#_(when-not config/cljs-dev?
   (def top-contribs (memo-ttl top-contribs (* 1000 60 60 6))))
 
 (defn add-see-alsos [results]
