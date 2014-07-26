@@ -34,11 +34,11 @@
 + Jobs
 + Admin interface
 + Example editing
-+ Null-state for top contribs
 
 
 ** Done
 
++ Null-state for top contribs
 + Fix login redirects to current page
 + Move over comments
 + UPDATE / REMOVE ROBOTS.TXT
