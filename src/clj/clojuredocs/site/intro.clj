@@ -31,7 +31,9 @@
      [:section
       [:h5 "Top Contributors"]
       [:div.top-contribs
-       (map common/$avatar top-contribs)]]]]
+       (if-not (empty? top-contribs)
+         (map common/$avatar top-contribs)
+         [:div.null-state "Uh-oh, no contributors!"])]]]]
    [:section
     [:div.row
      [:div.col-md-12
