@@ -16,3 +16,6 @@ pom.xml.asc
 
 resources/public/css/app.css
 resources/public/css/highlighting.css
+
+Dockerfile
+fig.yml
