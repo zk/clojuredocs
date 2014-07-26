@@ -75,7 +75,11 @@
    {:title "Common Elements"
     :nav-target "common-elements"
     :content
-    [[:p "Namespace nav tree, nests namespaces to save on horizontal space. Namespaces are linked, non-namespace bridge parts (e.g. "
+    [[:p "Null-state plate, shown where there's nothing of something."
+      [:div.example.checker-bg
+       [:div.null-state
+        "We don't have any of those!"]]]
+     [:p "Namespace nav tree, nests namespaces to save on horizontal space. Namespaces are linked, non-namespace bridge parts (e.g. "
       [:code "clojure"]
       ", "
       [:code "java"]
