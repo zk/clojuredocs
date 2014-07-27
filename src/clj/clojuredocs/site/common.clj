@@ -24,9 +24,9 @@
 
 (defn $user-area [user]
   [:li.user-area
-   [:img.avatar {:src (:avatar-url user)}]
-   " | "
    [:a {:href "/logout"}
+    [:img.avatar {:src (:avatar-url user)}]
+    " | "
     "Log Out"]])
 
 (defn $navbar [{:keys [user hide-search page-uri]}]
@@ -37,7 +37,9 @@
       [:a.navbar-brand {:href "/"}
        [:i.fa.fa-rocket]
        "ClojureDocs"]
-      [:ul.navbar-nav.nav.navbar-right.collapse.navbar-collapse
+      [:button.btn.btn-default.navbar-btn.pull-right.mobile-menu
+       [:i.fa.fa-bars]]
+      [:ul.navbar-nav.nav.navbar-right
        [:li [:a {:href "/quickref"} "Quick Reference"]]
        (if user
          ($user-area user)
