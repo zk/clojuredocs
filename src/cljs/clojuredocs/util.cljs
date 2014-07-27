@@ -32,9 +32,11 @@
   [string]
   (md5- (string->bytes string)))
 
-(defn md5-hex [string]
+(defn md5-hex
   "convert utf8 string to md5 hex string"
-  (bytes->hex (md5-bytes string)))
+  [string]
+  (when string
+    (bytes->hex (md5-bytes string))))
 
 (defn cd-decode [s]
   (cond
