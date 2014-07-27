@@ -180,6 +180,7 @@ h3 {
 @media (max-width: 767px) {
   h1 {
     font-size: 20px;
+    line-height: 26px;
   }
 }
 h5 {
@@ -312,6 +313,7 @@ header.navbar .quick-search-widget form {
 @media (max-width: 767px) {
   header.navbar .btn.mobile-menu {
     display: block;
+    margin-right: -11px;
   }
   body {
     right: 0;
@@ -321,7 +323,7 @@ header.navbar .quick-search-widget form {
   .navbar-nav {
     position: fixed;
     width: 200px;
-    z-index: 1000;
+    z-index: 10000;
     background-color: #47a3da;
     color: white;
     top: 0;
@@ -402,64 +404,6 @@ form.search input[name='query'].loading {
 }
 form.search input.placeholder {
   visibility: hidden;
-}
-.intro-page form.search input[name='query'] {
-  font-size: 20px;
-  padding: 10px 15px;
-}
-.intro-page .code-example {
-  font-size: 14px;
-  padding: 20px;
-  border: solid transparent 1px;
-  background-color: #fafafa;
-}
-.intro-page .row {
-  margin-bottom: 0px;
-}
-.intro-page .top-contribs .avatar {
-  width: 3.63%;
-  margin-right: 0.53%;
-  margin-bottom: 0.53%;
-  height: auto;
-}
-@media (max-width: 767px) {
-  .intro-page .top-contribs .avatar {
-    width: 7.80%;
-    height: auto;
-  }
-}
-.intro-page .getting-started-resources {
-  margin-bottom: 20px;
-}
-.intro-page .getting-started-resources li {
-  list-style-type: disc;
-  margin-left: 30px;
-}
-.intro-page .syntaxhighlighter {
-  padding: 15px;
-  overflow: auto;
-  overflow-y: hidden;
-  font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
-  font-size: 15px;
-  line-height: 1.3em;
-}
-@media (max-width: 1199px) {
-  .intro-page .syntaxhighlighter {
-    font-size: 13.8px;
-  }
-}
-@media (max-width: 991px) {
-  .intro-page .syntaxhighlighter {
-    font-size: 13px;
-  }
-}
-@media (max-width: 767px) {
-  .intro-page .syntaxhighlighter {
-    font-size: 12px;
-  }
-}
-.intro-page .syntaxhighlighter table {
-  margin: 0 auto;
 }
 .syntaxhighlighter {
   padding: 10px;
@@ -558,15 +502,83 @@ table.ac-results .ac-metadata {
   font-size: 12px;
   white-space: nowrap;
 }
+.intro-page section {
+  margin-bottom: 40px;
+}
+@media (max-width: 767px) {
+  .intro-page section {
+    margin-bottom: 20px;
+  }
+}
+.intro-page form.search input[name='query'] {
+  font-size: 20px;
+  padding: 10px 15px;
+}
+@media (max-width: 767px) {
+  .intro-page form.search input[name='query'] {
+    font-size: 16px;
+  }
+}
+.intro-page .code-example {
+  font-size: 14px;
+  padding: 20px;
+  border: solid transparent 1px;
+  background-color: #fafafa;
+}
+.intro-page .row {
+  margin-bottom: 0px;
+}
+.intro-page .top-contribs .avatar {
+  width: 3.63%;
+  margin-right: 0.53%;
+  margin-bottom: 0.53%;
+  height: auto;
+}
+@media (max-width: 767px) {
+  .intro-page .top-contribs .avatar {
+    width: 7.80%;
+    height: auto;
+  }
+}
+.intro-page .getting-started-resources {
+  margin-bottom: 20px;
+}
+.intro-page .getting-started-resources li {
+  list-style-type: disc;
+  margin-left: 30px;
+}
+.intro-page .syntaxhighlighter {
+  padding: 15px;
+  overflow: auto;
+  overflow-y: hidden;
+  font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+  font-size: 15px;
+  line-height: 1.3em;
+}
+@media (max-width: 1199px) {
+  .intro-page .syntaxhighlighter {
+    font-size: 13.8px;
+  }
+}
+@media (max-width: 991px) {
+  .intro-page .syntaxhighlighter {
+    font-size: 13px;
+  }
+}
+@media (max-width: 767px) {
+  .intro-page .syntaxhighlighter {
+    font-size: 12px;
+  }
+}
+.intro-page .syntaxhighlighter table {
+  margin: 0 auto;
+}
 .intro-page ul h4 i {
   margin-right: 12px;
   margin-left: -30px;
 }
 .intro-page ul h4 i.fa-map-marker {
   padding: 0 3px;
-}
-.intro-page section {
-  margin-bottom: 4em;
 }
 .intro-page .used-by ul {
   text-align: center;
@@ -884,6 +896,7 @@ table.ac-results .ac-metadata {
 .not-finding {
   text-align: right;
   font-size: 12px;
+  line-height: 18px;
   opacity: 0.8;
   margin-top: 5px;
 }

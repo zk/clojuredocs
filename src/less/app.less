@@ -64,6 +64,7 @@ h3 {
 @media (max-width: 767px) {
   h1 {
     font-size: 20px;
+    line-height: 26px;
   }
 }
 
@@ -235,6 +236,7 @@ header.navbar {
   header.navbar {
     .btn.mobile-menu {
       display: block;
+      margin-right: -11px;
     }
   }
 
@@ -248,7 +250,7 @@ header.navbar {
     position: fixed;
     position: fixed;
     width: 200px;
-    z-index: 1000;
+    z-index: 10000;
     background-color: #47a3da;
     color: white;
     top: 0;
@@ -354,75 +356,6 @@ form.search {
 
   input.placeholder {
     visibility: hidden;
-  }
-}
-
-
-.intro-page {
-  form.search {
-    input[name='query'] {
-      font-size: 20px;
-      padding: 10px 15px;
-    }
-  }
-
-  .code-example {
-    font-size: 14px;
-    padding: 20px;
-    border: solid transparent 1px;
-    background-color: #fafafa;
-  }
-
-  .row {
-    margin-bottom: 0px;
-  }
-
-  .top-contribs .avatar {
-    width: 3.63%;
-    margin-right: 0.53%;
-    margin-bottom: 0.53%;
-    height: auto;
-
-    @media (max-width: 767px) {
-      width: 7.80%;
-      height: auto;
-    }
-  }
-
-  .getting-started-resources {
-    margin-bottom: 20px;
-
-    li {
-      list-style-type: disc;
-      margin-left: 30px;
-    }
-  }
-
-  .syntaxhighlighter {
-    padding: 15px;
-    overflow: auto;
-    overflow-y: hidden;
-    font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
-
-    font-size: 15px;
-    line-height: 1.3em;
-
-    @media (max-width: 1199px) {
-      font-size: 13.8px;
-    }
-
-
-    @media (max-width: 991px) {
-      font-size: 13px;
-    }
-
-    @media (max-width: 767px) {
-      font-size: 12px;
-    }
-
-    table {
-      margin: 0 auto;
-    }
   }
 }
 
@@ -562,6 +495,86 @@ table.ac-results {
 }
 
 .intro-page {
+  section {
+    margin-bottom: 40px;
+  }
+
+  @media(max-width: 767px) {
+    section {
+      margin-bottom: 20px;
+    }
+  }
+
+  form.search {
+    input[name='query'] {
+      font-size: 20px;
+      padding: 10px 15px;
+
+      @media(max-width: 767px) {
+        font-size: 16px;
+      }
+    }
+  }
+
+  .code-example {
+    font-size: 14px;
+    padding: 20px;
+    border: solid transparent 1px;
+    background-color: #fafafa;
+  }
+
+  .row {
+    margin-bottom: 0px;
+  }
+
+  .top-contribs .avatar {
+    width: 3.63%;
+    margin-right: 0.53%;
+    margin-bottom: 0.53%;
+    height: auto;
+
+    @media (max-width: 767px) {
+      width: 7.80%;
+      height: auto;
+    }
+  }
+
+  .getting-started-resources {
+    margin-bottom: 20px;
+
+    li {
+      list-style-type: disc;
+      margin-left: 30px;
+    }
+  }
+
+  .syntaxhighlighter {
+    padding: 15px;
+    overflow: auto;
+    overflow-y: hidden;
+    font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+
+    font-size: 15px;
+    line-height: 1.3em;
+
+    @media (max-width: 1199px) {
+      font-size: 13.8px;
+    }
+
+
+    @media (max-width: 991px) {
+      font-size: 13px;
+    }
+
+    @media (max-width: 767px) {
+      font-size: 12px;
+    }
+
+    table {
+      margin: 0 auto;
+    }
+  }
+
   ul h4 i {
     margin-right: 12px;
     margin-left: -30px;
@@ -569,10 +582,6 @@ table.ac-results {
 
   ul h4 i.fa-map-marker {
     padding: 0 3px;
-  }
-
-  section {
-    margin-bottom: 4em;
   }
 
   .used-by {
@@ -604,7 +613,6 @@ table.ac-results {
 
 .var-page,
 .example-page {
-
   h1, h2 {
     margin-top: 0;
   }
@@ -965,6 +973,7 @@ table.ac-results {
 .not-finding {
   text-align: right;
   font-size: 12px;
+  line-height: 18px;
   opacity: 0.8;
   margin-top: 5px;
 }

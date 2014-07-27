@@ -26,8 +26,7 @@
   [:li.user-area
    [:a {:href "/logout"}
     [:img.avatar {:src (:avatar-url user)}]
-    " | "
-    "Log Out"]])
+    " Log Out"]])
 
 (defn $navbar [{:keys [user hide-search page-uri]}]
   [:header.navbar
