@@ -54,14 +54,17 @@
       (merge (with-meta (response "") (meta resp-map))
              resp-map))))
 
+(defn redirect-to-var [ns name]
+  (fn [r]
+    (let [name (->> name
+                    util/cd-decode
+                    util/cd-encode)]
+      {:status 301
+       :headers {"Location" (str "/" ns "/" name)}})))
+
 (defroutes old-url-redirects
-  (GET "/clojure_core/:ns/:name" [ns name]
-    (fn [r]
-      (let [name (->> name
-                      util/cd-decode
-                      util/cd-encode)]
-        {:status 301
-         :headers {"Location" (str "/" ns "/" name)}})))
+  (GET "/clojure_core/:ns/:name" [ns name] (redirect-to-var ns name))
+  (GET "/clojure_core/:version/:ns/:name" [ns name] (redirect-to-var ns name))
   (GET "/quickref/*" [] {:status 301 :headers {"Location" "/quickref"}})
   (GET "/clojure_core" [] {:status 301 :headers {"Location" "/"}}))
 
