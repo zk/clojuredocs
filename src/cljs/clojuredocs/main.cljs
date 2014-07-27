@@ -202,7 +202,7 @@ f should accept number-of-colls arguments."}
   (fn [$el]
     (om/root
       examples/$examples
-      {:var {:name "map" :ns "clojure.core"}}
+      {:var {:name "bar" :ns "foo"}}
       {:target $el}))
 
   :.sg-examples-single
@@ -218,7 +218,7 @@ user=> (into {} *1)
 {:a 2, :b 4, :c 6}"
                    :user {:email "zachary.kim@gmail.com"}
                    :history [{:user {:email "zachary.kim@gmail.com"}}]}]
-       :var {:name "map" :ns "clojure.core"}}
+       :var {:name "bar" :ns "foo"}}
       {:target $el}))
 
   :.sg-examples-lengths
@@ -260,7 +260,7 @@ user=> (into {} *1)
                              {:user {:email "masondesu@gmail.com"}}
                              {:user {:email "lee@writequit.org"}}
                              {:user {:email "zachary.kim@gmail.com"}}]}]
-       :var {:name "map" :ns "clojure.core"}}
+       :var {:name "bar" :ns "foo"}}
       {:target $el}))
 
   :.sg-add-example
