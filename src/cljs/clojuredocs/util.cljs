@@ -2,7 +2,9 @@
   (:require [goog.crypt :as gcrypt]
             [goog.crypt.Md5 :as Md5]
             [goog.crypt.Sha1 :as Sha1]
-            [clojure.string :as str]))
+            [clojure.string :as str]
+            [goog.string :as gstring]
+            [goog.string.format]))
 
 (defn pluralize [n single plural]
   (str n " " (if (= 1 n) single plural)))
@@ -98,4 +100,4 @@
         (< d 1) (str (int h) " hours")
         (< d 2) "1 day"
         (< y 1) (str (int d) " days")
-        :else (str (format "%.1f" y) " years")))))
+        :else (str (gstring/format "%.1f" y) " years")))))

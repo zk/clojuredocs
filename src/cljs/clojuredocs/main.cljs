@@ -341,7 +341,6 @@ user=> (into {} *1)
     (when (and (.-ctrlKey e) (= 83 (.-keyCode e)))
       (.focus (sel1 ".search input[name='query']")))))
 
-
 (def tog (atom false))
 
 #_(js/setInterval
