@@ -98,7 +98,7 @@
     [:div.sticky-wrapper
      (when config/staging?
        [:div.staging-banner
-        "This is the ClojureDocs staging site, where you'll find all the neat things we're working on. Please don't link to here."])
+        "This is the ClojureDocs staging site, where you'll find all the neat things we're working on."])
      ($navbar opts)
      [:div.container
       [:div.row
