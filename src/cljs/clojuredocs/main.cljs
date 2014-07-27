@@ -164,6 +164,18 @@
 ;; Styleguide
 
 (on-el
+  :.btn.mobile-menu
+  (fn [$el]
+    (dommy/listen! $el :click
+      (fn [e]
+        (dommy/toggle-class! (sel1 :body) :mobile-push)
+        (.stopPropagation e))))
+
+  :body
+  (fn [$el]
+    (let [h (fn [_] (dommy/remove-class! (sel1 :body) :mobile-push))]
+      (dommy/listen! $el :click h :touchstart h)))
+
   :.sg-quick-lookup
   (fn [$el]
 
@@ -264,59 +276,69 @@ user=> (into {} *1)
       {:target $el}))
 
   :.sg-add-example
-   (fn [$el]
-     (om/root
-       examples/$add
-       {}
-       {:target $el :init-state {:expanded? true}}))
+  (fn [$el]
+    (om/root
+      examples/$add
+      {}
+      {:target $el :init-state {:expanded? true}}))
 
   :.sg-add-example-loading
-   (fn [$el]
-     (om/root
-       examples/$add
-       {}
-       {:target $el
-        :init-state {:expanded? true
-                     :loading? true
-                     :text "(defn greet [name]\n  (println \"Hello\" name))"}}))
+  (fn [$el]
+    (om/root
+      examples/$add
+      {}
+      {:target $el
+       :init-state {:expanded? true
+                    :loading? true
+                    :text "(defn greet [name]\n  (println \"Hello\" name))"}}))
 
-   :.sg-add-example-errors
-   (fn [$el]
-     (om/root
-       examples/$add
-       {}
-       {:target $el
-        :init-state {:expanded? true
-                     :error-message "This is where error messages that apply to the whole form go. And here's some other text to show what happens with a very long error message."
-                     :text "(defn greet [name]\n  (println \"Hello\" name))"}}))
+  :.sg-add-example-errors
+  (fn [$el]
+    (om/root
+      examples/$add
+      {}
+      {:target $el
+       :init-state {:expanded? true
+                    :error-message "This is where error messages that apply to the whole form go. And here's some other text to show what happens with a very long error message."
+                    :text "(defn greet [name]\n  (println \"Hello\" name))"}}))
 
-   :.sg-notes-null-state
-   (fn [$el]
-     (om/root
-       notes/$notes
-       {}
-       {:target $el}))
+  :.sg-notes-null-state
+  (fn [$el]
+    (om/root
+      notes/$notes
+      {}
+      {:target $el}))
 
-   :.sg-notes-populated
-   (fn [$el]
-     (om/root
-       notes/$notes
-       {:notes [{:body "# Hello World\n\nThe quick brown fox **jumps** over the *lazy* dog.<pre>(heres some \"clojure\")</pre>"
-                 :user {:login "zk"
-                        :avatar-url "https://avatars.githubusercontent.com/u/7194?"}
-                 :created-at (- (util/now) 10000000)}]}
-       {:target $el}))
+  :.sg-notes-populated
+  (fn [$el]
+    (om/root
+      notes/$notes
+      {:notes [{:body "# Hello World\n\nThe quick brown fox **jumps** over the *lazy* dog.<pre>(heres some \"clojure\")</pre>"
+                :user {:login "zk"
+                       :avatar-url "https://avatars.githubusercontent.com/u/7194?"}
+                :created-at (- (util/now) 10000000)}]}
+      {:target $el}))
 
-   :.sg-add-note
-   (fn [$el]
-     (om/root
-       notes/$add
-       {}
-       {:target $el
-        :init-state {:expanded? true}})))
+  :.sg-add-note
+  (fn [$el]
+    (om/root
+      notes/$add
+      {}
+      {:target $el
+       :init-state {:expanded? true}})))
 
 (dommy/listen! (sel1 :body) :keydown
   (fn [e]
     ;; ctrl-s to focus search input
     (when (and (.-ctrlKey e) (= 83 (.-keyCode e)))
       (.focus (sel1 ".search input[name='query']")))))
+
+
+(def tog (atom false))
+
+#_(js/setInterval
+  (fn []
+    (if (swap! tog not)
+      (dommy/add-class! (sel1 :body) :mobile-push)
+      (dommy/remove-class! (sel1 :body) :mobile-push)))
+  1000)

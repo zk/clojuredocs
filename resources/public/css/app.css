@@ -276,17 +276,18 @@ header.navbar i {
     padding-left: 0;
   }
 }
+header.navbar .btn.mobile-menu {
+  border: none;
+  margin-top: 5px;
+  font-size: 18px;
+  display: none;
+}
+header.navbar .btn.mobile-menu i {
+  margin: 0;
+}
 header.navbar .user-area {
-  padding: 13px 15px;
   font-size: 14px;
   color: #999;
-}
-header.navbar .user-area a {
-  display: inline;
-  padding: 0;
-}
-header.navbar .user-area a:hover {
-  background-color: transparent;
 }
 header.navbar .avatar {
   width: 22px;
@@ -295,6 +296,7 @@ header.navbar .avatar {
 }
 header.navbar .navbar-nav {
   padding-right: 0;
+  margin: 0;
 }
 header.navbar .navbar-nav li {
   margin-bottom: 0;
@@ -306,6 +308,41 @@ header.navbar .navbar-nav li:last-child {
 }
 header.navbar .quick-search-widget form {
   margin-right: 10px;
+}
+@media (max-width: 767px) {
+  header.navbar .btn.mobile-menu {
+    display: block;
+  }
+  body {
+    right: 0;
+    position: relative;
+    transition: right 0.3s ease;
+  }
+  .navbar-nav {
+    position: fixed;
+    width: 200px;
+    z-index: 1000;
+    background-color: #47a3da;
+    color: white;
+    top: 0;
+    bottom: 0;
+    right: -240px;
+    transition: right 0.2s ease;
+  }
+  .navbar-nav li a {
+    color: white;
+  }
+  .navbar-nav li a:hover {
+    background-color: #258ecd;
+  }
+  .mobile-push {
+    position: relative;
+    right: 200px;
+    transition: all 0.2s ease;
+  }
+  .mobile-push .navbar-nav {
+    right: 0;
+  }
 }
 .xkcd {
   display: block;
