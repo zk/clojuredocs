@@ -23,17 +23,24 @@
 + Quickref update
 + Supported libs blurb
 + Core-specific namespace page
+  + tags / sections w/ filtering
 + Add libraries page
 + Add user page
 + Add example widget
 + Redirect old urls to new
+  + versioned var urls
 + Switch to avatar url instead of email
 + Clean data export for dev distribution
 + Mobile comb-through
-+ Add comments widget
++ Add notes widget
 + Jobs
 + Admin interface
-+ Example editing
+  + What goes here?
++ Examples
+  + Editing examples
+  + Deleting examples
++ Organize ns decls
++ Rename comments -> notes
 
 
 ** Done
@@ -92,7 +99,7 @@
   + name
   + ns
   + library-url
-+ var-comments
++ var-notes
   + var (ns name library-url)
 
 
@@ -103,3 +110,8 @@
   + Construct avatar url
 + Vars
   + Import on startup
+
+
+* Admin
+
++ Jobs overview

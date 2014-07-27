@@ -171,14 +171,14 @@ solving problems (holy buzzwords, fix this)."]
        :body (pr-str (add-see-alsos (search/query (:query params))))}))
 
   (GET "/search-feedback" [] search-feedback)
-  (POST "/search-feedback" [] (fn [r]
+  (POST "/search-feedback" [] (fn [{:keys [edn-body]}]
                                 (try
-                                  (let [body (edn/read-string (util/response-body r))]
-                                    (mon/insert! :search-feedback
-                                      (assoc body :created-at (util/now)))
-                                    {:status 200
-                                     :body "Ok!"})
+                                  (mon/insert! :search-feedback
+                                    (assoc edn-body :created-at (util/now)))
+                                  {:status 200
+                                   :body "Ok!"}
                                   (catch Exception e
+                                    (.printStackTrace e)
                                     {:body (str "Whoops, something went wrong. " (.getMessage e))
                                      :status 500}))))
   (GET "/search-feedback/success"

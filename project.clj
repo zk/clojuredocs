@@ -26,7 +26,8 @@
                  [org.clojure/core.logic "0.8.8"]
                  [om "0.6.4"]
                  [prismatic/om-tools "0.2.2"]
-                 [org.pegdown/pegdown "1.4.2"]]
+                 [org.pegdown/pegdown "1.4.2"]
+                 [sablono "0.2.18"]]
   :profiles {:nrepl {:source-paths ["dev"]
                      :dependencies [[org.clojure/tools.namespace "0.2.4"]]
                      :repl-options {:init (user/restart)}}}
@@ -37,10 +38,6 @@
                                  :output-dir "resources/public/cljs"
                                  :optimizations :none
                                  :source-map true
-                                 :foreign-libs [{:file "js/syntaxhighlighter.js"
-                                                 :provides ["highlight"]}
-                                                {:file "js/morpheus.js"
-                                                 :provides ["morpheus"]}]
                                  :externs ["externs/syntaxhighlighter.js"
                                            "externs/morpheus.js"]}}
 
@@ -50,13 +47,13 @@
                                           :output-dir "resources/public/cljs-advanced"
                                           :source-map "resources/public/cljs/clojuredocs.js.map"
                                           :optimizations :advanced
-                                          :foreign-libs [{:file "resources/public/js/syntaxhighlighter.js"
-                                                          :provides ["highlight"]}]
                                           :preamble ["public/js/morpheus.min.js"
-                                                     "react/react.min.js"]
+                                                     "react/react.min.js"
+                                                     "public/js/marked.min.js"]
                                           :externs ["externs/syntaxhighlighter.js"
                                                     "externs/react.js"
-                                                    "externs/morpheus.js"]}}
+                                                    "externs/morpheus.js"
+                                                    "externs/marked.js"]}}
 
                :prod {:source-paths ["src/cljs"]
                       :compiler {:output-to "resources/public/cljs/clojuredocs.js"
@@ -65,8 +62,10 @@
                                  :foreign-libs [{:file "resources/public/js/syntaxhighlighter.js"
                                                  :provides ["highlight"]}]
                                  :preamble ["public/js/morpheus.min.js"
-                                            "react/react.min.js"]
+                                            "react/react.min.js"
+                                            "public/js/marked.min.js"]
                                  :externs ["externs/syntaxhighlighter.js"
                                            "externs/react.js"
-                                           "externs/morpheus.js"]}
+                                           "externs/morpheus.js"
+                                           "externs/marked.js"]}
                       :jar true}}})

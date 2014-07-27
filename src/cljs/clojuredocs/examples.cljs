@@ -7,7 +7,9 @@
             [clojuredocs.ajax :refer [ajax]]
             [clojuredocs.anim :as anim]
             [clojure.string :as str]
-            [cljs.reader :as reader])
+            [cljs.reader :as reader]
+            [sablono.core :as sab :refer-macros [html]]
+            [clojuredocs.util :as util])
   (:require-macros [dommy.macros :refer [node sel1]]))
 
 (defn validate-and-submit [app owner {:keys [text var]}]
@@ -49,7 +51,7 @@
     (dom/a {:class "toggle-link"
             :href ""
             :on-click #(set-expanded owner (not expanded?))}
-      (if-not expanded? "Add an Example" "Close"))))
+      (if-not expanded? "Add an Example" "Collapse"))))
 
 (defn $editor [owner {:keys [expanded? text var loading? error-message] :as state}]
   (dom/div {:class (str "add-example-content" (when-not expanded? " hidden"))}
@@ -109,7 +111,10 @@
       (dommy/append!
         (om/get-node owner "live-preview")
         (node [:div.empty-live-preview "Live Preview"]))
-      (update-preview owner))
+      (update-preview owner)
+      (dommy/set-value!
+        (om/get-node owner "textarea")
+        (om/get-state owner :text)))
 
     om/IDidUpdate
     (did-update [this prev-props prev-state]
@@ -126,14 +131,56 @@
         ($toggle-controls owner state)
         ($editor owner state)))))
 
-(defn add-example-widget [widget-el]
-  (let [var (dommy/attr widget-el :data-var)
-        [ns name] (when var (str/split var #"/"))]
-    (om/root
-      $add
-      {}
-      {:target widget-el
-       :init-state
-       {:var {:ns ns
-              :name name
-              :library-url "https://github.com/clojure/clojure"}}})))
+(defn $example-body [{:keys [body]}]
+  [:div.example-body
+   [:pre.raw-example {:class "brush: clojure"} body]])
+
+(defn $example [{:keys [body _id user history created-at updated-at] :as ex}]
+  [:div.var-example
+   [:div
+    (let [users (distinct
+                  (concat
+                    [user]
+                    (->> history
+                         (map :user)
+                         reverse)))
+          num-to-show 7]
+      [:div.example-meta
+       [:div.contributors
+        (->> users
+             (take num-to-show)
+             (map util/$avatar))
+        (when (> (count users) 10)
+          [:div.contributors
+           "+ "
+           (- (count users) num-to-show)
+           " more"])]
+
+       [:div.links
+        [:a {:href (str "#example_" _id)}
+         "permalink"]
+        " / "
+        [:a {:href (str "/ex/" _id)}
+         "history"]
+        [:span.edit-example-widget]]])]
+   [:div
+    [:a {:id (str "example_" _id)}]
+    ($example-body ex)]])
+
+(defn $examples [{:keys [examples var user] :as app} owner]
+  (reify
+    om/IRender
+    (render [_]
+      (sab/html
+        [:div.var-examples
+         [:h5 (util/pluralize (count examples) "Example" "Examples")]
+         (if (empty? examples)
+           [:div.null-state
+            "No examples for " (:ns var) "/" (:name var) "."]
+           (map $example examples))
+         (if user
+           (om/build $add app)
+           [:div.login-required-message
+            [:a {:href "#" #_(common/gh-auth-url uri)} "Log in"]
+            " to add an example"])]))))
+1

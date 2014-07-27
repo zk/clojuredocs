@@ -104,7 +104,7 @@
          :page-uri uri
          :content
          [:div.row
-          [:div.col-md-12.examples-styleguide-content
+          [:div.col-md-10.col-md-offset-1.examples-styleguide-content
            (-> "src/md/examples-styleguide.md"
                slurp
                util/markdown)]]})))

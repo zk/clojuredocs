@@ -651,7 +651,7 @@ table.ac-results .ac-metadata {
   margin: 0;
 }
 .example-meta,
-.comment-meta {
+.note-meta {
   font-size: 10px;
   margin-bottom: 0px;
   line-height: 1.3em;
@@ -659,16 +659,16 @@ table.ac-results .ac-metadata {
   color: #888;
 }
 .example-meta .avatar,
-.comment-meta .avatar {
+.note-meta .avatar {
   width: 25px;
   height: 25px;
   opacity: 0.8;
 }
 .example-meta .avatar:hover,
-.comment-meta .avatar:hover {
+.note-meta .avatar:hover {
   opacity: 1;
 }
-.comment-meta {
+.note-meta {
   margin-bottom: 10px;
 }
 .var-example {
@@ -840,19 +840,9 @@ table.ac-results .ac-metadata {
   line-height: 20px;
   color: #888;
 }
-.add-example .live-preview {
-  background-color: #fafafa;
-  margin-bottom: 10px;
-}
 .add-example .add-example-content {
   padding: 30px;
   background-color: #f8f8f8;
-}
-.add-example .empty-live-preview {
-  text-align: center;
-  color: #aaa;
-  font-size: 14px;
-  padding: 10px;
 }
 .not-finding {
   text-align: right;
@@ -1020,28 +1010,29 @@ table.ac-results .ac-metadata {
 .toggle-link {
   color: rgba(66, 139, 202, 0.8);
 }
-.comment-body {
+.note-body {
   background-color: #fafafa;
   padding: 10px;
 }
-.comment-body p {
+.note-body p {
   margin-bottom: 10px;
 }
-.add-comment .add-comment-form {
-  padding: 20px;
+.add-note .add-note-content {
+  padding: 30px;
+  background-color: #f8f8f8;
 }
-.add-comment .instructions {
+.add-note .instructions {
   color: #555;
   font-size: 12px;
 }
-.add-comment textarea {
+.add-note textarea {
   height: 200px;
 }
-.add-comment .live-preview {
+.add-note .live-preview {
   padding: 10px;
   background-color: #fafafa;
 }
-.add-comment .live-preview li {
+.add-note .live-preview li {
   margin-left: 20px;
   list-style-type: disc;
   margin-bottom: 0;
@@ -1091,4 +1082,14 @@ table.ac-results .ac-metadata {
 }
 .sidenav .current {
   font-weight: bold;
+}
+.live-preview {
+  background-color: #fafafa;
+  margin-bottom: 10px;
+}
+.live-preview .empty-live-preview {
+  text-align: center;
+  color: #aaa;
+  font-size: 14px;
+  padding: 10px;
 }
