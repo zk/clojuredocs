@@ -51,11 +51,13 @@
                                                           :provides ["highlight"]}]
                                           :preamble ["public/js/morpheus.min.js"
                                                      "react/react.min.js"
-                                                     "public/js/marked.min.js"]
+                                                     "public/js/marked.min.js"
+                                                     "public/js/fastclick.min.js"]
                                           :externs ["externs/syntaxhighlighter.js"
                                                     "externs/react.js"
                                                     "externs/morpheus.js"
-                                                    "externs/marked.js"]}}
+                                                    "externs/marked.js"
+                                                    "externs/fastclick.js"]}}
 
                :prod {:source-paths ["src/cljs"]
                       :compiler {:output-to "resources/public/cljs/clojuredocs.js"
@@ -65,9 +67,11 @@
                                                  :provides ["highlight"]}]
                                  :preamble ["public/js/morpheus.min.js"
                                             "react/react.min.js"
-                                            "public/js/marked.min.js"]
+                                            "public/js/marked.min.js"
+                                            "public/js/fastclick.min.js"]
                                  :externs ["externs/syntaxhighlighter.js"
                                            "externs/react.js"
                                            "externs/morpheus.js"
-                                           "externs/marked.js"]}
+                                           "externs/marked.js"
+                                           "externs/fastclick.js"]}
                       :jar true}}})
