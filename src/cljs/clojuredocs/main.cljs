@@ -349,3 +349,6 @@ user=> (into {} *1)
       (dommy/add-class! (sel1 :body) :mobile-push)
       (dommy/remove-class! (sel1 :body) :mobile-push)))
   1000)
+
+
+(.attach js/FastClick js/document.body)
