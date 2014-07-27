@@ -176,10 +176,13 @@
     (let [h (fn [_] (dommy/remove-class! (sel1 :body) :mobile-push))]
       (dommy/listen! $el :click h :touchstart h)))
 
-  :.navbar-nav
-  (fn [$el]
+  #_:.navbar-nav
+  #_(fn [$el]
     (let [h (fn [e] (.stopPropagation e))]
-      (dommy/listen! $el :click h :touchstart h)))
+      (dommy/listen! $el
+        :click h
+        :touchstart h
+        :scroll h)))
 
   :.sg-quick-lookup
   (fn [$el]
@@ -205,7 +208,7 @@ f should accept number-of-colls arguments."}
                      :doc "Fundamental library of the Clojure language"}
                     {:type "page"
                      :name "Getting Started"
-                     :desc "Where to go to get started with Clojure. Provides a host of information on the language, core concepts, tutorials, books, and videos to help you learn Clojure."}]}
+                     :desc "Where to go to get started with Clojure. Provides a host of information  con the language, core concepts, tutorials, books, and videos to help you learn Clojure."}]}
       {:target $el}))
 
   :.sg-quick-lookup-loading
