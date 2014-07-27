@@ -28,7 +28,6 @@
 + Add user page
 + Add example widget
 + Redirect old urls to new
-  + versioned var urls
 + Switch to avatar url instead of email
 + Clean data export for dev distribution
 + Mobile comb-through
@@ -40,11 +39,10 @@
   + Editing examples
   + Deleting examples
 + Organize ns decls
-+ Rename comments -> notes
-
 
 ** Done
-
++ Redirect old versioned var urls
++ Rename comments -> notes
 + Null-state for top contribs
 + Fix login redirects to current page
 + Move over comments
