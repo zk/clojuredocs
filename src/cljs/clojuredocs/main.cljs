@@ -176,6 +176,11 @@
     (let [h (fn [_] (dommy/remove-class! (sel1 :body) :mobile-push))]
       (dommy/listen! $el :click h :touchstart h)))
 
+  :.navbar-nav
+  (fn [$el]
+    (let [h (fn [e] (.stopPropagation e))]
+      (dommy/listen! $el :click h :touchstart h)))
+
   :.sg-quick-lookup
   (fn [$el]
 
