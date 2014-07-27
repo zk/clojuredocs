@@ -47,6 +47,8 @@
                                           :output-dir "resources/public/cljs-advanced"
                                           :source-map "resources/public/cljs/clojuredocs.js.map"
                                           :optimizations :advanced
+                                          :foreign-libs [{:file "resources/public/js/syntaxhighlighter.js"
+                                                          :provides ["highlight"]}]
                                           :preamble ["public/js/morpheus.min.js"
                                                      "react/react.min.js"
                                                      "public/js/marked.min.js"]
