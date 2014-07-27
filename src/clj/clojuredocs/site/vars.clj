@@ -29,8 +29,8 @@
 (defn library-for [{:keys [ns]}]
   search/clojure-lib)
 
-(defn comments-for [{:keys [ns name library-url]}]
-  (mon/fetch :var-comments
+(defn notes-for [{:keys [ns name library-url]}]
+  (mon/fetch :var-notes
     :where {:var.ns ns :var.name name :var.library-url library-url}
     :sort {:created-at 1}))
 
@@ -38,76 +38,16 @@
   [:li.arglist (str
                  "(" name (when-not (empty? a) " ") a ")")])
 
-(defn $example-body [{:keys [body]}]
-  [:div.example-body
-   [:pre.raw-example {:class "brush: clojure"} body]])
-
-(defn $example [{:keys [body _id user history created-at updated-at] :as ex}]
-  [:div.var-example
-   [:div
-    (let [users (distinct
-                  (concat
-                    [user]
-                    (->> history
-                         (map :user)
-                         reverse)))
-          num-to-show 7]
-      [:div.example-meta
-       [:div.contributors
-        (->> users
-             (take num-to-show)
-             (map common/$avatar))
-        (when (> (count users) 10)
-          [:div.contributors
-           "+ "
-           (- (count users) num-to-show)
-           " more"])]
-
-       [:div.links
-        [:a {:href (str "#example_" _id)}
-         "permalink"]
-        " / "
-        [:a {:href (str "/ex/" _id)}
-         "history"]]])]
-   [:div
-    [:a {:id (str "example_" _id)}]
-    ($example-body ex)]])
-
 (defn source-url [{:keys [file line ns]}]
   (when (= "clojure.core" ns)
     (str "https://github.com/clojure/clojure/blob/clojure-1.6.0/src/clj/" file "#L" line)))
 
-(defn $see-also [{:keys [ns name created-at doc user] :as sa}]
-  [:div.col-sm-6.see-also
-   [:div
-    (util/$var-link ns name
-      [:span.ns ns "/"]
-      [:span.name name])]
-   [:p
-    (->> doc
-         (take 100)
-         (apply str))
-    (when (> (count doc) 100)
-      "...")]
-   [:div.meta
-    "Added by " [:a {:href (str "/u/" (:login user))} (:login user)]]])
-
 (defn lookup-var [ns name]
   (search/lookup (str ns "/" name)))
 
-(defn $examples [examples ns name]
-  [:div.var-examples
-   [:h5 (util/pluralize (count examples) "Example" "Examples")]
-   (if (empty? examples)
-     [:div.null-state
-      "No examples for " ns "/" name ", "
-      [:a {:href "#"} "add one"]
-      "?"]
-     (map $example examples))])
-
-(defn $comment [{:keys [body user created-at]}]
-  [:div.comment
-   [:div.comment-meta
+(defn $note [{:keys [body user created-at]}]
+  [:div.note
+   [:div.note-meta
     "By "
     (common/$avatar user)
     " "
@@ -115,21 +55,35 @@
     ", "
     (util/timeago created-at)
     " ago."]
-   [:div.comment-body
+   [:div.note-body
     (-> (util/markdown body)
         (str/replace #"<pre><code>" "<pre class=\"brush: clojure\">")
         (str/replace #"</code></pre>" "</pre>"))]])
 
-(defn $comments [comments name]
-  [:div.var-comments
-   [:h5 (util/pluralize (count comments) "Comment" "Comments")]
+(defn $notes [notes name]
+  [:div.var-notes
+   [:h5 (util/pluralize (count notes) "Note" "Notes")]
    [:div
-    (if (empty? comments)
-      [:div.null-state "No comments for " [:code name]]
+    (if (empty? notes)
+      [:div.null-state "No notes for " [:code name]]
       [:ul
-       (for [c comments]
-         ($comment c))])]
-   [:div.add-comment-widget]])
+       (for [n notes]
+         ($note n))])]
+   [:div.add-note-widget]])
+
+
+(defn clean-id [{:keys [_id] :as m}]
+  (assoc m :_id (str _id)))
+
+(defn clean-example [{:keys [_id user history] :as m}]
+  (-> m
+      (update-in [:user] dissoc :email)
+      (update-in [:_id] str)))
+
+(defn clean-see-also [m]
+  (-> m
+      (update-in [:user] dissoc :email)
+      (update-in [:_id] str)))
 
 (defn var-page [ns name]
   (let [name (util/cd-decode name)
@@ -140,7 +94,7 @@
               see-alsos (see-alsos-for v)
               library (library-for v)
               recent (:recent session)
-              comments (comments-for v)]
+              notes (notes-for v)]
           {:session (update-in session [:recent]
                       #(->> %
                             (concat [{:text name
@@ -151,8 +105,11 @@
            :body
            (common/$main
              {:body-class "var-page"
-              :page-data {:examples (map #(assoc % :_id (str (:_id %))) examples)
-                          :var (assoc v :_id (str (:_id v)))}
+              :page-data {:examples (map clean-example examples)
+                          :var v
+                          :notes (map clean-id notes)
+                          :see-alsos (map clean-see-also see-alsos)
+                          :user (select-keys user [:login :avatar-url])}
               :page-uri uri
               :user user
               :content [:div
@@ -192,28 +149,15 @@
                                [:a {:href "http://www.eclipse.org/legal/epl-v10.html"}
                                 "Eclipse Public License 1.0"]])]]
                           [:section
-                           [:div.examples-widget
-                            ($examples examples ns name)]
-                           (if user
-                             [:div.add-example-widget
-                              {:data-var (str (:ns v) "/" (:name v))}]
-                             [:div.login-required-message
-                              [:a {:href (common/gh-auth-url uri)} "Log in"]
-                              " to add an example"])]
+                           [:div.examples-widget]]
                           [:section
-                           [:h5 "See Also"]
-                           (if (empty? see-alsos)
-                             [:div.null-state
-                              "No see-alsos for " [:code name]]
-                             [:div.row
-                              (map $see-also see-alsos)])
-                           (if user
-                             [:div.add-see-also-widget]
-                             [:div.login-required-message
-                              [:a {:href (common/gh-auth-url uri)} "Log in"]
-                              " to add a see-also"])]
+                           [:div.see-alsos-widget]]
                           [:section
-                           ($comments comments name)]]]]})})))))
+                           [:div.notes-widget]]]]]})})))))
+
+(defn $example-body [{:keys [body]}]
+  [:div.example-body
+   [:pre.raw-example {:class "brush: clojure"} body]])
 
 (defn $example-history-point [{:keys [user body created-at updated-at] :as ex}]
   [:div.var-example
@@ -244,7 +188,7 @@
                       (util/$var-link ns name (str ns "/" name))
                       ", in order from newest to oldest. "
                       "The currrent version is outlined in yellow."]
-                     [:div.current-example
+                     #_[:div.current-example
                       ($example ex)]
                      (->> history
                           reverse

@@ -21,7 +21,7 @@
 (defn all-libs []
   (j/query mysql-db ["SELECT * FROM libraries"]))
 
-(defn all-comments []
+(defn all-notes []
   (j/query mysql-db ["SELECT * FROM comments"]))
 
 (defn lookup-user [user-id]
@@ -346,19 +346,19 @@
      )
 
 
-(defn ins-or-update-comment [cmt]
-  (mon/update! :var-comments
+(defn ins-or-update-note [cmt]
+  (mon/update! :var-notes
     (select-keys cmt [:user :created-at :var])
     cmt))
 
-(defn import-comments []
-  (let [comments (->> (all-comments)
+(defn import-notes []
+  (let [notes (->> (all-notes)
                       (map #(assoc % :user (lookup-user (:user_id %))))
                       (map #(assoc % :var (lookup-function (:commentable_id %))))
                       (map #(assoc % :created-at (:created_at %)))
                       (map #(assoc % :updated-at (:updated_at %)))
                       (map #(select-keys % [:updated-at :var :body :created-at :user])))]
-    (doseq [c comments]
-      (ins-or-update-comment c))))
+    (doseq [n notes]
+      (ins-or-update-note n))))
 
-(import-comments)
+(import-notes)

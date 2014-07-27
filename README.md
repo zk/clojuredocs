@@ -34,7 +34,7 @@ Connect to the repl and / or visit http://localhost:5000
 
 You'll notice that var information is already populated. In an effort for not make the same mistakes again, all core-related var info is loaded from the runtime version of Clojure on start up.
 
-OTOH, examples, see-alsos, and comments (and any other user-generated content) are stored in the database.
+OTOH, examples, see-alsos, and notes (and any other user-generated content) are stored in the database.
 
 ### Prod Local
 

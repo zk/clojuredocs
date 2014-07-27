@@ -1,4 +1,4 @@
-(ns clojuredocs.widgets
+(ns clojuredocs.search
   (:require [om.core :as om :include-macros true]
             [om-tools.dom :as dom :include-macros true]
             [dommy.core :as dommy]
@@ -6,28 +6,11 @@
              :refer [<! >! chan close! sliding-buffer put! alts! timeout pipe mult tap]]
             [clojuredocs.ajax :refer [ajax]]
             [clojuredocs.anim :as anim]
-            [clojuredocs.examples :as examples]
             [clojure.string :as str]
             [cljs.reader :as reader]
-            [goog.crypt :as gcrypt]
-            [goog.crypt.Md5 :as Md5]
-            [goog.crypt.Sha1 :as Sha1])
-  (:require-macros [cljs.core.async.macros :refer [go]]
-                   [dommy.macros :refer [node sel1]]))
-
-(enable-console-print!)
-
-(defn cd-encode [s]
-  (cond
-    (= "." s) "_."
-    (= ".." s) "_.."
-    :else (-> s
-              (str/replace #"/" "_fs")
-              (str/replace #"\\" "_bs")
-              (str/replace #"\?" "_q"))))
-
-(defn pluralize [n single plural]
-  (str n " " (if (= 1 n) single plural)))
+            [sablono.core :as sab :refer-macros [html]]
+            [clojuredocs.util :as util])
+  (:require-macros [dommy.macros :refer [node sel1]]))
 
 (defn ellipsis [n s]
   (if (> (- (count s) 3) n)
@@ -36,106 +19,6 @@
               (apply str))
          "...")
     s))
-
-(defn url-encode
-  [string]
-  (some-> string
-    str
-    (js/encodeURIComponent)
-    (.replace "+" "%20")))
-
-(defn var-url [{:keys [ns name]}]
-  (str "/" (url-encode ns) "/" (url-encode (cd-encode name))))
-
-
-;; Examples
-
-(defn string->bytes [s]
-  (gcrypt/stringToUtf8ByteArray s))  ;; must be utf8 byte array
-
-(defn bytes->hex
-  "convert bytes to hex"
-  [bytes-in]
-  (gcrypt/byteArrayToHex bytes-in))
-
-(defn hash-bytes [digester bytes-in]
-  (do
-    (.update digester bytes-in)
-    (.digest digester)))
-
-(defn md5-
-  "convert bytes to md5 bytes"
-  [bytes-in]
-  (hash-bytes (goog.crypt.Md5.) bytes-in))
-
-(defn md5-bytes
-  "convert utf8 string to md5 byte array"
-  [string]
-  (md5- (string->bytes string)))
-
-(defn md5-hex [string]
-  "convert utf8 string to md5 hex string"
-  (bytes->hex (md5-bytes string)))
-
-(defn avatar [{:keys [email login]}]
-  (dom/a {:href (str "/u/" login)}
-    (dom/img {:class "avatar"
-              :src (str "https://www.gravatar.com/avatar/" (md5-hex email) "?r=PG&s=48&default=identicon")})))
-
-(defn example-widget [{:keys [body history _id]} owner]
-  (reify
-    om/IDidMount
-    (did-mount [_]
-      (let [el (om/get-node owner "source")
-            pre (node [:pre {:class "brush: clojure"} body])]
-        (dommy/clear! el)
-        (dommy/append! el pre)
-        (.highlight js/SyntaxHighlighter #js {:toolbar false :gutter false} pre)))
-
-    om/IDidUpdate
-    (did-update [_ _ _]
-      (let [el (om/get-node owner "source")]
-        (dommy/clear! el)
-        (dommy/append! el (node
-                            [:pre {:class "brush: clojure"}
-                             body]))))
-    om/IRender
-    (render [this]
-      (let [users (->> history
-                       (map :user)
-                       distinct
-                       reverse)
-            num-to-show 6]
-        (dom/div {:class "row var-example"}
-          (dom/div {:class "col-md-10"}
-            (dom/div {:class "example-body" :ref "source"}))
-          (dom/div {:class "col-md-2"}
-            (dom/div {:class "example-meta"}
-              (dom/div {:class "contributors"}
-                (->> users
-                     (take num-to-show)
-                     (map avatar))
-                (when (> (count users) num-to-show)
-                  (dom/div {:class "contributors"}
-                    "+ "
-                    (- (count users) num-to-show)
-                    " more")))
-              (dom/div {:class "links"}
-                (dom/a {:href (str "#example_" _id)} "link")
-                " / "
-                (dom/a {:href (str "/ex/" _id)} "history")))))))))
-
-(defn examples [{:keys [examples var]} owner]
-  (reify
-    om/IRender
-    (render [this]
-      (dom/div {:class "var-examples"}
-        (dom/h3 (pluralize (count examples) "Example" "Examples"))
-        (if (> (count examples) 0)
-          (for [example examples]
-            (om/build example-widget example))
-          (dom/div {:class "null-state"}
-            "No examples for " (:ns var) "/" (:name var) "."))))))
 
 ;; Landing page autocomplete
 
@@ -219,12 +102,9 @@
     (om/set-state! owner :loading? true)
     (om/set-state! owner :text text)))
 
-(defn navigate-to [url]
-  (aset (.-location js/window) "href" url))
-
 (defn search-submit [{:keys [href]}]
   (when href
-    (navigate-to href))
+    (util/navigate-to href))
   false)
 
 (defn maybe-nav [e app ac-results]
@@ -254,7 +134,7 @@
       (js/clearTimeout @timer)
       (reset! timer (js/setTimeout #(f e) ms)))))
 
-(defn quick-search [{:keys [highlighted-index loading? ac-results] :as app} owner]
+(defn $quick-search [{:keys [highlighted-index loading? ac-results] :as app} owner]
   (reify
     om/IRenderState
     (render-state [this {:keys [text-chan text]}]
@@ -269,10 +149,10 @@
                     :on-input (throttle 200 #(put-text % text-chan owner))
                     :on-key-down #(maybe-nav % app ac-results)})))))
 
-(defn ac-results [{:keys [highlighted-index ac-results]
-                   :or {highlighted-index 0}
-                   :as app}
-                  owner]
+(defn $ac-results [{:keys [highlighted-index ac-results]
+                    :or {highlighted-index 0}
+                    :as app}
+                   owner]
   (reify
     om/IDidUpdate
     (did-update [_ prev-props prev-state]
@@ -287,14 +167,14 @@
       (dom/ul {:class "ac-results"}
         (map-indexed
           (fn [i {:keys [href type] :as res}]
-            (dom/li {:on-click #(when href (navigate-to href))
+            (dom/li {:on-click #(when href (util/navigate-to href))
                      :class (when (= i highlighted-index)
                               "highlighted")
                      :ref i}
               (ac-entry res)))
           ac-results)))))
 
-(defn quick-lookup [{:keys [highlighted-index ac-results loading?]
+(defn $quick-lookup [{:keys [highlighted-index ac-results loading?]
                      :or {highlighted-index 0}
                      :as app}
                     owner]
@@ -319,84 +199,17 @@
                     :on-key-down #(maybe-nav % app ac-results)})
         (dom/div {:class "not-finding"}
           "Can't find what you're looking for? "
-          (dom/a {:href (str "search-feedback" (when text (str "?query=" (url-encode text))))} "Help make ClojureDocs better")
+          (dom/a {:href (str "search-feedback" (when text (str "?query=" (util/url-encode text))))} "Help make ClojureDocs better")
           ".")
         (dom/ul {:class "ac-results"}
           (map-indexed
             (fn [i {:keys [href type] :as res}]
-              (dom/li {:on-click #(when href (navigate-to href))
+              (dom/li {:on-click #(when href (util/navigate-to href))
                        :class (when (= i highlighted-index)
                                 "highlighted")
                        :ref i}
                 (ac-entry res)))
             ac-results))))))
-
-(defn toggle [owner key]
-  (om/update-state! owner (fn [state]
-                            (assoc state key (not (get state key)))))
-  false)
-
-(defn add-see-also [{:keys [user]} owner]
-  (reify
-    om/IDidUpdate
-    (did-update [_ _ _]
-      (.focus (om/get-node owner "input")))
-    om/IRenderState
-    (render-state [this {:keys [expanded?]}]
-      (dom/div {:class "add-see-also"}
-        (dom/div {:class "toggle-controls"}
-          (if true
-            (dom/a {:class "toggle-link" :href "#" :on-click #(toggle owner :expanded?)}
-              (if-not expanded?
-                "Add See Also"
-                "Close"))
-            (dom/span {:class "muted"} "log in to add a see also")))
-        (dom/div {:class (when-not expanded? "hidden")}
-          (dom/form {:on-submit (constantly false) :autoComplete "off"}
-            (dom/div {:class "input-group"}
-              (dom/input {:class "form-control"
-                          :name "see-also-name"
-                          :ref "input"
-                          :placeholder "Var Name"})
-              (dom/span {:class "input-group-btn"}
-                (dom/button {:class "btn btn-success"} "Add See-Also")))))))))
-
-(defn $add-comment [{:keys [user]} owner]
-  (reify
-    om/IDidUpdate
-    (did-update [_ _ _]
-      (.focus (om/get-node owner "input"))
-      #_(when-let [text (om/get-state owner :text)]
-        (aset (om/get-node owner "live-preview")
-          "innerHTML"
-          (-> text
-              md->html
-              (str/replace #"<pre>" "<pre class=\"brush: clojure\">")))))
-    om/IRenderState
-    (render-state [this {:keys [expanded? text]}]
-      (dom/div {:class "add-comment"}
-        (dom/div {:class "toggle-controls"}
-          (if true
-            (dom/a {:class "toggle-link" :href "#" :on-click #(toggle owner :expanded?)}
-              (if-not expanded?
-                "Add Comment"
-                "Close"))
-            (dom/span {:class "muted"} "log in to add a comment")))
-        (dom/div {:class (when-not expanded? "hidden")}
-          (dom/form {:on-submit (constantly false) :autoComplete "off" :class "add-comment-form"}
-            (dom/div {:class "form-group"}
-              (dom/div {:class "instructions"}
-                (dom/p "Markdown allowed, code in <pre />"))
-              (dom/textarea
-                {:class "form-control"
-                 :name "comment-name"
-                 :ref "input"
-                 :value text
-                 :placeholder "Comment goes here"
-                 :on-input #(do
-                              (om/set-state! owner :text (.. % -target -value))
-                              false)})))
-          (dom/div {:class "live-preview" :ref "live-preview"}))))))
 
 (defn submit-feedback [owner query clojure-level text]
   (om/set-state! owner :loading? true)
@@ -408,7 +221,7 @@
             :clojure-level clojure-level
             :text text}
      :success (fn [_]
-                (navigate-to "/search-feedback/success"))
+                (util/navigate-to "/search-feedback/success"))
      :error (fn [_]
               (om/set-state! owner
                 :error-message
@@ -473,79 +286,3 @@
             "Send Feedback")
           (dom/img {:class (str "pull-right loading" (when-not loading? " hidden"))
                     :src "/img/loading.gif"}))))))
-
-(defn ajax-chan [opts]
-  (let [c (chan)]
-    (ajax
-      (merge
-        opts
-        {:success (fn [res]
-                    (put! c {:success true :res res}))
-         :error (fn [res]
-                  (put! c {:success false :res res}))}))
-    c))
-
-(defn wire-search [text-chan app-state]
-  (go
-    (while true
-      (let [ac-text (<! text-chan)
-            ac-response (<! (ajax-chan {:method :get
-                                        :path (str "/search?query=" (url-encode ac-text))
-                                        :data-type :edn}))
-            data (-> ac-response :res :body)]
-        (when (:success ac-response)
-          #_(anim/scroll-to (sel1 :div.search-widget) {:pad 30})
-          (swap! app-state
-            assoc
-            :highlighted-index 0
-            :loading? false
-            :ac-results data))))))
-
-(def app-state
-  (atom (reader/read-string (aget js/window "PAGE_DATA"))))
-
-(def text-chan (chan))
-
-(wire-search text-chan app-state)
-
-(def init
-  [[:div.search-widget]
-   (fn [$el]
-     (om/root
-         quick-lookup
-         app-state
-         {:target $el
-          :init-state {:text-chan text-chan}}))
-
-   [:div.quick-search-widget]
-   (fn [$el]
-     (om/root
-       quick-search
-       app-state
-       {:target $el
-        :init-state {:text-chan text-chan}}))
-
-   [:div.ac-results-widget]
-   (fn [$el]
-     (om/root
-       ac-results
-       app-state
-       {:target $el}))
-
-   [:div.add-example-widget]
-   examples/add-example-widget
-
-   [:div.add-see-also-widget]
-   (fn [$el]
-     (om/root
-       add-see-also
-       {}
-       {:target $el}))
-
-   [:div.search-feedback-widget]
-   (fn [$el]
-     (om/root
-       $search-feedback
-       {}
-       {:target $el
-        :init-state {:query (dommy/attr $el :data-query)}}))])

@@ -651,7 +651,7 @@ table.ac-results {
   }
 }
 
-.example-meta, .comment-meta {
+.example-meta, .note-meta {
   font-size: 10px;
   margin-bottom: 0px;
   line-height: 1.3em;
@@ -669,7 +669,7 @@ table.ac-results {
   }
 }
 
-.comment-meta {
+.note-meta {
   margin-bottom: 10px;
 }
 
@@ -904,22 +904,9 @@ table.ac-results {
     color: #888;
   }
 
-  .live-preview {
-    background-color: #fafafa;
-    margin-bottom: 10px;
-  }
-
   .add-example-content {
     padding: 30px;
     background-color: #f8f8f8;
-  }
-
-  .empty-live-preview {
-    text-align: center;
-    color: #aaa;
-    font-size: 14px;
-    padding: 10px;
-
   }
 }
 
@@ -1135,7 +1122,7 @@ table.ac-results {
   color: @light-blue;
 }
 
-.comment-body {
+.note-body {
   background-color: #fafafa;
   padding: 10px;
 
@@ -1144,9 +1131,10 @@ table.ac-results {
   }
 }
 
-.add-comment {
-  .add-comment-form {
-    padding: 20px;
+.add-note {
+  .add-note-content {
+    padding: 30px;
+    background-color: #f8f8f8;
   }
 
   .instructions {
@@ -1237,5 +1225,17 @@ table.ac-results {
 
   .current {
     font-weight: bold;
+  }
+}
+
+.live-preview {
+  background-color: #fafafa;
+  margin-bottom: 10px;
+
+  .empty-live-preview {
+    text-align: center;
+    color: #aaa;
+    font-size: 14px;
+    padding: 10px;
   }
 }

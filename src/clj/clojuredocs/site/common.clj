@@ -137,6 +137,8 @@
     (when (env/bool :cljs-dev)
       [:script {:src "/js/react.js"}])
     (when (env/bool :cljs-dev)
+      [:script {:src "/js/marked.min.js"}])
+    (when (env/bool :cljs-dev)
       [:script {:src "/cljs/goog/base.js"}])
     clojuredocs-script
     (when (env/bool :cljs-dev)
