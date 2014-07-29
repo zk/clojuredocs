@@ -55,7 +55,7 @@
       (.focus (om/get-node owner "input"))
       (update-preview owner))
     om/IRenderState
-    (render-state [this {:keys [expanded? text]}]
+    (render-state [this {:keys [expanded? loading? text error-message]}]
       (sab/html
         [:div.add-note
          [:div.toggle-controls
@@ -77,7 +77,7 @@
                            (om/set-state! owner :text (.. % -target -value))
                            false)}]
             [:p.instructions "Markdown allowed, code in <pre />."]
-            (when error-messagen
+            (when error-message
               [:div.form-group
                [:div.error-message.text-danger
                 [:i.fa.fa-exclamation-circle]
@@ -94,7 +94,7 @@
               {:class (when-not loading? " hidden")
                :src "/img/loading.gif"}]]]]]]))))
 
-(defn $note [{:keys [body user created-at]} owner]
+(defn $note [{:keys [body user created-at]}]
   [:div.note
    [:div.note-meta
     "By "

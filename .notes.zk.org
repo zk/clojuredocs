@@ -40,6 +40,8 @@
   + Deleting examples
 + Organize ns decls
 + Var page navigation
++ Loading state on search inputs should show immediately on input
++ Show no results state for search
 
 
 ** Done

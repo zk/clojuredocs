@@ -55,22 +55,28 @@
    :body (.getResponseText req)
    :success (.isSuccess req)})
 
+(defn json-parse [s]
+  (.parse js/JSON s))
+
+(defn json-stringify [s]
+  (.stringify js/JSON s))
+
 (defn format-body [{:keys [headers body] :as r}]
   (let [content-type (or (-> headers
                              (get "content-type"))
                          (-> headers
                              (get "Content-Type"))
                          "")
-        body (condp #(re-find % content-type) content-type
+        body (condp #(re-find %1 %2) content-type
                #"application/json" (-> body
-                                       JSON/parse
+                                       json-parse
                                        (js->clj :keywordize-keys true))
                #"application/edn" (reader/read-string body)
                body)]
     (assoc r :body body)))
 
 ;; To get around https://code.google.com/p/closure-library/issues/detail?id=642
-(defn xhrio-send [url callback method content headers timeout-interval]
+(defn xhrio-send [url callback method content headers & [timeout-interval with-creds]]
   (let [x (goog.net.XhrIo.)]
     (when callback
       (.listen x EventType/COMPLETE callback))
@@ -94,7 +100,7 @@
                (= :json (:data-type opts))
                (assoc opts :data (-> (:data opts)
                                      clj->js
-                                     JSON/stringify))
+                                     json-stringify))
 
                (= :edn (:data-type opts))
                (assoc opts :data (pr-str (:data opts)))
