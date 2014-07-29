@@ -66,11 +66,29 @@
        [:div.col-sm-4.col-md-12
         (map $toc-sphere tg)])]))
 
+(defn mobile-nav [quickref-data]
+  {:title "Table of Contents"
+   :links
+   (->> quickref-data
+        (map (fn [{:keys [title categories]}]
+               [:a
+                {:href (str "#" (title->id title))
+                 :data-animate-scroll "true"
+                 :data-animate-buffer "60"}
+                [:div.quickref-mobile-toc
+                 [:h5 title]
+                 [:span.categories
+                  (->> categories
+                       (map :title)
+                       (interpose ", ")
+                       (apply str))]]])))})
+
 (defn index [{:keys [user uri]}]
   (common/$main
     {:body-class "quickref-page"
      :user user
      :page-uri uri
+     :mobile-nav [(mobile-nav quickref-data)]
      :content
      [:div
       [:div.row

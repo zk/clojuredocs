@@ -1,6 +1,5 @@
 (ns clojuredocs.notes
   (:require [om.core :as om :include-macros true]
-            [om-tools.dom :as dom :include-macros true]
             [dommy.core :as dommy]
             [cljs.core.async :as async
              :refer [<! >! chan close! sliding-buffer put! alts! timeout pipe mult tap]]
@@ -57,41 +56,43 @@
       (update-preview owner))
     om/IRenderState
     (render-state [this {:keys [expanded? text]}]
-      (dom/div {:class "add-note"}
-        (dom/div {:class "toggle-controls"}
+      (sab/html
+        [:div.add-note
+         [:div.toggle-controls
           (if true
-            (dom/a {:class "toggle-link" :href "#" :on-click #(toggle owner :expanded?)}
-              (if-not expanded?
-                "Add Note"
-                "Collapse"))
-            (dom/span {:class "muted"} "log in to add a note")))
-        (dom/div {:class (str "add-note-content" (when-not expanded? " hidden"))}
-          (dom/div {:class "live-preview" :ref "live-preview"})
-          (dom/form {:on-submit (constantly false) :autoComplete "off" :class "add-note-form"}
-            (dom/div {:class "form-group"}
-              (dom/textarea
-                {:class "form-control"
-                 :name "note-name"
-                 :ref "input"
-                 :on-input #(do
-                              (om/set-state! owner :text (.. % -target -value))
-                              false)})
-              (dom/p {:class "instructions"} "Markdown allowed, code in <pre />.")
-              (when error-message
-                (dom/div {:class "form-group"}
-                  (dom/div {:class "error-message text-danger"}
-                    (dom/i {:class "fa fa-exclamation-circle"})
-                    error-message)))
-              (dom/div {:class "add-example-controls clearfix form-group"}
-                (dom/button {:class "btn btn-default"
-                             :disabled (when loading? "disabled")
-                             :on-click #(cancel-clicked % owner)}
-                  "Cancel")
-                (dom/button {:class "btn btn-success pull-right"
-                             :disabled (when loading? "disabled")}
-                  "Add Note")
-                (dom/img {:class (str "pull-right loading" (when-not loading? " hidden"))
-                          :src "/img/loading.gif"})))))))))
+            [:a.toggle-link {:href "#" :on-click #(toggle owner :expanded?)}
+             (if-not expanded?
+               "Add Note"
+               "Collapse")]
+            [:span.muted "log in to add a note"])]
+         [:div.add-note-content {:class (when-not expanded? " hidden")}
+          [:div.live-preview {:ref "live-preview"}]
+          [:form.add-note-form
+           {:on-submit (constantly false) :autoComplete "off"}
+           [:div.form-group
+            [:textarea.form-control
+             {:name "note-name"
+              :ref "input"
+              :on-input #(do
+                           (om/set-state! owner :text (.. % -target -value))
+                           false)}]
+            [:p.instructions "Markdown allowed, code in <pre />."]
+            (when error-messagen
+              [:div.form-group
+               [:div.error-message.text-danger
+                [:i.fa.fa-exclamation-circle]
+                error-message]])
+            [:div.add-example-controls.form-group.clearfix
+             [:button {:class "btn btn-default"
+                       :disabled (when loading? "disabled")
+                       :on-click #(cancel-clicked % owner)}
+              "Cancel"]
+             [:button {:class "btn btn-success pull-right"
+                       :disabled (when loading? "disabled")}
+              "Add Note"]
+             [:img.loading.pull-right
+              {:class (when-not loading? " hidden")
+               :src "/img/loading.gif"}]]]]]]))))
 
 (defn $note [{:keys [body user created-at]} owner]
   [:div.note

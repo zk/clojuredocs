@@ -31,7 +31,6 @@
 + Switch to avatar url instead of email
 + Clean data export for dev distribution
 + Mobile comb-through
-+ Mobile slide-out menu
 + Add notes widget
 + Jobs
 + Admin interface
@@ -40,8 +39,11 @@
   + Editing examples
   + Deleting examples
 + Organize ns decls
++ Var page navigation
+
 
 ** Done
++ Mobile slide-out menu
 + Redirect old versioned var urls
 + Rename comments -> notes
 + Null-state for top contribs

@@ -90,6 +90,19 @@
                            "clojure.test.junit"
                            "clojure.test.tap"
                            "clojure.zip"])]]}
+   (let [sphere '{:title "Simple Values",
+                  :categories
+                  ({:title "Regular Expressions",
+                    :groups
+                    ({:syms (re-pattern re-matcher), :title "Create"}
+                     {:syms (re-find re-matches re-seq re-groups), :title "Use"})})}]
+     {:title "Quick Reference"
+      :nav-target "quickref"
+      :content
+      [[:div.example.checker-bg
+        (quickref/$toc [sphere])]
+       [:div.example.checker-bg
+        (quickref/$sphere sphere)]]})
    {:title "Quick Search"
     :nav-target "quick-search"
     :content
@@ -117,29 +130,24 @@
      [:div.example.checker-bg.sg-add-example-loading]
      [:p "With general error:"]
      [:div.example.checker-bg.sg-add-example-errors]]}
-
-   (let [sphere '{:title "Simple Values",
-                  :categories
-                  ({:title "Regular Expressions",
-                    :groups
-                    ({:syms (re-pattern re-matcher), :title "Create"}
-                     {:syms (re-find re-matches re-seq re-groups), :title "Use"})})}]
-     {:title "Quick Reference"
-      :nav-target "quickref"
-      :content
-      [[:div.example.checker-bg
-        (quickref/$toc [sphere])]
-       [:div.example.checker-bg
-        (quickref/$sphere sphere)]]}
-     {:title "Notes"
-      :nav-target "notes"
-      :content
-      [[:p "Null state:"]
-       [:div.example.checker-bg.sg-notes-null-state]
-       [:p "Populated with examples:"]
-       [:div.example.checker-bg.sg-notes-populated]
-       [:p "Adding a note:"]
-       [:div.example.checker-bg.sg-add-note]]})])
+   {:title "See Alsos"
+    :nav-target "see-alsos"
+    :content
+    [[:p "Null state"]
+     [:div.example.checker-bg.sg-see-alsos-null-state]
+     [:p "Populated"]
+     [:div.example.checker-bg.sg-see-alsos-populated]
+     [:p "Add new"]
+     [:div.example.checker-bg.sg-add-see-also]]}
+   {:title "Notes"
+    :nav-target "notes"
+    :content
+    [[:p "Null state:"]
+     [:div.example.checker-bg.sg-notes-null-state]
+     [:p "Populated with examples:"]
+     [:div.example.checker-bg.sg-notes-populated]
+     [:p "Adding a note:"]
+     [:div.example.checker-bg.sg-add-note]]}])
 
 (defn index [{:keys [user uri]}]
   (common/$main

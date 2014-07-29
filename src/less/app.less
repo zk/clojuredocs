@@ -206,12 +206,6 @@ header.navbar {
     }
   }
 
-  .avatar {
-    width: 22px;
-    height: 22px;
-    margin-right: 5px;
-  }
-
   .navbar-nav {
     padding-right: 0;
     margin: 0;
@@ -232,11 +226,38 @@ header.navbar {
   }
 }
 
+.navbar-nav {
+  i {
+    margin-right: 5px;
+  }
+
+  .avatar {
+    width: 22px;
+    height: 22px;
+    margin-right: 5px;
+  }
+}
+
+.mobile-nav-menu {
+  display: none;
+}
+
 @media(max-width: 767px) {
   header.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color: white;
+    transition: all 0.2s ease;
+
     .btn.mobile-menu {
       display: block;
       margin-right: -11px;
+    }
+
+    .quick-search-widget {
+      display: none;
     }
   }
 
@@ -244,21 +265,42 @@ header.navbar {
     right: 0;
     position: relative;
     transition: right 0.3s ease;
+    padding-top: 60px;
   }
 
-  .navbar-nav {
-    position: fixed;
+  .desktop-navbar-nav {
+    display: none;
+  }
+
+  .mobile-nav-menu {
+    display: block;
     position: fixed;
     width: 200px;
     z-index: 10000;
     background-color: #47a3da;
     color: white;
+    font-weight: 300;
     top: 0;
     bottom: 0;
     right: -240px;
     transition: right 0.2s ease;
+    margin: 0;
+    overflow-y: scroll;
+
+    h4 {
+      padding: 5px 10px;
+      border-bottom: solid rgba(255,255,255,0.3) 1px;
+      margin: 0;
+      color: rgba(255,255,255,0.8);
+      font-size: 14px;
+      letter-spacing: 1px;
+      font-weight: 500;
+
+      i { margin-right: 5px; }
+    }
 
     li {
+      margin: 0;
       a {
         color: white;
 
@@ -267,6 +309,10 @@ header.navbar {
         }
       }
     }
+
+    .navbar-nav {
+      margin: 0;
+    }
   }
 
   .mobile-push {
@@ -274,9 +320,18 @@ header.navbar {
     right: 200px;
     transition: all 0.2s ease;
 
-    .navbar-nav {
+    .mobile-nav-menu {
       right: 0;
     }
+
+    header.navbar {
+      right: 200px;
+      transition: all 0.2s ease;
+    }
+  }
+
+  .page-toc {
+    display: none;
   }
 }
 
@@ -853,7 +908,19 @@ table.ac-results {
       line-height: 1.5em;
     }
   }
+}
 
+.quickref-mobile-toc {
+  h5 {
+    color: white;
+    margin-bottom: 5px;
+    margin-top: 0px;
+  }
+
+  .categories {
+    font-size: 12px;
+    line-height: 16px;
+  }
 }
 
 .sticky {

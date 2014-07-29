@@ -38,7 +38,7 @@
        "ClojureDocs"]
       [:button.btn.btn-default.navbar-btn.pull-right.mobile-menu
        [:i.fa.fa-bars]]
-      [:ul.navbar-nav.nav.navbar-right
+      [:ul.navbar-nav.nav.navbar-right.desktop-navbar-nav
        [:li [:a {:href "/quickref"} "Quick Reference"]]
        (if user
          ($user-area user)
@@ -58,6 +58,25 @@
       [:div.row
        [:div.col-md-10.col-md-offset-1
         [:div.ac-results-widget]]])]])
+
+(defn $mobile-navbar-nav [{:keys [user page-uri mobile-nav]}]
+  [:div.mobile-nav-menu
+   [:section
+    [:h4 [:i.fa.fa-rocket] "ClojureDocs"]
+    [:ul.navbar-nav.mobile-navbar-nav.nav
+     [:li [:a {:href "/quickref"} "Quick Reference"]]
+     (if user
+       ($user-area user)
+       [:li
+        [:a {:href (gh-auth-url page-uri)}
+         [:i.fa.fa-github-square] "Log In"]])]]
+   (for [{:keys [title links]} mobile-nav]
+     [:section
+      [:h4 title]
+      [:ul.navbar-nav.mobile-navbar-nav.nav
+       (for [link links]
+         [:li
+          link])]])])
 
 (defn md5-path [path]
   (try
@@ -101,6 +120,7 @@
        [:div.staging-banner
         "This is the ClojureDocs staging site, where you'll find all the neat things we're working on."])
      ($navbar opts)
+     ($mobile-navbar-nav opts)
      [:div.container
       [:div.row
        [:div.col-md-10.col-md-offset-1
