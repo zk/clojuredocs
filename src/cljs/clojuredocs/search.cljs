@@ -36,7 +36,7 @@
             "/"
             [:span.name name]]])]
        (when (> num-left 0)
-         [:span.remaining-label "+ " nul-left " more"])])))
+         [:span.remaining-label "+ " num-left " more"])])))
 
 (defn $ac-entry-var [{:keys [href name ns doc see-alsos type]}]
   [:div.ac-entry

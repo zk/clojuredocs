@@ -11,7 +11,7 @@
             [clojuredocs.util :as util])
   (:require-macros [dommy.macros :refer [node sel1]]))
 
-(defn validate-and-submit [app owner {:keys [text var]}]
+(defn validate-and-submit [owner {:keys [text var]}]
   (om/set-state! owner :loading? true)
   (om/set-state! owner :error-message nil)
   (ajax
@@ -56,7 +56,8 @@
    [:div.add-example-preview
     [:div.live-preview {:ref "live-preview"}]]
    [:div.form
-    {:on-submit #(validate-and-submit app owner
+    {:on-submit #(validate-and-submit
+                   owner
                    {:text text
                     :var var})}
     [:textarea
@@ -184,4 +185,3 @@
            [:div.login-required-message
             [:a {:href "#" #_(common/gh-auth-url uri)} "Log in"]
             " to add an example"])]))))
-1

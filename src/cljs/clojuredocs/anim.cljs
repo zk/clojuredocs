@@ -44,13 +44,3 @@
                 (+ top (.-offsetHeight elem)))
               (< top 0))
       (scroll-to elem opts))))
-
-(comment
-
-  (defn tween [el opts]
-    (.tween js/JSTween el (clj->js opts))
-    (.play js/JSTween))
-
-
-
-  )
