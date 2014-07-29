@@ -1,6 +1,5 @@
 (ns clojuredocs.see-alsos
   (:require [om.core :as om :include-macros true]
-            [om-tools.dom :as dom :include-macros true]
             [dommy.core :as dommy]
             [cljs.core.async :as async
              :refer [<! >! chan close! sliding-buffer put! alts! timeout pipe mult tap]]
@@ -33,30 +32,31 @@
    [:div.meta
     "Added by " [:a {:href (str "/u/" (:login user))} (:login user)]]])
 
-(defn $add-see-also [{:keys [user]} owner]
+(defn $add [{:keys [user]} owner]
   (reify
     om/IDidUpdate
     (did-update [_ _ _]
       (.focus (om/get-node owner "input")))
     om/IRenderState
     (render-state [this {:keys [expanded?]}]
-      (dom/div {:class "add-see-also"}
-        (dom/div {:class "toggle-controls"}
+      (sab/html
+        [:div.add-see-also
+         [:div.toggle-controls
           (if true
-            (dom/a {:class "toggle-link" :href "#" :on-click #(toggle owner :expanded?)}
-              (if-not expanded?
-                "Add See Also"
-                "Collapse"))
-            (dom/span {:class "muted"} "log in to add a see also")))
-        (dom/div {:class (when-not expanded? "hidden")}
-          (dom/form {:on-submit (constantly false) :autoComplete "off"}
-            (dom/div {:class "input-group"}
-              (dom/input {:class "form-control"
-                          :name "see-also-name"
-                          :ref "input"
-                          :placeholder "Var Name"})
-              (dom/span {:class "input-group-btn"}
-                (dom/button {:class "btn btn-success"} "Add See-Also")))))))))
+            [:a.toggle-link {:href "#" :on-click #(toggle owner :expanded?)}
+             (if-not expanded?
+               "Add See Also"
+               "Collapse")]
+            [:span.muted "log in to add a see also"])]
+         [:div {:class (when-not expanded? "hidden")}
+          [:form {:on-submit (constantly false) :autoComplete "off"}
+           [:div.input-group
+            [:input.form-control
+             {:name "see-also-name"
+              :ref "input"
+              :placeholder "Var Name"}]
+            [:span.input-group-btn
+             [:button.btn.btn-success "Add See-Also"]]]]]]))))
 
 (defn $see-alsos [{:keys [see-alsos var user] :as app} owner]
   (reify
@@ -73,6 +73,6 @@
                 (partition-all 2)
                 (map (fn [cs] [:div.row cs]))))
          (if user
-           (om/build $add-see-also app)
+           (om/build $add app)
            [:div.login-required-message
             "Log in to add a see-also"])]))))

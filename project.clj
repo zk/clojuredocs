@@ -38,6 +38,8 @@
                                  :output-dir "resources/public/cljs"
                                  :optimizations :none
                                  :source-map true
+                                 :foreign-libs [{:file "resources/public/js/syntaxhighlighter.js"
+                                                 :provides ["highlight"]}]
                                  :externs ["externs/syntaxhighlighter.js"
                                            "externs/morpheus.js"]}}
 

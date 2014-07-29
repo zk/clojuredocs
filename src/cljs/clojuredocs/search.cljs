@@ -1,6 +1,5 @@
 (ns clojuredocs.search
   (:require [om.core :as om :include-macros true]
-            [om-tools.dom :as dom :include-macros true]
             [dommy.core :as dommy]
             [cljs.core.async :as async
              :refer [<! >! chan close! sliding-buffer put! alts! timeout pipe mult tap]]
@@ -22,79 +21,55 @@
 
 ;; Landing page autocomplete
 
-(defmulti ac-entry :type)
-
-(defn see-alsos-widget [see-alsos]
+(defn $ac-see-alsos [see-alsos]
   (when-not (empty? see-alsos)
     (let [limit 5
           num-left (- (count see-alsos) limit)
           see-alsos (take limit see-alsos)]
-      (dom/div {:class "see-alsos"}
-        (dom/span {:class "see-also-label"} "see also:")
-        (dom/ul
-          (for [{:keys [ns name href] :as sa} see-alsos]
-            (dom/li
-              (dom/a {:href href :class "var-link"}
-                (dom/span {:class "namespace"} ns)
-                "/"
-                (dom/span {:class "name"} name)))))
-        (when (> num-left 0)
-          (dom/span {:class "remaining-label"} "+ " num-left " more"))))))
+      [:div.see-alsos
+       [:span.see-also-label "see also:"]
+       [:ul
+        (for [{:keys [ns name href] :as sa} see-alsos]
+          [:li
+           [:a {:href href :class "var-link"}
+            [:span.namespace ns]
+            "/"
+            [:span.name name]]])]
+       (when (> num-left 0)
+         [:span.remaining-label "+ " nul-left " more"])])))
 
-(defmethod ac-entry "function" [{:keys [href name ns doc type see-alsos] :as func}]
-  (dom/div {:class "ac-entry"}
-    (dom/span {:class "ac-type"} "fn")
-    (dom/h4
-      (dom/a {:href href}
-        name " (" ns ")"))
-    (dom/p (ellipsis 100 doc))
-    (see-alsos-widget see-alsos)))
+(defn $ac-entry-var [{:keys [href name ns doc see-alsos type]}]
+  [:div.ac-entry
+   [:span.ac-type type]
+   [:h4
+    [:a {:href href} name " (" ns ")"]]
+   [:p (ellipsis 100 doc)]
+   ($ac-see-alsos see-alsos)])
 
-(defmethod ac-entry "var" [{:keys [href name ns doc type see-alsos] :as func}]
-  (dom/div {:class "ac-entry"}
-    (dom/span {:class "ac-type"} "var")
-    (dom/h4
-      #_(dom/i {:class "fa fa-exclamation"})
-      (dom/a {:href href}
-        name " (" ns ")"))
-    (dom/p (ellipsis 100 doc))
-    (see-alsos-widget see-alsos)))
+(defn $ac-entry-ns [{:keys [href name ns doc see-alsos type]}]
+  [:div.ac-entry
+   [:span.ac-type type]
+   [:h4
+    [:a {:href href} name]]
+   [:p (ellipsis 100 doc)]
+   ($ac-see-alsos see-alsos)])
 
-(defmethod ac-entry "special-form" [{:keys [href name ns doc type see-alsos] :as func}]
-  (dom/div {:class "ac-entry"}
-    (dom/span {:class "ac-type"} "special form")
-    (dom/h4
-      #_(dom/i {:class "fa fa-exclamation"})
-      (dom/a {:href href}
-        name " (" ns ")"))
-    (dom/p (ellipsis 100 doc))
-    (see-alsos-widget see-alsos)))
+(defn $ac-entry-page [{:keys [href name desc type href]}]
+  [:div.ac-entry
+   [:span.ac-type type]
+   [:h4
+    [:a {:href href} name]]
+   [:p (ellipsis 100 desc)]])
 
-(defmethod ac-entry "macro" [{:keys [href name ns doc type see-alsos]}]
-  (dom/div {:class "ac-entry"}
-    (dom/span {:class "ac-type"} "macro")
-    (dom/h4
-      (dom/a {:href href}
-        name " (" ns ")"))
-    (dom/p (ellipsis 225 doc))
-    (see-alsos-widget see-alsos)))
+(defn $ac-entry [{:keys [type] :as ac-entry}]
+  (cond
+    (get #{"function" "macro" "var" "special-form"} type)
+    ($ac-entry-var ac-entry)
 
-(defmethod ac-entry "namespace" [{:keys [href name doc type desc]}]
-  (dom/div {:class "ac-entry"}
-    (dom/span {:class "ac-type"} "namespace")
-    (dom/h4
-      (dom/a {:href href} name))
-    (dom/p (ellipsis 225 (or doc desc)))))
+    (= "namespace" type) ($ac-entry-ns ac-entry)
 
-(defmethod ac-entry "page" [{:keys [href name desc type href]}]
-  (dom/div {:class "ac-entry"}
-    (dom/span {:class "ac-type"} "page")
-    (dom/h4
-      (dom/a {:href href} name))
-    (dom/p (ellipsis 255 desc))))
-
-(defmethod ac-entry :default [{:keys [type]}]
-  (.log js/console (str "Couldn't render ac entry:" type)))
+    (= "page" type) ($ac-entry-page ac-entry)
+    :else (.log js/console (str "Couldn't render ac entry:" type))))
 
 (defn put-text [e text-chan owner]
   (let [text (.. e -target -value)]
@@ -138,16 +113,17 @@
   (reify
     om/IRenderState
     (render-state [this {:keys [text-chan text]}]
-      (dom/form {:class "search" :autoComplete "off"
-                 ;; the search widget should prob not need to know about
-                 ;; autocomplete results (or act on them)
-                 :on-submit #(search-submit (nth ac-results highlighted-index))}
-        (dom/input {:class (str "form-control" (when loading? " loading"))
-                    :placeholder "Looking for? (ctrl-s)"
-                    :name "query"
-                    :autoComplete "off"
-                    :on-input (throttle 200 #(put-text % text-chan owner))
-                    :on-key-down #(maybe-nav % app ac-results)})))))
+      (sab/html
+        [:form.search
+         {:autoComplete "off"
+          :on-submit #(search-submit (nth ac-results highlighted-index))}
+         [:input.form-control
+          {:class (when loading? " loading")
+           :placeholder "Looking for? (ctrl-s)"
+           :name "query"
+           :autoComplete "off"
+           :on-input (throttle 200 #(put-text % text-chan owner))
+           :on-key-down #(maybe-nav % app ac-results)}]]))))
 
 (defn $ac-results [{:keys [highlighted-index ac-results]
                     :or {highlighted-index 0}
@@ -164,20 +140,21 @@
             (anim/scroll-into-view $el {:pad 30})))))
     om/IRender
     (render [this]
-      (dom/ul {:class "ac-results"}
-        (map-indexed
-          (fn [i {:keys [href type] :as res}]
-            (dom/li {:on-click #(when href (util/navigate-to href))
-                     :class (when (= i highlighted-index)
-                              "highlighted")
-                     :ref i}
-              (ac-entry res)))
-          ac-results)))))
+      (sab/html
+        [:ul.ac-results
+         (map-indexed
+           (fn [i {:keys [href type] :as res}]
+             [:li {:on-click #(when href (util/navigate-to href))
+                   :class (when (= i highlighted-index)
+                            "highlighted")
+                   :ref i}
+              ($ac-entry res)])
+           ac-results)]))))
 
 (defn $quick-lookup [{:keys [highlighted-index ac-results loading?]
-                     :or {highlighted-index 0}
-                     :as app}
-                    owner]
+                      :or {highlighted-index 0}
+                      :as app}
+                     owner]
   (reify
     om/IDidUpdate
     (did-update [_ prev-props prev-state]
@@ -187,29 +164,32 @@
         (anim/scroll-into-view (om/get-node owner (:highlighted-index app)) {:pad 30})))
     om/IRenderState
     (render-state [this {:keys [text-chan text]}]
-      (dom/form {:class "search"
-                 :autoComplete "off"
-                 :on-submit #(search-submit (nth ac-results highlighted-index))}
-        (dom/input {:class (str "form-control" (when loading? " loading"))
-                    :placeholder "Looking for?"
-                    :name "query"
-                    :autoComplete "off"
-                    :autoFocus "autofocus"
-                    :on-input (throttle 200 #(put-text % text-chan owner))
-                    :on-key-down #(maybe-nav % app ac-results)})
-        (dom/div {:class "not-finding"}
+      (sab/html
+        [:form.search {:autoComplete "off"
+                       :on-submit #(search-submit (nth ac-results highlighted-index))}
+         [:input {:class (str "form-control" (when loading? " loading"))
+                  :placeholder "Looking for?"
+                  :name "query"
+                  :autoComplete "off"
+                  :autoFocus "autofocus"
+                  :on-input (throttle 200 #(put-text % text-chan owner))
+                  :on-key-down #(maybe-nav % app ac-results)}]
+         [:div.not-finding]
+         [:div.not-finding {:class "not-finding"}
           "Can't find what you're looking for? "
-          (dom/a {:href (str "search-feedback" (when text (str "?query=" (util/url-encode text))))} "Help make ClojureDocs better")
-          ".")
-        (dom/ul {:class "ac-results"}
+          [:a.search-feedback
+           {:href (str "/search-feedback" (when text (str "?query=" (util/url-encode text))))}
+           "Help make ClojureDocs better"]
+          "."]
+         [:ul.ac-results
           (map-indexed
             (fn [i {:keys [href type] :as res}]
-              (dom/li {:on-click #(when href (util/navigate-to href))
-                       :class (when (= i highlighted-index)
-                                "highlighted")
-                       :ref i}
-                (ac-entry res)))
-            ac-results))))))
+              [:li {:on-click #(when href (util/navigate-to href))
+                    :class (when (= i highlighted-index)
+                             "highlighted")
+                    :ref i}
+               ($ac-entry res)])
+            ac-results)]]))))
 
 (defn submit-feedback [owner query clojure-level text]
   (om/set-state! owner :loading? true)
@@ -242,47 +222,49 @@
                     "\", but couldn't find what I was looking for. Here's a description of what I would have liked to find:")))))
     om/IRenderState
     (render-state [_ {:keys [text loading? clojure-level query error-message]}]
-      (dom/form {:class "form" :on-submit #(submit-feedback owner query clojure-level text)}
-        (dom/div {:class "form-group"}
-          (dom/label {:for "clojure-level"}
-            "Level of Clojuring")
-          (dom/div {:class "radio"}
-            (dom/label {:class "radio"}
-              (dom/input {:type "radio"
-                          :name "clojure-level"
-                          :value "beginner"
-                          :on-click #(om/set-state! owner :clojure-level "beginner")
-                          :disabled (if loading? "disabled")})
-              "I haven't written any Clojure")
-            (dom/label {:class "radio"}
-              (dom/input {:type "radio"
-                          :name "clojure-level"
-                          :value "intermediate"
-                          :on-click #(om/set-state! owner :clojure-level "intermediate")
-                          :disabled (if loading? "disabled")})
-              "I've done a few things in Clojure")
-            (dom/label {:class "radio"}
-              (dom/input {:type "radio"
-                          :name "clojure-level"
-                          :value "advanced"
-                          :on-click #(om/set-state! owner :clojure-level "advanced")
-                          :disabled (if loading? "disabled")})
-              "I'm comfortable contributing to Clojure projects")))
-        (dom/div {:class "form-group"}
-          (dom/label {:for "feedback"} "Feedback")
-          (dom/textarea {:class "form-control"
-                         :autoFocus "autofocus"
-                         :rows 10
-                         :name "feedback"
-                         :value text
-                         :on-input #(om/set-state! owner :text (.. % -target -value))
-                         :disabled (if loading? "disabled")}))
-        (dom/div {:class "form-group"}
-          (dom/span {:class (str "error-message" (when-not error-message " hidden"))}
-            (dom/i {:class "fa fa-exclamation-circle"})
-            error-message)
-          (dom/button {:class "btn btn-default pull-right"
-                       :disabled (if loading? "disabled")}
-            "Send Feedback")
-          (dom/img {:class (str "pull-right loading" (when-not loading? " hidden"))
-                    :src "/img/loading.gif"}))))))
+      (sab/html
+        [:form {:on-submit #(submit-feedback owner query clojure-level text)}
+         [:div.form-group
+          [:label.clojure-level
+           "Level of Clojuring"]
+          [:div.radio
+           [:label.radio
+            [:input {:type "radio"
+                     :name "clojure-level"
+                     :value "beginner"
+                     :on-click #(om/set-state! owner :clojure-level "beginner")
+                     :disabled (if loading? "disabled")}]
+            "I haven't written any Clojure"]
+           [:label.radio
+            [:input {:type "radio"
+                     :name "clojure-level"
+                     :value "intermediate"
+                     :on-click #(om/set-state! owner :clojure-level "intermediate")
+                     :disabled (if loading? "disabled")}]
+            "I've done a few things in Clojure"]
+           [:label.radio
+            [:input.radio
+             {:type "radio"
+              :name "clojure-level"
+              :value "advanced"
+              :on-click #(om/set-state! owner :clojure-level "advanced")
+              :disabled (if loading? "disabled")}]
+            "I'm comfortable contributing to Clojure projects"]]]
+         [:div.form-group
+          [:label {:for "feedback"} "Feedback"]
+          [:textarea {:class "form-control"
+                      :autoFocus "autofocus"
+                      :rows 10
+                      :name "feedback"
+                      :value text
+                      :on-input #(om/set-state! owner :text (.. % -target -value))
+                      :disabled (if loading? "disabled")}]]
+         [:div.form-group
+          [:span {:class (str "error-message" (when-not error-message " hidden"))}
+           [:i.fa.fa-exclamation-circle]
+           error-message]
+          [:button.btn.btn-default.pull-right
+           {:disabled (if loading? "disabled")}
+           "Send Feedback"]
+          [:img {:class (str "pull-right loading" (when-not loading? " hidden"))
+                 :src "/img/loading.gif"}]]]))))

@@ -58,7 +58,7 @@
   (mon/update! :examples (select-keys e [:library-url :ns :name :body]) e))
 
 ;; examples
-#_(time
+(time
   (let [examples (->> (core-nss)
                       (map (fn [{:keys [library_id name id]}]
                              {:library-id library_id
@@ -181,7 +181,7 @@
   (mon/update! :vars (select-keys v [:library-url :ns :name]) v))
 
 ;; Vars
-(doseq [v searchable-vars]
+#_(doseq [v searchable-vars]
   (insert-or-update-var v))
 
 
@@ -197,9 +197,9 @@
      :ns (:name ns)
      :doc (:doc v)}))
 
-#_(def see-alsos (atom {}))
+(def see-alsos (atom {}))
 
-#_(time
+(time
   (doseq [{:keys [from_id to_id user_id created_at]}
           (j/query mysql-db ["SELECT * FROM see_alsos"])]
     (let [from (pull-ns-name from_id)
@@ -209,11 +209,11 @@
                                                              :user (lookup-user user_id))])
                                              distinct)))))
 
-#_(def clj-nss (->> clojure-namespaces
+(def clj-nss (->> clojure-namespaces
                   (map str)
                   set))
 
-#_(time (doseq [[v sas] @see-alsos]
+(time (doseq [[v sas] @see-alsos]
         (insert-or-update-sa (assoc (select-keys v [:name :ns])
                                :vars (->> sas
                                           (filter #(get clj-nss (:ns %))))

@@ -1,6 +1,5 @@
 (ns clojuredocs.examples
   (:require [om.core :as om :include-macros true]
-            [om-tools.dom :as dom :include-macros true]
             [dommy.core :as dommy]
             [cljs.core.async :as async
              :refer [<! >! chan close! sliding-buffer put! alts! timeout pipe mult tap]]
@@ -47,47 +46,48 @@
   false)
 
 (defn $toggle-controls [owner {:keys [expanded?]}]
-  (dom/div {:class "toggle-controls"}
-    (dom/a {:class "toggle-link"
-            :href ""
-            :on-click #(set-expanded owner (not expanded?))}
-      (if-not expanded? "Add an Example" "Collapse"))))
+  [:div.toggle-controls
+   [:a.toggle-link {:href "#" :on-click #(set-expanded owner (not expanded?))}
+    (if-not expanded? "Add an Example" "Collapse")]])
 
 (defn $editor [owner {:keys [expanded? text var loading? error-message] :as state}]
-  (dom/div {:class (str "add-example-content" (when-not expanded? " hidden"))}
-    (dom/h5 "New Example")
-    (dom/div {:class "add-example-preview"}
-      (dom/div {:ref "live-preview" :class "live-preview"}))
-    (dom/form {:on-submit #(validate-and-submit app owner
-                             {:text text
-                              :var var})}
-      (dom/textarea {:class "form-control"
-                     :cols 80 :on-input #(update-text % owner)
-                     :ref "textarea"
-                     :disabled (when loading? "disabled")})
-      (dom/p {:class "instructions"}
-        "See our "
-        (dom/a {:href "/examples-styleguide"} "examples style guide")
-        " for content and formatting guidelines. "
-        "Examples submitted to ClojureDocs are licensed under the "
-        (dom/a {:href "https://creativecommons.org/publicdomain/zero/1.0/"}
-          "Creative Commons CC0 license")
-        ".")
-      (when error-message
-        (dom/div {:class "form-group"}
-          (dom/div {:class "error-message text-danger"}
-            (dom/i {:class "fa fa-exclamation-circle"})
-            error-message)))
-      (dom/div {:class "add-example-controls clearfix form-group"}
-        (dom/button {:class "btn btn-default"
-                     :disabled (when loading? "disabled")
-                     :on-click #(cancel-clicked % owner)}
-          "Cancel")
-        (dom/button {:class "btn btn-success pull-right"
-                     :disabled (when loading? "disabled")}
-          "Add Example")
-        (dom/img {:class (str "pull-right loading" (when-not loading? " hidden"))
-                  :src "/img/loading.gif"})))))
+  [:div {:class (str "add-example-content" (when-not expanded? " hidden"))}
+   [:h5 "New Example"]
+   [:div.add-example-preview
+    [:div.live-preview {:ref "live-preview"}]]
+   [:div.form
+    {:on-submit #(validate-and-submit app owner
+                   {:text text
+                    :var var})}
+    [:textarea
+     {:class "form-control"
+      :cols 80 :on-input #(update-text % owner)
+      :ref "textarea"
+      :disabled (when loading? "disabled")}]
+    [:p.instructions
+     "See our "
+     [:a {:href "/examples-styleguide"} "examples style guide"]
+     " for content and formatting guidelines. "
+     "Examples submitted to ClojureDocs are licensed under the "
+     [:a {:href "https://creativecommons.org/publicdomain/zero/1.0/"}
+      "Creative Commons CC0 license"]
+     "."]
+    (when error-message
+      [:div.form-group
+       [:div.error-message.text-danger
+        [:i.fa.fa-exclamation-circle]
+        error-message]])
+    [:div.add-example-controls.form-group.clearfix
+     [:button.btn.btn-default
+      {:disabled (when loading? "disabled")
+       :on-click #(cancel-clicked % owner)}
+      "Cancel"]
+     [:button.btn.btn-success.pull-right
+      {:disabled (when loading? "disabled")}
+      "Add Example"]
+     [:img.loading.pull-right
+      {:class (when-not loading? " hidden")
+       :src "/img/loading.gif"}]]]])
 
 (defn update-preview [owner]
   (let [text (om/get-state owner :text)
@@ -127,9 +127,10 @@
 
     om/IRenderState
     (render-state [this {:keys [expanded? text loading?] :as state}]
-      (dom/div {:class "add-example" :ref "wrapper"}
-        ($toggle-controls owner state)
-        ($editor owner state)))))
+      (sab/html
+        [:div.add-example {:ref "wrapper"}
+         ($toggle-controls owner state)
+         ($editor owner state)]))))
 
 (defn $example-body [{:keys [body]}]
   [:div.example-body
