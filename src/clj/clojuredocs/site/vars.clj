@@ -109,14 +109,51 @@
                           :var v
                           :notes (map clean-id notes)
                           :see-alsos (map clean-see-also see-alsos)
-                          :user (select-keys user [:login :avatar-url])}
+                          :user (when user (select-keys user [:login :avatar-url]))}
               :page-uri uri
               :user user
+              :mobile-nav [{:title "Nav"
+                            :links [[:a {:href "#"
+                                         :data-animate-scroll "true"
+                                         :data-animate-buffer "70"}
+                                     "Top"]
+                                    [:a {:href "#examples"
+                                         :data-animate-scroll "true"
+                                         :data-animate-buffer "70"}
+                                     "Examples"]
+                                    [:a {:href "#see-also"
+                                         :data-animate-scroll "true"
+                                         :data-animate-buffer "70"}
+                                     "See Also"]
+                                    [:a {:href "#notes"
+                                         :data-animate-scroll "true"
+                                         :data-animate-buffer "70"}
+                                     "Notes"]]}]
               :content [:div
                         [:div.row
                          [:div.col-sm-2.sidenav
-                          (common/$recent recent)
-                          (common/$library-nav library ns)]
+                          [:div.desktop-side-nav {:data-sticky-offset "10"}
+                           [:div.var-page-nav
+                            [:h5 "Nav"]
+                            [:ul
+                             [:li [:a {:href "#"
+                                       :data-animate-scroll "true"
+                                       :data-animate-buffer "20"}
+                                   "Top"]]
+                             [:li [:a {:href "#examples"
+                                       :data-animate-scroll "true"
+                                       :data-animate-buffer "20"}
+                                   "Examples"]]
+                             [:li [:a {:href "#see-also"
+                                       :data-animate-scroll "true"
+                                       :data-animate-buffer "10"}
+                                   "See Also"]]
+                             [:li [:a {:href "#notes"
+                                       :data-animate-scroll "true"
+                                       :data-animate-buffer "10"}
+                                   "Notes"]]]]
+                           #_(common/$recent recent)
+                           (common/$library-nav library ns)]]
                          [:div.col-sm-10
                           [:div.row
                            [:div.col-sm-8
@@ -149,11 +186,11 @@
                                [:a {:href "http://www.eclipse.org/legal/epl-v10.html"}
                                 "Eclipse Public License 1.0"]])]]
                           [:section
-                           [:div.examples-widget]]
+                           [:div.examples-widget {:id "examples"}]]
                           [:section
-                           [:div.see-alsos-widget]]
+                           [:div.see-alsos-widget {:id "see-also"}]]
                           [:section
-                           [:div.notes-widget]]]]]})})))))
+                           [:div.notes-widget {:id "notes"}]]]]]})})))))
 
 (defn $example-body [{:keys [body]}]
   [:div.example-body
