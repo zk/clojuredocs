@@ -110,7 +110,7 @@
           (str/replace #"</code></pre>" "</pre>")
           (str/replace #"<pre>" "<pre class=\"brush: clojure\">"))}}]])
 
-(defn $notes [{:keys [notes var] :as app} owner]
+(defn $notes [{:keys [notes var user] :as app} owner]
   (reify
     om/IRender
     (render [_]
@@ -123,4 +123,7 @@
             [:ul
              (for [n notes]
                ($note n))])]
-         (om/build $add app)]))))
+         (if user
+           (om/build $add app)
+           [:div.login-required-message
+            "Log in to add a note"])]))))
