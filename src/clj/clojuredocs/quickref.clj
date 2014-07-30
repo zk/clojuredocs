@@ -62,6 +62,7 @@
   (let [toc-groups (partition-all 2 quickref-data)]
     [:div.toc.clearfix
      [:h5 "Table of Contents"]
+     [:h6 [:a {:href "#" :data-animate-scroll "true" :data-animate-buffer "10"} "Top"]]
      (for [tg toc-groups]
        [:div.col-sm-4.col-md-12
         (map $toc-sphere tg)])]))
