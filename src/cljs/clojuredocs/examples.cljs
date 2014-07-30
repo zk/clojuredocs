@@ -55,7 +55,7 @@
    [:h5 "New Example"]
    [:div.add-example-preview
     [:div.live-preview {:ref "live-preview"}]]
-   [:div.form
+   [:form
     {:on-submit #(validate-and-submit
                    owner
                    {:text text
@@ -183,5 +183,4 @@
          (if user
            (om/build $add app)
            [:div.login-required-message
-            [:a {:href "#" #_(common/gh-auth-url uri)} "Log in"]
-            " to add an example"])]))))
+            "Log in to add an example"])]))))
