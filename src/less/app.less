@@ -14,6 +14,7 @@
 
 @blue: rgba(66, 139, 202, 1);
 @light-blue: rgba(66, 139, 202, 0.8);
+@lightest-blue: rgba(66, 139, 202, 0.1);
 
 // Fix for bootstrap border-box on firefox
 
@@ -28,6 +29,11 @@ html, body {
 body {
   font-size: 16px;
   line-height: 1.5em;
+  transition: all 0.3s ease-in;
+
+  &.search-active {
+    background-color: rgba(0,0,0,0.025);
+  }
 }
 
 img {
@@ -483,7 +489,7 @@ ul.ac-results {
     padding-bottom: 15px;
 
     &.highlighted {
-      background-color: #f8f8f8;
+      background-color: rgba(0,0,0,0.02);
     }
 
     h4 {
@@ -597,6 +603,10 @@ table.ac-results {
   }
 
   form.search {
+    margin: -30px -25px;
+    padding: 30px 25px;
+    background-color: white;
+
     input[name='query'] {
       font-size: 20px;
       padding: 10px 15px;
@@ -824,8 +834,16 @@ table.ac-results {
   }
 }
 
+.note {
+  margin-bottom: 30px;
+}
+
 .note-meta {
   margin-bottom: 10px;
+
+  .avatar {
+    margin: 0 2px;
+  }
 }
 
 .var-example { margin-bottom: 30px;
