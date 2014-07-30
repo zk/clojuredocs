@@ -163,17 +163,22 @@
 
 ;; Styleguide
 
+(def push-sels [:.mobile-push-wrapper :.mobile-nav-menu :.mobile-nav-bar])
+
 (on-el
   :.btn.mobile-menu
   (fn [$el]
     (dommy/listen! $el :click
       (fn [e]
-        (dommy/toggle-class! (sel1 :body) :mobile-push)
+        (doseq [s push-sels]
+          (dommy/toggle-class! (sel1 s) :mobile-push))
         (.stopPropagation e))))
 
   :body
   (fn [$el]
-    (let [h (fn [_] (dommy/remove-class! (sel1 :body) :mobile-push))]
+    (let [h (fn [_]
+              (doseq [s push-sels]
+                (dommy/remove-class! (sel1 s) :mobile-push)))]
       (dommy/listen! $el :click h)))
 
   :.mobile-nav-menu
@@ -185,7 +190,8 @@
           :touchend h))
 
     (doseq [$a (sel $el :a)]
-      (dommy/listen! $a :click #(dommy/remove-class! (sel1 :body) :mobile-push))))
+      (dommy/listen! $a :click #(doseq [s push-sels]
+                                  (dommy/remove-class! (sel1 s) :mobile-push)))))
 
   :.sg-quick-lookup
   (fn [$el]

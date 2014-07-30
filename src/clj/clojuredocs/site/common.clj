@@ -108,6 +108,8 @@
    [:head
     [:meta {:name "viewport" :content "width=device-width, maximum-scale=1.0"}]
     [:meta {:name "apple-mobile-web-app-capable" :content "yes"}]
+    [:meta {:name "apple-mobile-web-app-status-bar-style" :content "default"}]
+    [:meta {:name "apple-mobile-web-app-title" :content "ClojureDocs"}]
     [:title (or title "Community-Powered Clojure Documentation and Examples | ClojureDocs")]
     font-awesome-link
     bootstrap-link
@@ -116,12 +118,15 @@
    [:body
     (when body-class
       {:class body-class})
-    [:div.sticky-wrapper
+    ($mobile-navbar-nav opts)
+    [:div.mobile-nav-bar
+     ($navbar opts)]
+    [:div.sticky-wrapper.mobile-push-wrapper
      (when config/staging?
        [:div.staging-banner
         "This is the ClojureDocs staging site, where you'll find all the neat things we're working on."])
-     ($navbar opts)
-     ($mobile-navbar-nav opts)
+     [:div.desktop-nav-bar
+      ($navbar opts)]
      [:div.container
       [:div.row
        [:div.col-md-10.col-md-offset-1
