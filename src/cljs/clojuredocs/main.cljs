@@ -108,20 +108,68 @@
                   (put! c {:success false :res res}))}))
     c))
 
+
+;; From http://swannodette.github.io/2013/08/17/comparative/
+(defn throttle*
+  ([in msecs]
+    (throttle* in msecs (chan)))
+  ([in msecs out]
+    (throttle* in msecs out (chan)))
+  ([in msecs out control]
+    (go
+      (loop [state ::init last nil cs [in control]]
+        (let [[_ _ sync] cs]
+          (let [[v sc] (alts! cs)]
+            (condp = sc
+              in (condp = state
+                   ::init (do (>! out v)
+                            (>! out [::throttle v])
+                            (recur ::throttling last
+                              (conj cs (timeout msecs))))
+                   ::throttling (do (>! out v)
+                                  (recur state v cs)))
+              sync (if last
+                     (do (>! out [::throttle last])
+                       (recur state nil
+                         (conj (pop cs) (timeout msecs))))
+                     (recur ::init last (pop cs)))
+              control (recur ::init nil
+                        (if (= (count cs) 3)
+                          (pop cs)
+                          cs)))))))
+    out))
+
+(defn throttle
+  ([in msecs] (throttle in msecs (chan)))
+  ([in msecs out]
+    (->> (throttle* in msecs out)
+      (filter #(and (vector? %) (= (first %) ::throttle)))
+      (map second))))
+
 (defn wire-search [text-chan app-state]
-  (go
-    (while true
-      (let [ac-text (<! text-chan)
-            ac-response (<! (ajax-chan {:method :get
-                                        :path (str "/search?query=" (util/url-encode ac-text))
-                                        :data-type :edn}))
-            data (-> ac-response :res :body)]
-        (when (:success ac-response)
-          (swap! app-state
-            assoc
-            :highlighted-index 0
-            :loading? false
-            :ac-results data))))))
+  (let [tin (chan)
+        tout (chan)]
+    (throttle tin 250 tout)
+    (go
+      (while true
+        (let [ac-text (<! text-chan)
+              _ (swap! app-state assoc :search-loading? true)]
+          (>! tin ac-text))))
+    (go
+      (while true
+        (let [ac-text (<! tout)]
+          (when (vector? ac-text)
+            (let [ac-text (second ac-text)
+                  ac-response (<! (ajax-chan {:method :get
+                                              :path (str "/search?query=" (util/url-encode ac-text))
+                                              :data-type :edn}))
+                  data (-> ac-response :res :body)]
+              (when (:success ac-response)
+                (swap! app-state
+                  assoc
+                  :highlighted-index 0
+                  :search-loading? false
+                  :ac-results data)))))))))
 
 (defn animated-scroll-init [$el]
   (let [href (dommy/attr $el :href)
@@ -372,7 +420,9 @@ user=> (into {} *1)
   (fn [e]
     ;; ctrl-s to focus search input
     (when (and (.-ctrlKey e) (= 83 (.-keyCode e)))
-      (.focus (sel1 ".search input[name='query']")))))
+      (doseq [$el (sel ".search input[name='query']")]
+        (prn $el)
+        (.focus $el)))))
 
 (def tog (atom false))
 
