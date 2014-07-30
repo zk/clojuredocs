@@ -146,6 +146,10 @@ body {
 body {
   font-size: 16px;
   line-height: 1.5em;
+  transition: all 0.3s ease-in;
+}
+body.search-active {
+  background-color: rgba(0, 0, 0, 0.025);
 }
 img {
   max-width: 100%;
@@ -506,7 +510,7 @@ ul.ac-results li {
   padding-bottom: 15px;
 }
 ul.ac-results li.highlighted {
-  background-color: #f8f8f8;
+  background-color: rgba(0, 0, 0, 0.02);
 }
 ul.ac-results li p {
   margin-bottom: 0;
@@ -583,6 +587,11 @@ table.ac-results .ac-metadata {
   .intro-page section {
     margin-bottom: 20px;
   }
+}
+.intro-page form.search {
+  margin: -30px -25px;
+  padding: 30px 25px;
+  background-color: white;
 }
 .intro-page form.search input[name='query'] {
   font-size: 20px;
@@ -795,8 +804,14 @@ table.ac-results .ac-metadata {
 .note-meta .avatar:hover {
   opacity: 1;
 }
+.note {
+  margin-bottom: 30px;
+}
 .note-meta {
   margin-bottom: 10px;
+}
+.note-meta .avatar {
+  margin: 0 2px;
 }
 .var-example {
   margin-bottom: 30px;

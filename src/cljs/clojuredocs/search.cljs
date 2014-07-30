@@ -82,11 +82,15 @@
     (util/navigate-to href))
   false)
 
-(defn maybe-nav [e app ac-results]
+(defn search-keydown [e app owner ac-results]
   (when app
     (let [ctrl? (.-ctrlKey e)
           key-code (.-keyCode e)
           {:keys [highlighted-index]} @app]
+      (when (= 27 key-code)
+        (om/set-state! owner :text nil)
+        (om/update! app :ac-results nil)
+        (aset (om/get-node owner "input") "value" nil))
       (let [f (cond
                 (and ctrl? (= 78 key-code)) inc ; ctrl-n
                 (= 40 key-code) inc             ; down arrow
@@ -115,8 +119,9 @@
            :placeholder "Looking for? (ctrl-s)"
            :name "query"
            :autoComplete "off"
+           :ref "input"
            :on-input #(put-text % text-chan owner)
-           :on-key-down #(maybe-nav % app ac-results)}]]))))
+           :on-key-down #(search-keydown % app owner ac-results)}]]))))
 
 (defn $ac-results [{:keys [highlighted-index ac-results]
                     :or {highlighted-index 0}
@@ -154,19 +159,24 @@
       (when (and (not= (:highlighted-index prev-props)
                        (:highlighted-index app))
                  (> (count ac-results) 0))
-        (anim/scroll-into-view (om/get-node owner (:highlighted-index app)) {:pad 30})))
+        (anim/scroll-into-view (om/get-node owner (:highlighted-index app)) {:pad 30}))
+      (if (empty? (om/get-state owner :text))
+        (dommy/remove-class! (sel1 :body) :search-active)
+        (dommy/add-class! (sel1 :body) :search-active)))
     om/IRenderState
     (render-state [this {:keys [text-chan text]}]
       (sab/html
-        [:form.search {:autoComplete "off"
-                       :on-submit #(search-submit (nth ac-results highlighted-index))}
+        [:form.search
+         {:autoComplete "off"
+          :on-submit #(search-submit (nth ac-results highlighted-index))}
          [:input {:class (str "form-control" (when search-loading? " loading"))
                   :placeholder "Looking for?"
                   :name "query"
                   :autoComplete "off"
                   :autoFocus "autofocus"
+                  :ref "input"
                   :on-input #(put-text % text-chan owner)
-                  :on-key-down #(maybe-nav % app ac-results)}]
+                  :on-key-down #(search-keydown % app owner ac-results)}]
          [:div.not-finding]
          [:div.not-finding {:class "not-finding"}
           "Can't find what you're looking for? "
