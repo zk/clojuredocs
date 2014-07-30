@@ -39,12 +39,12 @@
   + Editing examples
   + Deleting examples
 + Organize ns decls
-+ Var page navigation
-+ Loading state on search inputs should show immediately on input
 + Show no results state for search
 
 
 ** Done
++ Loading state on search inputs should show immediately on input
++ Var page navigation
 + Mobile slide-out menu
 + Redirect old versioned var urls
 + Rename comments -> notes

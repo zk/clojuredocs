@@ -102,13 +102,6 @@
         (when (not (= identity f))
           false)))))
 
-(defn throttle [ms f]
-  (let [timer (atom nil)]
-    (fn [e]
-      (.persist e)
-      (js/clearTimeout @timer)
-      (reset! timer (js/setTimeout #(f e) ms)))))
-
 (defn $quick-search [{:keys [highlighted-index loading? ac-results] :as app} owner]
   (reify
     om/IRenderState
@@ -122,7 +115,7 @@
            :placeholder "Looking for? (ctrl-s)"
            :name "query"
            :autoComplete "off"
-           :on-input (throttle 200 #(put-text % text-chan owner))
+           :on-input #(put-text % text-chan owner)
            :on-key-down #(maybe-nav % app ac-results)}]]))))
 
 (defn $ac-results [{:keys [highlighted-index ac-results]
@@ -151,7 +144,7 @@
               ($ac-entry res)])
            ac-results)]))))
 
-(defn $quick-lookup [{:keys [highlighted-index ac-results loading?]
+(defn $quick-lookup [{:keys [highlighted-index ac-results search-loading?]
                       :or {highlighted-index 0}
                       :as app}
                      owner]
@@ -167,12 +160,12 @@
       (sab/html
         [:form.search {:autoComplete "off"
                        :on-submit #(search-submit (nth ac-results highlighted-index))}
-         [:input {:class (str "form-control" (when loading? " loading"))
+         [:input {:class (str "form-control" (when search-loading? " loading"))
                   :placeholder "Looking for?"
                   :name "query"
                   :autoComplete "off"
                   :autoFocus "autofocus"
-                  :on-input (throttle 200 #(put-text % text-chan owner))
+                  :on-input #(put-text % text-chan owner)
                   :on-key-down #(maybe-nav % app ac-results)}]
          [:div.not-finding]
          [:div.not-finding {:class "not-finding"}
