@@ -64,7 +64,7 @@ h3 {
 @media (max-width: 767px) {
   h1 {
     font-size: 20px;
-    line-height: 26px;
+    line-height: 30px;
   }
 }
 
@@ -225,6 +225,10 @@ header.navbar {
   }
 }
 
+.mobile-nav-bar {
+  display: none;
+}
+
 .navbar-nav {
   i {
     margin-right: 5px;
@@ -243,13 +247,6 @@ header.navbar {
 
 @media(max-width: 767px) {
   header.navbar {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 1000;
-    background-color: white;
-    transition: all 0.2s ease;
-
     .btn.mobile-menu {
       display: block;
       margin-right: -11px;
@@ -258,21 +255,43 @@ header.navbar {
     .quick-search-widget {
       display: none;
     }
+
+    .navbar-nav {
+      display: none;
+    }
   }
 
-  body {
+  .mobile-push-wrapper {
     right: 0;
     position: relative;
-    transition: right 0.3s ease;
+    transition: all 0.2s ease;
+    transform: translate3d(0,0,0);
+    -webkit-transform: translate3d(0,0,0);
     padding-top: 60px;
   }
 
-  .desktop-navbar-nav {
+  .desktop-nav-bar {
     display: none;
   }
 
   .desktop-side-nav {
     display: none;
+  }
+
+  .mobile-nav-bar {
+    background-color: white;
+    transition: all 0.2s ease;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    display: block;
+    transition: all 0.2s ease;
+    position: fixed;
+
+    header {
+      margin-bottom: 0;
+    }
   }
 
   .mobile-nav-menu {
@@ -285,8 +304,11 @@ header.navbar {
     font-weight: 300;
     top: 0;
     bottom: 0;
-    right: -240px;
-    transition: right 0.2s ease;
+    //right: -240px;
+    right: 0;
+    transition: all 0.2s ease;
+    transform: translate3d(200px,0,0);
+    -webkit-transform: translate3d(200px,0,0);
     margin: 0;
     overflow-y: scroll;
 
@@ -299,7 +321,9 @@ header.navbar {
       letter-spacing: 1px;
       font-weight: 500;
 
-      i { margin-right: 5px; }
+      i {
+        margin-right: 5px;
+      }
     }
 
     li {
@@ -318,19 +342,28 @@ header.navbar {
     }
   }
 
-  .mobile-push {
-    position: relative;
-    right: 200px;
+  .mobile-push-wrapper.mobile-push {
     transition: all 0.2s ease;
+    transform: translate3d(-200px,0,0);
+    -webkit-transform: translate3d(-200px,0,0);
+    right: 0;
+  }
 
-    .mobile-nav-menu {
-      right: 0;
-    }
+  .mobile-nav-menu.mobile-push {
+    transition: all 0.2s ease;
+    transform: translate3d(0,0,0);
+    -webkit-transform: translate3d(0,0,0);
 
     header.navbar {
       right: 200px;
       transition: all 0.2s ease;
     }
+  }
+
+  .mobile-nav-bar.mobile-push {
+    transition: all 0.2s ease;
+    transform: translate3d(-200px,0,0);
+    -webkit-transform: translate3d(-200px,0,0);
   }
 
   .page-toc {
