@@ -214,9 +214,8 @@ header.navbar {
       margin-bottom: 0;
       font-size: 14px;
 
-      &:last-child {
-        margin-right: 0;
-        padding-right: 0;
+      &:last-child a {
+        margin-right: -15px;
       }
     }
   }
@@ -269,6 +268,10 @@ header.navbar {
   }
 
   .desktop-navbar-nav {
+    display: none;
+  }
+
+  .desktop-side-nav {
     display: none;
   }
 
@@ -704,6 +707,10 @@ table.ac-results {
     margin-bottom: 5px;
   }
 
+  .null-state {
+    margin-bottom: 30px;
+  }
+
   .var-meta {
     margin-bottom: 10px;
 
@@ -879,6 +886,14 @@ table.ac-results {
   h5 {
     margin: 0;
     margin-bottom: 10px;
+    font-size: 12px;
+    margin-right: 0;
+    margin-top: 0;
+  }
+
+  h6 {
+    margin-top: 0;
+    margin-left: 15px;
   }
 
   ul {
@@ -890,10 +905,7 @@ table.ac-results {
 
   .toc-sphere {
     h5 {
-      font-size: 12px;
-      margin-right: 0;
       margin-bottom: 5px;
-      margin-top: 0;
     }
 
     ul {
@@ -1146,6 +1158,10 @@ table.ac-results {
       padding: 0 5px;
     }
   }
+}
+
+.var-page-nav {
+  margin-bottom: 30px;
 }
 
 .ns-page {

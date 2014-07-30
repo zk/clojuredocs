@@ -298,9 +298,8 @@ header.navbar .navbar-nav li {
   margin-bottom: 0;
   font-size: 14px;
 }
-header.navbar .navbar-nav li:last-child {
-  margin-right: 0;
-  padding-right: 0;
+header.navbar .navbar-nav li:last-child a {
+  margin-right: -15px;
 }
 header.navbar .quick-search-widget form {
   margin-right: 10px;
@@ -339,6 +338,9 @@ header.navbar .quick-search-widget form {
     padding-top: 60px;
   }
   .desktop-navbar-nav {
+    display: none;
+  }
+  .desktop-side-nav {
     display: none;
   }
   .mobile-nav-menu {
@@ -690,6 +692,10 @@ table.ac-results .ac-metadata {
 .example-page h1.var-name {
   margin-bottom: 5px;
 }
+.var-page .null-state,
+.example-page .null-state {
+  margin-bottom: 30px;
+}
 .var-page .var-meta,
 .example-page .var-meta {
   margin-bottom: 10px;
@@ -834,15 +840,19 @@ table.ac-results .ac-metadata {
 .toc h5 {
   margin: 0;
   margin-bottom: 10px;
+  font-size: 12px;
+  margin-right: 0;
+  margin-top: 0;
+}
+.toc h6 {
+  margin-top: 0;
+  margin-left: 15px;
 }
 .toc ul {
   margin-bottom: 5px;
 }
 .toc .toc-sphere h5 {
-  font-size: 12px;
-  margin-right: 0;
   margin-bottom: 5px;
-  margin-top: 0;
 }
 .toc .toc-sphere ul {
   padding: 0;
@@ -1039,6 +1049,9 @@ table.ac-results .ac-metadata {
     background-color: #fafafa;
     padding: 0 5px;
   }
+}
+.var-page-nav {
+  margin-bottom: 30px;
 }
 .ns-page h1 {
   margin-bottom: 20px;
