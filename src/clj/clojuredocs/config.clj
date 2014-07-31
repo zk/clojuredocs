@@ -15,3 +15,5 @@
 (def allow-robots? (env/bool :allow-robots true))
 
 (defn url [& s] (apply str base-url s))
+
+(def cache-markdown? (env/bool :cache-markdown false))

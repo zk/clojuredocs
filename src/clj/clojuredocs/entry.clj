@@ -125,8 +125,7 @@
         {:status 307
          :headers {"Location" (str "/" ns "/" (util/cd-encode name))}})))
 
-  (not-found (fn [r]
-               (common/four-oh-four r))))
+  (not-found (fn [r] (common/four-oh-four r))))
 
 (def session-store
   (cookie-store

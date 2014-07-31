@@ -204,7 +204,15 @@
         {:name "Read-Eval-Print Loop (REPL)"
          :keywords "repl read eval print loop"
          :href "/concepts/repl"
-         :desc "A read–eval–print loop (REPL), also known as an interactive toplevel or language shell, is a simple, interactive computer programming environment that takes single user inputs (i.e. single expressions), evaluates them, and returns the result to the user; a program written in a REPL environment is executed piecewise. The term is most usually used to refer to programming interfaces similar to the classic Lisp interactive environment. Common examples include command line shells and similar environments for programming languages."}]
+         :desc "A read–eval–print loop (REPL), also known as an interactive toplevel or language shell, is a simple, interactive computer programming environment that takes single user inputs (i.e. single expressions), evaluates them, and returns the result to the user; a program written in a REPL environment is executed piecewise. The term is most usually used to refer to programming interfaces similar to the classic Lisp interactive environment. Common examples include command line shells and similar environments for programming languages."}
+        {:name "Thrush Operators (->, ->>)"
+         :keywords "thrush operators -> ->> as->"
+         :href "/concepts/thrush"
+         :desc "http://thecomputersarewinning.com/post/Clojure-Thrush-Operator/"}
+        {:name "Recursion"
+         :keywords "recursion loop recur trampoline"
+         :href "https://www.google.com/search?q=recursion"
+         :desc "Recursion is the process of repeating items in a self-similar way. For instance, when the surfaces of two mirrors are exactly parallel with each other the nested images that occur are a form of infinite recursion."}]
        (map #(assoc % :type "page"))))
 
 (binding [clucy/*analyzer* (org.apache.lucene.analysis.core.WhitespaceAnalyzer. clucy/*version*)]
