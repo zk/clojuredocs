@@ -8,6 +8,11 @@
   + concept (I want to do x)
 + Mobile: main use case as linked-to from blog posts and such
   + think about removing all the extra parts for mobile
++ Site experience
+  + Must be *robust and snappy*. Like it or not, perception of a language is
+    often tied to factors out of that language's control, e.g. network
+    congestion, non-optimized css transitions, etc. A quick and
+    responsive experience is a top goal of the site.
 
 ** Non-goals (ATM)
 + How-tos on web app | desktop | mobile
@@ -39,10 +44,12 @@
   + Editing examples
   + Deleting examples
 + Organize ns decls
-+ Show no results state for search
++ Refactor examples and see alsos lookup for autocomplete results
 
 
 ** Done
++ Show no results state for search
++ Add number of examples to autocomplete
 + Loading state on search inputs should show immediately on input
 + Var page navigation
 + Mobile slide-out menu

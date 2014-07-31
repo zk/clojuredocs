@@ -15,6 +15,7 @@
 @blue: rgba(66, 139, 202, 1);
 @light-blue: rgba(66, 139, 202, 0.8);
 @lightest-blue: rgba(66, 139, 202, 0.1);
+@light-black: rgba(0,0,0,0.05);
 
 // Fix for bootstrap border-box on firefox
 
@@ -29,10 +30,10 @@ html, body {
 body {
   font-size: 16px;
   line-height: 1.5em;
-  transition: all 0.3s ease-in;
+  transition: all 0.2s ease-in;
 
   &.search-active {
-    background-color: rgba(0,0,0,0.025);
+    background-color: @light-black;
   }
 }
 
@@ -375,6 +376,10 @@ header.navbar {
   .page-toc {
     display: none;
   }
+
+  body.search-active {
+    background-color: transparent;
+  }
 }
 
 .xkcd {
@@ -490,9 +495,6 @@ ul.ac-results {
 
     &.highlighted {
       background-color: rgba(0,0,0,0.02);
-    }
-
-    h4 {
     }
 
     p {
@@ -1432,5 +1434,28 @@ table.ac-results {
     color: #aaa;
     font-size: 14px;
     padding: 10px;
+  }
+}
+
+.ac-results-widget {
+  margin: 0 -20px;
+  padding: 0 20px;
+}
+
+.search-active .ac-results-widget {
+  background-color: white;
+
+  ul.ac-results {
+    overflow: auto;
+  }
+
+  ul.ac-results > li {
+    &:first-child {
+      margin-top: 20px;
+    }
+
+    &:last-child {
+      margin-bottom: 20px;
+    }
   }
 }

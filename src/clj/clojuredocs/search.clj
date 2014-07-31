@@ -132,9 +132,9 @@
                         (map symbol)
                         (map find-ns)
                         (mapcat gather-var)
-                        (map #(assoc % :library-url library-url))
                         (concat special-forms)
                         (map transform-var-meta)
+                        (map #(assoc % :library-url library-url))
                         (map #(assoc % :type (type-of %)))
                         (map #(assoc % :href (str "/" (:ns %) "/" (util/cd-encode (:name %))))))))
 
@@ -169,7 +169,8 @@
 
 (def additional-ns-data
   {"clojure.zip" {:desc "Functional tree navigation and manipulation"}
-   "clojure.main" {:desc "Environmental- and repl-related utility functions"}})
+   "clojure.main" {:desc "Environmental- and repl-related utility functions"}
+   "clojure.core" {:desc "Core functionality for the Clojure programming language"}})
 
 (def searchable-nss
   (->> clojure-namespaces
@@ -188,11 +189,23 @@
               (assoc ns :href (str "/" name))))))
 
 (def searchable-pages
-  [{:name "Quick Reference"
-    :keywords "help, getting started, quickref, quick reference"
-    :href "/quickref"
-    :desc "Clojure functions broken down by conceptual area (string manipulation, collections, etc)."
-    :type "page"}])
+  (->> [{:name "Quick Reference"
+         :keywords "help, getting started, quickref, quick reference"
+         :href "/quickref"
+         :desc "Clojure functions broken down by conceptual area (string manipulation, collections, etc)."}
+        {:name "Laziness in Clojure"
+         :keywords "lazy laziness lazyness sequences seq lazy evaluation"
+         :href "/concepts/lazyness"
+         :desc "Laziness is the deferred or delayed execution of some bit of code, opposite of eager or immediate evaluation. Laziness is used Clojure to enable execution composition and solutions to problems that involve infinite sequences. FIX THIS"}
+        {:name "Functional Programming"
+         :keywords "functional programming"
+         :href "/concepts/functional-programming"
+         :desc "Rooted in lambda calculus, functional programming is a the style of building programs in a declarative way favoring composition of first-class, pure, and higher-order functions, immutable data structures, laziness, and the elimination of side effects. "}
+        {:name "Read-Eval-Print Loop (REPL)"
+         :keywords "repl read eval print loop"
+         :href "/concepts/repl"
+         :desc "A read–eval–print loop (REPL), also known as an interactive toplevel or language shell, is a simple, interactive computer programming environment that takes single user inputs (i.e. single expressions), evaluates them, and returns the result to the user; a program written in a REPL environment is executed piecewise. The term is most usually used to refer to programming interfaces similar to the classic Lisp interactive environment. Common examples include command line shells and similar environments for programming languages."}]
+       (map #(assoc % :type "page"))))
 
 (binding [clucy/*analyzer* (org.apache.lucene.analysis.core.WhitespaceAnalyzer. clucy/*version*)]
   (doseq [nm searchable-vars]

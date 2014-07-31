@@ -19,6 +19,11 @@
          "...")
     s))
 
+(defn handle-search-active-state [owner]
+  (if (empty? (om/get-state owner :text))
+    (dommy/remove-class! (sel1 :body) :search-active)
+    (dommy/add-class! (sel1 :body) :search-active)))
+
 ;; Landing page autocomplete
 
 (defn $ac-see-alsos [see-alsos]
@@ -36,22 +41,23 @@
             "/"
             [:span.name name]]])]
        (when (> num-left 0)
-         [:span.remaining-label "+ " num-left " more"])])))
+         [:span.remaining-label
+          (str "+ " num-left " more")])])))
 
-(defn $ac-entry-var [{:keys [href name ns doc see-alsos type]}]
+(defn $ac-entry-var [{:keys [href name ns doc see-alsos type examples-count]}]
   [:div.ac-entry
-   [:span.ac-type type]
+   [:span.ac-type type " / " examples-count " ex"  #_[:br] #_(util/pluralize examples-count "Example" "Examples")]
    [:h4
     [:a {:href href} name " (" ns ")"]]
    [:p (ellipsis 100 doc)]
    ($ac-see-alsos see-alsos)])
 
-(defn $ac-entry-ns [{:keys [href name ns doc see-alsos type]}]
+(defn $ac-entry-ns [{:keys [href name ns doc desc see-alsos type]}]
   [:div.ac-entry
    [:span.ac-type type]
    [:h4
     [:a {:href href} name]]
-   [:p (ellipsis 100 doc)]
+   [:p (ellipsis 100 (or doc desc))]
    ($ac-see-alsos see-alsos)])
 
 (defn $ac-entry-page [{:keys [href name desc type href]}]
@@ -108,6 +114,9 @@
 
 (defn $quick-search [{:keys [highlighted-index loading? ac-results] :as app} owner]
   (reify
+    om/IDidUpdate
+    (did-update [_ _ _]
+      (handle-search-active-state owner))
     om/IRenderState
     (render-state [this {:keys [text-chan text]}]
       (sab/html
@@ -123,7 +132,7 @@
            :on-input #(put-text % text-chan owner)
            :on-key-down #(search-keydown % app owner ac-results)}]]))))
 
-(defn $ac-results [{:keys [highlighted-index ac-results]
+(defn $ac-results [{:keys [highlighted-index ac-results results-empty?]
                     :or {highlighted-index 0}
                     :as app}
                    owner]
@@ -140,16 +149,23 @@
     (render [this]
       (sab/html
         [:ul.ac-results
-         (map-indexed
-           (fn [i {:keys [href type] :as res}]
-             [:li {:on-click #(when href (util/navigate-to href))
-                   :class (when (= i highlighted-index)
-                            "highlighted")
-                   :ref i}
-              ($ac-entry res)])
-           ac-results)]))))
+         (if results-empty?
+           [:li.null-state "Nothing Found"]
+           (map-indexed
+             (fn [i {:keys [href type] :as res}]
+               [:li {:on-click #(when href (util/navigate-to href))
+                     :class (when (= i highlighted-index)
+                              "highlighted")
+                     :ref i}
+                ($ac-entry res)])
+             ac-results))]))))
 
-(defn $quick-lookup [{:keys [highlighted-index ac-results search-loading?]
+(defn handle-search-scroll-to [owner prev-state]
+  (when (and (= 0 (count (:text prev-state)))
+             (= 1 (count (om/get-state owner :text))))
+    (anim/scroll-to (om/get-node owner "input") {:pad 35})))
+
+(defn $quick-lookup [{:keys [highlighted-index ac-results search-loading? results-empty?]
                       :or {highlighted-index 0}
                       :as app}
                      owner]
@@ -160,9 +176,8 @@
                        (:highlighted-index app))
                  (> (count ac-results) 0))
         (anim/scroll-into-view (om/get-node owner (:highlighted-index app)) {:pad 30}))
-      (if (empty? (om/get-state owner :text))
-        (dommy/remove-class! (sel1 :body) :search-active)
-        (dommy/add-class! (sel1 :body) :search-active)))
+      (handle-search-scroll-to owner prev-state)
+      (handle-search-active-state owner))
     om/IRenderState
     (render-state [this {:keys [text-chan text]}]
       (sab/html
@@ -185,14 +200,16 @@
            "Help make ClojureDocs better"]
           "."]
          [:ul.ac-results
-          (map-indexed
-            (fn [i {:keys [href type] :as res}]
-              [:li {:on-click #(when href (util/navigate-to href))
-                    :class (when (= i highlighted-index)
-                             "highlighted")
-                    :ref i}
-               ($ac-entry res)])
-            ac-results)]]))))
+          (if results-empty?
+            [:li.null-state "Nothing Found"]
+            (map-indexed
+              (fn [i {:keys [href type] :as res}]
+                [:li {:on-click #(when href (util/navigate-to href))
+                      :class (when (= i highlighted-index)
+                               "highlighted")
+                      :ref i}
+                 ($ac-entry res)])
+              ac-results))]]))))
 
 (defn submit-feedback [owner query clojure-level text]
   (om/set-state! owner :loading? true)

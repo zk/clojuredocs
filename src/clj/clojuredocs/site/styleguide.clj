@@ -110,6 +110,8 @@
      [:div.example.checker-bg.sg-quick-lookup]
      [:p "When loading autocomplete"]
      [:div.example.checker-bg.sg-quick-lookup-loading]
+     [:p "Null state"]
+     [:div.example.checker-bg.sg-quick-lookup-null-state]
      [:p "Landing search w/ autocomplete: heterogenous results linking to vars, namespaces, and concept pages."]
      [:div.example.checker-bg.sg-quick-lookup-autocomplete]]}
    {:title "Examples"
