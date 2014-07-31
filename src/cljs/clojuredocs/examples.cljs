@@ -18,7 +18,8 @@
     {:path "/api/examples"
      :method :post
      :data-type :edn
-     :data (merge var {:body text})
+     :data {:body text
+            :var var}
      :success (fn []
                 (.reload js/location))
      :error (fn [{:keys [status body]}]
@@ -50,7 +51,7 @@
    [:a.toggle-link {:href "#" :on-click #(set-expanded owner (not expanded?))}
     (if-not expanded? "Add an Example" "Collapse")]])
 
-(defn $editor [owner {:keys [expanded? text var loading? error-message] :as state}]
+(defn $editor [{:keys [var]} owner {:keys [expanded? text loading? error-message] :as state}]
   [:div {:class (str "add-example-content" (when-not expanded? " hidden"))}
    [:h5 "New Example"]
    [:div.add-example-preview
@@ -58,7 +59,7 @@
    [:form
     {:on-submit #(validate-and-submit
                    owner
-                   {:text text
+                   {:body text
                     :var var})}
     [:textarea
      {:class "form-control"
@@ -131,7 +132,7 @@
       (sab/html
         [:div.add-example {:ref "wrapper"}
          ($toggle-controls owner state)
-         ($editor owner state)]))))
+         ($editor app owner state)]))))
 
 (defn $example-body [{:keys [body]}]
   [:div.example-body

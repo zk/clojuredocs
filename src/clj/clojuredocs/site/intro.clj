@@ -125,7 +125,7 @@ solving problems (holy buzzwords, fix this)."]
          (map #(assoc (first %) :score (second %))))))
 
 ;; :|
-#_(when-not config/cljs-dev?
+(when-not config/cljs-dev?
   (def top-contribs (memo-ttl top-contribs (* 1000 60 60 6))))
 
 (defn add-see-alsos [results]
@@ -164,6 +164,25 @@ solving problems (holy buzzwords, fix this)."]
        [:p "We're sorry you couldn't find what you were looking for. If you leave us a note below with what you were looking for and how you tried to find it, we can use your feedback to make the site better."]
        [:div.search-feedback-widget
         {:data-query (:query params)}]]]}))
+
+(defn core-markdown []
+  (-> "src/md/core-library.md"
+      slurp
+      util/markdown))
+
+(when config/cache-markdown?
+  (def core-markdown (memoize core-markdown)))
+
+
+(defn core-library [{:keys [user uri]}]
+  (common/$main
+    {:body-class "core-library-page"
+     :user user
+     :page-uri uri
+     :content
+     [:div.row
+      [:div.col-md-12
+       (core-markdown)]]}))
 
 (defroutes routes
   (GET "/" []
@@ -206,7 +225,9 @@ solving problems (holy buzzwords, fix this)."]
               [:h3 "Thanks for your feedback"]
               [:p "Perhaps you can find what you're looking for using our "
                [:a {:href "/quickref"} "Clojure quick reference"]
-               "."]]]}))))
+               "."]]]})))
+
+  (GET "/core-library" [] core-library))
 
 
 

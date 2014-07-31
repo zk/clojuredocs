@@ -260,10 +260,11 @@ document.location.href = noddy.href;
       (for [{:keys [text href]} recent]
         [:li [:a {:href href} (ellipsis text 10)]])]]))
 
-(defn four-oh-four [f]
+(defn four-oh-four [{:keys [user]}]
   ($main
     {:body-class "four-oh-four"
      :hide-search true
+     :user user
      :content
      [:div.row
       [:div.col-sm-8.col-sm-offset-2
