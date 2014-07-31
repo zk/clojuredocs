@@ -1235,6 +1235,7 @@ table.ac-results .ac-metadata {
 }
 .sidenav h5 {
   font-size: 14px;
+  margin-top: 0;
 }
 .sidenav li {
   margin-bottom: 0px;

@@ -38,9 +38,9 @@
                       (dom/attr :data-sticky-offset)
                       (parse-int 100))
         $parent (-> $el dom/ancestor-nodes second)
-        initial-offset (offset-top $el)
+        starting-offset (atom nil)
         f (fn [_]
-            (if (> (.-pageYOffset js/window) (- initial-offset px-offset))
+            (if (> (.-pageYOffset js/window) (max @starting-offset (- (offset-top $el) px-offset)))
               (let [{:keys [width]} (-> $el
                                         dom/ancestor-nodes
                                         second
@@ -50,12 +50,19 @@
                     left-margin (computed-style $parent :margin-left)
                     right-margin (computed-style $parent :margin-right)
                     width (- width left-padding right-padding left-margin right-margin)]
+                (prn (- (offset-top $el) px-offset))
+                (swap! starting-offset (fn [v]
+                                         (if v
+                                           v
+                                           (- (offset-top $el) px-offset))))
                 (dom/add-class! $el :sticky)
                 (dom/set-style! $el
                   :width (str width "px")
                   :max-height (str js/window.innerHeight "px")
                   :top (str px-offset "px")))
-              (dom/remove-class! $el :sticky)))]
+              (do
+                (reset! starting-offset nil)
+                (dom/remove-class! $el :sticky))))]
     (dom/listen! js/window :scroll f)
     (dom/listen! js/window :resize f)
     (f nil)))
