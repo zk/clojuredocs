@@ -152,8 +152,10 @@
     (throttle tin 250 tout)
     (go
       (while true
-        (let [ac-text (<! text-chan)
-              _ (swap! app-state assoc :search-loading? true)]
+        (let [ac-text (<! text-chan)]
+          (swap! app-state assoc :search-loading? true)
+          (when (empty? ac-text)
+            (swap! app-state assoc :results-empty? false))
           (>! tin ac-text))))
     (go
       (while true
@@ -169,6 +171,7 @@
                   assoc
                   :highlighted-index 0
                   :search-loading? false
+                  :results-empty? (and (empty? data) (not (empty? ac-text)))
                   :ac-results data)))))))))
 
 (defn animated-scroll-init [$el]
@@ -268,11 +271,18 @@ f should accept number-of-colls arguments."}
                      :desc "Where to go to get started with Clojure. Provides a host of information  con the language, core concepts, tutorials, books, and videos to help you learn Clojure."}]}
       {:target $el}))
 
+  :.sg-quick-lookup-null-state
+  (fn [$el]
+    (om/root
+      search/$quick-lookup
+      {:results-empty? true}
+      {:target $el :init-state {:text "foo bar"}}))
+
   :.sg-quick-lookup-loading
   (fn [$el]
     (om/root
       search/$quick-lookup
-      {:loading? true}
+      {:search-loading? true}
       {:target $el}))
 
   :.sg-examples-null-state

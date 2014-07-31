@@ -39,7 +39,7 @@
      [:div.col-md-12
       [:h5 "On Clojure"]]
      [:div.col-md-6
-      [:p "Clojure is a concise, powerful, and performant general-purpose programming language that favors simplicity, composibility, functional and data-oriented way of
+      [:p "Clojure is a concise, powerful, and performant general-purpose programming language that favors simplicity, composibility, functional and a data-oriented way of
 solving problems (holy buzzwords, fix this)."]
       [:p
        "New to Clojure and not sure where to start? If you'd like to get a good background on Clojure's design origins (and be entertained at the same time), start "
@@ -142,6 +142,15 @@ solving problems (holy buzzwords, fix this)."]
     (->> results
          (map #(assoc % :see-alsos (get sa-lookup (select-keys % [:ns :name])))))))
 
+(defn add-examples-count [results]
+  (let [examples-lookup (->> results
+                             (map #(select-keys % [:ns :name]))
+                             (map (fn [l]
+                                    [l (mon/fetch-count :examples :where l)]))
+                             (into {}))]
+    (->> results
+         (map #(assoc % :examples-count (get examples-lookup (select-keys % [:ns :name])))))))
+
 
 (defn search-feedback [{:keys [params uri user]}]
   (common/$main
@@ -168,7 +177,11 @@ solving problems (holy buzzwords, fix this)."]
   (GET "/search" []
     (fn [{:keys [params]}]
       {:headers {"Content-Type" "application/edn"}
-       :body (pr-str (add-see-alsos (search/query (:query params))))}))
+       :body (pr-str (->> params
+                          :query
+                          search/query
+                          add-see-alsos
+                          add-examples-count))}))
 
   (GET "/search-feedback" [] search-feedback)
   (POST "/search-feedback" [] (fn [{:keys [edn-body]}]

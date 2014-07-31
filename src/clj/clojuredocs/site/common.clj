@@ -39,6 +39,7 @@
       [:button.btn.btn-default.navbar-btn.pull-right.mobile-menu
        [:i.fa.fa-bars]]
       [:ul.navbar-nav.nav.navbar-right.desktop-navbar-nav
+       [:li [:a {:href "/core-library"} "Core Library"]]
        [:li [:a {:href "/quickref"} "Quick Reference"]]
        (if user
          ($user-area user)
