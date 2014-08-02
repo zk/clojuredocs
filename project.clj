@@ -4,7 +4,7 @@
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :min-lein-version "2.0.0"
-  :source-paths ["src/clj"]
+  :source-paths ["src/clj" "target/generated/clj"]
   :test-paths ["test/clj"]
   :dependencies [[org.clojure/clojure "1.6.0"]
                  [ring "1.2.1"]
@@ -12,10 +12,9 @@
                  [aleph "0.3.0-rc2"]
                  [hiccup "1.0.4"]
                  [prismatic/dommy "0.1.2"]
-                 [org.clojure/clojurescript "0.0-2234"]
+                 [org.clojure/clojurescript "0.0-2277"]
                  [clucy "0.4.0"]
                  [watchtower "0.1.1"]
-                 [org.clojure/tools.reader "0.7.10"]
                  [clj-http "0.7.7"]
                  [cheshire "5.2.0"]
                  [org.clojure/java.jdbc "0.3.0-beta2"]
@@ -28,12 +27,20 @@
                  [prismatic/om-tools "0.2.2"]
                  [org.pegdown/pegdown "1.4.2"]
                  [sablono "0.2.18"]]
-  :profiles {:nrepl {:source-paths ["dev"]
-                     :dependencies [[org.clojure/tools.namespace "0.2.4"]]
-                     :repl-options {:init (user/restart)}}}
-  :plugins [[lein-cljsbuild "1.0.3"]] ;; required for heroku deploy
+  :repl-options {:init (do
+                         (require 'clojuredocs.main)
+                         (-> (clojuredocs.main/create-app)
+                             clojuredocs.main/start))}
+  :plugins [[lein-cljsbuild "1.0.3"]
+            [com.keminglabs/cljx "0.3.1"]] ;; required for heroku deploy
+  :cljx {:builds [{:source-paths ["src/cljx"]
+                   :output-path "target/generated/clj"
+                   :rules :clj}
+                  {:source-paths ["src/cljx"]
+                   :output-path "target/generated/cljs"
+                   :rules :cljs}]}
   :cljsbuild {:builds
-              {:dev  {:source-paths ["src/cljs"]
+              {:dev  {:source-paths ["src/cljs" "target/generated/cljs"]
                       :compiler {:output-to "resources/public/cljs/clojuredocs.js"
                                  :output-dir "resources/public/cljs"
                                  :optimizations :none
@@ -44,7 +51,7 @@
                                            "externs/morpheus.js"]}}
 
                ;; for debugging advanced compilation problems
-               :dev-advanced  {:source-paths ["src/cljs"]
+               :dev-advanced  {:source-paths ["src/cljs" "target/generated/cljs"]
                                :compiler {:output-to "resources/public/cljs/clojuredocs.js"
                                           :output-dir "resources/public/cljs-advanced"
                                           :source-map "resources/public/cljs/clojuredocs.js.map"
@@ -61,7 +68,7 @@
                                                     "externs/marked.js"
                                                     "externs/fastclick.js"]}}
 
-               :prod {:source-paths ["src/cljs"]
+               :prod {:source-paths ["src/cljs" "target/generated/cljs"]
                       :compiler {:output-to "resources/public/cljs/clojuredocs.js"
                                  :optimizations :advanced
                                  :pretty-print false

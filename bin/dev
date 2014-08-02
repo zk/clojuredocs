@@ -24,4 +24,5 @@ export ALLOW_ROBOTS=true
 
 cd $SCRIPT_DIR && lein clean
 cd $SCRIPT_DIR && lein cljsbuild clean
+cd $SCRIPT_DIR && lein cljx once
 cd $SCRIPT_DIR/.. && foreman start -f Procfile.dev

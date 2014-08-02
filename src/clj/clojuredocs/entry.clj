@@ -31,6 +31,21 @@
             [somnium.congomongo :as mon]
             [clojure.edn :as edn]))
 
+(defn decode-body [content-length body]
+  (when (and content-length
+             (> content-length 0))
+    (let [buf (byte-array content-length)]
+      (.read body buf 0 content-length)
+      (.close body)
+      (String. buf))))
+
+(defn response-body
+  "Turn a InputStream into a string."
+  [{:keys [content-length body]}]
+  (if (string? body)
+    body
+    (decode-body content-length body)))
+
 (defn hiccup->html-string [body]
   (if-not (vector? body)
     body
@@ -155,7 +170,7 @@
   (fn [r]
     (if (= "application/edn" (get-in r [:headers "content-type"]))
       (try
-        (h (assoc r :edn-body (-> r util/response-body edn/read-string)))
+        (h (assoc r :edn-body (-> r response-body edn/read-string)))
         (catch Exception e
           {:status 400
            :body "Malformed edn"}))
