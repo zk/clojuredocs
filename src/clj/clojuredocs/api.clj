@@ -23,9 +23,10 @@
   (when (empty? body)
     {:error-message "Looks like your example is blank."}))
 
-(defn has-valid-var [{:keys [ns name library-url]}]
-  (when-not (and ns name library-url)
-    {:error-message "Please provide the library url, namespace, and name of the var."}))
+(defn has-valid-var [ex]
+  (let [{:keys [ns name library-url] :as v} (:var ex)]
+    (when-not (and ns name library-url)
+      {:error-message "Please provide the library url, namespace, and name of the var."})))
 
 (def example-schema
   {:name :example
@@ -85,10 +86,10 @@
               (mon/insert! :examples entity)
               {:body "ok"
                :status 200
-               :headers {"Content-Type" "text/plain"}}))))))
+               :headers {"Content-Type" "text/plain"}})))))))
 
-    (ANY "/render-markdown" []
-    (fn [r]
-      (let [body (util/response-body r)]
-        {:body (when body (util/markdown body))
-         :headers {"Content-Type" "text/html;charset=utf-8"}}))))
+#_(use 'clojure.pprint)
+
+#_(->> (mon/fetch :examples)
+     (take 10)
+     pprint)
