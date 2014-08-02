@@ -181,7 +181,9 @@ solving problems (holy buzzwords, fix this)."]
      :page-uri uri
      :content
      [:div.row
-      [:div.col-md-12
+      [:div.col-sm-2
+       (common/$library-nav search/clojure-lib)]
+      [:div.col-sm-10
        (core-markdown)]]}))
 
 (defroutes routes
