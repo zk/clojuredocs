@@ -40,7 +40,7 @@
       (aset $preview
         "innerHTML"
         (-> text
-            js/marked
+            util/markdown
             (str/replace #"<pre>" "<pre class=\"brush: clojure\">")))
       (dommy/append! $preview
         (node [:div.empty-live-preview "Live Preview"])))))
@@ -105,7 +105,8 @@
    [:div.note-body
     {:dangerouslySetInnerHTML
      {:__html
-      (-> (js/marked body)
+      (-> body
+          util/markdown
           (str/replace #"<pre><code>" "<pre>")
           (str/replace #"</code></pre>" "</pre>")
           (str/replace #"<pre>" "<pre class=\"brush: clojure\">"))}}]])

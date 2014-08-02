@@ -21,10 +21,8 @@
 
 * Release Checklist
 
-+ URL shortener howto
 + Move over from old db
 + Claiming old user accounts
-+ Investigate bitbucket login
 + Quickref update
 + Supported libs blurb
 + Core-specific namespace page
@@ -90,6 +88,12 @@
 + Loading indicator on search widget
 + Add recently viewed vars to sidebar
 + Animate scroll-to links
+
+** Punt
++ ClojureScript / Clojure.NET support
++ URL shortener howto
++ Investigate bitbucket login
+
 
 
 * Indexes
