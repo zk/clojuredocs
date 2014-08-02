@@ -85,6 +85,9 @@
       (update-in [:user] dissoc :email)
       (update-in [:_id] str)))
 
+(defn $number-badge [num]
+  [:span.badge num])
+
 (defn var-page [ns name]
   (let [name (util/cd-decode name)
         {:keys [arglists name ns doc runtimes added file] :as v} (lookup-var ns name)]
@@ -120,15 +123,16 @@
                                     [:a {:href "#examples"
                                          :data-animate-scroll "true"
                                          :data-animate-buffer "70"}
-                                     "Examples"]
+                                     "Examples " ($number-badge (count examples))]
                                     [:a {:href "#see-also"
                                          :data-animate-scroll "true"
                                          :data-animate-buffer "70"}
-                                     "See Also"]
-                                    [:a {:href "#notes"
-                                         :data-animate-scroll "true"
-                                         :data-animate-buffer "70"}
-                                     "Notes"]]}]
+                                     "See Also " ($number-badge (count see-alsos))]
+                                    (when (> (count notes) 0)
+                                      [:a {:href "#notes"
+                                           :data-animate-scroll "true"
+                                           :data-animate-buffer "70"}
+                                       "Notes " ($number-badge (count notes))])]}]
               :content [:div
                         [:div.row
                          [:div.col-sm-2.sidenav
@@ -143,15 +147,17 @@
                              [:li [:a {:href "#examples"
                                        :data-animate-scroll "true"
                                        :data-animate-buffer "20"}
-                                   "Examples"]]
+                                   "Examples " ($number-badge (count examples))]]
                              [:li [:a {:href "#see-also"
                                        :data-animate-scroll "true"
                                        :data-animate-buffer "10"}
-                                   "See Also"]]
-                             [:li [:a {:href "#notes"
-                                       :data-animate-scroll "true"
-                                       :data-animate-buffer "10"}
-                                   "Notes"]]]]
+                                   "See Also "
+                                   ($number-badge (count see-alsos))]]
+                             (when (> (count notes) 0)
+                               [:li [:a {:href "#notes"
+                                         :data-animate-scroll "true"
+                                         :data-animate-buffer "10"}
+                                     "Notes" ($number-badge (count notes))]])]]
                            #_(common/$recent recent)
                            (common/$library-nav library ns)]]
                          [:div.col-sm-10

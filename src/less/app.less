@@ -17,6 +17,8 @@
 @lightest-blue: rgba(66, 139, 202, 0.1);
 @light-black: rgba(0,0,0,0.05);
 
+@code-bg: rgba(0,0,0,0.03);
+
 // Fix for bootstrap border-box on firefox
 
 html, body {
@@ -109,6 +111,19 @@ section {
 
 html, body {
   height: 100%;
+}
+
+.badge {
+  background-color: rgba(0,0,0,0.05);
+  background-color: transparent;
+  color: rgba(0,0,0,0.20);
+  border-radius: 3px;
+  padding: 1px 5px;
+  font-weight: 500;
+  margin-left: 5px;
+  margin-right: 5px;
+  font-size: 14px;
+  line-height: 22px;
 }
 
 .sticky-wrapper {
@@ -250,6 +265,25 @@ header.navbar {
 
 .mobile-nav-menu {
   display: none;
+}
+
+.desktop-side-nav {
+  .badge {
+    float: right;
+  }
+}
+
+.mobile-nav-menu {
+  .badge {
+    font-size: auto;
+    font-size: 16px;
+    color: rgba(255,255,255,0.5);
+    font-weight: 300;
+    float: right;
+    line-height: 22px;
+    margin: 0;
+    padding: 0;
+  }
 }
 
 @media(max-width: 767px) {
@@ -1458,5 +1492,16 @@ table.ac-results {
     &:last-child {
       margin-bottom: 20px;
     }
+  }
+}
+
+.core-library-page {
+  pre, .syntaxhighlighter {
+    background-color: @code-bg;
+    padding: 20px;
+  }
+
+  h3 {
+    margin-top: 30px;
   }
 }

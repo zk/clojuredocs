@@ -217,6 +217,18 @@ html,
 body {
   height: 100%;
 }
+.badge {
+  background-color: rgba(0, 0, 0, 0.05);
+  background-color: transparent;
+  color: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+  padding: 1px 5px;
+  font-weight: 500;
+  margin-left: 5px;
+  margin-right: 5px;
+  font-size: 14px;
+  line-height: 22px;
+}
 .sticky-wrapper {
   min-height: 100%;
   height: auto !important;
@@ -321,6 +333,19 @@ header.navbar .quick-search-widget form {
 }
 .mobile-nav-menu {
   display: none;
+}
+.desktop-side-nav .badge {
+  float: right;
+}
+.mobile-nav-menu .badge {
+  font-size: auto;
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 300;
+  float: right;
+  line-height: 22px;
+  margin: 0;
+  padding: 0;
 }
 @media (max-width: 767px) {
   header.navbar .btn.mobile-menu {
@@ -1271,4 +1296,12 @@ table.ac-results .ac-metadata {
 }
 .search-active .ac-results-widget ul.ac-results > li:last-child {
   margin-bottom: 20px;
+}
+.core-library-page pre,
+.core-library-page .syntaxhighlighter {
+  background-color: rgba(0, 0, 0, 0.03);
+  padding: 20px;
+}
+.core-library-page h3 {
+  margin-top: 30px;
 }
