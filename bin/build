@@ -2,9 +2,9 @@
 
 set -e
 
+lein cljx once
+lein cljsbuild once prod
+
 lein test
 
-# cljs
-lein cljsbuild once prod
-lein cljx once
 lein with-profile production compile :all
