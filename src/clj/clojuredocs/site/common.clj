@@ -271,3 +271,14 @@ document.location.href = noddy.href;
        [:h1 "404"]
        [:a.four-oh-four {:href "http://emareaf.deviantart.com/art/Rich-Hickey-321501046"}
         [:img.four-oh-four {:src "http://fc04.deviantart.net/fs70/f/2012/229/a/6/rich_hickey_by_emareaf-d5bevsm.png"}]]]]}))
+
+(defn memo-markdown-file [path]
+  (try
+    (-> path
+        slurp
+        util/markdown)
+    (catch java.io.FileNotFoundException e
+      nil)))
+
+(when config/cache-markdown?
+  (def memo-markdown-file (memoize memo-markdown-file)))

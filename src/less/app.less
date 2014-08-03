@@ -106,7 +106,7 @@ ul {
 }
 
 section {
-  margin-bottom: 20px;
+  margin-bottom: 40px;
 }
 
 html, body {
@@ -497,6 +497,7 @@ form.search {
 
 .syntaxhighlighter {
   padding: 10px;
+  background-color: @code-bg;
 }
 
 .ac-result-link:hover {
@@ -1156,7 +1157,7 @@ table.ac-results {
   padding: 20px;
 }
 
-.styleguide-page {
+.dev-page {
   .styleguide-section {
     margin-bottom: 50px;
 
@@ -1254,9 +1255,19 @@ table.ac-results {
 .ns-page {
   h1 { margin-bottom: 20px; }
   pre.doc { margin-bottom: 20px; }
+
+  section {
+    margin-bottom: 50px;
+
+    ul li {
+      list-style-type: disc;
+    }
+  }
 }
 
 .ns-table {
+  width: 100%;
+
   .name {
     text-align: right;
   }
@@ -1503,5 +1514,14 @@ table.ac-results {
 
   h3 {
     margin-top: 30px;
+  }
+}
+
+.markdown {
+  ul {
+    li {
+      list-style-type: disc;
+      margin-left: 25px;
+    }
   }
 }

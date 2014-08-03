@@ -1,5 +1,6 @@
 (ns clojuredocs.site.nss
-  (:require [somnium.congomongo :as mon]
+  (:require [clojuredocs.config :as config]
+            [somnium.congomongo :as mon]
             [clojuredocs.util :as util]
             [clojuredocs.site.common :as common]
             [clojuredocs.search :as search]
@@ -55,13 +56,18 @@
            :content [:div
                      [:div.row
                       [:div.col-sm-2.sidenav
-                       (common/$recent (-> r :session :recent))
-                       (common/$library-nav lib)]
+                       [:div
+                        {:data-sticky-offset "20"}
+                        (common/$library-nav lib)]]
                       [:div.col-sm-10
                        [:h1 ns-str]
-                       (when (:doc ns)
-                         [:pre.doc (:doc ns)])
-                       [:table {:class "ns-table"}
-                        (->> vars
-                             group-vars
-                             (mapcat $var-group))]]]]})))))
+                       [:section.markdown
+                        (when (:doc ns)
+                          [:pre.doc (:doc ns)])
+                        (common/memo-markdown-file (str "src/md/namespaces/" ns-str ".md"))]
+                       [:section
+                        [:h5 "Vars in " ns-str]
+                        [:table {:class "ns-table"}
+                         (->> vars
+                              group-vars
+                              (mapcat $var-group))]]]]]})))))

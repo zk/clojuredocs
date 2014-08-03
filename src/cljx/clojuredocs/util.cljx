@@ -71,7 +71,8 @@
 #+clj
 (defn markdown [s]
   (when s
-    (let [pd (PegDownProcessor. (int (bit-or Extensions/AUTOLINKS
+    (let [pd (PegDownProcessor. (int (bit-or
+                                       Extensions/AUTOLINKS
                                        Extensions/FENCED_CODE_BLOCKS
                                        Extensions/TABLES)))]
       (.markdownToHtml pd s))))
