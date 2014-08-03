@@ -13,7 +13,8 @@
             [clojuredocs.anim :as anim]
             [cljs.reader :as reader]
             [cljs.core.async :as async
-             :refer [<! >! chan close! sliding-buffer put! alts! timeout pipe mult tap]])
+             :refer [<! >! chan close! sliding-buffer put! alts! timeout pipe mult tap]]
+            #_[clj-fuzzy.metrics1 :as fuzzy])
   (:require-macros [cljs.core.async.macros :refer [go]]
                    [dommy.macros :refer [node sel sel1]]))
 
@@ -445,3 +446,10 @@ user=> (into {} *1)
 
 
 (.attach js/FastClick js/document.body)
+
+(def strings ["foo" "bar" "baz"])
+
+
+#_(->> strings
+     (map #(fuzzy/levensthein % "f"))
+     prn)

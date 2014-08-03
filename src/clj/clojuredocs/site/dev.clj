@@ -1,5 +1,6 @@
-(ns clojuredocs.site.styleguide
-  (:require [clojuredocs.site.common :as common]
+(ns clojuredocs.site.dev
+  (:require [compojure.core :refer [defroutes GET]]
+            [clojuredocs.site.common :as common]
             [clojuredocs.quickref :as quickref]))
 
 (defn section [title & body]
@@ -13,9 +14,10 @@
    (vec (concat [:div.section-content] content))])
 
 (defn $nav [sections]
-  [:div {:data-sticky-offset "20"}
-   [:h5 "Sections"]
-   [:ul.sidenav
+  [:div
+   {:data-sticky-offset "20"}
+   [:h5 "Styleguide"]
+   [:ul
     [:li [:h6 [:a {:href "#"
                    :data-animate-scroll "true"} "Top"]]]
     (for [{:keys [nav-target title]} sections]
@@ -25,8 +27,8 @@
              :data-animate-scroll "true"
              :data-animate-buffer "20"} title]]])]])
 
-(def sections
-  [{:title "Bootstrap Overrides"
+(def styleguide-sections
+  [{:title "Bootstrap"
     :nav-target "bootstrap-overrides"
     :content
     [[:p
@@ -151,16 +153,52 @@
      [:p "Adding a note:"]
      [:div.example.checker-bg.sg-add-note]]}])
 
-(defn index [{:keys [user uri]}]
+(defn $tpl [{:keys [body-class user page-uri nav content]}]
   (common/$main
-    {:body-class "styleguide-page"
+    {:body-class "dev-page"
      :user user
-     :page-uri uri
+     :page-uri page-uri
      :content
      [:div.row
       [:div.col-md-2
-       ($nav sections)]
+       [:div.sidenav
+        [:section
+         [:h5 "Dev"]
+         [:ul
+          [:li [:a {:href "/dev/styleguide"} "Styleguide"]]
+          [:li [:a {:href "/dev/search-perf"} "Search Perf"]]
+          [:li [:a {:href "/dev/canary"} "Canary Tests"]]]]
+        nav]]
       [:div.col-md-10
-       [:h1 "Styleguide"]
-       [:p.lead "Here you'll find various UI elements used on the ClojureDocs site. This styleguide is designed to help you see how changes will the vairous states of our UI elements when making changes."]
-       (map $section sections)]]}))
+       content]]}))
+
+(defn styleguide [{:keys [user uri]}]
+  ($tpl
+    {:user user
+     :page-uri uri
+     :nav ($nav styleguide-sections)
+     :content
+     [:div
+      [:h1 "Styleguide"]
+      [:p.lead "Here you'll find various UI elements used on the ClojureDocs site. This styleguide is designed to help you see how changes will the vairous states of our UI elements when making changes."]
+      (map $section styleguide-sections)]}))
+
+(defn perf [{:keys [user uri]}]
+  ($tpl
+    {:user user
+     :page-uri uri
+     :content
+     [:div
+      [:h1 "Search Performance"]]}))
+
+(defn canary-tests [{:keys [user uri]}]
+  ($tpl
+    {:user user
+     :page-uri uri
+     :content
+     [:div [:h1 "Canary"]]}))
+
+(defroutes routes
+  (GET "/dev/styleguide" [] styleguide)
+  (GET "/dev/search-perf" [] perf)
+  (GET "/dev/canary" [] canary-tests))

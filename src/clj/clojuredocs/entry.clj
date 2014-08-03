@@ -25,11 +25,12 @@
             [clojuredocs.site.vars :as site.vars]
             [clojuredocs.site.user :as site.user]
             [clojuredocs.site.nss :as site.nss]
-            [clojuredocs.site.styleguide :as styleguide]
+            [clojuredocs.site.dev :as site.dev]
             [clojure.pprint :refer (pprint)]
             [clojuredocs.api :as api]
             [somnium.congomongo :as mon]
-            [clojure.edn :as edn]))
+            [clojure.edn :as edn]
+            [clojuredocs.search :as search]))
 
 (defn decode-body [content-length body]
   (when (and content-length
@@ -105,6 +106,14 @@
        :body (if config/allow-robots?
                "User-agent: *\nAllow: /"
                "User-agent: *\nDisallow: /")}))
+
+  (GET "/search-data" []
+    (fn [r]
+      {:headers {"Content-Type" "text/javascript"}
+       :body (pr-str (->> search/searchable-vars
+                          (map #(select-keys % [:ns :name :keywords :doc :type]))
+                          (map #(update-in % [:doc] (fn [s] (->> s (take 100) (apply str)))))))}))
+
   (var site.intro/routes)
   (var site.gh-auth/routes)
   (var site.user/routes)
@@ -113,7 +122,7 @@
   (GET "/logout" [] (fn [r] (-> (redirect "/")
                                 (assoc :session nil))))
   (GET "/quickref" [] quickref/index)
-  (GET "/styleguide" [] styleguide/index)
+  (var site.dev/routes)
   (GET "/examples-styleguide" []
     (fn [{:keys [uri user]}]
       (common/$main
