@@ -446,10 +446,3 @@ user=> (into {} *1)
 
 
 (.attach js/FastClick js/document.body)
-
-(def strings ["foo" "bar" "baz"])
-
-
-#_(->> strings
-     (map #(fuzzy/levensthein % "f"))
-     prn)
