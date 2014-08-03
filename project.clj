@@ -10,6 +10,7 @@
                  [ring "1.2.1"]
                  [compojure "1.1.6"]
                  [aleph "0.3.0-rc2"]
+                 [prismatic/schema "0.2.6"]
                  [hiccup "1.0.4"]
                  [prismatic/dommy "0.1.2"]
                  [org.clojure/clojurescript "0.0-2277"]
@@ -26,7 +27,8 @@
                  [om "0.6.4"]
                  [prismatic/om-tools "0.2.2"]
                  [org.pegdown/pegdown "1.4.2"]
-                 [sablono "0.2.18"]]
+                 [sablono "0.2.18"]
+                 [clj-fuzzy "0.1.8"]]
   :repl-options {:init (do
                          (require 'clojuredocs.main)
                          (-> (clojuredocs.main/create-app)
