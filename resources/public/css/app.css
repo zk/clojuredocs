@@ -211,7 +211,7 @@ ul {
   padding: 0;
 }
 section {
-  margin-bottom: 20px;
+  margin-bottom: 40px;
 }
 html,
 body {
@@ -513,6 +513,7 @@ form.search input.placeholder {
 }
 .syntaxhighlighter {
   padding: 10px;
+  background-color: rgba(0, 0, 0, 0.03);
 }
 .ac-result-link:hover {
   text-decoration: none;
@@ -1041,30 +1042,30 @@ table.ac-results .ac-metadata {
   background-position: 0 0, 20px 20px;
   padding: 20px;
 }
-.styleguide-page .styleguide-section {
+.dev-page .styleguide-section {
   margin-bottom: 50px;
 }
-.styleguide-page .styleguide-section > h2 {
+.dev-page .styleguide-section > h2 {
   border-bottom: solid #ddd 1px;
   padding-bottom: 5px;
 }
-.styleguide-page .example {
+.dev-page .example {
   margin-bottom: 30px;
 }
-.styleguide-page .buttons-ex button {
+.dev-page .buttons-ex button {
   margin-right: 10px;
 }
-.styleguide-page .contextual-bgs > div {
+.dev-page .contextual-bgs > div {
   display: inline-block;
   padding: 10px 20px;
   margin-right: 10px;
 }
-.styleguide-page .headers-ex h1,
-.styleguide-page .headers-ex h2,
-.styleguide-page .headers-ex h3,
-.styleguide-page .headers-ex h4,
-.styleguide-page .headers-ex h5,
-.styleguide-page .headers-ex h6 {
+.dev-page .headers-ex h1,
+.dev-page .headers-ex h2,
+.dev-page .headers-ex h3,
+.dev-page .headers-ex h4,
+.dev-page .headers-ex h5,
+.dev-page .headers-ex h6 {
   line-height: 50px;
   margin: 0;
 }
@@ -1123,6 +1124,15 @@ table.ac-results .ac-metadata {
 }
 .ns-page pre.doc {
   margin-bottom: 20px;
+}
+.ns-page section {
+  margin-bottom: 50px;
+}
+.ns-page section ul li {
+  list-style-type: disc;
+}
+.ns-table {
+  width: 100%;
 }
 .ns-table .name {
   text-align: right;
@@ -1304,4 +1314,8 @@ table.ac-results .ac-metadata {
 }
 .core-library-page h3 {
   margin-top: 30px;
+}
+.markdown ul li {
+  list-style-type: disc;
+  margin-left: 25px;
 }

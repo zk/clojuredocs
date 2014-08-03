@@ -165,15 +165,6 @@ solving problems (holy buzzwords, fix this)."]
        [:div.search-feedback-widget
         {:data-query (:query params)}]]]}))
 
-(defn core-markdown []
-  (-> "src/md/core-library.md"
-      slurp
-      util/markdown))
-
-(when config/cache-markdown?
-  (def core-markdown (memoize core-markdown)))
-
-
 (defn core-library [{:keys [user uri]}]
   (common/$main
     {:body-class "core-library-page"
@@ -182,9 +173,17 @@ solving problems (holy buzzwords, fix this)."]
      :content
      [:div.row
       [:div.col-sm-2
-       (common/$library-nav search/clojure-lib)]
+       [:div.sidenav
+        {:data-sticky-offset "20"}
+        (common/$library-nav search/clojure-lib)]]
       [:div.col-sm-10
-       (core-markdown)]]}))
+       [:section.markdown
+        (common/memo-markdown-file "src/md/core-library.md")]
+       (for [{:keys [name]} search/searchable-nss]
+         (when-let [content (common/memo-markdown-file (str "src/md/namespaces/" name ".md"))]
+           [:section.markdown
+            [:h2 [:a {:href (str "/" name)} name]]
+            content]))]]}))
 
 (defroutes routes
   (GET "/" []
