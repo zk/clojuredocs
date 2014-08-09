@@ -18,14 +18,8 @@
             [hiccup.page :refer (html5)]
             [clojuredocs.env :as env]
             [clojuredocs.util :as util]
-            [clojuredocs.site.common :as common]
-            [clojuredocs.quickref :as quickref]
-            [clojuredocs.site.intro :as site.intro]
-            [clojuredocs.site.gh-auth :as site.gh-auth]
-            [clojuredocs.site.vars :as site.vars]
-            [clojuredocs.site.user :as site.user]
-            [clojuredocs.site.nss :as site.nss]
-            [clojuredocs.site.dev :as site.dev]
+            [clojuredocs.pages.common :as common]
+            [clojuredocs.pages :as pages]
             [clojure.pprint :refer (pprint)]
             [clojuredocs.api :as api]
             [somnium.congomongo :as mon]
@@ -84,71 +78,11 @@
   (GET "/quickref/*" [] {:status 301 :headers {"Location" "/quickref"}})
   (GET "/clojure_core" [] {:status 301 :headers {"Location" "/"}}))
 
-(defn expand-ns [ns]
-  (:name (mon/fetch-one :namespaces
-           :where {:name (->> (str/split ns #"\.")
-                              (map #(str % "[^.]*"))
-                              (interpose "\\.")
-                              (apply str)
-                              re-pattern)})))
-
-(defn lookup-var [ns name]
-  (mon/fetch-one :vars :where {:name name :ns ns}))
-
-(defn lookup-var-expand [ns name]
-  (or (lookup-var ns name)
-      (lookup-var (expand-ns ns) name)))
-
 (defroutes _routes
-  (GET "/robots.txt" []
-    (fn [r]
-      {:headers {"Content-Type" "text/plain"}
-       :body (if config/allow-robots?
-               "User-agent: *\nAllow: /"
-               "User-agent: *\nDisallow: /")}))
-
-  (GET "/search-data" []
-    (fn [r]
-      {:headers {"Content-Type" "text/javascript"}
-       :body (pr-str (->> search/searchable-vars
-                          (map #(select-keys % [:ns :name :keywords :doc :type]))
-                          (map #(update-in % [:doc] (fn [s] (->> s (take 100) (apply str)))))))}))
-
-  (var site.intro/routes)
-  (var site.gh-auth/routes)
-  (var site.user/routes)
   (context "/api" [] api/_routes)
-
-  (GET "/logout" [] (fn [r] (-> (redirect "/")
-                                (assoc :session nil))))
-  (GET "/quickref" [] quickref/index)
-  (var site.dev/routes)
-  (GET "/examples-styleguide" []
-    (fn [{:keys [uri user]}]
-      (common/$main
-        {:body-class "examples-styleguide-page"
-         :user user
-         :page-uri uri
-         :content
-         [:div.row
-          [:div.col-md-10.col-md-offset-1.examples-styleguide-content
-           (-> "src/md/examples-styleguide.md"
-               slurp
-               util/markdown)]]})))
-  (GET "/ex/:id" [id] (site.vars/example-page id))
-
-    ;; Redirect old urls
+  (var pages/_routes)
+  ;; Redirect old urls
   (var old-url-redirects)
-
-  (GET "/:ns/:name" [ns name] (site.vars/var-page ns name))
-  (GET "/:ns" [ns] (site.nss/index ns))
-
-  (GET "/:ns/:name" [ns name]
-    (fn [r]
-      (let [{:keys [ns name]} (lookup-var-expand ns name)]
-        {:status 307
-         :headers {"Location" (str "/" ns "/" (util/cd-encode name))}})))
-
   (not-found (fn [r] (common/four-oh-four r))))
 
 (def session-store
@@ -181,8 +115,10 @@
       (try
         (h (assoc r :edn-body (-> r response-body edn/read-string)))
         (catch Exception e
-          {:status 400
-           :body "Malformed edn"}))
+          (if (re-find #"EOF while reading" (str e))
+            {:status 400
+             :body "Malformed EDN"}
+            (throw e))))
       (h r))))
 
 (def routes

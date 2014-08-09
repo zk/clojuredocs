@@ -1,7 +1,7 @@
-(ns clojuredocs.site.dev
+(ns clojuredocs.pages.dev
   (:require [compojure.core :refer [defroutes GET]]
-            [clojuredocs.site.common :as common]
-            [clojuredocs.quickref :as quickref]))
+            [clojuredocs.pages.common :as common]
+            [clojuredocs.pages.quickref :as quickref]))
 
 (defn section [title & body]
   [:secton
@@ -172,7 +172,7 @@
       [:div.col-md-10
        content]]}))
 
-(defn styleguide [{:keys [user uri]}]
+(defn styleguide-handler [{:keys [user uri]}]
   ($tpl
     {:user user
      :page-uri uri
@@ -183,7 +183,7 @@
       [:p.lead "Here you'll find various UI elements used on the ClojureDocs site. This styleguide is designed to help you see how changes will the vairous states of our UI elements when making changes."]
       (map $section styleguide-sections)]}))
 
-(defn perf [{:keys [user uri]}]
+(defn perf-handler [{:keys [user uri]}]
   ($tpl
     {:user user
      :page-uri uri
@@ -191,14 +191,9 @@
      [:div
       [:h1 "Search Performance"]]}))
 
-(defn canary-tests [{:keys [user uri]}]
+(defn canary-tests-handler [{:keys [user uri]}]
   ($tpl
     {:user user
      :page-uri uri
      :content
      [:div [:h1 "Canary"]]}))
-
-(defroutes routes
-  (GET "/dev/styleguide" [] styleguide)
-  (GET "/dev/search-perf" [] perf)
-  (GET "/dev/canary" [] canary-tests))
