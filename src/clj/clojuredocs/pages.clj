@@ -106,7 +106,7 @@
   (or (lookup-var ns name)
       (lookup-var (expand-ns ns) name)))
 
-(defroutes _routes
+(defroutes routes
   (GET "/robots.txt" [] robots-resp)
   (GET "/logout" [] logout-resp)
   (GET "/examples-styleguide" [] examples-styleguide-handler)
