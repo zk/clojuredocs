@@ -1,7 +1,7 @@
-(ns clojuredocs.quickref
+(ns clojuredocs.pages.quickref
   (:require [clojure.string :as str]
             [clojuredocs.util :as util]
-            [clojuredocs.site.common :as common]
+            [clojuredocs.pages.common :as common]
             [clojuredocs.search :as search]))
 
 (declare quickref-data)
@@ -84,7 +84,7 @@
                        (interpose ", ")
                        (apply str))]]])))})
 
-(defn index [{:keys [user uri]}]
+(defn page-handler [{:keys [user uri]}]
   (common/$main
     {:body-class "quickref-page"
      :user user

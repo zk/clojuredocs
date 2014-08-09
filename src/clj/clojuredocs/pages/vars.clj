@@ -1,9 +1,10 @@
-(ns clojuredocs.site.vars
+(ns clojuredocs.pages.vars
   (:require [clojuredocs.util :as util]
             [clojure.string :as str]
             [somnium.congomongo :as mon]
             [clojuredocs.search :as search]
-            [clojuredocs.site.common :as common]
+            [clojuredocs.pages.common :as common]
+            [clojuredocs.data :as data]
             [hiccup.core :as hc]))
 
 (defn ellipsis [s n]
@@ -15,28 +16,18 @@
                     (apply str))
                "...")))
 
-(defn examples-for [{:keys [ns name]}]
-  (mon/fetch :examples :where {:name name
-                               :ns ns
-                               :library-url "https://github.com/clojure/clojure"}))
-
-(defn see-alsos-for [{:keys [ns name]}]
-  (->> (mon/fetch-one :see-alsos :where {:name name
-                                         :ns ns
-                                         :library-url "https://github.com/clojure/clojure"})
-       :vars))
-
 (defn library-for [{:keys [ns]}]
   search/clojure-lib)
-
-(defn notes-for [{:keys [ns name library-url]}]
-  (mon/fetch :var-notes
-    :where {:var.ns ns :var.name name :var.library-url library-url}
-    :sort {:created-at 1}))
 
 (defn $arglist [name a]
   [:li.arglist (str
                  "(" name (when-not (empty? a) " ") a ")")])
+
+(defn see-alsos-for [v]
+  (->> v
+       data/find-see-alsos-for
+       (map (fn [{:keys [ns name] :as sa}]
+              (assoc sa :doc (-> (str ns "/" name) search/lookup :doc))))))
 
 (defn source-url [{:keys [file line ns]}]
   (when (= "clojure.core" ns)
@@ -88,16 +79,16 @@
 (defn $number-badge [num]
   [:span.badge num])
 
-(defn var-page [ns name]
+(defn var-page-handler [ns name]
   (let [name (util/cd-decode name)
         {:keys [arglists name ns doc runtimes added file] :as v} (lookup-var ns name)]
     (fn [{:keys [user session uri]}]
       (when v
-        (let [examples (examples-for v)
+        (let [examples (data/find-examples-for v)
               see-alsos (see-alsos-for v)
               library (library-for v)
               recent (:recent session)
-              notes (notes-for v)]
+              notes (data/find-notes-for v)]
           {:session (update-in session [:recent]
                       #(->> %
                             (concat [{:text name
@@ -112,7 +103,7 @@
                           :var v
                           :notes (map clean-id notes)
                           :see-alsos (map clean-see-also see-alsos)
-                          :user (when user (select-keys user [:login :avatar-url]))}
+                          :user (when user (select-keys user [:login :avatar-url :account-source]))}
               :page-uri uri
               :user user
               :mobile-nav [{:title "Nav"
@@ -216,7 +207,7 @@
         ]])]
    [:div ($example-body ex)]])
 
-(defn example-page [id]
+(defn example-handler [id]
   (fn [{:keys [user session uri]}]
     (let [{:keys [history name ns] :as ex}
           (mon/fetch-one :examples :where {:_id (util/bson-id id)})]

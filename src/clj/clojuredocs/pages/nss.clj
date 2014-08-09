@@ -1,8 +1,8 @@
-(ns clojuredocs.site.nss
+(ns clojuredocs.pages.nss
   (:require [clojuredocs.config :as config]
             [somnium.congomongo :as mon]
             [clojuredocs.util :as util]
-            [clojuredocs.site.common :as common]
+            [clojuredocs.pages.common :as common]
             [clojuredocs.search :as search]
             [clojure.string :as str]))
 
@@ -43,7 +43,7 @@
        [:td.name [:span (util/$var-link ns name name)]]
        [:td [:div.doc doc]]])))
 
-(defn index [ns-str]
+(defn page-handler [ns-str]
   (fn [{:keys [user uri] :as r}]
     (let [lib (library-for ns-str)
           ns (namespace-for ns-str)

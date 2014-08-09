@@ -1,4 +1,4 @@
-(ns clojuredocs.site.common
+(ns clojuredocs.pages.common
   (:require [clojure.string :as str]
             [clojuredocs.util :as util]
             [clojuredocs.config :as config]
