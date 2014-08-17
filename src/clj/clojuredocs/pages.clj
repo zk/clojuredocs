@@ -123,6 +123,8 @@
 
   ;; Dev Stuff
   (GET "/dev/styleguide" [] dev/styleguide-handler)
+  (GET "/dev/styleguide/search" [] dev/search-styleguide-handler)
+  (GET "/dev/styleguide/examples" [] dev/examples-styleguide-handler)
   (GET "/dev/search-perf" [] dev/perf-handler)
   (GET "/dev/canary" [] dev/canary-tests-handler)
 
