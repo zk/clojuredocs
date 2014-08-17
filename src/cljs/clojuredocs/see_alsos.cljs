@@ -17,7 +17,7 @@
                             (assoc state key (not (get state key)))))
   false)
 
-(defn $see-also [{:keys [ns name created-at doc user] :as sa}]
+(defn $see-also [{:keys [ns name created-at doc author] :as sa}]
   [:div.col-sm-6.see-also
    [:div
     (util/$var-link ns name
@@ -30,7 +30,7 @@
     (when (> (count doc) 100)
       "...")]
    [:div.meta
-    "Added by " [:a {:href (str "/u/" (:login user))} (:login user)]]])
+    "Added by " [:a {:href (str "/u/" (:login author))} (:login author)]]])
 
 (defn $add [{:keys [user]} owner]
   (reify
