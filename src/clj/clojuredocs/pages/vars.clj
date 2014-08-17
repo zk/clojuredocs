@@ -99,7 +99,7 @@
            :body
            (common/$main
              {:body-class "var-page"
-              :page-data {:examples (map clean-example examples)
+              :page-data {:examples (mapv clean-example examples)
                           :var v
                           :notes (map clean-id notes)
                           :see-alsos (map clean-see-also see-alsos)
