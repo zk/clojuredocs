@@ -17,7 +17,7 @@
 @lightest-blue: rgba(66, 139, 202, 0.1);
 @light-black: rgba(0,0,0,0.05);
 
-@code-bg: rgba(0,0,0,0.03);
+@code-bg: rgba(0,0,0,0.01);
 
 // Fix for bootstrap border-box on firefox
 
@@ -147,12 +147,25 @@ footer {
   }
 
   .ctas {
-    margin-left: 52px;
     line-height: 30px;
 
     iframe {
       margin-bottom: -6px;
       margin-left: 10px;
+    }
+  }
+
+  .left {
+    text-align: right;
+  }
+
+  .right {
+    text-align: left;
+  }
+
+  @media(max-width: 767px) {
+    .left, .right {
+      text-align: center;
     }
   }
 }
@@ -883,31 +896,11 @@ table.ac-results {
   }
 }
 
-.var-example { margin-bottom: 30px;
+.var-example {
+  margin-bottom: 30px;
 
   .example {
     margin-bottom: 30px;
-  }
-
-  .example-meta {
-    color: #aaa;
-
-    .avatar {
-      margin-right: 5px;
-    }
-
-    .contributors,
-    .created,
-    .last-updated,
-    .links {
-      display: inline-block;
-      margin-right: 5px;
-      margin-bottom: 5px;
-
-      a {
-
-      }
-    }
   }
 
   .syntaxhighlighter {
@@ -922,6 +915,39 @@ table.ac-results {
   .last-updated {
   }
 }
+
+.example-meta {
+  color: #aaa;
+
+  .avatar {
+    margin-right: 5px;
+  }
+
+  .contributors,
+  .created,
+  .last-updated,
+  .links {
+    display: inline-block;
+    margin-right: 5px;
+    margin-bottom: 5px;
+
+    a {
+
+    }
+  }
+
+  .loading {
+    margin-left: 10px;
+    width: 9px;
+    margin-bottom: 2px;
+  }
+
+  .error-deleting {
+    padding-left: 3px;
+    padding-right: 3px;
+  }
+}
+
 
 .example-page {
   .current-example {
@@ -1108,7 +1134,7 @@ table.ac-results {
   }
 }
 
-.add-example {
+.example-editor {
   form {
     margin-bottom: 20px;
   }
@@ -1200,6 +1226,10 @@ table.ac-results {
   background-color: #fafafa;
   margin-bottom: 10px;
   overflow-x: scroll;
+
+  &.just-created {
+//    background-color: #ffa;
+  }
 
   pre.raw-example {
     background-color: #fafafa;
@@ -1373,6 +1403,13 @@ table.ac-results {
   }
 }
 
+.add-example {
+  .add-example-content {
+    padding: 10px;
+    background-color: #fafafa;
+  }
+}
+
 .add-note {
   .add-note-content {
     padding: 30px;
@@ -1434,7 +1471,7 @@ table.ac-results {
 .examples-styleguide-content {
   .syntaxhighlighter {
     margin-bottom: 20px;
-    background-color: #fafafa;
+    background-color: @code-bg;
   }
 
   ul {
@@ -1518,10 +1555,35 @@ table.ac-results {
 }
 
 .markdown {
-  ul {
+  ol, ul {
+    padding-left: 0;
     li {
-      list-style-type: disc;
       margin-left: 25px;
+      padding: 0;
     }
+  }
+
+  ul li {
+    list-style-type: disc;
+  }
+
+  ol li {
+    list-style-type: decimal;
+  }
+}
+
+.sg-example {
+  margin-bottom: 30px;
+  border: solid #eee 1px;
+  padding: 3px;
+
+  .caption {
+    text-align: center;
+    background-color: #fafafa;
+    padding: 5px;
+    color: #999;
+    font-size: 11px;
+//    font-weight: 300;
+    letter-spacing: 1px;
   }
 }

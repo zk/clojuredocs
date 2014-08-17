@@ -248,12 +248,23 @@ footer .divider {
   font-size: 16px;
 }
 footer .ctas {
-  margin-left: 52px;
   line-height: 30px;
 }
 footer .ctas iframe {
   margin-bottom: -6px;
   margin-left: 10px;
+}
+footer .left {
+  text-align: right;
+}
+footer .right {
+  text-align: left;
+}
+@media (max-width: 767px) {
+  footer .left,
+  footer .right {
+    text-align: center;
+  }
 }
 .avatar {
   display: inline-block;
@@ -513,7 +524,7 @@ form.search input.placeholder {
 }
 .syntaxhighlighter {
   padding: 10px;
-  background-color: rgba(0, 0, 0, 0.03);
+  background-color: rgba(0, 0, 0, 0.01);
 }
 .ac-result-link:hover {
   text-decoration: none;
@@ -848,25 +859,34 @@ table.ac-results .ac-metadata {
 .var-example .example {
   margin-bottom: 30px;
 }
-.var-example .example-meta {
-  color: #aaa;
-}
-.var-example .example-meta .avatar {
-  margin-right: 5px;
-}
-.var-example .example-meta .contributors,
-.var-example .example-meta .created,
-.var-example .example-meta .last-updated,
-.var-example .example-meta .links {
-  display: inline-block;
-  margin-right: 5px;
-  margin-bottom: 5px;
-}
 .var-example .syntaxhighlighter {
   font-size: 15px;
 }
 .var-example .syntaxhighlighter table {
   margin: 0;
+}
+.example-meta {
+  color: #aaa;
+}
+.example-meta .avatar {
+  margin-right: 5px;
+}
+.example-meta .contributors,
+.example-meta .created,
+.example-meta .last-updated,
+.example-meta .links {
+  display: inline-block;
+  margin-right: 5px;
+  margin-bottom: 5px;
+}
+.example-meta .loading {
+  margin-left: 10px;
+  width: 9px;
+  margin-bottom: 2px;
+}
+.example-meta .error-deleting {
+  padding-left: 3px;
+  padding-right: 3px;
 }
 .example-page .current-example {
   border: solid rgba(255, 243, 109, 0.3) 5px;
@@ -1006,25 +1026,25 @@ table.ac-results .ac-metadata {
 .sphere dt {
   font-weight: normal;
 }
-.add-example form {
+.example-editor form {
   margin-bottom: 20px;
 }
-.add-example textarea {
+.example-editor textarea {
   font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
   margin-bottom: 10px;
   padding: 10px;
   height: 200px;
 }
-.add-example .add-example-controls {
+.example-editor .add-example-controls {
   margin-bottom: 10px;
 }
-.add-example p.instructions {
+.example-editor p.instructions {
   margin-bottom: 10px;
   font-size: 12px;
   line-height: 20px;
   color: #888;
 }
-.add-example .add-example-content {
+.example-editor .add-example-content {
   padding: 30px;
   background-color: #f8f8f8;
 }
@@ -1214,6 +1234,10 @@ table.ac-results .ac-metadata {
 .note-body p {
   margin-bottom: 10px;
 }
+.add-example .add-example-content {
+  padding: 10px;
+  background-color: #fafafa;
+}
 .add-note .add-note-content {
   padding: 30px;
   background-color: #f8f8f8;
@@ -1256,7 +1280,7 @@ table.ac-results .ac-metadata {
 }
 .examples-styleguide-content .syntaxhighlighter {
   margin-bottom: 20px;
-  background-color: #fafafa;
+  background-color: rgba(0, 0, 0, 0.01);
 }
 .examples-styleguide-content ul {
   margin-bottom: 30px;
@@ -1309,13 +1333,37 @@ table.ac-results .ac-metadata {
 }
 .core-library-page pre,
 .core-library-page .syntaxhighlighter {
-  background-color: rgba(0, 0, 0, 0.03);
+  background-color: rgba(0, 0, 0, 0.01);
   padding: 20px;
 }
 .core-library-page h3 {
   margin-top: 30px;
 }
+.markdown ol,
+.markdown ul {
+  padding-left: 0;
+}
+.markdown ol li,
+.markdown ul li {
+  margin-left: 25px;
+  padding: 0;
+}
 .markdown ul li {
   list-style-type: disc;
-  margin-left: 25px;
+}
+.markdown ol li {
+  list-style-type: decimal;
+}
+.sg-example {
+  margin-bottom: 30px;
+  border: solid #eee 1px;
+  padding: 3px;
+}
+.sg-example .caption {
+  text-align: center;
+  background-color: #fafafa;
+  padding: 5px;
+  color: #999;
+  font-size: 11px;
+  letter-spacing: 1px;
 }
