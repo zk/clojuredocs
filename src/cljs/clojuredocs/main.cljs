@@ -200,8 +200,14 @@
 
 (wire-search text-chan app-state)
 
+(defn mk-delete-example [app-state]
+  (fn [ex-to-del]
+    (swap! app-state update-in [:examples]
+      (fn [exs]
+        (vec (remove #(= ex-to-del %) exs))))))
+
 (on-el-om
-  [:.examples-widget examples/$examples]
+  [:.examples-widget examples/$examples {:init-state {:delete-ex (mk-delete-example app-state)}}]
   [:.see-alsos-widget see-alsos/$see-alsos]
   [:.search-widget search/$quick-lookup {:init-state {:text-chan text-chan}}]
   [:.quick-search-widget search/$quick-search {:init-state {:text-chan text-chan}}]
@@ -216,6 +222,72 @@
 ;; Styleguide
 
 (def push-sels [:.mobile-push-wrapper :.mobile-nav-menu :.mobile-nav-bar])
+
+(def ex-ac-results
+  {:ac-results [{:type "function"
+                 :ns "clojure.core"
+                 :name "map"
+                 :doc "Returns a lazy sequence consisting of the result of applying f to the set of first items of each coll, followed by applying f to the set
+of second items in each coll, until any one of the colls is
+exhausted. Any remaining items in other colls are ignored. Function
+f should accept number-of-colls arguments."}
+                {:type "namespace"
+                 :name "clojure.core"
+                 :doc "Fundamental library of the Clojure language"}
+                {:type "page"
+                 :name "Getting Started"
+                 :desc "Where to go to get started with Clojure. Provides a host of information  con the language, core concepts, tutorials, books, and videos to help you learn Clojure."}]})
+
+(def ex-example-0
+  {:body "user=> (map #(vector (first %) (* 2 (second %)))
+            {:a 1 :b 2 :c 3})
+
+([:a 2] [:b 4] [:c 6])
+
+user=> (into {} *1)
+{:a 2, :b 4, :c 6}"
+   :author {:login "zk" :account-source "github" :avatar-url "https://avatars.githubusercontent.com/u/7194?v=2"}})
+
+
+(def ex-example-1
+  {:body "user=> (map #(vector (first %) (* 2 (second %)))
+            {:a 1 :b 2 :c 3})
+
+([:a 2] [:b 4] [:c 6])
+
+user=> (into {} *1)
+{:a 2, :b 4, :c 6}"
+   :author {:login "zk"
+            :account-source "github"
+            :avatar-url "https://avatars.githubusercontent.com/u/7194?v=2"}
+   :editors [{:login "masondesu"
+              :account-source "github"
+              :avatar-url "http://www.gravatar.com/avatar/091bc95204caaf52b0d299bd9ac59540?s=48&d=identicon"}
+             {:login "dakrone"
+              :account-source "github"
+              :avatar-url "http://www.gravatar.com/avatar/bcacd00a7f05c4772329cf9f446c7987?s=48&d=identicon"}]})
+
+
+(def ex-example-2
+  {:body "user=> (map #(vector (first %) (* 2 (second %)))
+            {:a 1 :b 2 :c 3})
+
+([:a 2] [:b 4] [:c 6])
+
+user=> (into {} *1)
+{:a 2, :b 4, :c 6}"
+   :user {:email "zachary.kim@gmail.com"}
+   :editors [{:email "foo@barrrrrrrrr.com"}
+             {:email "foo@barrrrrrrr.com"}
+             {:email "foo@barrrrrrr.com"}
+             {:email "foo@barrrrrr.com"}
+             {:email "foo@barrrrr.com"}
+             {:email "foo@barrrr.com"}
+             {:email "foo@barrr.com"}
+             {:email "foo@barr.com"}
+             {:email "foo@bar.com"}]})
+:var {:name "bar" :ns "foo"}
+
 
 (on-el
   :.btn.mobile-menu
@@ -257,19 +329,7 @@
   (fn [$el]
     (om/root
       search/$quick-lookup
-      {:ac-results [{:type "function"
-                     :ns "clojure.core"
-                     :name "map"
-                     :doc "Returns a lazy sequence consisting of the result of applying f to the set of first items of each coll, followed by applying f to the set
-of second items in each coll, until any one of the colls is
-exhausted. Any remaining items in other colls are ignored. Function
-f should accept number-of-colls arguments."}
-                    {:type "namespace"
-                     :name "clojure.core"
-                     :doc "Fundamental library of the Clojure language"}
-                    {:type "page"
-                     :name "Getting Started"
-                     :desc "Where to go to get started with Clojure. Provides a host of information  con the language, core concepts, tutorials, books, and videos to help you learn Clojure."}]}
+      ex-ac-results
       {:target $el}))
 
   :.sg-quick-lookup-null-state
@@ -297,15 +357,7 @@ f should accept number-of-colls arguments."}
   (fn [$el]
     (om/root
       examples/$examples
-      {:examples [{:body "user=> (map #(vector (first %) (* 2 (second %)))
-            {:a 1 :b 2 :c 3})
-
-([:a 2] [:b 4] [:c 6])
-
-user=> (into {} *1)
-{:a 2, :b 4, :c 6}"
-                   :user {:email "zachary.kim@gmail.com"}
-                   :history [{:user {:email "zachary.kim@gmail.com"}}]}]
+      {:examples [ex-example-0]
        :var {:name "bar" :ns "foo"}}
       {:target $el}))
 
@@ -313,70 +365,82 @@ user=> (into {} *1)
   (fn [$el]
     (om/root
       examples/$examples
-      {:examples [{:body "user=> (foo)"
-                   :user {:email "zachary.kim@gmail.com"}
-                   :history [{:user {:email "lee@writequit.org"}}
-                             {:user {:email "zachary.kim@gmail.com"}}]}
-                  {:body "user=> (map #(vector (first %) (* 2 (second %)))
-            {:a 1 :b 2 :c 3})
-
-([:a 2] [:b 4] [:c 6])
-
-user=> (into {} *1)
-{:a 2, :b 4, :c 6}"
-                   :user {:email "zachary.kim@gmail.com"}
-                   :history [{:user {:email "masondesu@gmail.com"}}
-                             {:user {:email "lee@writequit.org"}}
-                             {:user {:email "zachary.kim@gmail.com"}}]}
-                  {:body "user=> (map #(vector (first %) (* 2 (second %)))
-            {:a 1 :b 2 :c 3})
-
-([:a 2] [:b 4] [:c 6])
-
-user=> (into {} *1)
-{:a 2, :b 4, :c 6}"
-                   :user {:email "zachary.kim@gmail.com"}
-                   :history [{:user {:email "foo@barrrrrrr.com"}}
-                             {:user {:email "foo@barrrrrr.com"}}
-                             {:user {:email "foo@barrrrr.com"}}
-                             {:user {:email "foo@barrrr.com"}}
-                             {:user {:email "foo@barrr.com"}}
-                             {:user {:email "foo@barr.com"}}
-                             {:user {:email "foo@bar.com"}}
-                             {:user {:email "fickamanda@gmail.com"}}
-                             {:user {:email "brentdillingham@gmail.com"}}
-                             {:user {:email "masondesu@gmail.com"}}
-                             {:user {:email "lee@writequit.org"}}
-                             {:user {:email "zachary.kim@gmail.com"}}]}]
-       :var {:name "bar" :ns "foo"}}
+      {:examples [ex-example-0
+                  ex-example-1
+                  ex-example-2]}
       {:target $el}))
 
   :.sg-add-example
   (fn [$el]
     (om/root
       examples/$add
-      {}
-      {:target $el :init-state {:expanded? true}}))
+      {:editing? true}
+      {:target $el}))
 
   :.sg-add-example-loading
   (fn [$el]
     (om/root
       examples/$add
-      {}
-      {:target $el
-       :init-state {:expanded? true
-                    :loading? true
-                    :text "(defn greet [name]\n  (println \"Hello\" name))"}}))
+      {:editing? true :loading? true :body "(defn greet [name]\n  (println \"Hello\" name))"}
+      {:target $el}))
 
   :.sg-add-example-errors
   (fn [$el]
     (om/root
       examples/$add
-      {}
+      {:editing? true :body "(defn greet [name]\n  (println \"Hello\" name))"}
       {:target $el
-       :init-state {:expanded? true
-                    :error-message "This is where error messages that apply to the whole form go. And here's some other text to show what happens with a very long error message."
-                    :text "(defn greet [name]\n  (println \"Hello\" name))"}}))
+       :init-state {:error-message "This is where error messages that apply to the whole form go. And here's some other text to show what happens with a very long error message."}}))
+
+  :.sg-edit-example
+  (fn [$el]
+    (om/root
+      examples/$example
+      (merge
+        ex-example-0
+        {:editing? true
+         :can-delete? true})
+      {:target $el}))
+
+  :.sg-delete-example
+  (fn [$el]
+    (om/root
+      examples/$example-meta
+      {:body "user=> (foo)"
+       :author {:login "zk" :account-source "github" :avatar-url "https://avatars.githubusercontent.com/u/7194?v=2"}
+       :history [{:author {:login "dakrone" :account-source "github" :avatar-url "https://avatars3.githubusercontent.com/u/19060?v=2&s=460"}}]
+       :can-delete? true}
+      {:target $el}))
+
+  :.sg-delete-example-confirm
+  (fn [$el]
+    (om/root
+      examples/$example-meta
+      {:body "user=> (foo)"
+       :author {:login "zk" :account-source "github" :avatar-url "https://avatars.githubusercontent.com/u/7194?v=2"}
+       :history [{:author {:login "dakrone" :account-source "github" :avatar-url "https://avatars3.githubusercontent.com/u/19060?v=2&s=460"}}]
+       :can-delete? true}
+      {:target $el :init-state {:delete-state :confirm}}))
+
+  :.sg-delete-example-loading
+  (fn [$el]
+    (om/root
+      examples/$example-meta
+      {:body "user=> (foo)"
+       :author {:login "zk" :account-source "github" :avatar-url "https://avatars.githubusercontent.com/u/7194?v=2"}
+       :history [{:author {:login "dakrone" :account-source "github" :avatar-url "https://avatars3.githubusercontent.com/u/19060?v=2&s=460"}}]
+       :can-delete? true}
+      {:target $el :init-state {:delete-state :loading}}))
+
+  :.sg-delete-example-error
+  (fn [$el]
+    (om/root
+      examples/$example-meta
+      {:body "user=> (foo)"
+       :author {:login "zk" :account-source "github" :avatar-url "https://avatars.githubusercontent.com/u/7194?v=2"}
+       :history [{:author {:login "dakrone" :account-source "github" :avatar-url "https://avatars3.githubusercontent.com/u/19060?v=2&s=460"}}]
+       :can-delete? true}
+      {:target $el :init-state {:delete-state :error}}))
 
   :.sg-notes-null-state
   (fn [$el]
@@ -432,7 +496,6 @@ user=> (into {} *1)
     ;; ctrl-s to focus search input
     (when (and (.-ctrlKey e) (= 83 (.-keyCode e)))
       (doseq [$el (sel ".search input[name='query']")]
-        (prn $el)
         (.focus $el)))))
 
 (def tog (atom false))
