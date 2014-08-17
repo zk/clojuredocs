@@ -50,7 +50,6 @@
                     left-margin (computed-style $parent :margin-left)
                     right-margin (computed-style $parent :margin-right)
                     width (- width left-padding right-padding left-margin right-margin)]
-                (prn (- (offset-top $el) px-offset))
                 (swap! starting-offset (fn [v]
                                          (if v
                                            v
