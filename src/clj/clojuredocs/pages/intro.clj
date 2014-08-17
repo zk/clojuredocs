@@ -105,19 +105,19 @@ solving problems (holy buzzwords, fix this)."]
         [:p "First, take a look at the examples style guide, and then add an example for your favorite var (or pick one from the list)."]
         [:p "In addition to examples, you also have the ability to add 'see also' references between vars."]]]]]]])
 
+
 (defn top-contribs []
   (let [scores (atom {})]
-    (doseq [{:keys [history author]} (mon/fetch :examples)]
-      (let [history (->> history
-                         (concat [{:author author}])
-                         reverse)
-            first-author (-> history first :author)]
-        (swap! scores update-in [first-author] #(+ 4 (or % 0)))
-        (doseq [author (->> history rest (map :author))]
-          (swap! scores update-in [author] #(inc (or % 0))))))
+    (doseq [{:keys [author _id]} (mon/fetch :examples)]
+      (let [editors (->> (mon/fetch :example-histories :where {:example-id _id})
+                         (map :editor))]
+        (swap! scores update-in [author] #(+ 4 (or % 0)))
+        (doseq [editor editors]
+          (swap! scores update-in [editor] #(inc (or % 0))))))
     (->> @scores
          (sort-by second)
          reverse
+         (remove #(get #{"zkim" "zk"} (-> % first :login)))
          (take (* 24 3))
          (map #(assoc (first %) :score (second %))))))
 
