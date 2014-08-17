@@ -10,16 +10,21 @@
   (let [context-name :create
         coll (:mongo-coll comp)]
     (validate-payload comp context-name payload)
-    (mon/insert! coll payload)))
+    (mon/insert! coll payload)
+    payload))
 
 (defn update-where! [comp where-fn payload]
   (let [context-name :update
         coll (:mongo-coll comp)]
     (validate-payload comp context-name payload)
-    (mon/update! coll (where-fn payload) payload)))
+    (mon/update! coll (where-fn payload) payload)
+    payload))
 
 (defn update-by-id! [schema payload]
   (update-where! schema #(select-keys % [:_id]) payload))
+
+(defn find-by-id [{:keys [mongo-coll]} _id]
+  (mon/fetch-one mongo-coll :where {:_id _id}))
 
 
 ;; Examples
@@ -39,7 +44,6 @@
             :var.ns ns
             :var.library-url library-url}
     :sort {:created-at 1}))
-
 
 ;; Notes
 
