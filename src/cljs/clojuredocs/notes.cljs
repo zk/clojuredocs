@@ -94,15 +94,15 @@
               {:class (when-not loading? " hidden")
                :src "/img/loading.gif"}]]]]]]))))
 
-(defn $note [{:keys [body user created-at]}]
+(defn $note [{:keys [body author created-at]}]
   [:div.note
    [:div.note-meta
     "By "
-    (util/$avatar user)
+    (util/$avatar author)
     ", "
     (util/timeago created-at)
     " ago."]
-   [:div.note-body
+   [:div.note-body.markdown
     {:dangerouslySetInnerHTML
      {:__html
       (-> body

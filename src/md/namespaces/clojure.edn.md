@@ -10,6 +10,6 @@ use** the `read-*` functions in `clojure.core` to deserialize untrusted Clojure 
 
 ##### Community Links
 
-* [Official EDN Spec](https://github.com/edn-format/edn)
+* [Official EDN Spec](http://edn-format.org)
 * [Official documentation for clojure.edn](https://clojure.github.io/clojure/clojure.edn-api.html)
 * [EDN walkthrough by Mark Mandel](http://www.compoundtheory.com/clojure-edn-walkthrough)
