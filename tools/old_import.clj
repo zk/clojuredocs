@@ -3,7 +3,9 @@
             #_[clojure.java.jdbc.sql :as s]
             [clojure.pprint :refer (pprint)]
             [clojure.string :as str]
-            [somnium.congomongo :as mon]))
+            [somnium.congomongo :as mon]
+            [clojuredocs.data :as data]
+            [clojuredocs.util :as util]))
 
 
 
@@ -24,8 +26,20 @@
 (defn all-notes []
   (j/query mysql-db ["SELECT * FROM comments"]))
 
+(defn assoc-avatar-url [{:keys [email] :as m}]
+  (if email
+    (assoc m :avatar-url (str "https://www.gravatar.com/avatar/"
+                              (-> email str/lower-case util/md5)
+                              "?r=PG&default=identicon"))
+    m))
+
 (defn lookup-user [user-id]
-  (select-keys (first (j/query mysql-db ["SELECT * FROM users WHERE id=?" user-id])) [:email :login]))
+  (-> (j/query mysql-db ["SELECT * FROM users WHERE id=?" user-id])
+      first
+      (select-keys  [:email :login])
+      (assoc :account-source "clojuredocs")
+      assoc-avatar-url
+      (dissoc :email)))
 
 (defn lookup-ns [nsid]
   {:ns (->> (j/query mysql-db ["SELECT * FROM namespaces WHERE id=?" nsid])
@@ -44,9 +58,9 @@
        (map (fn [{:keys [updated_at body user_id]}]
               (when user_id ; some example versions don't have a user associated
                 (let [user (lookup-user user_id)]
-                  {:created-at updated_at
+                  {:created-at (.getTime updated_at)
                    :body body
-                   :user user}))))
+                   :editor user}))))
        (filter identity)
        (sort-by :created-at)
        #_reverse))
@@ -58,39 +72,62 @@
   (mon/update! :examples (select-keys e [:library-url :ns :name :body]) e))
 
 ;; examples
-(time
-  (let [examples (->> (core-nss)
-                      (map (fn [{:keys [library_id name id]}]
-                             {:library-id library_id
-                              :namespace-id id
-                              :namespace name}))
-                      (mapcat (fn [{:keys [namespace namespace-id]}]
-                                (let [res (j/query mysql-db ["SELECT * FROM functions WHERE namespace_id=?" namespace-id])]
-                                  (->> res
-                                       (map (fn [{:keys [name id]}]
-                                              {:ns namespace
-                                               :name name
-                                               :function-id id}))))))
-                      (mapcat (fn [m]
-                                (let [res (j/query mysql-db ["SELECT * FROM examples WHERE function_id=?" (:function-id m)])]
-                                  (->> res
-                                       (map (fn [{:keys [body user_id id created_at updated_at]}]
-                                              (assoc m
-                                                :body body
-                                                :user-id user_id
-                                                :example-id id
-                                                :created-at created_at
-                                                :updated-at updated_at)))))))
-                      (map (fn [{:keys [user-id example-id] :as m}]
-                             (let [user (lookup-user user-id)]
-                               (assoc m
-                                 :user user
-                                 :history (history-for example-id)))))
-                      (map #(assoc % :library-url "https://github.com/clojure/clojure"))
-                      (map #(dissoc % :user-id :example-id :function-id)))]
-    (doseq [e examples]
-      (insert-or-update-example e))
-    (println (mon/fetch-count :examples))))
+
+(do
+  (mon/drop-coll! :examples)
+  (mon/drop-coll! :example-histories)
+  (time
+    (let [examples (->> (core-nss)
+                        (map (fn [{:keys [library_id name id]}]
+                               {:library-id library_id
+                                :namespace-id id
+                                :namespace name}))
+                        (mapcat (fn [{:keys [namespace namespace-id]}]
+                                  (let [res (j/query mysql-db ["SELECT * FROM functions WHERE namespace_id=?" namespace-id])]
+                                    (->> res
+                                         (map (fn [{:keys [name id]}]
+                                                {:ns namespace
+                                                 :name name
+                                                 :function-id id}))))))
+                        (mapcat (fn [m]
+                                  (let [res (j/query mysql-db ["SELECT * FROM examples WHERE function_id=?" (:function-id m)])]
+                                    (->> res
+                                         (map (fn [{:keys [body user_id id created_at updated_at]}]
+                                                (assoc m
+                                                  :body body
+                                                  :user-id user_id
+                                                  :example-id id
+                                                  :created-at created_at
+                                                  :updated-at updated_at)))))))
+                        (map (fn [{:keys [user-id example-id] :as m}]
+                               (let [user (lookup-user user-id)]
+                                 (assoc m
+                                   :author user
+                                   :history (history-for example-id)))))
+                        (map #(assoc % :library-url "https://github.com/clojure/clojure"))
+                        (map (fn [{:keys [author ns name body library-url created-at updated-at history]}]
+                               {:_id (org.bson.types.ObjectId.)
+                                :var {:ns ns
+                                      :name name
+                                      :library-url library-url}
+                                :history history
+                                :author author
+                                :editors (map :editor history)
+                                :body body
+                                :created-at (.getTime created-at)
+                                :updated-at (.getTime updated-at)})))]
+      (doseq [{:keys [_id history] :as e} examples]
+        (mon/insert! :examples
+          (select-keys e [:_id :var :author :editors :body :created-at :updated-at]))
+        (doseq [h history]
+          (mon/insert!
+            :example-histories
+            (merge
+              h
+              {:_id (org.bson.types.ObjectId.)
+               :example-id _id}))))
+      (println "examples" (mon/fetch-count :examples))
+      (println "example history entries" (mon/fetch-count :example-histories)))))
 
 (def special-forms
   [{:name 'def
@@ -199,25 +236,35 @@
 
 (def see-alsos (atom {}))
 
-(time
+#_(time
   (doseq [{:keys [from_id to_id user_id created_at]}
           (j/query mysql-db ["SELECT * FROM see_alsos"])]
     (let [from (pull-ns-name from_id)
           to (pull-ns-name to_id)]
       (swap! see-alsos update-in [from] #(-> %
-                                             (concat [(assoc to :created-at created_at
-                                                             :user (lookup-user user_id))])
+                                             (concat [(-> to
+                                                          (select-keys [:ns :name])
+                                                          (assoc
+                                                              :created-at (.getTime created_at)
+                                                              :author (lookup-user user_id)
+                                                              :library-url "https://github.com/clojure/clojure"
+                                                              )
+                                                          )])
                                              distinct)))))
 
 (def clj-nss (->> clojure-namespaces
                   (map str)
                   set))
 
-(time (doseq [[v sas] @see-alsos]
-        (insert-or-update-sa (assoc (select-keys v [:name :ns])
-                               :vars (->> sas
-                                          (filter #(get clj-nss (:ns %))))
-                               :library-url "https://github.com/clojure/clojure"))))
+#_(time
+  (doseq [[v sas] @see-alsos]
+    (data/update-see-also-where!
+      (fn [{:keys [ns name]}] {:var.ns ns :var.name name})
+      {:var (-> v
+                (select-keys [:name :ns])
+                (assoc :library-url "https://github.com/clojure/clojure"))
+       :refs (->> sas
+                  (filter #(get clj-nss (:ns %))))})))
 
 #_(->> @see-alsos
      (filter #(= "map" (:name (first %))))
@@ -225,9 +272,6 @@
      first
      insert-or-update-var
      pprint)
-
-
-#_(mon/fetch-one :see-alsos :where {:name "fnil"})
 
 
 
@@ -281,7 +325,7 @@
   (mon/update! :namespaces {:name (:name ns-map)} ns-map))
 
 
-(let [nss ["clojure.core"
+#_(let [nss ["clojure.core"
            "clojure.data"
            "clojure.edn"
            "clojure.inspector"
@@ -346,19 +390,18 @@
      )
 
 
-(defn ins-or-update-note [cmt]
-  (mon/update! :var-notes
-    (select-keys cmt [:user :created-at :var])
-    cmt))
-
 (defn import-notes []
   (let [notes (->> (all-notes)
-                      (map #(assoc % :user (lookup-user (:user_id %))))
-                      (map #(assoc % :var (lookup-function (:commentable_id %))))
-                      (map #(assoc % :created-at (:created_at %)))
-                      (map #(assoc % :updated-at (:updated_at %)))
-                      (map #(select-keys % [:updated-at :var :body :created-at :user])))]
+                   (map #(assoc % :author (lookup-user (:user_id %))))
+                   (map #(assoc % :var (lookup-function (:commentable_id %))))
+                   (map #(assoc % :created-at (:created_at %)))
+                   (map #(assoc % :updated-at (:updated_at %)))
+                   (map (fn [{:keys [created-at updated-at] :as m}]
+                          (assoc m
+                            :created-at (when created-at (.getTime created-at))
+                            :updated-at (when updated-at (.getTime updated-at)))))
+                   (map #(select-keys % [:updated-at :var :body :created-at :author])))]
     (doseq [n notes]
-      (ins-or-update-note n))))
+      (data/update-note-where! #(select-keys % [:author :body :var]) n))))
 
-(import-notes)
+#_(import-notes)
