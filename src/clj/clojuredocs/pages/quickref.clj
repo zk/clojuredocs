@@ -1,8 +1,8 @@
 (ns clojuredocs.pages.quickref
   (:require [clojure.string :as str]
             [clojuredocs.util :as util]
-            [clojuredocs.pages.common :as common]
             [clojuredocs.search :as search]
+            [clojuredocs.pages.common :as common]
             [clojuredocs.pages.quickref.static :as static]))
 
 (defn title->id [k]
