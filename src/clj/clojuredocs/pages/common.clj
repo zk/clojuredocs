@@ -134,32 +134,37 @@
         content]]]
      [:div.sticky-push]]
     [:footer
-     [:div.divider
-      "- ❦ -"]
-     [:div.ctas
-      "Brought to you by "
-      [:a {:href "https://twitter.com/heyzk"} "@heyzk"]
-      ". "
-      "&nbsp; / "
-      [:iframe {:src "/github-btn.html?user=zk&repo=clojuredocs&type=watch&count=true"
-                :allowtransparency "true"
-                :frameborder "0"
-                :scrolling "0"
-                :width "80"
-                :height "20"}]
-      [:iframe {:src "/github-btn.html?user=zk&repo=clojuredocs&type=fork&count=true"
-                :allowtransparency "true"
-                :frameborder "0"
-                :scrolling "0"
-                :width "80"
-                :height "20"}]
-      [:a.twitter-share-button {:href "https://twitter.com/share"
-                                :data-url "http://clojuredocs.org"
-                                :data-text "Community-powered docs and examples for #Clojure"
-                                :data-via "heyzk"}
-       "Tweet"]
-      [:script
-       "!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');"]]]
+     [:div.container
+      [:div.row
+       [:div.col-sm-12
+        [:div.divider
+         "- ❦ -"]]]
+      [:div.row
+       [:div.ctas
+        [:div.col-sm-6.left
+         "Brought to you by "
+         [:a {:href "https://twitter.com/heyzk"} "@heyzk"]
+         ". "]
+        [:div.col-sm-6.right
+         [:iframe {:src "/github-btn.html?user=zk&repo=clojuredocs&type=watch&count=true"
+                   :allowtransparency "true"
+                   :frameborder "0"
+                   :scrolling "0"
+                   :width "80"
+                   :height "20"}]
+         #_[:iframe {:src "/github-btn.html?user=zk&repo=clojuredocs&type=fork&count=true"
+                   :allowtransparency "true"
+                   :frameborder "0"
+                   :scrolling "0"
+                   :width "80"
+                   :height "20"}]
+         [:a.twitter-share-button {:href "https://twitter.com/share"
+                                   :data-url "http://clojuredocs.org"
+                                   :data-text "Community-powered docs and examples for #Clojure"
+                                   :data-via "heyzk"}
+          "Tweet"]]]
+       [:script
+        "!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');"]]]]
     (when (env/bool :cljs-dev)
       [:script {:src "/js/fastclick.min.js"}])
     (when (env/bool :cljs-dev)
