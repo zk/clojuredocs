@@ -27,8 +27,9 @@
                  [om "0.6.4"]
                  [prismatic/om-tools "0.2.2"]
                  [org.pegdown/pegdown "1.4.2"]
-                 [sablono "0.2.18"]
-                 [clj-fuzzy "0.1.8"]]
+                 [sablono "0.2.21"]
+                 [clj-fuzzy "0.1.8"]
+                 [slingshot "0.10.3"]]
   :repl-options {:init (do
                          (require 'clojuredocs.main)
                          (-> (clojuredocs.main/create-app)
