@@ -6,6 +6,7 @@
             [clojuredocs.util :as util]
             [clojuredocs.config :as config]
             [clojuredocs.search :as search]
+            [clojuredocs.search.static :as search.static]
             [clojuredocs.pages.common :as common]
             [clojuredocs.pages.search-feedback :as search-feedback]
             [clojuredocs.pages.intro :as intro]
@@ -106,11 +107,31 @@
   (or (lookup-var ns name)
       (lookup-var (expand-ns ns) name)))
 
+(defn concept-page-handler [concept]
+  (fn [r]
+    (common/$main
+      {:content
+       [:div.row
+        [:div.col-sm-2
+         [:div.sidenav
+          {:data-sticky-offset "30"}
+          [:h5 "Concepts"]
+          [:ul
+           (for [{:keys [name href]} search.static/concept-pages]
+             [:li [:a {:href href} name]])]]]
+        [:div.col-sm-10
+         [:div.markdown
+          (-> (str "src/md/concepts/" concept ".md")
+              common/memo-markdown-file
+              common/prep-for-syntaxhighligher)]]]})))
+
 (defroutes routes
   (GET "/robots.txt" [] robots-resp)
   (GET "/logout" [] logout-resp)
   (GET "/examples-styleguide" [] examples-styleguide-handler)
   (GET "/core-library" [] core-library-handler)
+
+  (GET "/concepts/:concept" [concept] (concept-page-handler concept))
 
   ;; Search Feedback
   (GET "/search-feedback" [] search-feedback/page-handler)
@@ -127,6 +148,7 @@
   (GET "/dev/styleguide/examples" [] dev/examples-styleguide-handler)
   (GET "/dev/search-perf" [] dev/perf-handler)
   (GET "/dev/canary" [] dev/canary-tests-handler)
+  (GET "/dev/api" [] dev/api-docs-handler)
 
   (GET "/gh-callback*" {{path :*} :route-params} (gh-auth/callback-handler path))
   (GET "/quickref" [] quickref/page-handler)
