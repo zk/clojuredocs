@@ -56,6 +56,16 @@
          :doc "Assignment special form. When the first operand is a field member access form, the assignment is to the corresponding field. If it is an instance field, the instance expr will be evaluated, then the expr. In all cases the value of expr is returned. Note - you cannot assign to function params or local bindings. Only Java fields, Vars, Refs and Agents are mutable in Clojure. See http://clojure.org/special_forms for more information."}]
        (map #(assoc % :type "special-form"))))
 
+(def concept-pages
+  [{:name "Destructuring"
+    :keywords "destructuring destructure destruct"
+    :href "/concepts/destructuring"
+    :desc "Destructuring allows you to assign names to values based on the structure of a parameter."}
+   {:name "Functional Programming"
+    :keywords "functional programming"
+    :href "/concepts/functional-programming"
+    :desc "Rooted in lambda calculus, functional programming is a the style of building programs in a declarative way favoring composition of first-class, pure, and higher-order functions, immutable data structures, laziness, and the elimination of side effects. "}])
+
 (def searchable-pages
   (->> [{:name "Quick Reference"
          :keywords "help, getting started, quickref, quick reference"
@@ -65,10 +75,6 @@
          :keywords "lazy laziness lazyness sequences seq lazy evaluation"
          :href "/concepts/lazyness"
          :desc "Laziness is the deferred or delayed execution of some bit of code, opposite of eager or immediate evaluation. Laziness is used Clojure to enable execution composition and solutions to problems that involve infinite sequences. FIX THIS"}
-        {:name "Functional Programming"
-         :keywords "functional programming"
-         :href "/concepts/functional-programming"
-         :desc "Rooted in lambda calculus, functional programming is a the style of building programs in a declarative way favoring composition of first-class, pure, and higher-order functions, immutable data structures, laziness, and the elimination of side effects. "}
         {:name "Read-Eval-Print Loop (REPL)"
          :keywords "repl read eval print loop"
          :href "/concepts/repl"
@@ -81,4 +87,5 @@
          :keywords "recursion loop recur trampoline"
          :href "https://www.google.com/search?q=recursion"
          :desc "Recursion is the process of repeating items in a self-similar way. For instance, when the surfaces of two mirrors are exactly parallel with each other the nested images that occur are a form of infinite recursion."}]
+       (concat concept-pages)
        (map #(assoc % :type "page"))))

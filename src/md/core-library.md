@@ -1,7 +1,7 @@
 # Clojure's Core Library
 
 Clojure's standard library, i.e. the `clojure.*` namespaces, provide a
-ton of general-purpouse functionality for writing robust, maintainable
+ton of general-purpose functionality for writing robust, maintainable
 applications.
 
 Getting a handle on all the functionality you'll want to use can be a

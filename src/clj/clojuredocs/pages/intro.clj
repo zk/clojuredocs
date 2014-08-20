@@ -88,7 +88,9 @@ solving problems (holy buzzwords, fix this)."]
               {:src "https://puppetlabs.com/wp-content/uploads/2010/12/PL_logo_horizontal_RGB_sm.png"
                :url "https://puppetlabs.com"}
               {:src "/img/living-social-logo.png"
-               :url "https://livingsocial.com"}]]
+               :url "https://livingsocial.com"}
+              {:src "/img/circleci-logo.png"
+               :url "https://circleci.com"}]]
          [:li [:a {:href url} [:img {:src src}]]])]]]]
    [:div.row
     [:div.col-md-6

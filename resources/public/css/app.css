@@ -141,7 +141,7 @@ body {
   -webkit-font-smothing: antialiased;
   height: 100%;
   font-family: "Helvetica Neue", Helvetica, sans-serif;
-  color: #333;
+  color: #444;
 }
 body {
   font-size: 16px;
@@ -196,8 +196,10 @@ h5 {
   margin-bottom: 15px;
 }
 p {
-  font-size: 16px;
+  font-size: 17px;
   margin-bottom: 1.4em;
+  font-family: Georgia, serif;
+  line-height: 1.6em;
 }
 li {
   margin-bottom: 0.5em;
@@ -216,6 +218,12 @@ section {
 html,
 body {
   height: 100%;
+}
+code {
+  font-size: 14px;
+}
+a > code {
+  color: #428bca;
 }
 .badge {
   background-color: rgba(0, 0, 0, 0.05);
@@ -1354,6 +1362,10 @@ table.ac-results .ac-metadata {
 .markdown ol li {
   list-style-type: decimal;
 }
+.markdown .syntaxhighlighter,
+.markdown pre {
+  margin-bottom: 40px;
+}
 .sg-example {
   margin-bottom: 30px;
   border: solid #eee 1px;
@@ -1366,4 +1378,9 @@ table.ac-results .ac-metadata {
   color: #999;
   font-size: 11px;
   letter-spacing: 1px;
+}
+.field-schemas td,
+table.schema td {
+  padding-right: 10px;
+  vertical-align: top;
 }
