@@ -2,6 +2,7 @@
   (:require [clojure.string :as str]
             [clojuredocs.md5 :as md5]
             #+clj  [cheshire.core :as json]
+            #+clj  [clojure.pprint :refer [pprint]]
             #+cljs [goog.string :as gstring])
   #+clj
   (:import [org.pegdown PegDownProcessor]
@@ -138,3 +139,9 @@
   (-> (java.util.UUID/randomUUID)
       str
       (str/replace #"-" "")))
+
+#+clj
+(defn pp-str [o]
+  (let [w (java.io.StringWriter.)]
+    (pprint o w)
+    (str/trim (.toString w))))
