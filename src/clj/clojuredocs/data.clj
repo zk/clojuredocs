@@ -1,6 +1,5 @@
 (ns clojuredocs.data
   (:require [somnium.congomongo :as mon]
-            [clojuredocs.schemas :as cds]
             [schema.core :as sc]))
 
 (defn validate-payload [comp context-name payload]
@@ -29,15 +28,6 @@
 
 ;; Examples
 
-(defn insert-example! [payload]
-  (insert! cds/ExampleComp payload))
-
-(defn update-example-where! [where payload]
-  (update-where! cds/ExampleComp where payload))
-
-(defn update-example-by-id! [payload]
-  (update-by-id! cds/ExampleComp payload))
-
 (defn find-examples-for [{:keys [ns name library-url]}]
   (mon/fetch :examples
     :where {:var.name name
@@ -47,9 +37,6 @@
 
 ;; Notes
 
-(defn update-note-where! [where payload]
-  (update-where! cds/NoteComp where payload))
-
 (defn find-notes-for [{:keys [ns name library-url]}]
   (mon/fetch :notes
     :where {:var.ns ns :var.name name :var.library-url library-url}
@@ -57,9 +44,6 @@
 
 
 ;; See Alsos
-
-(defn update-see-also-where! [where payload]
-  (update-where! cds/SeeAlsoComp where payload))
 
 (defn find-see-alsos-for [{:keys [ns name library-url]}]
   (->> (mon/fetch-one :see-alsos :where {:var.name name
