@@ -1,7 +1,11 @@
 (ns clojuredocs.pages.dev
-  (:require [compojure.core :refer [defroutes GET]]
+  (:require [clojure.string :as str]
+            [compojure.core :refer [defroutes GET]]
             [clojuredocs.pages.common :as common]
-            [clojuredocs.pages.quickref :as quickref]))
+            [clojuredocs.pages.quickref :as quickref]
+            [clojuredocs.schemas :as schemas]
+            [schema.core :as s]
+            [clojuredocs.util :as util]))
 
 (defn section [title & body]
   [:secton
@@ -39,8 +43,9 @@
         [:section
          [:h5 "Dev"]
          [:ul
-          [:li [:a {:href "/dev/search-perf"} "Search Perf"]]
-          [:li [:a {:href "/dev/canary"} "Canary Tests"]]]]
+          [:li [:a {:href "/dev/api"} "API Docs"]]
+          #_[:li [:a {:href "/dev/search-perf"} "Search Perf"]]
+          #_[:li [:a {:href "/dev/canary"} "Canary Tests"]]]]
         [:section
          [:h5 "Styleguide"]
          [:ul
@@ -51,6 +56,14 @@
         nav]]
       [:div.col-md-10
        content]]}))
+
+(defn example [{:keys [title hook caption]}]
+  [:div.sg-example
+   (when title
+     [:h4 title])
+   [:div {:class (str "checker-bg " (name hook))}]
+   (when caption
+     [:div.caption caption])])
 
 (def examples-styleguide-sections
   [{:title "Rendering"
@@ -218,14 +231,6 @@
       [:p.lead "Here you'll find various UI elements used on the ClojureDocs site. This styleguide is designed to help you see how changes will the vairous states of our UI elements when making changes."]
       (map $section styleguide-sections)]}))
 
-(defn example [{:keys [title hook caption]}]
-  [:div.sg-example
-   (when title
-     [:h4 title])
-   [:div {:class (str "checker-bg " (name hook))}]
-   (when caption
-     [:div.caption caption])])
-
 (defn search-styleguide-handler [{:keys [user uri]}]
   ($tpl
     {:user user
@@ -261,3 +266,65 @@
      :page-uri uri
      :content
      [:div [:h1 "Canary"]]}))
+
+(defn format-http-method [k]
+  (-> k name str/upper-case))
+
+(defn type-doc [t]
+  (or (get {s/Str "String"} t) (pr-str t)))
+
+(defn field-docs [{:keys [field-docs]}]
+  [:table.table.field-schemas
+   [:tr
+    [:th "key"]
+    [:th "doc"]]
+   (for [[k v] field-docs]
+     [:tr
+      [:td [:code (str k)]]
+      [:td v]])])
+
+(defn schema-table [schema]
+  (let [{:keys [name docs]} (meta schema)]
+    [:div
+     [:h3 name]
+     [:pre
+      (util/pp-str schema)]
+     #_[:table.table.schema
+      [:tr
+       [:th "name"]
+       [:th "type"]
+       [:th "notes"]]
+      (for [[k v] schema]
+        [:tr
+         [:td [:code (str k)]]
+         [:td (type-doc v)]
+         [:td (get docs k)]])]]))
+
+(defn docs-for [{:keys [api-root name contexts] :as comp}]
+  [:div
+   [:h2 (-> name
+            clojure.core/name
+            str/capitalize)]
+   (for [{:keys [http-method name req-schema resp-schemas require-auth?]} contexts]
+     [:div
+      [:h3 name]
+      [:h4 [:code (format-http-method http-method) " /api" api-root]]
+      [:h5 "Field Docs"]
+      (field-docs comp)
+      [:h5 "Request Schema"]
+      (field-schemas field-docs req-schema)
+      [:h5 "Response Schemas"]
+      [:pre (pr-str resp-schemas)]])])
+
+(defn api-docs-handler [{:keys [user uri]}]
+  ($tpl
+    {:user user
+     :page-uri uri
+     :content
+     [:div
+      [:h1 "ClojureDocs API"]
+      [:div.markdown
+       (->> "src/md/api/overview.md"
+            common/memo-markdown-file)]
+      [:h2 "Endpoints"]
+      (docs-for schemas/ExampleComp)]}))
