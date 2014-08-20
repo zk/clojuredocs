@@ -9,7 +9,7 @@
 + Mobile: main use case as linked-to from blog posts and such
   + think about removing all the extra parts for mobile
 + Site experience
-  + Must be *robust and snappy*. Like it or not, perception of a language is
+  + Must be *robust and snappy*. Perception of a language is
     often tied to factors out of that language's control, e.g. network
     congestion, non-optimized css transitions, etc. A quick and
     responsive experience is a top goal of the site.
@@ -23,29 +23,28 @@
 
 + Move over from old db
 + Claiming old user accounts
-+ Quickref update
-+ Supported libs blurb
 + Core-specific namespace page
   + tags / sections w/ filtering
-+ Add libraries page
 + Add user page
 + Add example widget
 + Redirect old urls to new
-+ Switch to avatar url instead of email
 + Clean data export for dev distribution
 + Mobile comb-through
 + Add notes widget
 + Jobs
 + Admin interface
   + What goes here?
-+ Examples
-  + Editing examples
-  + Deleting examples
 + Organize ns decls
 + Refactor examples and see alsos lookup for autocomplete results
++ Exception reporting
++ Split-screen example editing
++ Editing examples
 
 
 ** Done
++ Deleting examples
++ Switch to avatar url instead of email
++ Add libraries page
 + Show no results state for search
 + Add number of examples to autocomplete
 + Loading state on search inputs should show immediately on input
@@ -93,7 +92,8 @@
 + ClojureScript / Clojure.NET support
 + URL shortener howto
 + Investigate bitbucket login
-
++ Quickref update
++ Supported libs blurb
 
 
 * Indexes
@@ -129,3 +129,77 @@
 * Admin
 
 + Jobs overview
+
+
+* API gen
+
+Let's see if we can declaratively define our endpoints:
+
++ routing -- server & client
++ db querying -- server
++ input coercion / transformation -- server
++ validation -- server & client
++ data querying / storage -- server
++ error handling -- server & client
+  + failed validations
+    + 422 :general-error, :prop-errors
++ response transformation -- server
++ authorizaton -- server
+
++ Server
+  + routing
+  + db querying
+  + db storage
+  + validation
+  + error handling
+  + response transformation
+  + authorization
+
++ Client
+  + routing
+  + validation
+  + failed validation reporting
+
+
+It would be nice if both the client call functions and endpoint
+generation could be done off of the same data.
+
+Single-field validation, form submit -> routing -> input coercion
+
+(client-call schema context success error)
+
+
+* App Layout
+
+** Clj
++ Config
++ Init
++ Client API
++ Page Rendering
++ Comps
++ Data Access
+
+** Cljs
++ Server Comm
++ Widgets
++ Cross components
++ Routing?
+
+
+** pages.clj / pages subdir
+
+Used to house all page rendering logic. Adding a page? The route /
+logic should probably go in pages.clj. If the logic for rendering your
+page needs a bunch of supporting functions, or if there are many pages
+that should all be grouped logically, consider adding a namespace to
+the pages subdir (see search feedback routes, for example). Routes
+should only be added to pages.clj unless you really, really need to
+handle routing in your namespace.
+
+
+* Examples / Example History
+
++ Use Cases
+  + View example -- Show author / editors in example meta, and latest
+    edit body and last updated timestamp
+  +
