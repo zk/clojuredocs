@@ -283,38 +283,40 @@
       [:td [:code (str k)]]
       [:td v]])])
 
+(defn schema-key [k]
+  (str (if (s/optional-key? k)
+         (:k k)
+         k)))
+
 (defn schema-table [schema]
   (let [{:keys [name docs]} (meta schema)]
     [:div
      [:h3 name]
-     [:pre
+     #_[:pre
       (util/pp-str schema)]
-     #_[:table.table.schema
+     [:table.table.schema
       [:tr
        [:th "name"]
        [:th "type"]
        [:th "notes"]]
       (for [[k v] schema]
         [:tr
-         [:td [:code (str k)]]
+         [:td [:code (schema-key k)]]
          [:td (type-doc v)]
-         [:td (get docs k)]])]]))
+         [:td
+          (get docs k)
+          (when-not (s/optional-key? k)
+            "Required")]])]]))
 
-(defn docs-for [{:keys [api-root name contexts] :as comp}]
+(defn docs-for [{:keys [method path schemas]}]
   [:div
-   [:h2 (-> name
-            clojure.core/name
-            str/capitalize)]
-   (for [{:keys [http-method name req-schema resp-schemas require-auth?]} contexts]
+   [:h2 [:code (format-http-method method) " " path]]
+   [:h3 "Request"]
+   (for [[k v] (:req schemas)]
      [:div
-      [:h3 name]
-      [:h4 [:code (format-http-method http-method) " /api" api-root]]
-      [:h5 "Field Docs"]
-      (field-docs comp)
-      [:h5 "Request Schema"]
-      (field-schemas field-docs req-schema)
-      [:h5 "Response Schemas"]
-      [:pre (pr-str resp-schemas)]])])
+      [:h4 (-> (if (s/optional-key? k) (:k k) k)
+               str)]
+      (schema-table v)])])
 
 (defn api-docs-handler [{:keys [user uri]}]
   ($tpl
@@ -327,4 +329,4 @@
        (->> "src/md/api/overview.md"
             common/memo-markdown-file)]
       [:h2 "Endpoints"]
-      (docs-for schemas/ExampleComp)]}))
+      (docs-for schemas/get-examples-endpoint)]}))

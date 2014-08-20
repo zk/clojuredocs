@@ -1,65 +1,6 @@
 (ns clojuredocs.schemas
   (:require [schema.core :as s]))
 
-;; prismatic schemas
-
-(def Comp {:name s/Keyword
-           :mongo-coll s/Keyword
-           :api-root s/Str
-           (s/optional-key :contexts) s/Any
-           (s/optional-key :local-refs) s/Any})
-
-(def Var
-  ^{:docs {:ns "Namespace -- ex. `clojure.core`"}
-    :name "Var"}
-  {:ns s/Str :name s/Str :library-url s/Str})
-
-(def VarDocs )
-
-(def User
-  ^{:name "User"}
-  {:login s/Str
-   :avatar-url s/Str
-   :account-source (s/enum "github" "bitbucket" "clojuredocs")})
-
-(def GetExample
-  {:_id s/Str
-   :updated-at s/Int
-   :created-at s/Int
-   :body s/Str
-   :var Var
-   :author User})
-
-(def ExampleHistory
-  {:created-at s/Int
-   :body s/Str
-   :author User})
-
-(def CreateExample
-  {(s/optional-key :_id) #+clj org.bson.types.ObjectId #+cljs s/Str
-   :var Var
-   :author User
-   :body s/Str
-   :updated-at s/Int
-   :created-at s/Int
-   :editors [User]})
-
-(def UpdateExample
-  (merge
-    CreateExample))
-
-;; Field Types
-
-(def field-types
-  [{:name :email
-    :type :email}
-   {:name :_id
-    :type :mongo-id}
-   {:name :created-at
-    :type :unix-timestamp}
-   {:name :avatar-url
-    :type :string}])
-
 ;; Validations
 
 (defn validate [ent comp context-name]
@@ -90,7 +31,7 @@
   (when-not author
     {:error-message "You must be logged in to edit an example"}))
 
-(def ExampleComp
+#_(def ExampleComp
   {:name :example
    :api-root "/examples"
    :mongo-coll :examples
@@ -115,44 +56,66 @@
                :identity #(select-keys % [:_id])
                :data-op :delete}]})
 
-(def CreateExampleComp
-  {:name :create-example
-   :path "/examples"
-   :mongo-coll :examples
-   :http-method :post
-   :request-validations [body-not-empty has-valid-var]})
 
-(def UpdateNote {:author User
-                 :var Var
-                 :created-at s/Int
-                 :updated-at s/Int
-                 :body s/Str})
+(def CreateExample {:body s/Str})
 
-(def NoteComp
-  {:name :note
-   :api-root "/notes"
-   :mongo-coll :notes
-   :contexts {:update {:schema UpdateNote}}})
+(def Example {:body s/Str})
 
-(def SeeAlsoVar
-  {:author User
-   :created-at s/Int
-   :ns s/Str
-   :name s/Str
-   :library-url s/Str})
+(def User {:login s/Str
+           :avatar-url s/Str
+           :account-source (s/enum "github" "clojuredocs")})
 
-(def UpdateSeeAlso
-  {(s/optional-key :_id) s/Str
+(def Var {:ns s/Str
+          :name s/Str
+          :library-url s/Str})
+
+(def ExampleReq
+  {(s/optional-key :_id) #+clj org.bson.types.ObjectId #+cljs s/Str
+   :body s/Str
    :var Var
-   :refs [SeeAlsoVar]})
+   (s/optional-key :author) User
+   (s/optional-key :editors) [User]
+   (s/optional-key :created-at) s/Int
+   (s/optional-key :updated-at) s/Int})
 
-(def SeeAlsoComp
-  {:name :see-also
-   :api-root "/see-alsos"
-   :mongo-coll :see-alsos
-   :contexts {:update {:schema UpdateSeeAlso}}})
+(def ExampleResp
+  (assoc ExampleReq (s/optional-key :_id) s/Str))
 
-;;;
+(def ExampleList {:data [ExampleResp]
+                  :offset s/Int
+                  :limit s/Int
+                  :count s/Int
+                  :total s/Int})
 
-#_(doseq [ps [ExampleComp NoteComp SeeAlsoComp]]
-  (s/validate Comp ps))
+(def Pagination {(s/optional-key :offset) s/Int
+                 (s/optional-key :limit) s/Int})
+
+(def ValidationError
+  {:field s/Keyword
+   :message s/Str})
+
+(def ValidationErrors
+  {(s/optional-key :message) s/Str
+   (s/optional-key :errors) [ValidationError]})
+
+(defn mongo-id-coercion [schema]
+  (s/start-walker
+   (fn [s]
+     (let [walk (s/walker s)]
+       (fn [x]
+         (walk
+           (cond
+             (and (= s org.bson.types.ObjectId) (string? x)) (org.bson.types.ObjectId. x)
+             (and (= s s/Str) (= org.bson.types.ObjectId (class x))) (str x)
+             :else x)))))
+   schema))
+
+(def get-examples-endpoint
+  {:method :get
+   :path "/api/examples"
+   :schemas {:req {:edn-body ExampleReq
+                   (s/optional-key :params) {(s/optional-key :limit) s/Int
+                                                   (s/optional-key :offset) s/Int}}
+             :resp {200 {:offset s/Int
+                         :limit s/Int
+                         :data [ExampleResp]}}}})
