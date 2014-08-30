@@ -90,7 +90,11 @@ solving problems (holy buzzwords, fix this)."]
               {:src "/img/living-social-logo.png"
                :url "https://livingsocial.com"}
               {:src "/img/circleci-logo.png"
-               :url "https://circleci.com"}]]
+               :url "https://circleci.com"}
+              {:src "/img/walmart-labs.png"
+               :url "http://www.walmartlabs.com"}
+              {:src "/img/rjmetrics-logo.png"
+               :url "https://rjmetrics.com"}]]
          [:li [:a {:href url} [:img {:src src}]]])]]]]
    [:div.row
     [:div.col-md-6
