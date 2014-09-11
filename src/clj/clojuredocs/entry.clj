@@ -24,7 +24,8 @@
             [clojuredocs.api.server :as api.server]
             [somnium.congomongo :as mon]
             [clojure.edn :as edn]
-            [clojuredocs.search :as search]))
+            [clojuredocs.search :as search]
+            [prone.middleware :as prone]))
 
 (defn decode-body [content-length body]
   (when (and content-length
@@ -121,6 +122,41 @@
             (throw e))))
       (h r))))
 
+(defn stacktrace-el->clj [s]
+  {:class-name (.getClassName s)
+   :line-number (.getLineNumber s)
+   :method-name (.getMethodName s)})
+
+(defn exception->log-entry [ e]
+  {:message (.getMessage e)
+   :stacktrace (->> (.getStackTrace e)
+                    (map stacktrace-el->clj))})
+
+(defn wrap-exception-logging [h]
+  (fn [r]
+    (try
+      (h r)
+      (catch Exception e
+        (println (exception->log-entry e))
+        (throw e)))))
+
+(defn enable-mw [h mw enabled?]
+  (fn [r]
+    (if enabled?
+      ((mw h) r)
+      (h r))))
+
+(defn wrap-500-page [h]
+  (fn [r]
+    (try
+      (h r)
+      (catch Exception e
+        (.printStackTrace e)
+        {:status 500
+         :headers {"Content-Type" "text/html"}
+         :body (hiccup->html-string
+                 (common/five-hundred (:user r)))}))))
+
 (def routes
   (-> _routes
       promote-session-user
@@ -135,4 +171,9 @@
                        "eot" "application/vnd.ms-fontobject"
                        "svg" "image/svg+xml"
                        "ttf" "application/x-font-ttf"})
-      wrap-long-caching))
+      wrap-long-caching
+      (enable-mw
+        wrap-exception-logging config/log-exceptions?)
+      (enable-mw
+        prone/wrap-exceptions config/debug-exceptions?)
+      wrap-500-page))

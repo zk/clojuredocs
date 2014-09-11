@@ -22,6 +22,9 @@ export GH_CLIENT_SECRET=1af3fca29ce3fb36075ca28bb7513e6070847d71
 
 export ALLOW_ROBOTS=true
 
+export LOG_EXCEPTIONS=false
+export DEBUG_EXCEPTIONS=true
+
 cd $SCRIPT_DIR && lein clean
 cd $SCRIPT_DIR && lein cljsbuild clean
 cd $SCRIPT_DIR && lein cljx once

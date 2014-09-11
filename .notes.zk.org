@@ -24,7 +24,6 @@
 + Move over from old db
 + Claiming old user accounts
 + Add user page
-+ Add example widget
 + Redirect old urls to new
 + Clean data export for dev distribution
 + Mobile comb-through
@@ -40,6 +39,7 @@
 
 
 ** Done
++ Add example widget
 + Core-specific namespace page
 + Deleting examples
 + Switch to avatar url instead of email

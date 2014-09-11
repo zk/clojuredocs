@@ -17,3 +17,7 @@
 (defn url [& s] (apply str base-url s))
 
 (def cache-markdown? (env/bool :cache-markdown false))
+
+(def debug-exceptions? (env/bool :debug-exceptions true))
+
+(def log-exceptions? (env/bool :log-exceptions false))

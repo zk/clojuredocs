@@ -29,7 +29,8 @@
                  [org.pegdown/pegdown "1.4.2"]
                  [sablono "0.2.21"]
                  [clj-fuzzy "0.1.8"]
-                 [slingshot "0.10.3"]]
+                 [slingshot "0.10.3"]
+                 [prone "0.6.0"]]
   :repl-options {:init (do
                          (require 'clojuredocs.main)
                          (-> (clojuredocs.main/create-app)
