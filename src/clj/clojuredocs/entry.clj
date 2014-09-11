@@ -21,7 +21,7 @@
             [clojuredocs.pages.common :as common]
             [clojuredocs.pages :as pages]
             [clojure.pprint :refer (pprint)]
-            [clojuredocs.api :as api]
+            [clojuredocs.api.server :as api.server]
             [somnium.congomongo :as mon]
             [clojure.edn :as edn]
             [clojuredocs.search :as search]))
@@ -79,7 +79,7 @@
   (GET "/clojure_core" [] {:status 301 :headers {"Location" "/"}}))
 
 (defroutes _routes
-  (context "/api" [] api/routes)
+  (context "/api" [] api.server/routes)
   (var pages/routes)
   ;; Redirect old urls
   (var old-url-redirects)
