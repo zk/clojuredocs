@@ -1,5 +1,6 @@
 (ns clojuredocs.pages.intro
   (:require [clojuredocs.config :as config]
+            [clojuredocs.util :as util]
             [compojure.core :refer (defroutes GET POST)]
             [somnium.congomongo :as mon]
             [fogus.unk :refer (memo-ttl)]
@@ -29,7 +30,7 @@
       [:h5 "Top Contributors"]
       [:div.top-contribs
        (if-not (empty? top-contribs)
-         (map common/$avatar top-contribs)
+         (map util/$avatar top-contribs)
          [:div.null-state "Uh-oh, no contributors!"])]]]]
    [:section
     [:div.row

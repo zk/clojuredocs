@@ -40,7 +40,7 @@
   [:div.note
    [:div.note-meta
     "By "
-    (common/$avatar user)
+    (util/$avatar user)
     " "
     (:login user)
     ", "
@@ -79,6 +79,26 @@
 (defn $number-badge [num]
   [:span.badge num])
 
+(defn $var-header [{:keys [ns name added arglists] :as v}]
+  [:div.row.var-header
+   [:div.col-sm-8
+    [:h1.var-name name]]
+   [:div.col-sm-4
+    [:div.var-meta
+     [:h4 [:a {:href (str "/" ns)} ns]]
+     (if added
+       [:span "Available since " added]
+       [:span "Available in 1.6"])
+     (when-let [su (source-url v)]
+       [:span.source-link
+        " ("
+        [:a {:href su} "source"]
+        ") "])]]
+   [:div.col-sm-12
+    [:section
+     [:ul.arglists
+      (map #($arglist name %) arglists)]]]])
+
 (defn var-page-handler [ns name]
   (let [name (util/cd-decode name)
         {:keys [arglists name ns doc runtimes added file] :as v} (lookup-var ns name)]
@@ -114,7 +134,9 @@
                                     [:a {:href "#examples"
                                          :data-animate-scroll "true"
                                          :data-animate-buffer "70"}
-                                     "Examples " ($number-badge (count examples))]
+                                     "Examples "
+                                     [:span.examples-count
+                                      ($number-badge (count examples))]]
                                     [:a {:href "#see-also"
                                          :data-animate-scroll "true"
                                          :data-animate-buffer "70"}
@@ -128,48 +150,10 @@
                         [:div.row
                          [:div.col-sm-2.sidenav
                           [:div.desktop-side-nav {:data-sticky-offset "10"}
-                           [:div.var-page-nav
-                            [:h5 "Nav"]
-                            [:ul
-                             [:li [:a {:href "#"
-                                       :data-animate-scroll "true"
-                                       :data-animate-buffer "20"}
-                                   "Top"]]
-                             [:li [:a {:href "#examples"
-                                       :data-animate-scroll "true"
-                                       :data-animate-buffer "20"}
-                                   "Examples " ($number-badge (count examples))]]
-                             [:li [:a {:href "#see-also"
-                                       :data-animate-scroll "true"
-                                       :data-animate-buffer "10"}
-                                   "See Also "
-                                   ($number-badge (count see-alsos))]]
-                             (when (> (count notes) 0)
-                               [:li [:a {:href "#notes"
-                                         :data-animate-scroll "true"
-                                         :data-animate-buffer "10"}
-                                     "Notes" ($number-badge (count notes))]])]]
-                           #_(common/$recent recent)
+                           [:div.var-page-nav]
                            (common/$library-nav library ns)]]
                          [:div.col-sm-10
-                          [:div.row
-                           [:div.col-sm-8
-                            [:h1.var-name name]]
-                           [:div.col-sm-4
-                            [:div.var-meta
-                             [:h4 [:a {:href (str "/" ns)} ns]]
-                             (if added
-                               [:span "Available since " added]
-                               [:span "Available in 1.6"])
-                             (when-let [su (source-url v)]
-                               [:span.source-link
-                                " ("
-                                [:a {:href su} "source"]
-                                ") "])]]
-                           [:div.col-sm-12
-                            [:section
-                             [:ul.arglists
-                              (map #($arglist name %) arglists)]]]]
+                          ($var-header v)
                           [:section
                            [:div.docstring
                             (if doc
@@ -200,7 +184,7 @@
       [:div.example-meta
        [:div.contributors
         "Created by &nbsp;"
-        (common/$avatar user)
+        (util/$avatar user)
         ""
         (util/timeago created-at) " ago."]
        [:div.links

@@ -3,7 +3,8 @@
             [clojuredocs.md5 :as md5]
             #+clj  [cheshire.core :as json]
             #+clj  [clojure.pprint :refer [pprint]]
-            #+cljs [goog.string :as gstring])
+            #+cljs [goog.string :as gstring]
+            #+cljs [cljs.reader :as reader])
   #+clj
   (:import [org.pegdown PegDownProcessor]
            [org.pegdown Parser]
@@ -51,10 +52,13 @@
                 (str/replace #"\\" "_bs")
                 (str/replace #"\?" "_q")))))
 
+(defn var-path [ns name]
+  (str "/" ns "/" (cd-encode name)))
+
 (defn $var-link [ns name & contents]
   (vec
     (concat
-      [:a {:href (str "/" ns "/" (cd-encode name))}]
+      [:a {:href (var-path ns name)}]
       contents)))
 
 #+cljs
@@ -86,13 +90,17 @@
   #+clj  (System/currentTimeMillis)
   #+cljs (.now js/Date))
 
-(defn $avatar [{:keys [email login avatar-url] :as user}]
-  [:a {:href (str "/u/" login)}
-   [:img.avatar
-    {:src (or avatar-url
-              (str "https://www.gravatar.com/avatar/"
-                   (md5 email)
-                   "?r=PG&s=32&default=identicon")) }]])
+(defn $avatar [{:keys [email login avatar-url account-source] :as user} & [{:keys [size]}]]
+  (let [size (str (or size 32))]
+    [:a {:href (str (if (= "github" account-source)
+                      "/u/"
+                      "/uc/")
+                    login)}
+     [:img.avatar
+      {:src (or (str avatar-url "&s=" size)
+                (str "https://www.gravatar.com/avatar/"
+                     (md5 email)
+                     "?r=PG&s=" size "&default=identicon")) }]]))
 
 (defn sformat [& args]
   #+cljs
@@ -145,3 +153,7 @@
   (let [w (java.io.StringWriter.)]
     (pprint o w)
     (str/trim (.toString w))))
+
+#+cljs
+(defn page-data! []
+  (reader/read-string (aget js/window "PAGE_DATA")))
