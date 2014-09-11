@@ -1,7 +1,7 @@
-(ns clojuredocs.api
+(ns clojuredocs.api.server
   (:require [compojure.core :refer (defroutes GET POST PUT DELETE ANY) :as cc]
             [clojuredocs.util :as util]
-            [clojuredocs.schemas :as schemas]
+            [clojuredocs.api.schemas :as schemas]
             [clojuredocs.data :as data]
             [somnium.congomongo :as mon]
             [schema.core :as ps]
@@ -32,6 +32,7 @@
    schema))
 
 (defn validate-request [req schema]
+  (prn (type req))
   (let [coercion ((mongo-id-coercion (merge RequestSchema schema)) req)]
     (when (schema.utils/error? coercion)
       (throw+
@@ -51,7 +52,7 @@
         {:status 500
          :headers {"Content-Type" "application/edn"}
          :body (pr-str {:message "Error validating response"
-                        :errors coercion})}))
+                        :errors (pr-str coercion)})}))
     (assoc resp :body coercion)))
 
 (defn mount-endpoint [[{:keys [name path method schemas]} handler]]
@@ -62,8 +63,8 @@
         (when-let [match (clout/route-matches route req)]
           (try+
             (-> req
-                (validate-request (:req schemas))
                 (assoc :route-params match)
+                (validate-request (:req schemas))
                 handler
                 (validate-response-body (:resp schemas))
                 (update-in [:body] pr-str))
@@ -75,19 +76,34 @@
                :headers {"Content-Type" "application/edn"}
                :body (pr-str (str e))})))))))
 
-(def endpoints
-  [schemas/get-examples-endpoint e/get-examples-handler])
+(defroutes _routes
+  (->> [e/get-examples-endpoint
+        e/update-example-endpoint
+        e/create-example-endpoint
+        e/delete-example-endpoint]
+       (map mount-endpoint)
+       (apply cc/routes)))
 
-(defroutes routes
-  (apply cc/routes
-    (->> endpoints
-         (partition 2)
-         (map mount-endpoint))))
+(defn string-body? [r]
+  (string? (:body r)))
 
-#_(routes
-    {:uri "/api/examples"
-     :request-method :get
-     :edn-body {:var {:ns "clojure.core"
-                      :name "map"
-                      :library-url "foo"}
-                :body "hello world"}})
+(defn edn-response? [{:keys [headers]}]
+  (get #{"application/edn"}
+    (or (get headers "Content-Type")
+        (get headers "content-type"))))
+
+(defn wrap-format-edn-body [h]
+  (fn [r]
+    (let [res (h r)]
+      (if (and (not (string-body? res))
+               (edn-response? res))
+        (update-in res [:body] pr-str)
+        res))))
+
+(def routes
+  (->> _routes
+       wrap-format-edn-body))
+
+#_(routes {:uri "/api/examples/54027f6130049c43a3100cf0"
+         :request-method :delete
+         :user {:login "zkim" :account-source "clojuredocs"}})
