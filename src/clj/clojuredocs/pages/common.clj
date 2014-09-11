@@ -277,13 +277,25 @@ document.location.href = noddy.href;
 
 (defn four-oh-four [{:keys [user]}]
   ($main
-    {:body-class "four-oh-four"
+    {:body-class "error-page"
      :hide-search true
      :user user
      :content
      [:div.row
       [:div.col-sm-8.col-sm-offset-2
        [:h1 "404"]
+       [:a.four-oh-four {:href "http://emareaf.deviantart.com/art/Rich-Hickey-321501046"}
+        [:img.four-oh-four {:src "http://fc04.deviantart.net/fs70/f/2012/229/a/6/rich_hickey_by_emareaf-d5bevsm.png"}]]]]}))
+
+(defn five-hundred [{:keys [user]}]
+  ($main
+    {:body-class "error-page"
+     :hide-search true
+     :user user
+     :content
+     [:div.row
+      [:div.col-sm-8.col-sm-offset-2
+       [:h1 "500"]
        [:a.four-oh-four {:href "http://emareaf.deviantart.com/art/Rich-Hickey-321501046"}
         [:img.four-oh-four {:src "http://fc04.deviantart.net/fs70/f/2012/229/a/6/rich_hickey_by_emareaf-d5bevsm.png"}]]]]}))
 

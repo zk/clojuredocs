@@ -53,7 +53,9 @@
         [:div.example-editor
          [:div.live-preview {:ref "live-preview"}]]))))
 
-(defn $expando-ta [text opts]
+(defn $expando-ta
+  "A textarea the expands downward with the content (no scroll)"
+  [text opts]
   (let [rows (Math/max
                (+ (->> text
                        (filter #(= "\n" %))
