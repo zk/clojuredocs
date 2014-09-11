@@ -1,18 +1,17 @@
 (ns clojuredocs.main
-  (:require [aleph.http :as ah]
+  (:require [ring.adapter.jetty :as jetty]
             [somnium.congomongo :as mon]
             [clojuredocs.env :as env]
             [clojuredocs.entry :as entry]
             [clojuredocs.config :as config]))
 
 (defn start-http-server [entry-point opts]
-  (ah/start-http-server
-    (ah/wrap-ring-handler
-      (fn [r]
-        (let [resp (entry-point r)]
-          (if (:status resp)
-            resp
-            (assoc resp :status 200)))))
+  (jetty/run-jetty
+    (fn [r]
+      (let [resp (entry-point r)]
+        (if (:status resp)
+          resp
+          (assoc resp :status 200))))
     opts))
 
 (defn valid-env-or-exit []

@@ -8,14 +8,17 @@
             [clojuredocs.see-alsos :as see-alsos]
             [clojuredocs.examples :as examples]
             [clojuredocs.notes :as notes]
+            [clojuredocs.mods.var-page :as var-page]
+            [clojuredocs.mods.styleguide :as styleguide]
             [highlight]
             [om.core :as om :include-macros true]
             [clojuredocs.anim :as anim]
+            [clojuredocs.canary :as canary]
             [cljs.reader :as reader]
             [cljs.core.async :as async
              :refer [<! >! chan close! sliding-buffer put! alts! timeout pipe mult tap]]
             #_[clj-fuzzy.metrics1 :as fuzzy])
-  (:require-macros [cljs.core.async.macros :refer [go]]
+  (:require-macros [cljs.core.async.macros :refer [go go-loop]]
                    [dommy.macros :refer [node sel sel1]]))
 
 (enable-console-print!)
@@ -35,7 +38,8 @@
     (doseq [$el (sel selector)]
       (f $el))))
 
-(def app-state (atom (reader/read-string (aget js/window "PAGE_DATA"))))
+(def app-state
+  (atom (or (reader/read-string (aget js/window "PAGE_DATA")) {})))
 
 (defn on-el [& pairs]
   (doseq [[selector f] (partition 2 pairs)]
@@ -192,10 +196,6 @@
         (anim/scroll-to $target {:pad buffer})
         (.preventDefault e)))))
 
-(init
-  "[data-sticky-offset]" sticky/init
-  "[data-animate-scroll]" animated-scroll-init)
-
 (def text-chan (chan))
 
 (wire-search text-chan app-state)
@@ -206,9 +206,15 @@
       (fn [exs]
         (vec (remove #(= ex-to-del %) exs))))))
 
+(def new-example-ch (chan))
+
+(go-loop []
+  (when-let [ex (<! new-example-ch)]
+    (prn ex)
+    (swap! app-state assoc :create-success? true)
+    (recur)))
+
 (on-el-om
-  [:.examples-widget examples/$examples {:init-state {:delete-ex (mk-delete-example app-state)}}]
-  [:.see-alsos-widget see-alsos/$see-alsos]
   [:.search-widget search/$quick-lookup {:init-state {:text-chan text-chan}}]
   [:.quick-search-widget search/$quick-search {:init-state {:text-chan text-chan}}]
   [:.ac-results-widget search/$ac-results]
@@ -216,7 +222,7 @@
    (fn [$el app]
      {:init-state
       {:query (dommy/attr $el :data-query)}})]
-  [:.notes-widget notes/$notes])
+  )
 
 
 ;; Styleguide
@@ -237,57 +243,6 @@ f should accept number-of-colls arguments."}
                 {:type "page"
                  :name "Getting Started"
                  :desc "Where to go to get started with Clojure. Provides a host of information  con the language, core concepts, tutorials, books, and videos to help you learn Clojure."}]})
-
-(def ex-example-0
-  {:body "user=> (map #(vector (first %) (* 2 (second %)))
-            {:a 1 :b 2 :c 3})
-
-([:a 2] [:b 4] [:c 6])
-
-user=> (into {} *1)
-{:a 2, :b 4, :c 6}"
-   :author {:login "zk" :account-source "github" :avatar-url "https://avatars.githubusercontent.com/u/7194?v=2"}})
-
-
-(def ex-example-1
-  {:body "user=> (map #(vector (first %) (* 2 (second %)))
-            {:a 1 :b 2 :c 3})
-
-([:a 2] [:b 4] [:c 6])
-
-user=> (into {} *1)
-{:a 2, :b 4, :c 6}"
-   :author {:login "zk"
-            :account-source "github"
-            :avatar-url "https://avatars.githubusercontent.com/u/7194?v=2"}
-   :editors [{:login "masondesu"
-              :account-source "github"
-              :avatar-url "http://www.gravatar.com/avatar/091bc95204caaf52b0d299bd9ac59540?s=48&d=identicon"}
-             {:login "dakrone"
-              :account-source "github"
-              :avatar-url "http://www.gravatar.com/avatar/bcacd00a7f05c4772329cf9f446c7987?s=48&d=identicon"}]})
-
-
-(def ex-example-2
-  {:body "user=> (map #(vector (first %) (* 2 (second %)))
-            {:a 1 :b 2 :c 3})
-
-([:a 2] [:b 4] [:c 6])
-
-user=> (into {} *1)
-{:a 2, :b 4, :c 6}"
-   :user {:email "zachary.kim@gmail.com"}
-   :editors [{:email "foo@barrrrrrrrr.com"}
-             {:email "foo@barrrrrrrr.com"}
-             {:email "foo@barrrrrrr.com"}
-             {:email "foo@barrrrrr.com"}
-             {:email "foo@barrrrr.com"}
-             {:email "foo@barrrr.com"}
-             {:email "foo@barrr.com"}
-             {:email "foo@barr.com"}
-             {:email "foo@bar.com"}]})
-:var {:name "bar" :ns "foo"}
-
 
 (on-el
   :.btn.mobile-menu
@@ -346,102 +301,6 @@ user=> (into {} *1)
       {:search-loading? true}
       {:target $el}))
 
-  :.sg-examples-null-state
-  (fn [$el]
-    (om/root
-      examples/$examples
-      {:var {:name "bar" :ns "foo"}}
-      {:target $el}))
-
-  :.sg-examples-single
-  (fn [$el]
-    (om/root
-      examples/$examples
-      {:examples [ex-example-0]
-       :var {:name "bar" :ns "foo"}}
-      {:target $el}))
-
-  :.sg-examples-lengths
-  (fn [$el]
-    (om/root
-      examples/$examples
-      {:examples [ex-example-0
-                  ex-example-1
-                  ex-example-2]}
-      {:target $el}))
-
-  :.sg-add-example
-  (fn [$el]
-    (om/root
-      examples/$add
-      {:editing? true}
-      {:target $el}))
-
-  :.sg-add-example-loading
-  (fn [$el]
-    (om/root
-      examples/$add
-      {:editing? true :loading? true :body "(defn greet [name]\n  (println \"Hello\" name))"}
-      {:target $el}))
-
-  :.sg-add-example-errors
-  (fn [$el]
-    (om/root
-      examples/$add
-      {:editing? true :body "(defn greet [name]\n  (println \"Hello\" name))"}
-      {:target $el
-       :init-state {:error-message "This is where error messages that apply to the whole form go. And here's some other text to show what happens with a very long error message."}}))
-
-  :.sg-edit-example
-  (fn [$el]
-    (om/root
-      examples/$example
-      (merge
-        ex-example-0
-        {:editing? true
-         :can-delete? true})
-      {:target $el}))
-
-  :.sg-delete-example
-  (fn [$el]
-    (om/root
-      examples/$example-meta
-      {:body "user=> (foo)"
-       :author {:login "zk" :account-source "github" :avatar-url "https://avatars.githubusercontent.com/u/7194?v=2"}
-       :history [{:author {:login "dakrone" :account-source "github" :avatar-url "https://avatars3.githubusercontent.com/u/19060?v=2&s=460"}}]
-       :can-delete? true}
-      {:target $el}))
-
-  :.sg-delete-example-confirm
-  (fn [$el]
-    (om/root
-      examples/$example-meta
-      {:body "user=> (foo)"
-       :author {:login "zk" :account-source "github" :avatar-url "https://avatars.githubusercontent.com/u/7194?v=2"}
-       :history [{:author {:login "dakrone" :account-source "github" :avatar-url "https://avatars3.githubusercontent.com/u/19060?v=2&s=460"}}]
-       :can-delete? true}
-      {:target $el :init-state {:delete-state :confirm}}))
-
-  :.sg-delete-example-loading
-  (fn [$el]
-    (om/root
-      examples/$example-meta
-      {:body "user=> (foo)"
-       :author {:login "zk" :account-source "github" :avatar-url "https://avatars.githubusercontent.com/u/7194?v=2"}
-       :history [{:author {:login "dakrone" :account-source "github" :avatar-url "https://avatars3.githubusercontent.com/u/19060?v=2&s=460"}}]
-       :can-delete? true}
-      {:target $el :init-state {:delete-state :loading}}))
-
-  :.sg-delete-example-error
-  (fn [$el]
-    (om/root
-      examples/$example-meta
-      {:body "user=> (foo)"
-       :author {:login "zk" :account-source "github" :avatar-url "https://avatars.githubusercontent.com/u/7194?v=2"}
-       :history [{:author {:login "dakrone" :account-source "github" :avatar-url "https://avatars3.githubusercontent.com/u/19060?v=2&s=460"}}]
-       :can-delete? true}
-      {:target $el :init-state {:delete-state :error}}))
-
   :.sg-notes-null-state
   (fn [$el]
     (om/root
@@ -474,6 +333,15 @@ user=> (into {} *1)
       {:var {:ns "foo" :name "bar"}}
       {:target $el}))
 
+  :.sg-add-note-loading
+  (fn [$el]
+    (om/root
+      notes/$add
+      {}
+      {:target $el
+       :init-state {:expanded? true
+                    :loading? true}}))
+
   :.sg-see-alsos-populated
   (fn [$el]
     (om/root
@@ -488,8 +356,14 @@ user=> (into {} *1)
       see-alsos/$add
       {:var {:ns "foo" :name "bar"}}
       {:target $el
-       :init-state {:expanded? true}})))
+       :init-state {:expanded? true}}))
 
+  :.canary-tests-container
+  (fn [$el]
+    (canary/init $el))
+
+  :body.var-page var-page/init
+  :body.styleguide-page styleguide/init)
 
 (dommy/listen! (sel1 :body) :keydown
   (fn [e]
@@ -509,3 +383,7 @@ user=> (into {} *1)
 
 
 (.attach js/FastClick js/document.body)
+
+(init
+  "[data-sticky-offset]" sticky/init
+  "[data-animate-scroll]" animated-scroll-init)

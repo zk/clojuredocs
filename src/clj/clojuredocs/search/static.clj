@@ -2,6 +2,7 @@
 
 (def clojure-namespaces
   '[clojure.core
+    clojure.core.async
     clojure.data
     clojure.edn
     clojure.inspector

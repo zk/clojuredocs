@@ -28,11 +28,15 @@
     [:img.avatar {:src (:avatar-url user)}]
     " Log Out"]])
 
-(defn $navbar [{:keys [user hide-search page-uri]}]
+(defn $navbar [{:keys [user hide-search page-uri full-width?]}]
   [:header.navbar
-   [:div.container
+   [:div
+    {:class (if full-width? "container-fluid" "container")}
     [:div.row
-     [:div.col-md-10.col-md-offset-1
+     [:div
+      {:class (if full-width?
+                "col-md-12"
+                "col-md-10 col-md-offset-1")}
       [:a.navbar-brand {:href "/"}
        [:i.fa.fa-rocket]
        "ClojureDocs"]
@@ -104,7 +108,7 @@
           :href (str "/css/font-awesome.min.css?"
                      (md5-path "resources/public/css/font-awesome.min.css"))}])
 
-(defn $main [{:keys [page-uri content title body-class user page-data] :as opts}]
+(defn $main [{:keys [page-uri content title body-class user page-data full-width?] :as opts}]
   [:html5
    [:head
     [:meta {:name "viewport" :content "width=device-width, maximum-scale=1.0"}]
@@ -128,9 +132,15 @@
         "This is the ClojureDocs staging site, where you'll find all the neat things we're working on."])
      [:div.desktop-nav-bar
       ($navbar opts)]
-     [:div.container
+     [:div
+      {:class (if full-width?
+                "container-fluid"
+                "container")}
       [:div.row
-       [:div.col-md-10.col-md-offset-1
+       [:div
+        {:class (if full-width?
+                  "col-md-12"
+                  "col-md-10 col-md-offset-1")}
         content]]]
      [:div.sticky-push]]
     [:footer

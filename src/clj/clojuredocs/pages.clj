@@ -140,12 +140,14 @@
 
   (GET "/search" [] var-search-handler)
   (GET "/" [] intro/page-handler)
-  (GET "/u/:login" [] user/page-handler)
+  (GET "/u/:login" [login] (user/page-handler login "github"))
+  (GET "/uc/:login" [login] (user/page-handler login "clojuredocs"))
 
   ;; Dev Stuff
   (GET "/dev/styleguide" [] dev/styleguide-handler)
   (GET "/dev/styleguide/search" [] dev/search-styleguide-handler)
   (GET "/dev/styleguide/examples" [] dev/examples-styleguide-handler)
+  (GET "/dev/styleguide/inspector" [] dev/styleguide-inspector-handler)
   (GET "/dev/search-perf" [] dev/perf-handler)
   (GET "/dev/canary" [] dev/canary-tests-handler)
   (GET "/dev/api" [] dev/api-docs-handler)
@@ -159,8 +161,7 @@
   (GET "/:ns/:name" [ns name] (vars/var-page-handler ns name))
   (GET "/:ns/:name" [ns name] ;; ns unmunging catch
     (fn [r]
-      (let [{:keys [ns name]} (lookup-var-expand ns name)]
-        {:status 307
-         :headers {"Location" (str "/" ns "/" (util/cd-encode name))}})))
-
-  )
+      (let [{:keys [ns name] :as v} (lookup-var-expand ns name)]
+        (when v
+          {:status 307
+           :headers {"Location" (str "/" ns "/" (util/cd-encode name))}})))))

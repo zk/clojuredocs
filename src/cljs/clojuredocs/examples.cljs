@@ -9,197 +9,9 @@
             [cljs.reader :as reader]
             [sablono.core :as sab :refer-macros [html]]
             [clojuredocs.util :as util]
-            [clojuredocs.schemas :as schemas]
             [clojure.data :refer [diff]])
-  (:require-macros [dommy.macros :refer [node sel1]]))
-
-(defn client-call [comp context payload success error]
-  (let [{:keys [api-root]} comp
-        {:keys [http-method]} (-> comp :contexts context)]
-    (ajax
-      {:path (str "/api" api-root)
-       :method http-method
-       :data-type :edn
-       :data payload
-       :success success
-       :error error})))
-
-(defn validate-and-submit [app owner payload]
-  (om/set-state! owner :loading? true)
-  (om/set-state! owner :error-message nil)
-  (client-call schemas/ExampleComp :create
-    (-> payload
-        (update-in [:var] #(select-keys % [:ns :name :library-url]))
-        (assoc :history []))
-    (fn [data]
-      (om/transact! app (fn [app]
-                          (update-in app [:examples] (fn [es] (vec
-                                                                (concat
-                                                                  es
-                                                                  [(assoc (:body data)
-                                                                     :new? true)]))))))
-      (om/set-state! owner :loading? false)
-      (om/set-state! owner :text nil)
-      (om/set-state! owner :expanded? false))
-    (fn [{:keys [status body]}]
-      (om/set-state! owner :loading? false)
-      (cond
-        (= 422 status)
-        (om/update-state! owner #(merge % body))
-
-        :else
-        (om/set-state! owner :error-message "There was a problem contacting the server."))))
-  false)
-
-(defn update-example [{:keys [_id var]} owner text]
-  (om/set-state! owner :loading? true)
-  (om/set-state! owner :error-message nil)
-  (client-call schemas/ExampleComp :update
-    {:var (select-keys var [:ns :name :library-url])
-     :example-id _id
-     :body text}
-    (fn [data]
-      (om/transact! app (fn [app]
-                          (update-in app [:examples] (fn [es] (concat es [(assoc (:body data)
-                                                                            :new? true)])))))
-      (om/set-state! owner :loading? false)
-      (om/set-state! owner :text nil)
-      (om/set-state! owner :expanded? false))
-    (fn [{:keys [status body]}]
-      (om/set-state! owner :loading? false)
-      (cond
-        (= 422 status)
-        (om/update-state! owner #(merge % body))
-
-        :else
-        (om/set-state! owner :error-message "There was a problem contacting the server."))))
-  false)
-
-(defn update-text [e owner on-text]
-  (let [new-text (.. e -target -value)]
-    (om/set-state! owner :text new-text)
-    (when on-text (on-text new-text)))
-  false)
-
-(defn cancel-clicked [e example]
-  (om/update! example [:editing?] false)
-  false)
-
-(defn $toggle-controls [{:keys [editing?] :as example}]
-  [:div.toggle-controls
-   [:a.toggle-link {:href "#"
-                    :on-click (fn []
-                                (om/transact!
-                                  example
-                                  #(assoc %
-                                     :editing? (not editing?)
-                                     :should-focus? true))
-                                false)}
-    (if-not editing? "Add an Example" "Collapse")]])
-
-(defn $editor [{:keys [var body loading?] :as app} owner]
-  (reify
-    om/IInitState
-    (init-state [_]
-      {:text body})
-    om/IDidMount
-    (did-mount [_]
-      (dommy/append!
-        (om/get-node owner "live-preview")
-        (node [:div.empty-live-preview "Live Preview"]))
-      (update-preview owner)
-      (dommy/set-value!
-        (om/get-node owner "textarea")
-        (om/get-state owner :text)))
-
-    om/IDidUpdate
-    (did-update [this prev-props prev-state]
-      (let [{:keys [should-focus? expanded? text]} (om/get-state owner)]
-        (when (and should-focus? expanded?)
-          (om/set-state! owner :should-focus? false)
-          (.focus (om/get-node owner "textarea"))))
-      (update-preview owner))
-
-    om/IRenderState
-    (render-state [_ {:keys [text on-text]}]
-      (html
-        [:div.example-editor
-         [:div.live-preview {:ref "live-preview"}]
-         [:textarea
-          {:class "form-control"
-           :cols 80 :on-input #(update-text % owner on-text)
-           :ref "textarea"
-           :disabled (when loading? "disabled")}]
-         [:p.instructions
-          "See our "
-          [:a {:href "/examples-styleguide"} "examples style guide"]
-          " for content and formatting guidelines. "
-          "Examples submitted to ClojureDocs are licensed under the "
-          [:a {:href "https://creativecommons.org/publicdomain/zero/1.0/"}
-           "Creative Commons CC0 license"]
-          "."]]))))
-
-(defn $add-example-editor [{:keys [var loading? body] :as example} owner]
-  (reify
-    om/IRenderState
-    (render-state [_ {:keys [error-message] :as state}]
-      (html
-        [:div.add-example-content
-         [:h5 "New Example"]
-         [:form
-          {:on-submit #(validate-and-submit
-                         example
-                         owner
-                         {:body body
-                          :var @var})}
-          (om/build $editor example {:init-state {:on-text #(om/update! example [:body] %)} :state state})
-          (when error-message
-            [:div.form-group
-             [:div.error-message.text-danger
-              [:i.fa.fa-exclamation-circle]
-              error-message]])
-          [:div.add-example-controls.form-group.clearfix
-           [:button.btn.btn-default
-            {:disabled (when loading? "disabled")
-             :on-click #(cancel-clicked % example)}
-            "Cancel"]
-           [:button.btn.btn-success.pull-right
-            {:disabled (when loading? "disabled")}
-            "Add Example"]
-           [:img.loading.pull-right
-            {:class (when-not loading? " hidden")
-             :src "/img/loading.gif"}]]]]))))
-
-(defn $update-example-editor [{:keys [var loading? body] :as example} owner]
-  (reify
-    om/IRenderState
-    (render-state [_ {:keys [error-message text] :as state}]
-      (html
-        [:div.add-example-content
-         [:h5 "Edit Example"]
-         [:form
-          {:on-submit #(validate-and-submit
-                         example
-                         owner
-                         {:body body
-                          :var @var})}
-          (om/build $editor example {:init-state {:on-text #(om/set-state! owner text %)} :state state})
-          (when error-message
-            [:div.form-group
-             [:div.error-message.text-danger
-              [:i.fa.fa-exclamation-circle]
-              error-message]])
-          [:div.add-example-controls.form-group.clearfix
-           [:button.btn.btn-default
-            {:disabled (when loading? "disabled")
-             :on-click #(cancel-clicked % example)}
-            "Cancel"]
-           [:button.btn.btn-success.pull-right
-            {:disabled (when loading? "disabled")}
-            "Update Example"]
-           [:img.loading.pull-right
-            {:class (when-not loading? " hidden")
-             :src "/img/loading.gif"}]]]]))))
+  (:require-macros [dommy.macros :refer [node sel1]]
+                   [cljs.core.async.macros :refer [go go-loop]]))
 
 (defn update-preview [owner]
   (let [text (om/get-state owner :text)
@@ -214,22 +26,105 @@
           ;; Not handling this error prevents subsequent
           ;; highlights from succeeding
           (catch js/Error e (prn "Error highlighting example"))))
-      (dommy/append! preview (node [:div.empty-live-preview "Live Preview"])))))
+      (do
+        (dommy/append! preview (node [:div.empty-live-preview "Live Preview"]))))))
 
-(defn $add [{:keys [editing? should-focus?] :as example} owner]
+(defn $live-preview [{:keys [loading? text] :as app} owner]
   (reify
+    om/IInitState
+    (init-state [_]
+      {:text text})
+
+    om/IDidMount
+    (did-mount [_]
+      (dommy/append!
+          (om/get-node owner "live-preview")
+          (node [:div.empty-live-preview "Live Preview"]))
+      (update-preview owner))
+
     om/IDidUpdate
     (did-update [this prev-props prev-state]
-      (when (and should-focus? editing?)
-        (om/transact! example #(assoc % :should-focus? false))
-        (anim/scroll-to (om/get-node owner "wrapper") {:pad 10})))
+      (om/set-state! owner :text text)
+      (update-preview owner))
+
     om/IRenderState
-    (render-state [this {:keys [text loading?] :as state}]
-      (sab/html
-        [:div.add-example {:ref "wrapper"}
-         ($toggle-controls example)
-         [:div.add-example-content {:class (when-not editing? " hidden")}
-          (om/build $add-example-editor example {:state state})]]))))
+    (render-state [_ {:keys [text]}]
+      (html
+        [:div.example-editor
+         [:div.live-preview {:ref "live-preview"}]]))))
+
+(defn $expando-ta [text opts]
+  (let [rows (Math/max
+               (+ (->> text
+                       (filter #(= "\n" %))
+                       count)
+                 3)
+               10)]
+    [:textarea
+     (merge
+       {:class "form-control"
+        :autofocus "autofocus"
+        :cols 80
+        :rows rows
+        :value text}
+       opts)]))
+
+(defn eighty-columns []
+  (let [text " 80 columns "
+        char "-"
+        pre-text ";;"
+        post-text ">"
+        n (- 80 (count pre-text) (count text) (count post-text))
+        pre-n (Math/ceil (/ n 2))
+        post-n (Math/floor (/ n 2))]
+    (str
+      pre-text
+      (apply str (repeat pre-n char))
+      text
+      (apply str (repeat post-n char))
+      post-text)))
+
+(defn $tabbed-clojure-editor [{:keys [body error create-success? loading? _id] :as app} owner]
+  (reify
+    om/IInitState
+    (init-state [_]
+      {:active :editor
+       :text body})
+    om/IRenderState
+    (render-state [_ {:keys [text-ch active submit-btn-text text preview-state]}]
+      (let [text-ch (or text-ch (chan))]
+        (html
+          [:div.tabbed-editor
+           [:ul.nav.nav-tabs
+            [:li
+             {:class (when (= :editor active) "active")}
+             [:a {:href "#"
+                  :on-click #(do
+                               (om/set-state! owner :active :editor)
+                               false)}
+              [:i.fa.fa-code] " Editor"]]
+            [:li
+             {:class (when (= :preview active) "active")}
+             [:a {:href "#"
+                  :on-click #(do
+                               (om/set-state! owner :active :preview)
+                               false)}
+              [:i.fa.fa-eye] " Preview"]]]
+           [:div {:class (when (= :preview active) "hidden")}
+            [:div.example-editor
+             {:class (when loading? "disabled")}
+             ($expando-ta
+               text
+               {:on-change #(let [v (.. % -target -value)]
+                              (om/set-state! owner :text v)
+                              (put! text-ch v)
+                              false)
+                :value text
+                :disabled (when loading? "disabled")
+                :placeholder "Code Here"})
+             [:pre.columns-guide (eighty-columns)]]]
+           [:div {:class (when (= :editor active) "hidden")}
+            (om/build $live-preview {:text text})]])))))
 
 (defn user-can-delete? [user {:keys [author]}]
   (= (select-keys user [:login :account-source])
@@ -247,29 +142,18 @@
       ;; highlights from succeeding
       (catch js/Error e (prn "Error highlighting example")))))
 
-(defn delete-example [owner ex del-fn]
-  (om/set-state! owner :delete-state :loading)
-  (ajax
-    {:path (str "/api/examples")
-     :method :delete
-     :data-type :edn
-     :data @ex
-     :success (fn [data]
-                (om/set-state! owner :delete-state :none)
-                (del-fn @ex))
-     :error (fn [resp]
-              (om/set-state! owner :delete-state :error))})
-  false)
-
-(defn $example-meta [{:keys [editing? author editors can-delete?] :as ex} owner]
+(defn $example-meta [{:keys [_id editing? author
+                             editors can-delete? can-edit?
+                             delete-state] :as ex} owner]
   (reify
     om/IRenderState
-    (render-state [_ {:keys [delete-ex delete-state]}]
+    (render-state [_ {:keys [delete-ch]}]
       (let [authors (distinct
                       (concat
                         [author]
                         editors))
-            num-to-show 7]
+            num-to-show 7
+            delete-ch (or delete-ch (chan))]
         (html
           [:div.example-meta
            [:div.contributors
@@ -287,18 +171,21 @@
             " / "
             [:a {:href (str "/ex/" _id)}
              "history"]
-            " / "
-            (if editing?
-              [:a {:href "#"
-                   :on-click #(do
-                                (om/update! ex [:editing?] false)
-                                false)}
-               "cancel edit"]
-              [:a {:href "#"
-                   :on-click #(do
-                                (om/update! ex [:editing?] true)
-                                false)}
-               "edit"])
+            (when can-edit?
+              [:span
+               " / "
+               (if editing?
+                 [:a {:href "#"
+                      :on-click #(do
+                                   (om/update! ex [:editing?] false)
+                                   false)}
+                  "cancel edit"]
+                 [:a {:href "#"
+                      :on-click #(do
+                                   (om/update! ex [:editing?] true)
+                                   (om/update! ex [:preview-text] nil)
+                                   false)}
+                  "edit"])])
             (when (and can-delete? (not editing?))
               [:span
                " / "
@@ -307,21 +194,20 @@
                    [:img.loading {:src "/img/loading.gif"}]
                    [:span
                     [:a {:href "#"
-                         :on-click #(do
-                                      (om/set-state! owner :delete-state :none)
-                                      false)}
+                         :on-click #(do (om/update! ex :delete-state :none)
+                                        false)}
                      "cancel"]
                     " | "
                     [:a {:href "#"
-                         :on-click #(delete-example owner ex delete-ex)}
-                     "confirm delete?"]
-                    ])
+                         :on-click #(do
+                                      (put! delete-ch (:_id @ex))
+                                      false)}
+                     "confirm delete?"]])
                  [:span
                   {:class (when (= :error delete-state) "error-deleting bg-danger")}
                   [:a {:href "#"
-                       :on-click #(do
-                                    (om/set-state! owner :delete-state :confirm)
-                                    false)}
+                       :on-click #(do (om/update! ex :delete-state :confirm)
+                                      false)}
                    "delete"]])])
             [:span.edit-example-widget]]])))))
 
@@ -336,37 +222,126 @@
     om/IRender
     (render [_]
       (html
-        [:div.example-body {:ref "example-body" :class (when new? "just-created")}]))))
+        [:div.example-body {:ref "example-body"}]))))
 
-(defn $example [{:keys [editing? body _id author history created-at updated-at new? can-delete?] :as ex} owner]
+(def $example-instructions
+  [:p.example-instructions
+   "See our "
+   [:a {:href "/examples-styleguide"} "examples style guide"]
+   " for content and formatting guidelines. "
+   "Examples submitted to ClojureDocs are licensed under the "
+   [:a {:href "https://creativecommons.org/publicdomain/zero/1.0/"}
+    "Creative Commons CC0 license"]
+   "."])
+
+(defn $example-editor [{:keys [editing? loading? error var _id] :as app} owner]
+  (reify
+    om/IInitState
+    (init-state [_]
+      {:text-ch (chan)})
+
+    om/IWillMount
+    (will-mount [_]
+      (go-loop []
+        (when-let [text (<! (om/get-state owner :text-ch))]
+          (om/set-state! owner :text text)
+          (recur))))
+    om/IRenderState
+    (render-state [_ {:keys [example-ch submit-button-text text text-ch] :as state}]
+      (let [example-ch (or example-ch (chan))]
+        (html
+          [:div
+           (om/build $tabbed-clojure-editor app {:init-state {:text-ch text-ch}})
+           $example-instructions
+           (when error
+             [:div.form-group
+              [:div.error-message.text-danger
+               [:i.fa.fa-exclamation-circle]
+               error]])
+           [:div.add-example-controls.form-group.clearfix
+            [:button.btn.btn-default
+             {:disabled (when loading? "disabled")
+              :on-click #(do
+                           (om/update! app :editing? false)
+                           false)}
+             "Cancel"]
+            [:button.btn.btn-success.pull-right
+             {:disabled (when loading? "disabled")
+              :on-click #(do
+                           (put! example-ch {:body text :_id _id})
+                           false)}
+             (or submit-button-text "Submit")]
+            [:img.loading.pull-right
+             {:class (when-not loading? " hidden")
+              :src "/img/loading.gif"}]]])))))
+
+(defn $example [{:keys [editing? _id] :as ex} owner]
   (reify
     om/IRenderState
-    (render-state [_ {:keys [delete-ex]}]
+    (render-state [_ {:keys [delete-ch update-example-ch]}]
       (html
         [:div.var-example
          [:a {:id (str "example_" _id)}]
          [:div
-          (om/build $example-meta ex {:init-state {:delete-ex delete-ex}})]
+          (om/build $example-meta ex {:init-state {:delete-ch delete-ch}})]
          (if editing?
-           (om/build $update-example-editor ex)
+           [:div
+            [:h5 "Edit Example"]
+            (om/build $example-editor ex
+              {:init-state {:submit-button-text "Update Example"
+                            :example-ch update-example-ch}})]
            (om/build $example-body ex))]))))
 
-(defn $examples [{:keys [examples var user] :as app} owner]
+(defn build-examples [user examples state]
+  (om/build-all
+    $example
+    (->> examples
+         (map #(assoc % :can-delete? (user-can-delete? user %)))
+         (map #(assoc % :can-edit? (not (nil? user)))))
+    {:init-state state}))
+
+(defn $create-example [{:keys [editing? should-focus? var] :as app} owner]
+  (reify
+    om/IDidUpdate
+    (did-update [this prev-props prev-state]
+      (when (and should-focus? editing?)
+        (om/transact! app #(assoc % :should-focus? false))
+        (anim/scroll-to (om/get-node owner "wrapper") {:pad 10})))
+
+    om/IRenderState
+    (render-state [this {:keys [text loading? example-ch] :as state}]
+      (html
+        [:div.add-example {:ref "wrapper"}
+         [:div.toggle-controls
+          [:a.toggle-link
+           {:href "#"
+            :on-click (fn []
+                        (om/transact!
+                          app
+                          #(assoc %
+                             :editing? (not editing?)
+                             :should-focus? true))
+                        false)}
+           (if-not editing? "Add an Example" "Collapse")]]
+         [:div.add-example-content {:class (when-not editing? " hidden")}
+          (om/build $example-editor app
+            {:init-state {:example-ch example-ch
+                          :submit-button-text "Add Example"}})]]))))
+
+(defn $examples [{:keys [user examples var] :as app} owner]
   (reify
     om/IRenderState
-    (render-state [_ {:keys [delete-ex]}]
+    (render-state [_ {:keys [delete-ch new-example-ch] :as state}]
       (html
         [:div.var-examples
          [:h5 (util/pluralize (count examples) "Example" "Examples")]
          (if (empty? examples)
            [:div.null-state
             "No examples for " (:ns var) "/" (:name var) "."]
-           (om/build-all
-             $example
-             (->> (:examples app)
-                  (map #(assoc % :can-delete? (user-can-delete? user %))))
-             {:init-state {:delete-ex delete-ex}}))
+           (build-examples user examples state))
          (if user
-           (om/build $add app)
-           [:div.login-required-message
-            "Log in to add an example"])]))))
+           (om/build $create-example
+               (:add-example app)
+               {:init-state {:example-ch new-example-ch}})
+             [:div.login-required-message
+              "Log in to add an example"])]))))

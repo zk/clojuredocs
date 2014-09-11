@@ -4,9 +4,23 @@
             [somnium.congomongo :as mon]
             [compojure.core :refer (defroutes GET)]))
 
-(defn page-handler [{:keys [user uri]}]
-  (let [user {}]
-    (common/$main
-      {:user user
-       :page-uri uri
-       :content [:h1 "HELLO WORLD"]})))
+(defn page-handler [login account-source]
+  (let [{:keys [login account-source] :as user}
+        (mon/fetch-one :users :where {:login login :account-source account-source})
+
+        examples-authored-count
+        (mon/fetch-count :examples :where {:author.login login
+                                           :author.account-source account-source})]
+    (fn [r]
+      (common/$main
+        {:user (:user r)
+         :page-uri (:uri r)
+         :body-class "user-page"
+         :content [:div.row
+                   [:div.col-sm-10.col-sm-offset-1
+                    [:div.row
+                     [:div.col-sm-4
+                      (util/$avatar user {:size 200})]
+                     [:div.col-sm-8
+                      [:h1 login]
+                      [:p "User " [:b login] " has been a member since 2012. Since they joined, they've created " examples-authored-count " examples."]]]]]}))))

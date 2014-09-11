@@ -3,7 +3,6 @@
             [compojure.core :refer [defroutes GET]]
             [clojuredocs.pages.common :as common]
             [clojuredocs.pages.quickref :as quickref]
-            [clojuredocs.schemas :as schemas]
             [schema.core :as s]
             [clojuredocs.util :as util]))
 
@@ -31,21 +30,22 @@
              :data-animate-scroll "true"
              :data-animate-buffer "20"} title]]])]])
 
-(defn $tpl [{:keys [body-class user page-uri nav content]}]
+(defn $tpl [{:keys [body-class user page-uri nav content full-width?]}]
   (common/$main
-    {:body-class "dev-page"
+    {:body-class (or body-class "dev-page")
      :user user
      :page-uri page-uri
+     :full-width? full-width?
      :content
      [:div.row
-      [:div.col-md-2
+      [:div.col-sm-2
        [:div.sidenav
         [:section
          [:h5 "Dev"]
          [:ul
           [:li [:a {:href "/dev/api"} "API Docs"]]
-          #_[:li [:a {:href "/dev/search-perf"} "Search Perf"]]
-          #_[:li [:a {:href "/dev/canary"} "Canary Tests"]]]]
+          [:li [:a {:href "/dev/search-perf"} "Search Perf"]]
+          [:li [:a {:href "/dev/canary"} "Canary Tests"]]]]
         [:section
          [:h5 "Styleguide"]
          [:ul
@@ -54,7 +54,7 @@
           [:li [:a {:href "/dev/styleguide/examples"} "Examples"]]
           ]]
         nav]]
-      [:div.col-md-10
+      [:div.col-sm-10
        content]]}))
 
 (defn example [{:keys [title hook caption]}]
@@ -66,18 +66,18 @@
      [:div.caption caption])])
 
 (def examples-styleguide-sections
-  [{:title "Rendering"
-    :nav-target "rendering"
+  [{:title "Render"
+    :nav-target "render"
     :content
     [(->> [{:hook :sg-examples-null-state
-            :caption "null state for clojure.core/map"}
+            :caption "null state"}
            {:hook :sg-examples-single
             :caption "single example"}
            {:hook :sg-examples-lengths
             :caption "examples of varying length"}]
           (map example))]}
-   {:title "Creating"
-    :nav-target "creating"
+   {:title "Create"
+    :nav-target "create"
     :content
     [(->> [{:hook :sg-add-example
             :caption "adding an example"}
@@ -86,14 +86,14 @@
            {:hook :sg-add-example-errors
             :caption "with general error"}]
           (map example))]}
-   {:title "Editing"
-    :nav-target "editing"
+   {:title "Edit"
+    :nav-target "edit"
     :content
     [(->> [{:hook :sg-edit-example
             :caption "editing"}]
           (map example))]}
-   {:title "Deleting"
-    :nav-target "deleting"
+   {:title "Delete"
+    :nav-target "delete"
     :content
     [[:p "Delete is available when you're the original author of an example"]
      (->> [{:hook :sg-delete-example
@@ -117,7 +117,7 @@
      [:p "Null state"]
      [:div.example.checker-bg.sg-quick-lookup-null-state]]}
    {:title "Live Search"
-    :nav-target "quick-search"
+    :nav-target "live-search"
     :content
     [[:p "Landing search w/ autocomplete: heterogenous results linking to vars, namespaces, and concept pages."]
      [:div.example.checker-bg.sg-quick-lookup-autocomplete]]}])
@@ -172,7 +172,7 @@
      {:title "Common Elements"
       :nav-target "common-elements"
       :content
-      [[:p "Null-state plate, shown where there's nothing of something."
+      [[:p "Null-state, shown where there's nothing of something."
         [:div.example.checker-bg
          [:div.null-state
           "We don't have any of those!"]]]
@@ -187,7 +187,12 @@
                              "clojure.test"
                              "clojure.test.junit"
                              "clojure.test.tap"
-                             "clojure.zip"])]]}
+                             "clojure.zip"])]
+       [:p "Tabbed Clojure Editor"]
+       (example {:hook :sg-tabbed-clojure-editor})
+
+       #_[:p "Tabbed Markdown Editor"]
+       #_(example {:hook :sg-tabbed-markdown-editor})]}
      (let [sphere '{:title "Simple Values",
                     :categories
                     ({:title "Regular Expressions",
@@ -213,18 +218,22 @@
      {:title "Notes"
       :nav-target "notes"
       :content
-      [[:p "Null state:"]
-       [:div.example.checker-bg.sg-notes-null-state]
-       [:p "Populated with examples:"]
-       [:div.example.checker-bg.sg-notes-populated]
-       [:p "Adding a note:"]
-       [:div.example.checker-bg.sg-add-note]]}]))
+      (->> [{:hook :sg-notes-null-state
+             :caption "null state"}
+            {:hook :sg-notes-populated
+             :caption "populated"}
+            {:hook :sg-add-note
+             :caption "add note"}
+            {:hook :sg-add-note-loading
+             :caption "add note loading"}]
+           (map example))}]))
 
 (defn styleguide-handler [{:keys [user uri]}]
   ($tpl
     {:user user
      :page-uri uri
      :nav ($nav "General" styleguide-sections)
+     :body-class :styleguide-page
      :content
      [:div
       [:h1 "Styleguide"]
@@ -246,11 +255,20 @@
     {:user user
      :page-uri uri
      :nav ($nav "Examples" examples-styleguide-sections)
+     :body-class :styleguide-page
      :content
      [:div
       [:h1 "Examples Stylguide"]
       (map $section examples-styleguide-sections)]}))
 
+(defn styleguide-inspector-handler [{:keys [user uri]}]
+  (common/$main
+    {:user user
+     :page-uri uri
+     :body-class :styleguide-page
+     :full-width? true
+     :content
+     [:div.sg-examples-null-state-inspector]}))
 
 (defn perf-handler [{:keys [user uri]}]
   ($tpl
@@ -265,7 +283,9 @@
     {:user user
      :page-uri uri
      :content
-     [:div [:h1 "Canary"]]}))
+     [:div
+      [:h1 "Canary Tests"]
+      [:div.canary-tests-container]]}))
 
 (defn format-http-method [k]
   (-> k name str/upper-case))
@@ -288,25 +308,29 @@
          (:k k)
          k)))
 
+(defn enum-schema? [o]
+  (instance? schema.core.EnumSchema o))
+
 (defn schema-table [schema]
   (let [{:keys [name docs]} (meta schema)]
-    [:div
-     [:h3 name]
-     #_[:pre
-      (util/pp-str schema)]
-     [:table.table.schema
-      [:tr
-       [:th "name"]
-       [:th "type"]
-       [:th "notes"]]
-      (for [[k v] schema]
-        [:tr
-         [:td [:code (schema-key k)]]
-         [:td (type-doc v)]
-         [:td
-          (get docs k)
-          (when-not (s/optional-key? k)
-            "Required")]])]]))
+    [:table.schema
+     {:style "background-color: rgba(0,0,0,0.05); margin-top: 0;"}
+     (for [[k v] schema]
+       [:tr
+        [:td
+         [:code (schema-key k)]
+         (when (s/optional-key? k)
+           [:span.aside "opt"])]
+        [:td
+         (cond
+           (enum-schema? v) (->> (:vs v)
+                                 (map pr-str)
+                                 (interpose " | ")
+                                 (apply str))
+           (map? v) (schema-table v)
+           :else (type-doc v))
+         (when-let [doc (get docs k)]
+           (str ", " doc))]])]))
 
 (defn docs-for [{:keys [method path schemas]}]
   [:div
@@ -329,4 +353,4 @@
        (->> "src/md/api/overview.md"
             common/memo-markdown-file)]
       [:h2 "Endpoints"]
-      (docs-for schemas/get-examples-endpoint)]}))
+      #_(docs-for schemas/get-examples-endpoint)]}))

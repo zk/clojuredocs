@@ -75,7 +75,8 @@
               :ref "input"
               :on-input #(do
                            (om/set-state! owner :text (.. % -target -value))
-                           false)}]
+                           false)
+              :disabled (when loading? "disabled")}]
             [:p.instructions "Markdown allowed, code in <pre />."]
             (when error-message
               [:div.form-group

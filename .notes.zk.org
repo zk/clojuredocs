@@ -23,8 +23,6 @@
 
 + Move over from old db
 + Claiming old user accounts
-+ Core-specific namespace page
-  + tags / sections w/ filtering
 + Add user page
 + Add example widget
 + Redirect old urls to new
@@ -42,6 +40,7 @@
 
 
 ** Done
++ Core-specific namespace page
 + Deleting examples
 + Switch to avatar url instead of email
 + Add libraries page
@@ -168,6 +167,40 @@ Single-field validation, form submit -> routing -> input coercion
 
 (client-call schema context success error)
 
+It's unfortunate that you have to visit 3 different namespaces to add
+a single endpoint, this needs to be fixed. Part of the reason right
+now is that the schema is cross-platform and the endpoints are
+not. Another part is that you have to explicitly mount endpoints in
+`clojuredocs.server`. See: https://www.youtube.com/watch?v=_oj0gfSRLm0
+
+All this is fixable I think.
+
+Actually four places, also the front-end code that uses that
+endpoint.
+
+** Layout
+
++ clojuredocs.api.schemas -- schemas, cross env
++ clojuredocs.api.server (clj)
++ clojuredocs.api.client (cljs)
+
+(api/request api/get-examples
+  payload
+  on-success
+  on-error)
+
+(api/response api/get-examples handler)
+
+(server/endpoint get-examples handler)
+
++clj
+(defn get-examples [r])
+
++cljs
+(defn get-examples [opts success error]
+
+
+
 
 * App Layout
 
@@ -202,4 +235,151 @@ handle routing in your namespace.
 + Use Cases
   + View example -- Show author / editors in example meta, and latest
     edit body and last updated timestamp
-  +
+
+
+* User Accounts
+
+ClojureDocs v1 used OpenID, which is being phased out pretty much
+anywhere (oh well). So we've got a bunch of user accounts from the old
+version of CD that have to be migrated over.
+
+Personally, I don't really want to maintain a user identity that's
+specific to ClojureDocs. I like the idea of using GitHub auth (oauth2)
+initially and adding on other providers. Just have to handle the case
+of login collisions from different providers.
+
+
+
+* Coupling In Widgets
+
++ Styleguide is a good stage for isolation
++ Widgets should work both in context and in isolation
++ Using channels to isolate widgets
++ How does this work with nested widgets?
+
+Is an appropriate shape of a widget the:
++ state
++ no external calls
++ state is not modified in-widget?
+
+That last one is interesting, lets visit that. Another way to state
+that question is: should all app state modification be done out of
+widget?
+
+Probably not, error handling becomes to arduous. So then isolation
+becomes a matter of configuration.
+
++ Should be able to put the widget in any of it's states in a
+  straightforward way (passing data). Channels hurt here.
++ Composibility of widgets is important, channels add another
+  dimension when thinking about composibility.
++ Right now state transitions are hard to follow, alot of it is
+  spread across the namespace. What's the cause of that?
++ Should event handlers just be about putting stuff onto a queue?
++ Maybe localizing all mutation to the widget itself isn't a bad idea,
+  as opposed to channels escaping the widget. This begs the question
+  of how inter-widget communication should work (refs?).
+
+Results are looking good so far, essentially all state manipulation
+happens in the same place, which is a good thing. There's still the
+question as to whether this could be accomplished by just moving code
+around. Even if not, is it worth the overhad managing channels?
+
+
+#+BEGIN_SRC clojure
+
+(defn event-loop [state text-chan cancel-chan]
+  (go
+    (loop []
+      (prn @state)
+      (let [[v ch] (async/alts! [text-chan cancel-chan] :priority)]
+        (condp = ch
+          text-chan (do
+                      (swap! state assoc :text v)
+                      (recur))
+          cancel-chan (prn "CANCEL"))))))
+
+(let [t (async/chan 10)
+      c (async/chan 10)]
+  (event-loop (atom) t c)
+  (go
+    (>! t "foo")
+    (<! (timeout 100))
+    (>! t "bar"))
+  #_(go
+    (>! c "hello")
+    (<! (timeout 100))
+    (>! c "world")
+    (<! (timeout 1000))
+    (>! c "the quick")))
+
+#+END_SRC
+
+It really seems like overkill instead of manipulating state directly
+in the event handler, but let's try it.
+
+Ok, hit a road block. An example doesn't know how to remove itself
+from the page, so there needs to be some communication outside that
+handles this.
+
+Two problems:
+
+1. How is this communication structured? A channel that the widge
+   exposes? A channel that is passed to the widget to put deletes on?
+   An event that's fired? The widget is passed the shared structure
+   and it removes the example from the list of examples? A flag on
+   the example that prevents it from being rendered?
+   + If it's a channel passed into the widget, how is that passed
+     through multiple layers of widgets, if multiple layers exist?
+2. How to identify the example to be removed?
+
+
+#+BEGIN_SRC clojure
+
+(defn wire-meta-behavior [owner example report-delete-chan]
+  (let [delete-ch (chan)]
+    (go-loop []
+      (when-let [delete-state (<! delete-ch)]
+        (condp = delete-state
+          :do-delete
+          (let [res (<! (delete-example example))]
+            (if (= 200 (:status res))
+              (!> report-delete-chan example)
+              (om/set-state! owner :delete-state :error)))
+          (om/set-state! owner :delete-state delete-state))
+        (recur)))
+    {:delete-ch delete-ch}))
+
+#+END_SRC
+
+I'm not a huge fan of how the event handlers are bound by specifying
+the function to run in the element attributes.
+
+Ok, it's a little better, but still coupled. I've been thinking about
+having a single channel / pair of channels be the communication
+interface to a widget, and how state is manipulated, so information
+flows:
+
+app state -> events -> channels -> app state
+
+Server comm should probably be done at the top level, or as high-up
+as possible
+
+
+* Localizing state, communication, and UI
+
+Widgets interact with state either through putting messages on
+provided channels, or manipulating the state they have in scope (cursors).
+
+component / page / container / world / widget / loop / link / module
+/ mod
+
+Mod -- app state
+
+Included declaratively
+
+Lifecycle
+* page-wide scripts
+
+
+Man I'm writing some awful code.
