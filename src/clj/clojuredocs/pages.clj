@@ -77,12 +77,15 @@
 
 (defn add-examples-count [results]
   (let [examples-lookup (->> results
-                             (map #(select-keys % [:ns :name]))
-                             (map (fn [l]
-                                    [l (mon/fetch-count :examples :where l)]))
+                             (map #(select-keys % [:ns :name :library-url]))
+                             (map (fn [{:keys [ns name library-url] :as l}]
+                                    [l (mon/fetch-count :examples :where {:var.ns ns
+                                                                          :var.name name
+                                                                          :var.library-url library-url})]))
                              (into {}))]
     (->> results
-         (map #(assoc % :examples-count (get examples-lookup (select-keys % [:ns :name])))))))
+         (map #(assoc % :examples-count (get examples-lookup (select-keys % [:ns :name :library-url])))))))
+
 
 (defn var-search-handler [{:keys [params]}]
   {:headers {"Content-Type" "application/edn"}
