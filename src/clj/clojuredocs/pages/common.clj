@@ -308,10 +308,11 @@ document.location.href = noddy.href;
       nil)))
 
 (defn prep-for-syntaxhighligher [s]
-  (-> s
-      (str/replace #"<pre><code>" "<pre>")
-      (str/replace #"</code></pre>" "</pre>")
-      (str/replace #"<pre>" "<pre class=\"brush: clojure\">")))
+  (when s
+    (-> s
+        (str/replace #"<pre><code>" "<pre>")
+        (str/replace #"</code></pre>" "</pre>")
+        (str/replace #"<pre>" "<pre class=\"clojure\">"))))
 
 (when config/cache-markdown?
   (def memo-markdown-file (memoize memo-markdown-file)))
