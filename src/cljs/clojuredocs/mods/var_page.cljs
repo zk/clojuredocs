@@ -163,9 +163,8 @@
             _id #(merge % {:delete-state :error}))))
       (recur))))
 
-(defn init [$root]
-  (let [!state (atom (init-state))
-        ex-ch (chan)
+(defn init-examples [$root !state]
+  (let [ex-ch (chan)
         update-example-ch (chan)
         new-example-ch (chan)
         delete-ch (chan)]
@@ -191,9 +190,23 @@
     (om/root
       see-alsos/$see-alsos
       !state
-      {:target (sel1 $root :.see-alsos-widget)})
+      {:target (sel1 $root :.see-alsos-widget)})))
 
+
+(defn init-notes [$root])
+
+(defn init-see-alsos [$root !state]
+  (let [new-ch (chan)
+        delete-ch (chan)]
     (om/root
       notes/$notes
       !state
-      {:target (sel1 $root :.notes-widget)})))
+      {:target (sel1 $root :.notes-widget)
+       :init-state {:new-ch new-note-ch
+                    :delete-ch delete-note-ch}})))
+
+(defn init [$root]
+  (let [!state (atom (init-state))]
+    (init-examples $root !state)
+    (init-see-alsos $root !state)
+    (init-notes $root !state)))
