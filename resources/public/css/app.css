@@ -1,141 +1,3 @@
-/**
- * SyntaxHighlighter
- * http://alexgorbatchev.com/SyntaxHighlighter
- *
- * SyntaxHighlighter is donationware. If you are using it, please donate.
- * http://alexgorbatchev.com/SyntaxHighlighter/donate.html
- *
- * @version
- * 3.0.83 (July 02 2010)
- *
- * @copyright
- * Copyright (C) 2004-2010 Alex Gorbatchev.
- *
- * @license
- * Dual licensed under the MIT and GPL licenses.
- */
-.syntaxhighlighter .line.highlighted.alt1,
-.syntaxhighlighter .line.highlighted.alt2 {
-  background-color: #e0e0e0 !important;
-}
-.syntaxhighlighter .line.highlighted.number {
-  color: black !important;
-}
-.syntaxhighlighter table caption {
-  color: black !important;
-}
-.syntaxhighlighter .gutter {
-  color: #eee !important;
-}
-.syntaxhighlighter .gutter .line.highlighted {
-  background-color: #6ce26c !important;
-  color: white !important;
-}
-.syntaxhighlighter.printing .line .content {
-  border: none !important;
-}
-.syntaxhighlighter.collapsed {
-  overflow: visible !important;
-}
-.syntaxhighlighter.collapsed .toolbar {
-  color: blue !important;
-  background: white !important;
-  border: 1px solid #6ce26c !important;
-}
-.syntaxhighlighter.collapsed .toolbar a {
-  color: blue !important;
-}
-.syntaxhighlighter.collapsed .toolbar a:hover {
-  color: red !important;
-}
-.syntaxhighlighter .toolbar {
-  color: white !important;
-  background: #6ce26c !important;
-  border: none !important;
-}
-.syntaxhighlighter .toolbar a {
-  color: white !important;
-}
-.syntaxhighlighter .toolbar a:hover {
-  color: black !important;
-}
-.syntaxhighlighter .plain,
-.syntaxhighlighter .plain a {
-  color: black !important;
-}
-.syntaxhighlighter .comments,
-.syntaxhighlighter .comments a {
-  color: #008200 !important;
-}
-.syntaxhighlighter .string,
-.syntaxhighlighter .string a {
-  color: blue !important;
-}
-.syntaxhighlighter .keyword {
-  color: #006699 !important;
-}
-.syntaxhighlighter .preprocessor {
-  color: gray !important;
-}
-.syntaxhighlighter .variable {
-  color: #aa7700 !important;
-}
-.syntaxhighlighter .value {
-  color: #009900 !important;
-}
-.syntaxhighlighter .functions {
-  color: #ff1493 !important;
-}
-.syntaxhighlighter .constants {
-  color: #0066cc !important;
-}
-.syntaxhighlighter .script {
-  font-weight: bold !important;
-  color: #006699 !important;
-  background-color: none !important;
-}
-.syntaxhighlighter .color1,
-.syntaxhighlighter .color1 a {
-  color: gray !important;
-}
-.syntaxhighlighter .color2,
-.syntaxhighlighter .color2 a {
-  color: #ff1493 !important;
-}
-.syntaxhighlighter .color3,
-.syntaxhighlighter .color3 a {
-  color: red !important;
-}
-.syntaxhighlighter .keyword {
-  font-weight: bold !important;
-}
-.clojure.syntaxhighlighter .meta {
-  opacity: 0.6 !important;
-}
-.clojure.syntaxhighlighter .invalid {
-  color: yellow !important;
-  background: red !important;
-}
-.clojure.syntaxhighlighter .quoted {
-  font-style: italic !important;
-}
-.syntaxhighlighter code {
-  background-color: transparent;
-  padding: 0;
-}
-.syntaxhighlighter .gutter {
-  padding: 0;
-}
-.syntaxhighlighter .gutter .line {
-  padding-right: 3px;
-  min-width: 30px;
-  text-align: right;
-}
-.syntaxhighlighter .container {
-  width: auto;
-  padding: 0 0;
-  margin: auto auto;
-}
 html,
 body {
   -webkit-font-smothing: antialiased;
@@ -537,6 +399,8 @@ form.search input.placeholder {
 .syntaxify {
   padding: 10px;
   background-color: rgba(0, 0, 0, 0.01);
+  white-space: pre;
+  overflow-x: scroll;
 }
 .ac-result-link:hover {
   text-decoration: none;
@@ -692,7 +556,7 @@ table.ac-results .ac-metadata {
 }
 @media (max-width: 1199px) {
   .intro-page .syntaxify {
-    font-size: 13.8px;
+    font-size: 12px;
   }
 }
 @media (max-width: 991px) {
@@ -820,14 +684,6 @@ table.ac-results .ac-metadata {
 .example-page .example {
   margin-bottom: 30px;
 }
-.var-page .syntaxify,
-.example-page .syntaxify {
-  font-size: 15px;
-}
-.var-page .syntaxify table,
-.example-page .syntaxify table {
-  margin: 0;
-}
 .example-meta,
 .note-meta {
   font-size: 10px;
@@ -855,14 +711,33 @@ table.ac-results .ac-metadata {
 .note-meta .avatar {
   margin: 0 2px;
 }
+.var-example .syntaxify,
+.tabbed-editor .example-editor textarea.form-control,
+.tabbed-editor .example-editor .columns-guide,
+.tabbed-editor pre.syntaxify {
+  font-size: 15px;
+}
+@media (max-width: 1199px) {
+  .var-example .syntaxify,
+  .tabbed-editor .example-editor textarea.form-control,
+  .tabbed-editor .example-editor .columns-guide,
+  .tabbed-editor pre.syntaxify {
+    font-size: 12.5px;
+  }
+}
+@media (max-width: 991px) {
+  .var-example .syntaxify,
+  .tabbed-editor .example-editor textarea.form-control,
+  .tabbed-editor .example-editor .columns-guide,
+  .tabbed-editor pre.syntaxify {
+    font-size: 11.5px;
+  }
+}
 .var-example {
   margin-bottom: 30px;
 }
 .var-example .example {
   margin-bottom: 30px;
-}
-.var-example .syntaxify {
-  font-size: 15px;
 }
 .var-example .syntaxify table {
   margin: 0;
@@ -1042,6 +917,7 @@ table.ac-results .ac-metadata {
   font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
   margin-bottom: 0;
   padding: 10px;
+  font-size: 13px;
 }
 .example-editor .add-example-controls {
   margin-bottom: 10px;
@@ -1421,16 +1297,19 @@ table.schema .aside {
   font-size: 12px;
 }
 .tabbed-editor .example-editor {
-  border: solid #ccc 1px;
   border-color: #eee;
+  border: solid #eee 1px;
+  border-top: none;
 }
 .tabbed-editor .example-editor .columns-guide {
   background-color: transparent;
   color: #ccc;
   margin: 0;
 }
-.tabbed-editor .live-preview {
-  margin: 0;
+.tabbed-editor .null-state {
+  background-color: white;
+  border: none;
+  border-top: none;
 }
 .tabbed-editor textarea {
   border: none;
@@ -1447,7 +1326,6 @@ table.schema .aside {
   box-shadow: none;
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
-  border-color: #eee;
 }
 .tabbed-editor .nav-tabs {
   background-color: #eee;
@@ -1457,10 +1335,18 @@ table.schema .aside {
   margin-bottom: 0;
   border-bottom: none;
 }
-.tabbed-editor .nav-tabs li.active {
+.tabbed-editor .nav-tabs > li.active {
   border-bottom: none;
 }
-.tabbed-editor .nav-tabs li.active:hover {
+.tabbed-editor .nav-tabs > li.active:hover {
+  border-color: #eee;
+}
+.tabbed-editor .nav-tabs > li.active > a:focus {
+  border-color: #eee;
+}
+.tabbed-editor .nav-tabs li.active > a,
+.tabbed-editor .nav-tabs li.active > a:hover,
+.tabbed-editor .nav-tabs li.active > a:focus {
   border-color: #eee;
 }
 .tabbed-editor .nav-tabs li a {
@@ -1473,7 +1359,10 @@ table.schema .aside {
   margin-bottom: 0;
 }
 .tabbed-editor .live-preview {
-  min-height: 200px;
+  min-height: 238px;
+  background-color: white;
+  border: solid #eee 1px;
+  border-top: none;
 }
 .sg-example-inspector .sg-inspector-state textarea {
   width: 100%;

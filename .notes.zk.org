@@ -32,13 +32,15 @@
 + Admin interface
   + What goes here?
 + Organize ns decls
-+ Refactor examples and see alsos lookup for autocomplete results
-+ Exception reporting
-+ Split-screen example editing
-+ Editing examples
++ Fix scroll-to on expand in firefox
 
 
 ** Done
++ Fix function counts on autocomplete
++ Make code text sizing responsive
++ Exception reporting
++ Editing examples
++ Refactor examples and see alsos lookup for autocomplete results
 + Add example widget
 + Core-specific namespace page
 + Deleting examples
@@ -93,6 +95,7 @@
 + Investigate bitbucket login
 + Quickref update
 + Supported libs blurb
++ Split-screen example editing
 
 
 * Indexes
@@ -392,3 +395,5 @@ Man I'm writing some awful code.
 Removed syntax highlighter in favor of the one cribbed from
 Reagent. Feels way more performant, and I can remove
 syntaxhighlighter & supporting files from the frontend.
+
+458K pre, 433K post :D
