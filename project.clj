@@ -49,10 +49,7 @@
                                  :output-dir "resources/public/cljs"
                                  :optimizations :none
                                  :source-map true
-                                 :foreign-libs [{:file "resources/public/js/syntaxhighlighter.js"
-                                                 :provides ["highlight"]}]
-                                 :externs ["externs/syntaxhighlighter.js"
-                                           "externs/morpheus.js"]}}
+                                 :externs ["externs/morpheus.js"]}}
 
                ;; for debugging advanced compilation problems
                :dev-advanced  {:source-paths ["src/cljs" "target/generated/cljs"]
@@ -60,14 +57,11 @@
                                           :output-dir "resources/public/cljs-advanced"
                                           :source-map "resources/public/cljs/clojuredocs.js.map"
                                           :optimizations :advanced
-                                          :foreign-libs [{:file "resources/public/js/syntaxhighlighter.js"
-                                                          :provides ["highlight"]}]
                                           :preamble ["public/js/morpheus.min.js"
                                                      "react/react.min.js"
                                                      "public/js/marked.min.js"
                                                      "public/js/fastclick.min.js"]
-                                          :externs ["externs/syntaxhighlighter.js"
-                                                    "externs/react.js"
+                                          :externs ["externs/react.js"
                                                     "externs/morpheus.js"
                                                     "externs/marked.js"
                                                     "externs/fastclick.js"]}}
@@ -76,14 +70,11 @@
                       :compiler {:output-to "resources/public/cljs/clojuredocs.js"
                                  :optimizations :advanced
                                  :pretty-print false
-                                 :foreign-libs [{:file "resources/public/js/syntaxhighlighter.js"
-                                                 :provides ["highlight"]}]
                                  :preamble ["public/js/morpheus.min.js"
                                             "react/react.min.js"
                                             "public/js/marked.min.js"
                                             "public/js/fastclick.min.js"]
-                                 :externs ["externs/syntaxhighlighter.js"
-                                           "externs/react.js"
+                                 :externs ["externs/react.js"
                                            "externs/morpheus.js"
                                            "externs/marked.js"
                                            "externs/fastclick.js"]}

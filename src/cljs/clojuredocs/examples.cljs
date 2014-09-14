@@ -5,6 +5,7 @@
              :refer [<! >! chan close! sliding-buffer put! alts! timeout pipe mult tap]]
             [clojuredocs.ajax :refer [ajax]]
             [clojuredocs.anim :as anim]
+            [clojuredocs.syntax :as syntax]
             [clojure.string :as str]
             [cljs.reader :as reader]
             [sablono.core :as sab :refer-macros [html]]
@@ -12,46 +13,6 @@
             [clojure.data :refer [diff]])
   (:require-macros [dommy.macros :refer [node sel1]]
                    [cljs.core.async.macros :refer [go go-loop]]))
-
-(defn update-preview [owner]
-  (let [text (om/get-state owner :text)
-        preview (om/get-node owner "live-preview")
-        el (node [:pre {:class "brush: clojure"} text])]
-    (dommy/clear! preview)
-    (if-not (empty? text)
-      (do
-        (dommy/append! preview el)
-        (try
-          (.highlight js/SyntaxHighlighter el)
-          ;; Not handling this error prevents subsequent
-          ;; highlights from succeeding
-          (catch js/Error e (prn "Error highlighting example"))))
-      (do
-        (dommy/append! preview (node [:div.empty-live-preview "Live Preview"]))))))
-
-(defn $live-preview [{:keys [loading? text] :as app} owner]
-  (reify
-    om/IInitState
-    (init-state [_]
-      {:text text})
-
-    om/IDidMount
-    (did-mount [_]
-      (dommy/append!
-          (om/get-node owner "live-preview")
-          (node [:div.empty-live-preview "Live Preview"]))
-      (update-preview owner))
-
-    om/IDidUpdate
-    (did-update [this prev-props prev-state]
-      (om/set-state! owner :text text)
-      (update-preview owner))
-
-    om/IRenderState
-    (render-state [_ {:keys [text]}]
-      (html
-        [:div.example-editor
-         [:div.live-preview {:ref "live-preview"}]]))))
 
 (defn $expando-ta
   "A textarea the expands downward with the content (no scroll)"
@@ -126,23 +87,13 @@
                 :placeholder "Code Here"})
              [:pre.columns-guide (eighty-columns)]]]
            [:div {:class (when (= :editor active) "hidden")}
-            (om/build $live-preview {:text text})]])))))
+            [:pre
+             (when text
+               (syntax/syntaxify text))]]])))))
 
 (defn user-can-delete? [user {:keys [author]}]
   (= (select-keys user [:login :account-source])
      (select-keys author [:login :account-source])))
-
-(defn update-example-body [owner {:keys [body]}]
-  (let [el (om/get-node owner "example-body")
-        pre (node [:pre.raw-example {:class "brush: clojure"}
-                   body])]
-    (dommy/clear! el)
-    (dommy/append! el pre)
-    (try
-      (.highlight js/SyntaxHighlighter pre)
-      ;; Not handling this error prevents subsequent
-      ;; highlights from succeeding
-      (catch js/Error e (prn "Error highlighting example")))))
 
 (defn $example-meta [{:keys [_id editing? author
                              editors can-delete? can-edit?
@@ -213,19 +164,6 @@
                    "delete"]])])
             [:span.edit-example-widget]]])))))
 
-(defn $example-body [ex owner]
-  (reify
-    om/IDidMount
-    (did-mount [_]
-      (update-example-body owner ex))
-    om/IDidUpdate
-    (did-update [_ _ _]
-      (update-example-body owner ex))
-    om/IRender
-    (render [_]
-      (html
-        [:div.example-body {:ref "example-body"}]))))
-
 (def $example-instructions
   [:p.example-instructions
    "See our "
@@ -277,7 +215,7 @@
              {:class (when-not loading? " hidden")
               :src "/img/loading.gif"}]]])))))
 
-(defn $example [{:keys [editing? _id] :as ex} owner]
+(defn $example [{:keys [body editing? _id] :as ex} owner]
   (reify
     om/IRenderState
     (render-state [_ {:keys [delete-ch update-example-ch]}]
@@ -292,8 +230,9 @@
             (om/build $example-editor ex
               {:init-state {:submit-button-text "Update Example"
                             :example-ch update-example-ch}})]
-           (om/build $example-body ex))]))))
-
+           (when body
+             (syntax/syntaxify body)))]))))
+1
 (defn build-examples [user examples state]
   (om/build-all
     $example

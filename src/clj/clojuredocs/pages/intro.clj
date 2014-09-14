@@ -4,7 +4,8 @@
             [compojure.core :refer (defroutes GET POST)]
             [somnium.congomongo :as mon]
             [fogus.unk :refer (memo-ttl)]
-            [clojuredocs.pages.common :as common]))
+            [clojuredocs.pages.common :as common]
+            [clojuredocs.syntax :as syntax]))
 
 (defn $index [top-contribs]
   [:div
@@ -59,9 +60,9 @@ solving problems (holy buzzwords, fix this)."]
       [:p "Seems like more than a few, these days. Happy coding!"]]
      [:div.col-md-6
       [:div.example-code
-       [:pre
-        {:class "brush: clj"}
-        (slurp "src/examples/clj/first.clj")]]]]]
+       (-> "src/examples/clj/first.clj"
+           slurp
+           (syntax/syntaxify :stringify-style? true))]]]]
    [:div.row
     [:div.col-md-12
      [:section.used-by

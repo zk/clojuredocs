@@ -1,5 +1,3 @@
-@import "highlighting.less";
-
 // @mixin blue-bg($alpha: 1) { background-color: rgba(53,151,202,$alpha); }
 // @mixin green-bg($alpha: 1) { background-color: rgba(57,202,116,$alpha); }
 // @mixin yellow-bg($alpha: 1) { background-color: rgba(236,192,47,$alpha); }
@@ -525,9 +523,9 @@ form.search {
   }
 }
 
-.syntaxhighlighter {
+.syntaxify {
   padding: 10px;
-  background-color: transparent;//@code-bg;
+  background-color: @code-bg;
 }
 
 .ac-result-link:hover {
@@ -716,7 +714,7 @@ table.ac-results {
     }
   }
 
-  .syntaxhighlighter {
+  .syntaxify {
     padding: 15px;
     overflow: auto;
     overflow-y: hidden;
@@ -872,7 +870,7 @@ table.ac-results {
     margin-bottom: 30px;
   }
 
-  .syntaxhighlighter {
+  .syntaxify {
     font-size: 15px;
 
     table {
@@ -922,7 +920,7 @@ table.ac-results {
     margin-bottom: 30px;
   }
 
-  .syntaxhighlighter {
+  .syntaxify {
     font-size: 15px;
 
     table {
@@ -1009,7 +1007,7 @@ table.ac-results {
   }
 }
 
-.syntaxhighlighter * {
+.syntaxify * {
   font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
 }
 
@@ -1278,10 +1276,6 @@ p.example-instructions {
   }
 }
 
-.syntaxhighlighter .container:before {
-  content: ""
-}
-
 .library-nav {
   @media(max-width: 767px) {
     display: none;
@@ -1508,7 +1502,7 @@ p.example-instructions {
 }
 
 .examples-styleguide-content {
-  .syntaxhighlighter {
+  .syntaxify {
     margin-bottom: 20px;
     background-color: @code-bg;
   }
@@ -1583,7 +1577,7 @@ p.example-instructions {
 }
 
 .core-library-page {
-  pre, .syntaxhighlighter {
+  pre, .syntaxify {
     background-color: @code-bg;
     padding: 20px;
   }
@@ -1610,7 +1604,7 @@ p.example-instructions {
     list-style-type: decimal;
   }
 
-  .syntaxhighlighter, pre {
+  .syntaxify, pre {
     margin-bottom: 40px;
   }
 }
@@ -1674,7 +1668,7 @@ table.schema {
 }
 
 .add-example-page {
-  .syntaxhighlighter code, textarea, pre {
+  .syntaxify code, textarea, pre {
     font-size: 12px;
   }
 }
