@@ -534,9 +534,9 @@ form.search input[name='query'].loading {
 form.search input.placeholder {
   visibility: hidden;
 }
-.syntaxhighlighter {
+.syntaxify {
   padding: 10px;
-  background-color: transparent;
+  background-color: rgba(0, 0, 0, 0.01);
 }
 .ac-result-link:hover {
   text-decoration: none;
@@ -682,7 +682,7 @@ table.ac-results .ac-metadata {
   list-style-type: disc;
   margin-left: 30px;
 }
-.intro-page .syntaxhighlighter {
+.intro-page .syntaxify {
   padding: 15px;
   overflow: auto;
   overflow-y: hidden;
@@ -691,21 +691,21 @@ table.ac-results .ac-metadata {
   line-height: 1.3em;
 }
 @media (max-width: 1199px) {
-  .intro-page .syntaxhighlighter {
+  .intro-page .syntaxify {
     font-size: 13.8px;
   }
 }
 @media (max-width: 991px) {
-  .intro-page .syntaxhighlighter {
+  .intro-page .syntaxify {
     font-size: 13px;
   }
 }
 @media (max-width: 767px) {
-  .intro-page .syntaxhighlighter {
+  .intro-page .syntaxify {
     font-size: 12px;
   }
 }
-.intro-page .syntaxhighlighter table {
+.intro-page .syntaxify table {
   margin: 0 auto;
 }
 .intro-page ul h4 i {
@@ -820,12 +820,12 @@ table.ac-results .ac-metadata {
 .example-page .example {
   margin-bottom: 30px;
 }
-.var-page .syntaxhighlighter,
-.example-page .syntaxhighlighter {
+.var-page .syntaxify,
+.example-page .syntaxify {
   font-size: 15px;
 }
-.var-page .syntaxhighlighter table,
-.example-page .syntaxhighlighter table {
+.var-page .syntaxify table,
+.example-page .syntaxify table {
   margin: 0;
 }
 .example-meta,
@@ -861,10 +861,10 @@ table.ac-results .ac-metadata {
 .var-example .example {
   margin-bottom: 30px;
 }
-.var-example .syntaxhighlighter {
+.var-example .syntaxify {
   font-size: 15px;
 }
-.var-example .syntaxhighlighter table {
+.var-example .syntaxify table {
   margin: 0;
 }
 .example-meta {
@@ -919,7 +919,7 @@ table.ac-results .ac-metadata {
 .ns-tree .current {
   font-weight: bold;
 }
-.syntaxhighlighter * {
+.syntaxify * {
   font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
 }
 .toc {
@@ -1118,9 +1118,6 @@ p.example-instructions {
   padding: 15px;
   font-size: 14px;
 }
-.syntaxhighlighter .container:before {
-  content: "";
-}
 @media (max-width: 767px) {
   .library-nav {
     display: none;
@@ -1293,7 +1290,7 @@ p.example-instructions {
 .search-feedback-page .error-message i {
   margin-right: 5px;
 }
-.examples-styleguide-content .syntaxhighlighter {
+.examples-styleguide-content .syntaxify {
   margin-bottom: 20px;
   background-color: rgba(0, 0, 0, 0.01);
 }
@@ -1347,7 +1344,7 @@ p.example-instructions {
   margin-bottom: 20px;
 }
 .core-library-page pre,
-.core-library-page .syntaxhighlighter {
+.core-library-page .syntaxify {
   background-color: rgba(0, 0, 0, 0.01);
   padding: 20px;
 }
@@ -1369,7 +1366,7 @@ p.example-instructions {
 .markdown ol li {
   list-style-type: decimal;
 }
-.markdown .syntaxhighlighter,
+.markdown .syntaxify,
 .markdown pre {
   margin-bottom: 40px;
 }
@@ -1418,7 +1415,7 @@ table.schema .aside {
 .test-result.pending {
   background-color: #999;
 }
-.add-example-page .syntaxhighlighter code,
+.add-example-page .syntaxify code,
 .add-example-page textarea,
 .add-example-page pre {
   font-size: 12px;

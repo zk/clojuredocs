@@ -14,7 +14,7 @@ If the target var is not part of the core ns (or otherwise not <code>use</code>d
 
 Bad:
 
-<pre class="brush: clojure">
+<pre class="clojure">
 
 (sh "ls" "-aul")
 
@@ -26,7 +26,7 @@ Bad:
 
 Good:
 
-<pre class="brush: clojure">
+<pre class="clojure">
 (use '[clojure.java.shell :only [sh]])
 
 (sh "ls" "-aul")
@@ -39,7 +39,7 @@ Good:
 
 Each example should be either broad, or deep, not both.  For example, the following example for <code>not=</code> shows the broad range of inputs allowed.
 
-<pre class="brush: clojure">
+<pre class="clojure">
 (not= 1 1) ;;=> false
 
 (not= 1 2) ;;=> true
@@ -55,7 +55,7 @@ Each example should be either broad, or deep, not both.  For example, the follow
 
 Where this example for <code>future</code> has depth.
 
-<pre class="brush: clojure">
+<pre class="clojure">
 ;; A future is calculated in another thread
 (def f (future (Thread/sleep 10000) 100))
 ;;=> #'user/f
@@ -77,7 +77,7 @@ Comments should be used to describe the following code block or blocks and/or po
 
 Bad:
 
-<pre class="brush: clojure">
+<pre class="clojure">
 (with-precision 10 (/ 1M 3))
 ;;=> 0.3333333333M
 
@@ -87,7 +87,7 @@ user=&gt; (.floatValue 0.3333333333M)
 
 Good:
 
-<pre class="brush: clojure">
+<pre class="clojure">
 ;; The "M" suffix denotes a BigDecimal instance
 ;; http://download.oracle.com/javase/6/docs/api/java/math/BigDecimal.html
 
@@ -102,7 +102,7 @@ Good:
 
 Bad:
 
-<pre class="brush: clojure">
+<pre class="clojure">
 ; This function will print 'hello world' to the console
 (defn hello-world []
   (println "hello world"))  ;; Does the actual printing
@@ -110,7 +110,7 @@ Bad:
 
 Good:
 
-<pre class="brush: clojure">
+<pre class="clojure">
 ;; This function will print 'hello world' to the console
 (defn hello-world []
   (println "hello world"))  ; Does the actual printing
@@ -122,7 +122,7 @@ Using comments to differentiate code from context and output will help new Cloju
 
 Good:
 
-<pre class="brush: clojure">
+<pre class="clojure">
 ;; You can use destructuring to have keyword arguments. This would be a pretty
 ;; verbose version of map (in an example a bit more verbose than the first above):
 
@@ -155,7 +155,7 @@ Consider leaving one line of whitespace after output from the repl to make your 
 
 Bad:
 
-<pre class="brush: clojure">
+<pre class="clojure">
 (println "foo")
 ;; foo
 ;;=> nil
@@ -170,7 +170,7 @@ Bad:
 
 Good:
 
-<pre class="brush: clojure">
+<pre class="clojure">
 (println "foo")
 ;; foo
 ;;=> nil

@@ -383,3 +383,12 @@ Lifecycle
 
 
 Man I'm writing some awful code.
+
+
+* Log
+
+<2014-09-13 Sat 21:48>
+
+Removed syntax highlighter in favor of the one cribbed from
+Reagent. Feels way more performant, and I can remove
+syntaxhighlighter & supporting files from the frontend.

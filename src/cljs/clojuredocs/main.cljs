@@ -10,22 +10,23 @@
             [clojuredocs.notes :as notes]
             [clojuredocs.mods.var-page :as var-page]
             [clojuredocs.mods.styleguide :as styleguide]
-            [highlight]
             [om.core :as om :include-macros true]
             [clojuredocs.anim :as anim]
             [clojuredocs.canary :as canary]
             [cljs.reader :as reader]
             [cljs.core.async :as async
              :refer [<! >! chan close! sliding-buffer put! alts! timeout pipe mult tap]]
+            [clojuredocs.syntax :as syntax]
             #_[clj-fuzzy.metrics1 :as fuzzy])
   (:require-macros [cljs.core.async.macros :refer [go go-loop]]
                    [dommy.macros :refer [node sel sel1]]))
 
 (enable-console-print!)
 
-(aset (aget js/SyntaxHighlighter "defaults") "toolbar" false)
-(aset (aget js/SyntaxHighlighter "defaults") "gutter" false)
-(.all js/SyntaxHighlighter)
+(doseq [$el (sel :pre.clojure)]
+  (let [contents (dommy/text $el)
+        highlighted (syntax/syntaxify contents :stringify-style? true)]
+    (dommy/replace! $el (node highlighted))))
 
 (defn log [& args]
   (.log js/console args))
