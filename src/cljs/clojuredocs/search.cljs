@@ -112,7 +112,7 @@
         (when (not (= identity f))
           false)))))
 
-(defn $quick-search [{:keys [highlighted-index loading? ac-results] :as app} owner]
+(defn $quick-search [{:keys [highlighted-index search-loading? ac-results] :as app} owner]
   (reify
     om/IDidUpdate
     (did-update [_ _ _]
@@ -122,9 +122,9 @@
       (sab/html
         [:form.search
          {:autoComplete "off"
-          :on-submit #(search-submit (nth ac-results highlighted-index))}
+          :on-submit #(search-submit (nth ac-results (or highlighted-index 0)))}
          [:input.form-control
-          {:class (when loading? " loading")
+          {:class (when search-loading? " loading")
            :placeholder "Looking for? (ctrl-s)"
            :name "query"
            :autoComplete "off"
