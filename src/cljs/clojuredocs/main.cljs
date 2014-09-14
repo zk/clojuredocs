@@ -144,40 +144,36 @@
                           cs)))))))
     out))
 
-(defn throttle
-  ([in msecs] (throttle in msecs (chan)))
-  ([in msecs out]
-    (->> (throttle* in msecs out)
-      (filter #(and (vector? %) (= (first %) ::throttle)))
-      (map second))))
+(defn throttle [in ms]
+  (let [c (chan)
+        timer (atom nil)]
+    (go-loop []
+      (when-let [new-text (<! in)]
+        (js/clearTimeout @timer)
+        (reset! timer (js/setTimeout #(put! c new-text) ms))
+        (recur)))
+    c))
 
 (defn wire-search [text-chan app-state]
-  (let [tin (chan)
-        tout (chan)]
-    (throttle tin 250 tout)
+  (let [throttled-text-chan (throttle text-chan 200)]
     (go
       (while true
-        (let [ac-text (<! text-chan)]
-          (swap! app-state assoc :search-loading? true)
-          (when (empty? ac-text)
-            (swap! app-state assoc :results-empty? false))
-          (>! tin ac-text))))
-    (go
-      (while true
-        (let [ac-text (<! tout)]
-          (when (vector? ac-text)
-            (let [ac-text (second ac-text)
-                  ac-response (<! (ajax-chan {:method :get
-                                              :path (str "/search?query=" (util/url-encode ac-text))
-                                              :data-type :edn}))
-                  data (-> ac-response :res :body)]
-              (when (:success ac-response)
-                (swap! app-state
-                  assoc
-                  :highlighted-index 0
-                  :search-loading? false
-                  :results-empty? (and (empty? data) (not (empty? ac-text)))
-                  :ac-results data)))))))))
+        (let [ac-text (<! throttled-text-chan)]
+          (if (empty? ac-text)
+            (swap! app-state assoc :results-empty? false :ac-results [])
+            (do
+              (swap! app-state assoc :search-loading? true)
+              (let [ac-response (<! (ajax-chan {:method :get
+                                                :path (str "/search?query=" (util/url-encode ac-text))
+                                                :data-type :edn}))
+                    data (-> ac-response :res :body)]
+                (when (:success ac-response)
+                  (swap! app-state
+                    assoc
+                    :highlighted-index 0
+                    :search-loading? false
+                    :results-empty? (and (empty? data) (not (empty? ac-text)))
+                    :ac-results data))))))))))
 
 (defn animated-scroll-init [$el]
   (let [href (dommy/attr $el :href)
