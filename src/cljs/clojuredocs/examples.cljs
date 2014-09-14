@@ -86,10 +86,10 @@
                 :disabled (when loading? "disabled")
                 :placeholder "Code Here"})
              [:pre.columns-guide (eighty-columns)]]]
-           [:div {:class (when (= :editor active) "hidden")}
-            [:pre
-             (when text
-               (syntax/syntaxify text))]]])))))
+           [:div.live-preview {:class (when (= :editor active) "hidden")}
+            (if-not (empty? text)
+              (syntax/syntaxify text)
+              [:div.null-state "Live Preview"])]])))))
 
 (defn user-can-delete? [user {:keys [author]}]
   (= (select-keys user [:login :account-source])

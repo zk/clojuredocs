@@ -526,6 +526,8 @@ form.search {
 .syntaxify {
   padding: 10px;
   background-color: @code-bg;
+  white-space: pre;
+  overflow-x: scroll;
 }
 
 .ac-result-link:hover {
@@ -724,7 +726,7 @@ table.ac-results {
     line-height: 1.3em;
 
     @media (max-width: 1199px) {
-      font-size: 13.8px;
+      font-size: 12px;
     }
 
 
@@ -870,14 +872,6 @@ table.ac-results {
     margin-bottom: 30px;
   }
 
-  .syntaxify {
-    font-size: 15px;
-
-    table {
-      margin: 0;
-    }
-  }
-
   .created,
   .last-updated {
   }
@@ -913,6 +907,22 @@ table.ac-results {
   }
 }
 
+
+.var-example .syntaxify,
+.tabbed-editor .example-editor textarea.form-control,
+.tabbed-editor .example-editor .columns-guide,
+.tabbed-editor pre.syntaxify{
+  font-size: 15px;
+
+  @media(max-width: 1199px) {
+    font-size: 12.5px;
+  }
+
+  @media(max-width: 991px) {
+    font-size: 11.5px;
+  }
+}
+
 .var-example {
   margin-bottom: 30px;
 
@@ -921,8 +931,6 @@ table.ac-results {
   }
 
   .syntaxify {
-    font-size: 15px;
-
     table {
       margin: 0;
     }
@@ -1168,6 +1176,7 @@ table.ac-results {
     margin-bottom: 0;
     padding: 10px;
     //height: 200px;
+    font-size: 13px;
   }
 
   .add-example-controls {
@@ -1675,8 +1684,9 @@ table.schema {
 
 .tabbed-editor {
   .example-editor {
-    border: solid #ccc 1px;
     border-color: #eee;
+    border: solid #eee 1px;
+    border-top: none;
 
     .columns-guide {
       background-color: transparent;
@@ -1685,9 +1695,12 @@ table.schema {
     }
   }
 
-  .live-preview {
-    margin: 0;
+  .null-state {
+    background-color: white;
+    border: none;
+    border-top: none;
   }
+
 
   textarea {
     border: none;
@@ -1704,7 +1717,6 @@ table.schema {
       box-shadow: none;
       -webkit-box-shadow: none;
       -moz-box-shadow: none;
-      border-color: #eee;
     }
   }
 
@@ -1717,12 +1729,22 @@ table.schema {
       border-bottom: none;
     }
 
-    li.active {
+    & > li.active {
       border-bottom: none;
 
       &:hover {
         border-color: #eee;
       }
+
+      & > a:focus {
+        border-color: #eee;
+      }
+    }
+
+    li.active>a,
+    li.active>a:hover,
+    li.active>a:focus {
+      border-color: #eee;
     }
 
     li a {
@@ -1739,7 +1761,10 @@ table.schema {
   }
 
   .live-preview {
-    min-height: 200px;
+    min-height: 238px;
+    background-color: white;
+    border: solid #eee 1px;
+    border-top: none;
   }
 }
 
