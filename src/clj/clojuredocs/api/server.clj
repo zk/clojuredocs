@@ -1,15 +1,22 @@
 (ns clojuredocs.api.server
   (:require [compojure.core :refer (defroutes GET POST PUT DELETE ANY PATCH) :as cc]
+            [compojure.route :refer (not-found)]
             [somnium.congomongo :as mon]
             [clout.core :as clout]
             [slingshot.slingshot :refer [try+ throw+]]
             [clojuredocs.util :as util]
-            [clojuredocs.api.examples :as examples]))
+            [clojuredocs.api.examples :as examples]
+            [clojuredocs.api.see-alsos :as see-alsos]))
 
 (defroutes _routes
   (POST "/examples" [] examples/post-example-handler)
   (DELETE "/examples/:id" [id] (examples/delete-example-handler id))
-  (PATCH "/examples/:id" [id] (examples/patch-example-handler id)))
+  (PATCH "/examples/:id" [id] (examples/patch-example-handler id))
+
+  (POST "/see-alsos" [] see-alsos/post-see-also-handler)
+  (not-found
+    {:status 404
+     :body {:message "Route not found"}}))
 
 (defn string-body? [r]
   (string? (:body r)))

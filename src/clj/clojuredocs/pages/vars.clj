@@ -23,11 +23,13 @@
   [:li.arglist (str
                  "(" name (when-not (empty? a) " ") a ")")])
 
-(defn see-alsos-for [v]
-  (->> v
-       data/find-see-alsos-for
-       (map (fn [{:keys [ns name] :as sa}]
-              (assoc sa :doc (-> (str ns "/" name) search/lookup :doc))))))
+(defn see-alsos-for [{:keys [ns name library-url]}]
+  (->> (mon/fetch :see-alsos
+         :where {:from-var.ns ns
+                 :from-var.name name
+                 :from-var.library-url library-url})
+       (map (fn [{:keys [to-var] :as sa}]
+              (assoc sa :doc (-> (str (:ns to-var) "/" (:name to-var)) search/lookup :doc))))))
 
 (defn source-url [{:keys [file line ns]}]
   (when (= "clojure.core" ns)

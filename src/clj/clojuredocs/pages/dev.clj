@@ -214,7 +214,13 @@
        [:p "Populated"]
        [:div.example.checker-bg.sg-see-alsos-populated]
        [:p "Add new"]
-       [:div.example.checker-bg.sg-add-see-also]]}
+       [:div.example.checker-bg.sg-add-see-also]
+       [:p "Loading"]
+       [:div.example.checker-bg.sg-add-see-also-loading]
+       [:p "Error"]
+       [:div.example.checker-bg.sg-add-see-also-error]
+       [:p "Autocomplete"]
+       [:div.example.checker-bg.sg-add-see-also-ac]]}
      {:title "Notes"
       :nav-target "notes"
       :content

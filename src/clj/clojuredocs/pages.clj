@@ -95,6 +95,13 @@
                       add-see-alsos
                       add-examples-count))})
 
+(defn ac-vars-handler [{:keys [params]}]
+  {:headers {"Content-Type" "application/edn"}
+   :body (pr-str (->> params
+                      :query
+                      search/query
+                      (filter #(get #{"var" "function" "special-form" "macro"} (:type %)))))})
+
 (defn expand-ns [ns]
   (:name (mon/fetch-one :namespaces
            :where {:name (->> (str/split ns #"\.")
@@ -142,6 +149,7 @@
   (GET "/search-feedback/success" [] search-feedback/success-handler)
 
   (GET "/search" [] var-search-handler)
+  (GET "/ac-vars" [] ac-vars-handler)
   (GET "/" [] intro/page-handler)
   (GET "/u/:login" [login] (user/page-handler login "github"))
   (GET "/uc/:login" [login] (user/page-handler login "clojuredocs"))

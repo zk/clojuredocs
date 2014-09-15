@@ -381,17 +381,17 @@ header.navbar .quick-search-widget form {
 .null-state a {
   color: rgba(66, 139, 202, 0.7);
 }
+input.loading {
+  background-image: url("/img/loading.gif");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+}
 form.search input[name='query'] {
   border-radius: 0;
   min-width: 200px;
   height: 100%;
   font-size: 14px;
   padding: 6px 12px;
-}
-form.search input[name='query'].loading {
-  background-image: url("/img/loading.gif");
-  background-repeat: no-repeat;
-  background-position: right 8px center;
 }
 form.search input.placeholder {
   visibility: hidden;
@@ -1082,12 +1082,24 @@ p.example-instructions {
   display: block;
   margin: 20px auto;
 }
-.add-see-also form {
+.add-see-also .add-see-also-content {
   border: solid #eee 1px;
   padding: 20px;
 }
+.add-see-also form {
+  margin-bottom: 10px;
+}
 .add-see-also input {
   border-radius: 0;
+}
+.add-see-also .error-message {
+  padding: 5px;
+}
+.add-see-also .error-message i {
+  margin-right: 5px;
+}
+.add-see-also .ac-results {
+  color: #555;
 }
 .muted {
   color: #aaa;

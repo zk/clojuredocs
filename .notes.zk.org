@@ -33,6 +33,9 @@
   + What goes here?
 + Organize ns decls
 + Fix scroll-to on expand in firefox
++ See alsos CRUD
++ check indexes
++ page titles (var info, etc)
 
 
 ** Done

@@ -2,7 +2,8 @@
   (:require [slingshot.slingshot :refer [throw+]]
             [somnium.congomongo :as mon]
             [schema.core :as s]
-            [clojuredocs.util :as util]))
+            [clojuredocs.util :as util]
+            [clojuredocs.api.common :as c]))
 
 ;; Schemas
 
@@ -15,15 +16,6 @@
   {:ns s/Str
    :name s/Str
    :library-url s/Str})
-
-(defn validate-schema! [payload schema]
-  (let [res (s/check schema payload)]
-    (when res
-      (throw+
-        {:status 421
-         :body {:failures res
-                :schema schema}})))
-  payload)
 
 ;; Utils
 
@@ -67,29 +59,6 @@
         (concat editors [user])))))
 
 
-;; Error States
-
-(defn require-login! [user]
-  (when-not user
-    (throw+
-      {:body {:error "You must be logged in to edit an example."}
-       :status 401})))
-
-
-;; Validations
-
-(defn run-validations [payload validations]
-  (->> validations
-       (map #(% payload))
-       (reduce merge)))
-
-(defn validate! [payload validations]
-  (let [res (run-validations payload validations)]
-    (when-not (empty? res)
-      (throw+
-        {:status 422
-         :body res}))))
-
 (defn body-not-empty [{:keys [body]}]
   (when (empty? body)
     {:message "Whoops, looks like your example is blank."}))
@@ -110,7 +79,7 @@
    :_id org.bson.types.ObjectId})
 
 (defn post-example-handler [{:keys [edn-body user]}]
-  (require-login! user)
+  (c/require-login! user)
   (validate! edn-body [body-not-empty var-required])
   (-> edn-body
       (assoc :author user)
@@ -134,7 +103,7 @@
 
 (defn patch-example-handler [id]
   (fn [{:keys [edn-body user]}]
-    (require-login! user)
+    (c/require-login! user)
     (let [_id (parse-mongo-id! id)
           example-update (assoc edn-body :_id _id)
           example (mon/fetch-one :examples :where {:_id (:_id example-update)})
@@ -163,7 +132,7 @@
 
 (defn delete-example-handler [id]
   (fn [{:keys [user]}]
-    (require-login! user)
+    (c/require-login! user)
     (let [_id (parse-mongo-id! id)
           example (mon/fetch-one :examples :where {:_id _id})]
       (when-not example
