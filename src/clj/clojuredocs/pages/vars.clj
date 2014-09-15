@@ -107,7 +107,9 @@
     (fn [{:keys [user session uri]}]
       (when v
         (let [examples (data/find-examples-for v)
-              see-alsos (see-alsos-for v)
+              see-alsos (->> v
+                             see-alsos-for
+                             (map #(assoc % :can-delete? (util/is-author? user %))))
               library (library-for v)
               recent (:recent session)
               notes (data/find-notes-for v)]
@@ -124,7 +126,7 @@
               :page-data {:examples (mapv clean-example examples)
                           :var v
                           :notes (map clean-id notes)
-                          :see-alsos (map clean-see-also see-alsos)
+                          :see-alsos (vec (map clean-see-also see-alsos))
                           :user (when user (select-keys user [:login :avatar-url :account-source]))}
               :page-uri uri
               :user user

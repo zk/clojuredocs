@@ -52,4 +52,23 @@
     (c/validate! new-see-also [prevent-duplicates prevent-same])
     (c/validate-schema! new-see-also SeeAlso)
     (mon/insert! :see-alsos new-see-also)
-    {:status 200 :body (assoc new-see-also :doc (:doc to-var))}))
+    {:status 200 :body (assoc new-see-also :doc (:doc to-var) :can-delete? true)}))
+
+(defn is-author? [user]
+  (fn [m]
+    (prn user m)
+    (when-not (= user (:author m))
+      {:message "Sorry, you can't delete that see also."})))
+
+(defn delete-see-also-handler [id]
+  (fn [{:keys [edn-body user]}]
+    (common/require-login! user)
+    (let [_id (org.bson.types.ObjectId. id)
+          sa (mon/fetch-one :see-alsos :where {:_id _id})]
+      (c/validate! sa [(is-author? user)])
+      #_(mon/update! :see-alsos
+        {:_id _id}
+        (assoc sa :deleted-at (util/now)))
+      (mon/destroy! :see-alsos {:_id _id})
+      {:status 200
+       :body sa})))

@@ -32,18 +32,6 @@
   (mon/insert! :examples payload)
   payload)
 
-(defn is-author? [user example]
-  (= (select-keys user [:login :account-source])
-     (select-keys (:author example) [:login :account-source])))
-
-(defn parse-mongo-id! [id]
-  (try
-    (org.bson.types.ObjectId. id)
-    (catch java.lang.IllegalArgumentException e
-      (throw+
-        {:status 400
-         :body {:message "Couldn't parse mongo id"}}))))
-
 (defn create-example-history [example user new-body]
   {:_id (org.bson.types.ObjectId.)
    :editor user
@@ -104,7 +92,7 @@
 (defn patch-example-handler [id]
   (fn [{:keys [edn-body user]}]
     (c/require-login! user)
-    (let [_id (parse-mongo-id! id)
+    (let [_id (c/parse-mongo-id! id)
           example-update (assoc edn-body :_id _id)
           example (mon/fetch-one :examples :where {:_id (:_id example-update)})
           new-example (-> example
@@ -133,12 +121,12 @@
 (defn delete-example-handler [id]
   (fn [{:keys [user]}]
     (c/require-login! user)
-    (let [_id (parse-mongo-id! id)
+    (let [_id (c/parse-mongo-id! id)
           example (mon/fetch-one :examples :where {:_id _id})]
       (when-not example
         (throw+ {:status 404
                  :body {:message "Not Found"}}))
-      (when-not (is-author? user example)
+      (when-not (util/is-author? user example)
         (throw+ {:status 401
                  :body {:message "Not authorized to delete that example"}}))
       (mon/update! :examples example (assoc example :deleted-at (util/now)))

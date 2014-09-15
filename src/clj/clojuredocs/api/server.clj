@@ -14,6 +14,7 @@
   (PATCH "/examples/:id" [id] (examples/patch-example-handler id))
 
   (POST "/see-alsos" [] see-alsos/post-see-also-handler)
+  (DELETE "/see-alsos/:id" [id] (see-alsos/delete-see-also-handler id))
   (not-found
     {:status 404
      :body {:message "Route not found"}}))
