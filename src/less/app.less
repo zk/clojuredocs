@@ -503,6 +503,12 @@ header.navbar {
   }
 }
 
+input.loading {
+  background-image: url("/img/loading.gif");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+}
+
 form.search {
   input[name='query'] {
     border-radius: 0;
@@ -510,12 +516,6 @@ form.search {
     height: 100%;
     font-size: 14px;
     padding: 6px 12px;
-
-    &.loading {
-      background-image: url("/img/loading.gif");
-      background-repeat: no-repeat;
-      background-position: right 8px center;
-    }
   }
 
   input.placeholder {
@@ -1392,13 +1392,29 @@ p.example-instructions {
 }
 
 .add-see-also {
-  form {
+  .add-see-also-content {
     border: solid #eee 1px;
     padding: 20px;
   }
 
+  form {
+    margin-bottom: 10px;
+  }
+
   input {
     border-radius: 0;
+  }
+
+  .error-message {
+    padding: 5px;
+
+    i {
+      margin-right: 5px;
+    }
+  }
+
+  .ac-results {
+    color: #555;
   }
 }
 

@@ -7,6 +7,7 @@
             [om.dom :as omdom]
             [sablono.core :as sab :refer-macros [html]]
             [clojuredocs.examples :as examples]
+            [clojuredocs.see-alsos :as see-alsos]
             [cljs.reader :as reader])
   (:require-macros [cljs.core.async.macros :refer [go go-loop]]
                    [dommy.macros :refer [node sel sel1]]))
@@ -155,11 +156,6 @@ user=> (into {} *1)
     examples/$tabbed-clojure-editor
     {})
 
-  #_(root-sel
-    :.sg-tabbed-markdown-editor
-    examples/$tabbed-markdown-editor
-    {})
-
   (root-sel
     :.sg-examples-null-state
     examples/$examples
@@ -244,7 +240,36 @@ user=> (into {} *1)
      :author {:login "zk" :account-source "github" :avatar-url "https://avatars.githubusercontent.com/u/7194?v=2"}
      :history [{:author {:login "dakrone" :account-source "github" :avatar-url "https://avatars3.githubusercontent.com/u/19060?v=2&s=460"}}]
      :can-delete? true
-     :delete-state :error}))
+     :delete-state :error})
+
+  (root-sel
+    :.sg-add-see-also
+    see-alsos/$add
+    {:var {:ns "foo" :name "bar"}
+     :expanded? true})
+
+  (root-sel
+    :.sg-add-see-also-loading
+    see-alsos/$add
+    {:var {:ns "foo" :name "bar"}
+     :expanded? true
+     :loading? true})
+
+  (root-sel
+    :.sg-add-see-also-error
+    see-alsos/$add
+    {:var {:ns "foo" :name "bar"}
+     :expanded? true
+     :error "Please check yourself before you wreck yourself."})
+
+  (root-sel
+    :.sg-add-see-also-ac
+    see-alsos/$add
+    {:expanded? true
+     :ac-results [{:ns "clojure.core"
+                   :name "foo"
+                   :doc "Some docstring here"
+                   :library-url "cclib"}]}))
 
 
 #_(fn [$el]

@@ -115,36 +115,6 @@
     c))
 
 
-;; From http://swannodette.github.io/2013/08/17/comparative/
-(defn throttle*
-  ([in msecs]
-    (throttle* in msecs (chan)))
-  ([in msecs out]
-    (throttle* in msecs out (chan)))
-  ([in msecs out control]
-    (go
-      (loop [state ::init last nil cs [in control]]
-        (let [[_ _ sync] cs]
-          (let [[v sc] (alts! cs)]
-            (condp = sc
-              in (condp = state
-                   ::init (do (>! out v)
-                            (>! out [::throttle v])
-                            (recur ::throttling last
-                              (conj cs (timeout msecs))))
-                   ::throttling (do (>! out v)
-                                  (recur state v cs)))
-              sync (if last
-                     (do (>! out [::throttle last])
-                       (recur state nil
-                         (conj (pop cs) (timeout msecs))))
-                     (recur ::init last (pop cs)))
-              control (recur ::init nil
-                        (if (= (count cs) 3)
-                          (pop cs)
-                          cs)))))))
-    out))
-
 (defn throttle [in ms]
   (let [c (chan)
         timer (atom nil)]
@@ -346,14 +316,6 @@ f should accept number-of-colls arguments."}
       {:var {:ns "foo" :name "bar"}
        :see-alsos [{:_id "", :user {:login "mmwaikar"}, :created-at #inst "2011-10-14T13:29:04.000-00:00", :name "map-indexed", :ns "clojure.core", :doc "Returns a lazy sequence consisting of the result of applying f to 0\nand the first item of coll, followed by applying f to 1 and the second\nitem in coll, etc, until coll is exhausted. Thus function f should\naccept 2 arguments, index and item."} {:_id "", :user {:login "gstamp"}, :created-at #inst "2012-09-06T11:28:04.000-00:00", :name "pmap", :ns "clojure.core", :doc "Like map, except f is applied in parallel. Semi-lazy in that the\nparallel computation stays ahead of the consumption, but doesn't\nrealize the entire result unless required. Only useful for\ncomputationally intensive functions where the time of f dominates\nthe coordination overhead."} {:_id "", :user {:login "gstamp"}, :created-at #inst "2012-09-06T11:28:33.000-00:00", :name "amap", :ns "clojure.core", :doc "Maps an expression across an array a, using an index named idx, and\nreturn value named ret, initialized to a clone of a, then setting \neach element of ret to the evaluation of expr, returning the new \narray ret."} {:_id "", :user {:login "adereth"}, :created-at #inst "2013-06-21T19:20:53.000-00:00", :name "mapcat", :ns "clojure.core", :doc "Returns the result of applying concat to the result of applying map\nto f and colls.  Thus function f should return a collection."}]}
       {:target $el}))
-
-  :.sg-add-see-also
-  (fn [$el]
-    (om/root
-      see-alsos/$add
-      {:var {:ns "foo" :name "bar"}}
-      {:target $el
-       :init-state {:expanded? true}}))
 
   :.canary-tests-container
   (fn [$el]

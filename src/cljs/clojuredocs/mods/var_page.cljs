@@ -15,6 +15,27 @@
 
 (enable-console-print!)
 
+(defn throttle [in ms]
+  (let [c (chan)
+        timer (atom nil)]
+    (go-loop []
+      (when-let [new-text (<! in)]
+        (js/clearTimeout @timer)
+        (reset! timer (js/setTimeout #(put! c new-text) ms))
+        (recur)))
+    c))
+
+(defn ajax-chan [opts]
+  (let [c (chan)]
+    (ajax
+      (merge
+        opts
+        {:success (fn [res]
+                    (put! c {:success true :res res}))
+         :error (fn [res]
+                  (put! c {:success false :res res}))}))
+    c))
+
 (defn $nav [{:keys [examples see-alsos notes]} owner]
   (reify
     om/IRender
@@ -67,6 +88,7 @@
     {:examples []
      :vars []
      :add-example {}
+     :add-see-also {}
      :user {:login "zk" :account-source "github"}}
     (util/page-data!)))
 
@@ -188,22 +210,63 @@
                     :delete-ch delete-ch}})
 
     (om/root
-      see-alsos/$see-alsos
-      !state
-      {:target (sel1 $root :.see-alsos-widget)})))
-
-
-(defn init-notes [$root])
-
-(defn init-see-alsos [$root !state]
-  (let [new-ch (chan)
-        delete-ch (chan)]
-    (om/root
       notes/$notes
       !state
       {:target (sel1 $root :.notes-widget)
-       :init-state {:new-ch new-note-ch
-                    :delete-ch delete-note-ch}})))
+       :init-state {:new-ch new-ch
+                    :delete-ch delete-ch}})))
+
+
+(defn init-notes [$root !state])
+
+(defn init-see-alsos [$root !state]
+  (let [new-ch (chan)
+        delete-ch (chan)
+        ac-ch (chan)
+        throttled-ac-ch (throttle ac-ch 200)] ; ugly
+    (go-loop []
+      (when-let [ns-name-str (<! new-ch)]
+        (if (empty? ns-name-str)
+          (swap! !state assoc-in [:add-see-also :error]
+            "Whoops, looks like the var name is blank.")
+          (do
+            (swap! !state assoc-in [:add-see-also :loading?] true)
+            (let [{:keys [success res]}
+                  (<! (ajax-chan
+                        {:method :post
+                         :path "/api/see-alsos"
+                         :data-type :edn
+                         :data {:fq-to-var-name ns-name-str
+                                :from-var (select-keys (:var @!state) [:ns :name :library-url])}}))]
+              (if success
+                (swap! !state (fn [m]
+                                (-> m
+                                    (update-in [:see-alsos] concat [(:body res)])
+                                    (assoc :add-see-also {:ac-text ""}))))
+                (swap! !state assoc-in [:add-see-also :error] (-> res :body :message))))
+            (swap! !state assoc-in [:add-see-also :loading?] false)))
+        (recur)))
+    (go-loop []
+      (when-let [ac-text (<! throttled-ac-ch)]
+        (swap! !state assoc-in [:add-see-also :completing?] true)
+        (let [{:keys [success res]}
+              (<! (ajax-chan
+                    {:method :get
+                     :path (str "/ac-vars?query=" (util/url-encode ac-text))
+                     :data-type :edn}))]
+          (if success
+            (swap! !state assoc-in [:add-see-also :ac-results] (vec (:body res)))
+            (swap! !state assoc-in [:add-see-also :error] (-> res :body :error)))
+          (swap! !state assoc-in [:add-see-also :completing?] false)
+          (recur))))
+
+    (om/root
+      see-alsos/$see-alsos
+      !state
+      {:target (sel1 $root :.see-alsos-widget)
+       :init-state {:new-ch new-ch
+                    :delete-ch delete-ch
+                    :ac-ch ac-ch}})))
 
 (defn init [$root]
   (let [!state (atom (init-state))]
