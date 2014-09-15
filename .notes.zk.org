@@ -25,6 +25,7 @@
 + Claiming old user accounts
 + Add user page
 + Redirect old urls to new
+  + /v/# urls
 + Clean data export for dev distribution
 + Mobile comb-through
 + Add notes widget
@@ -33,13 +34,14 @@
   + What goes here?
 + Organize ns decls
 + Fix scroll-to on expand in firefox
-+ See alsos CRUD
 + check indexes
-+ page titles (var info, etc)
 + optimistic network
 
 
+
 ** Done
++ See alsos CRUD
++ page titles (var info, etc)
 + Fix function counts on autocomplete
 + Make code text sizing responsive
 + Exception reporting

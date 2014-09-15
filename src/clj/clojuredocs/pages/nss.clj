@@ -52,6 +52,7 @@
         (common/$main
           {:body-class "ns-page"
            :user user
+           :title (str (:name ns) " namespace | ClojureDocs - Community-Powered Clojure Documentation and Examples")
            :page-uri uri
            :content [:div
                      [:div.row

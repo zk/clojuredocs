@@ -86,6 +86,7 @@
 (defn page-handler [{:keys [user uri]}]
   (common/$main
     {:body-class "quickref-page"
+     :title "Clojure Quick Reference | ClojureDocs - Community-Powered Clojure Documentation and Examples"
      :user user
      :page-uri uri
      :mobile-nav [(mobile-nav static/quickref-data)]
