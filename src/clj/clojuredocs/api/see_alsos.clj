@@ -34,7 +34,7 @@
     {:message "Sorry, a var can't see-also itself."}))
 
 (defn post-see-also-handler [{:keys [edn-body user]}]
-  (common/require-login! user)
+  (c/require-login! user)
   (let [ns-name (:fq-to-var-name edn-body)
         from-var (:from-var edn-body)
         to-var (search/lookup ns-name)
@@ -61,7 +61,7 @@
 
 (defn delete-see-also-handler [id]
   (fn [{:keys [edn-body user]}]
-    (common/require-login! user)
+    (c/require-login! user)
     (let [_id (org.bson.types.ObjectId. id)
           sa (mon/fetch-one :see-alsos :where {:_id _id})]
       (c/validate! sa [(is-author? user)])

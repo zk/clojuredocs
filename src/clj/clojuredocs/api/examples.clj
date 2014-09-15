@@ -68,12 +68,12 @@
 
 (defn post-example-handler [{:keys [edn-body user]}]
   (c/require-login! user)
-  (validate! edn-body [body-not-empty var-required])
+  (c/validate! edn-body [body-not-empty var-required])
   (-> edn-body
       (assoc :author user)
       update-timestamps
       (assoc :_id (org.bson.types.ObjectId.))
-      (validate-schema! InsertExample)
+      (c/validate-schema! InsertExample)
       insert!
       edn-response))
 
@@ -107,9 +107,9 @@
         (throw+
           (-> (edn-response {:error "Couldn't find the example you're trying to update."})
               (assoc :status 422))))
-      (validate! new-example [body-not-empty])
-      (validate-schema! new-example UpdateExample)
-      (validate-schema! example-history InsertExampleHistory)
+      (c/validate! new-example [body-not-empty])
+      (c/validate-schema! new-example UpdateExample)
+      (c/validate-schema! example-history InsertExampleHistory)
       (mon/update! :examples
         {:_id (:_id example)}
         new-example)
