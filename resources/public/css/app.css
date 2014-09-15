@@ -369,6 +369,9 @@ header.navbar .quick-search-widget form {
 .see-also .meta a {
   color: #ccc;
 }
+.see-also .delete-confirmation a {
+  color: #428bca;
+}
 .null-state {
   background-color: #fafafa;
   text-align: center;
@@ -756,12 +759,13 @@ table.ac-results .ac-metadata {
   margin-right: 5px;
   margin-bottom: 5px;
 }
-.example-meta .loading {
-  margin-left: 10px;
+.example-meta .loading,
+.see-also .delete-controls .loading {
   width: 9px;
   margin-bottom: 2px;
 }
-.example-meta .error-deleting {
+.example-meta .error-deleting,
+.see-also .delete-controls .error-deleting {
   padding-left: 3px;
   padding-right: 3px;
 }

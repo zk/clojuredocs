@@ -125,6 +125,15 @@
                             ex)))
                    vec)))
 
+(defn update-sa [{:keys [see-alsos] :as state} _id f]
+  (assoc state
+    :see-alsos (->> see-alsos
+                    (map (fn [ex]
+                           (if (= _id (:_id ex))
+                             (f ex)
+                             ex)))
+                    vec)))
+
 (defn req-update-example [_id body]
   (let [c (chan)]
     (ajax
@@ -241,7 +250,7 @@
               (if success
                 (swap! !state (fn [m]
                                 (-> m
-                                    (update-in [:see-alsos] concat [(:body res)])
+                                    (update-in [:see-alsos] #(vec (concat % [(:body res)])))
                                     (assoc :add-see-also {:ac-text ""}))))
                 (swap! !state assoc-in [:add-see-also :error] (-> res :body :message))))
             (swap! !state assoc-in [:add-see-also :loading?] false)))
@@ -259,6 +268,29 @@
             (swap! !state assoc-in [:add-see-also :error] (-> res :body :error)))
           (swap! !state assoc-in [:add-see-also :completing?] false)
           (recur))))
+
+    (go-loop []
+      (when-let [to-del (<! delete-ch)]
+        (swap! !state update-sa
+          (:_id to-del)
+          (fn [sa]
+            (assoc sa :delete-state :loading)))
+        (let [{:keys [success res]}
+              (<! (ajax-chan
+                    {:method :delete
+                     :path (str "/api/see-alsos/" (:_id to-del))
+                     :data-type :edn}))]
+          (if success
+            (swap! !state update-in [:see-alsos]
+              (fn [sas]
+                (->> sas
+                     (remove #(= (:_id %) (:_id to-del)))
+                     vec)))
+            (swap! !state update-sa
+              (:_id to-del)
+              (fn [sa]
+                (assoc sa :delete-state :error)))))
+        (recur)))
 
     (om/root
       see-alsos/$see-alsos

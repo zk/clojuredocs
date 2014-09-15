@@ -31,3 +31,11 @@
       (throw+
         {:status 422
          :body res}))))
+
+(defn parse-mongo-id! [id]
+  (try
+    (org.bson.types.ObjectId. id)
+    (catch java.lang.IllegalArgumentException e
+      (throw+
+        {:status 400
+         :body {:message "Couldn't parse mongo id"}}))))

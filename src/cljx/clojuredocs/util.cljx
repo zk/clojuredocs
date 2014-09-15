@@ -157,3 +157,8 @@
 #+cljs
 (defn page-data! []
   (reader/read-string (aget js/window "PAGE_DATA")))
+
+
+(defn is-author? [user o]
+  (= (select-keys user [:login :account-source])
+     (select-keys (:author o) [:login :account-source])))

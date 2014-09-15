@@ -36,6 +36,7 @@
 + See alsos CRUD
 + check indexes
 + page titles (var info, etc)
++ optimistic network
 
 
 ** Done
