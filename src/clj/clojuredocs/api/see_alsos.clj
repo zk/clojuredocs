@@ -56,7 +56,6 @@
 
 (defn is-author? [user]
   (fn [m]
-    (prn user m)
     (when-not (= user (:author m))
       {:message "Sorry, you can't delete that see also."})))
 

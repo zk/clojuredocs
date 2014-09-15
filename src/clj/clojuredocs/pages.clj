@@ -32,6 +32,7 @@
   [{:keys [uri user]}]
   (common/$main
     {:body-class "examples-styleguide-page"
+     :title "Examples Style Guide | ClojureDocs - Community-Powered Clojure Documentation and Examples"
      :user user
      :page-uri uri
      :content
@@ -44,6 +45,7 @@
 (defn core-library-handler [{:keys [user uri]}]
   (common/$main
     {:body-class "core-library-page"
+     :title "Clojure's Core Library | ClojureDocs - Community-Powered Clojure Documentation and Examples"
      :user user
      :page-uri uri
      :content
@@ -117,10 +119,19 @@
   (or (lookup-var ns name)
       (lookup-var (expand-ns ns) name)))
 
+(defn format-concept-title [concept]
+  (->> (str/split concept #"-")
+       (map str/capitalize)
+       (interpose " ")
+       (apply str)))
+
 (defn concept-page-handler [concept]
-  (fn [r]
+  (fn [{:keys [user uri]}]
     (common/$main
-      {:content
+      {:title (str (format-concept-title concept) " | ClojureDocs - Community-Powered Clojure Documentation and Examples")
+       :page-uri uri
+       :user user
+       :content
        [:div.row
         [:div.col-sm-2
          [:div.sidenav

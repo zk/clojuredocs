@@ -123,6 +123,7 @@
            :body
            (common/$main
              {:body-class "var-page"
+              :title (str name " - " ns " | ClojureDocs")
               :page-data {:examples (mapv clean-example examples)
                           :var v
                           :notes (map clean-id notes)

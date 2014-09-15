@@ -6,6 +6,7 @@
 (defn page-handler [{:keys [params uri user]}]
   (common/$main
     {:body-class "search-feedback-page"
+     :title (str "Send Us Some Feedback | ClojureDocs - Community-Powered Clojure Documentation and Examples")
      :user user
      :page-uri uri
      :content
@@ -31,6 +32,7 @@
 (defn success-handler [{:keys [user uri]}]
   (common/$main
     {:body-class "search-feedback-page"
+     :title (str "Send Us Some Feedback | ClojureDocs - Community-Powered Clojure Documentation and Examples")
      :user user
      :page-uri uri
      :content
