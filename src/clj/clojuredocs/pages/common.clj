@@ -69,6 +69,7 @@
    [:section
     [:h4 [:i.fa.fa-rocket] "ClojureDocs"]
     [:ul.navbar-nav.mobile-navbar-nav.nav
+     [:li [:a {:href "/core-library"} "Core Library"]]
      [:li [:a {:href "/quickref"} "Quick Reference"]]
      (if user
        ($user-area user)
@@ -80,8 +81,7 @@
       [:h4 title]
       [:ul.navbar-nav.mobile-navbar-nav.nav
        (for [link links]
-         [:li
-          link])]])])
+         [:li link])]])])
 
 (defn md5-path [path]
   (try
