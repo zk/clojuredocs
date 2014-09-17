@@ -231,7 +231,8 @@
               {:init-state {:submit-button-text "Update Example"
                             :example-ch update-example-ch}})]
            (when body
-             (syntax/syntaxify body)))]))))
+             [:div.example-body
+              (syntax/syntaxify body)]))]))))
 1
 (defn build-examples [user examples state]
   (om/build-all

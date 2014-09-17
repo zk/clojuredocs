@@ -36,6 +36,7 @@
 + check indexes
 + optimistic network
 + favicon
++ history page
 
 
 
