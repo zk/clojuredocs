@@ -541,6 +541,10 @@ table.ac-results .ac-metadata {
     height: auto;
   }
 }
+.intro-page .migrate-account {
+  text-align: right;
+  font-size: 12px;
+}
 .intro-page .getting-started-resources {
   margin-bottom: 20px;
 }

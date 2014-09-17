@@ -121,8 +121,8 @@
            [:div.links
             [:a {:href (str "#example_" _id)}
              "permalink"]
-            " / "
-            [:a {:href (str "/ex/" _id)}
+            #_" / "
+            #_[:a {:href (str "/ex/" _id)}
              "history"]
             (when can-edit?
               [:span
