@@ -155,7 +155,12 @@
                                       [:a {:href "#notes"
                                            :data-animate-scroll "true"
                                            :data-animate-buffer "70"}
-                                       "Notes " ($number-badge (count notes))])]}]
+                                       "Notes " ($number-badge (count notes))])]}
+                           {:title "Namespaces"
+                            :links (->> library
+                                        :namespaces
+                                        (map (fn [{:keys [name]}]
+                                               [:a {:href (str "/" name)} name])))}]
               :content [:div
                         [:div.row
                          [:div.col-sm-2.sidenav

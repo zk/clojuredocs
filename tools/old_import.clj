@@ -7,8 +7,6 @@
             [clojuredocs.data :as data]
             [clojuredocs.util :as util]))
 
-
-
 (def mysql-db {:subprotocol "mysql"
                :subname "//127.0.0.1:3306/clojuredocs"
                :user "root"
@@ -26,6 +24,9 @@
 (defn all-notes []
   (j/query mysql-db ["SELECT * FROM comments"]))
 
+(defn all-users []
+  (j/query mysql-db ["SELECT * FROM users"]))
+
 (defn assoc-avatar-url [{:keys [email] :as m}]
   (if email
     (assoc m :avatar-url (str "https://www.gravatar.com/avatar/"
@@ -33,13 +34,17 @@
                               "?r=PG&default=identicon"))
     m))
 
-(defn lookup-user [user-id]
-  (-> (j/query mysql-db ["SELECT * FROM users WHERE id=?" user-id])
-      first
+(defn format-db-user [u]
+  (-> u
       (select-keys  [:email :login])
       (assoc :account-source "clojuredocs")
       assoc-avatar-url
       (dissoc :email)))
+
+(defn lookup-user [user-id]
+  (-> (j/query mysql-db ["SELECT * FROM users WHERE id=?" user-id])
+      first
+      format-db-user))
 
 (defn lookup-ns [nsid]
   {:ns (->> (j/query mysql-db ["SELECT * FROM namespaces WHERE id=?" nsid])
@@ -68,12 +73,21 @@
 
 (mon/mongo! :db :clojuredocs)
 
+(do
+  (prn "Updating Users")
+  (doseq [u (->> (all-users)
+                 (map format-db-user))]
+    (mon/update! :users (select-keys u [:login]) u))
+  (prn "Users: " (mon/fetch-count :users))
+  (prn))
+
 (defn insert-or-update-example [e]
   (mon/update! :examples (select-keys e [:library-url :ns :name :body]) e))
 
 ;; examples
 
-(do
+#_(do
+  (prn "Importing examples...")
   (mon/drop-coll! :examples)
   (mon/drop-coll! :example-histories)
   (time
@@ -256,15 +270,19 @@
                   (map str)
                   set))
 
-#_(time
-  (doseq [[v sas] @see-alsos]
-    (data/update-see-also-where!
-      (fn [{:keys [ns name]}] {:var.ns ns :var.name name})
-      {:var (-> v
-                (select-keys [:name :ns])
-                (assoc :library-url "https://github.com/clojure/clojure"))
-       :refs (->> sas
-                  (filter #(get clj-nss (:ns %))))})))
+(time
+  (doseq [[{:keys [ns name library-url] :as from} sas] @see-alsos]
+    (doseq [to sas]
+      (let [payload {:from-var (assoc (select-keys from [:ns :name]) :library-url "https://github.com/clojure/clojure")
+                     :to-var (select-keys to [:ns :name :library-url])
+                     :author (:author to)
+                     :created-at (:created-at to)}]
+        (mon/update! :see-alsos
+          {:from-var.ns (:ns from)
+           :from-var.name (:name from)
+           :to-var.ns (:ns to)
+           :to-var.name (:name to)}
+          payload)))))
 
 #_(->> @see-alsos
      (filter #(= "map" (:name (first %))))
@@ -390,7 +408,10 @@
      )
 
 
-(defn import-notes []
+
+
+
+#_(defn import-notes []
   (let [notes (->> (all-notes)
                    (map #(assoc % :author (lookup-user (:user_id %))))
                    (map #(assoc % :var (lookup-function (:commentable_id %))))
