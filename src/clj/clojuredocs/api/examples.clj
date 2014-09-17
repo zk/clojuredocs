@@ -62,14 +62,14 @@
 (def UpdateExample
   (merge
     InsertExample
-    {:editors [User]}))
+    {:editors [c/User]}))
 
 (def InsertExampleHistory
   {:_id org.bson.types.ObjectId
    :example-id org.bson.types.ObjectId
    :created-at s/Int
    :body s/Str
-   :editor User})
+   :editor c/User})
 
 (defn patch-example-handler [id]
   (fn [{:keys [edn-body user]}]
