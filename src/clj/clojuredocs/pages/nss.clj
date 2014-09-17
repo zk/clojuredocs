@@ -34,16 +34,6 @@
                :vars vs}))))
 
 (defn $var-group [{:keys [heading vars]}]
-  (concat
-    [[:tr
-       [:td {:colspan 2}
-        [:div.heading heading]]]]
-    (for [{:keys [ns name doc]} vars]
-      [:tr
-       [:td.name [:span (util/$var-link ns name name)]]
-       [:td [:div.doc doc]]])))
-
-(defn $var-group [{:keys [heading vars]}]
   [:div.var-group
    [:h4.heading heading]
    (vec
@@ -51,14 +41,15 @@
        [:dl.dl-horizontal]
        (->> vars
             (map (fn [{:keys [ns name doc]}]
-                   [:div.dl-row
-                    [:dt.name
-                     (util/$var-link ns name name)]
-                    (if doc
-                      [:dd.doc doc]
-                      [:dd.no-doc "no doc"])])))))])
-
-($var-group {:heading "foo" :vars [{:name "foo" :doc "bar"}]})
+                   (let [name (-> name
+                                   (str/replace #"<" "&lt;")
+                                   (str/replace #">" "&gt;"))]
+                     [:div.dl-row
+                      [:dt.name
+                       (util/$var-link ns name name)]
+                      (if doc
+                        [:dd.doc doc]
+                        [:dd.no-doc "no doc"])]))))))])
 
 (defn page-handler [ns-str]
   (fn [{:keys [user uri] :as r}]
