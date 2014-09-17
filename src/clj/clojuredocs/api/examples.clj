@@ -4,25 +4,7 @@
             [schema.core :as s]
             [clojuredocs.util :as util]
             [clojuredocs.api.common :as c]))
-
-;; Schemas
-
-(def User
-  {:login s/Str
-   :account-source s/Str
-   :avatar-url s/Str})
-
-(def Var
-  {:ns s/Str
-   :name s/Str
-   :library-url s/Str})
-
 ;; Utils
-
-(defn update-timestamps [{:keys [created-at updated-at] :as m}]
-  (let [now (util/now)
-        m (if created-at m (assoc m :created-at now))]
-    (assoc m :updated-at now)))
 
 (defn edn-response [payload]
   {:body payload
@@ -59,11 +41,11 @@
 ;; Handlers
 
 (def InsertExample
-  {:author User
+  {:author c/User
    :body s/Str
    :created-at s/Int
    :updated-at s/Int
-   :var Var
+   :var c/Var
    :_id org.bson.types.ObjectId})
 
 (defn post-example-handler [{:keys [edn-body user]}]
@@ -71,7 +53,7 @@
   (c/validate! edn-body [body-not-empty var-required])
   (-> edn-body
       (assoc :author user)
-      update-timestamps
+      c/update-timestamps
       (assoc :_id (org.bson.types.ObjectId.))
       (c/validate-schema! InsertExample)
       insert!
@@ -98,7 +80,7 @@
           new-example (-> example
                           (assoc :body (:body example-update))
                           (update-in [:editors] (add-editor user))
-                          update-timestamps)
+                          c/update-timestamps)
           example-history (create-example-history
                             example
                             user

@@ -89,6 +89,7 @@
      :vars []
      :add-example {}
      :add-see-also {}
+     :add-note {}
      :user {:login "zk" :account-source "github"}}
     (util/page-data!)))
 
@@ -133,6 +134,15 @@
                              (f ex)
                              ex)))
                     vec)))
+
+(defn update-note [{:keys [notes] :as state} _id f]
+  (assoc state
+    :notes (->> notes
+                (map (fn [ex]
+                       (if (= _id (:_id ex))
+                         (f ex)
+                         ex)))
+                vec)))
 
 (defn req-update-example [_id body]
   (let [c (chan)]
@@ -216,17 +226,103 @@
       {:target (sel1 $root :.examples-widget)
        :init-state {:new-example-ch new-example-ch
                     :update-example-ch update-example-ch
-                    :delete-ch delete-ch}})
+                    :delete-ch delete-ch}})))
+
+
+(defn init-notes [$root !state]
+  (let [new-ch (chan)
+        delete-ch (chan)
+        edit-ch (chan)]
+
+    ;; Create
+    (go-loop []
+      (when-let [note-text (<! new-ch)]
+        (swap! !state assoc-in [:add-note :error] nil)
+        (swap! !state assoc-in [:add-note :loading?] false)
+        (if (empty? note-text)
+          (swap! !state assoc-in [:add-note :error] "Whoops, looks like your note is empty.")
+          (do
+            (swap! !state assoc-in [:add-note :loading?] true)
+            (let [{:keys [success res]}
+                  (<! (ajax-chan
+                        {:method :post
+                         :path "/api/notes"
+                         :data-type :edn
+                         :data {:body note-text
+                                :var (select-keys (:var @!state) [:ns :name :library-url])}}))]
+              (if success
+                (do
+                  (swap! !state
+                    (fn [m]
+                      (-> m
+                          (update-in [:notes]
+                            #(vec (concat % [(:body res)])))
+                          (update-in [:add-note] {:text ""})))))
+                (swap! !state assoc-in [:add-note :error] (-> res :body :message)))
+              (swap! !state assoc-in [:add-note :loading?] false))))
+        (recur)))
+
+    ;; Edit
+    (go-loop []
+      (when-let [{:keys [text _id]} (<! edit-ch)]
+        (swap! !state update-note _id
+          (fn [note]
+            (assoc note :error nil)))
+        (if (empty? text)
+          (swap! !state update-note _id
+            (fn [note]
+              (assoc note :error "Whoops, looks like your note is empty.")))
+          (do
+            (swap! !state update-note _id
+              (fn [note]
+                (assoc note :loading? true)))
+            (let [{:keys [success res]}
+                  (<! (ajax-chan
+                        {:method :patch
+                         :path (str "/api/notes/" _id)
+                         :data-type :edn
+                         :data {:body text}}))]
+              (if success
+                (swap! !state update-note _id
+                  (fn [note]
+                    (:body res)))
+                (do
+                  (swap! !state update-note _id
+                    (fn [n]
+                      (-> n
+                          (assoc :error (-> res :body :message))
+                          (assoc :loading? false)))))))))
+        (recur)))
+
+    ;; Delete
+    (go-loop []
+      (when-let [_id (<! delete-ch)]
+        (swap! !state update-note _id
+          (fn [note]
+            (assoc note :delete-state :loading)))
+        (let [{:keys [success re]}
+              (<! (ajax-chan
+                    {:method :delete
+                     :path (str "/api/notes/" _id)
+                     :data-type :edn}))]
+          (if success
+            (swap! !state update-in [:notes]
+              (fn [notes]
+                (->> notes
+                     (remove #(= _id (:_id %)))
+                     vec)))
+            (swap! !state update-note _id
+              (fn [note]
+                (assoc note :delete-state :error)))))
+        (recur)))
 
     (om/root
       notes/$notes
       !state
       {:target (sel1 $root :.notes-widget)
        :init-state {:new-ch new-ch
-                    :delete-ch delete-ch}})))
-
-
-(defn init-notes [$root !state])
+                    :delete-ch delete-ch
+                    :edit-ch edit-ch}})))
 
 (defn init-see-alsos [$root !state]
   (let [new-ch (chan)

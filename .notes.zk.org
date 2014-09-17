@@ -28,7 +28,6 @@
   + /v/# urls
 + Clean data export for dev distribution
 + Mobile comb-through
-+ Add notes widget
 + Jobs
 + Admin interface
   + What goes here?
@@ -36,10 +35,12 @@
 + Fix scroll-to on expand in firefox
 + check indexes
 + optimistic network
++ favicon
 
 
 
 ** Done
++ Notes CRUD
 + See alsos CRUD
 + page titles (var info, etc)
 + Fix function counts on autocomplete
