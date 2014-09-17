@@ -1042,8 +1042,64 @@ p.example-instructions {
 .ns-page section {
   margin-bottom: 50px;
 }
-.ns-page section ul li {
-  list-style-type: disc;
+.var-group {
+  clear: both;
+}
+.var-group h4 {
+  margin-top: 20px;
+  margin-bottom: 5px;
+  border-bottom: solid #ccc 2px;
+}
+.var-group .dl-row {
+  clear: both;
+  padding: 3px 0;
+}
+.var-group .dl-row:hover {
+  background-color: #eee;
+}
+.var-group dl {
+  font-size: 13px;
+}
+.var-group dt {
+  min-width: 150px;
+  text-align: right;
+  margin-right: 10px;
+  font-weight: normal;
+}
+.var-group dd {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 580px;
+  white-space: nowrap;
+}
+@media (max-width: 1199px) {
+  .var-group dd {
+    width: 460px;
+  }
+}
+@media (max-width: 991px) {
+  .var-group dd {
+    width: 400px;
+  }
+}
+@media (max-width: 767px) {
+  .var-group .dl-row {
+    padding: 0;
+  }
+  .var-group dt {
+    display: block;
+    text-align: left;
+    padding-top: 10px;
+  }
+  .var-group dd {
+    display: block;
+    border-bottom: solid #ddd 1px;
+    width: 100%;
+    padding-bottom: 10px;
+  }
+}
+.var-group .no-doc {
+  color: #aaa;
 }
 .ns-table {
   width: 100%;
@@ -1059,7 +1115,6 @@ p.example-instructions {
   vertical-align: middle;
 }
 .ns-table .doc {
-  width: 450px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
