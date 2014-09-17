@@ -61,9 +61,11 @@
   (let [toc-groups (partition-all 2 quickref-data)]
     [:div.toc.clearfix
      [:h5 "Table of Contents"]
-     [:h6 [:a {:href "#" :data-animate-scroll "true" :data-animate-buffer "10"} "Top"]]
+     [:h6 [:a {:href "#"
+               :data-animate-scroll "true"
+               :data-animate-buffer "10"} "Top"]]
      (for [tg toc-groups]
-       [:div.col-sm-4.col-md-12
+       [:div
         (map $toc-sphere tg)])]))
 
 (defn mobile-nav [quickref-data]
@@ -93,11 +95,11 @@
      :content
      [:div
       [:div.row
-       [:div.col-md-3.sidenav
+       [:div.col-sm-3.sidenav.toc-sidenav
         [:div.page-toc
          {:data-sticky-offset "10"}
          ($toc static/quickref-data)]]
-       [:div.col-md-9
+       [:div.col-sm-9
         [:h1 "Quickref for Clojure Core"]
         [:p
          "Adapted from Johannes Friestad's "

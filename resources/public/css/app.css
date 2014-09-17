@@ -818,7 +818,6 @@ table.ac-results .ac-metadata {
 }
 .toc h6 {
   margin-top: 0;
-  margin-left: 15px;
 }
 .toc ul {
   margin-bottom: 5px;
@@ -849,13 +848,6 @@ table.ac-results .ac-metadata {
   position: fixed;
   overflow-y: scroll;
   overflow-x: auto;
-}
-@media (max-width: 991px) {
-  .sticky {
-    top: auto;
-    position: relative;
-    width: 100% !important;
-  }
 }
 .sphere h2,
 .sphere h3,
