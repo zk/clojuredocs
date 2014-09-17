@@ -400,8 +400,8 @@ form.search input.placeholder {
   visibility: hidden;
 }
 .syntaxify {
-  padding: 10px;
-  background-color: rgba(0, 0, 0, 0.01);
+  padding: 0px;
+  background-color: transparent;
   white-space: pre;
   overflow-x: scroll;
 }
@@ -760,12 +760,14 @@ table.ac-results .ac-metadata {
   margin-bottom: 5px;
 }
 .example-meta .loading,
-.see-also .delete-controls .loading {
+.see-also .delete-controls .loading,
+.note-meta .loading {
   width: 9px;
   margin-bottom: 2px;
 }
 .example-meta .error-deleting,
-.see-also .delete-controls .error-deleting {
+.see-also .delete-controls .error-deleting,
+.note-meta .error-deleting {
   padding-left: 3px;
   padding-right: 3px;
 }
@@ -1142,25 +1144,12 @@ p.example-instructions {
   padding: 10px;
   background-color: #fafafa;
 }
-.add-note .add-note-content {
-  padding: 30px;
-  background-color: #f8f8f8;
-}
 .add-note .instructions {
   color: #555;
   font-size: 12px;
 }
 .add-note textarea {
   height: 200px;
-}
-.add-note .live-preview {
-  padding: 10px;
-  background-color: #fafafa;
-}
-.add-note .live-preview li {
-  margin-left: 20px;
-  list-style-type: disc;
-  margin-bottom: 0;
 }
 .search-feedback-page .radio {
   margin-top: 0;
@@ -1246,11 +1235,13 @@ p.example-instructions {
 .markdown ol,
 .markdown ul {
   padding-left: 0;
+  margin-bottom: 20px;
 }
 .markdown ol li,
 .markdown ul li {
   margin-left: 25px;
   padding: 0;
+  margin-bottom: 0;
 }
 .markdown ul li {
   list-style-type: disc;
@@ -1261,6 +1252,14 @@ p.example-instructions {
 .markdown .syntaxify,
 .markdown pre {
   margin-bottom: 40px;
+}
+.markdown h1,
+.markdown h2,
+.markdown h3,
+.markdown h4,
+.markdown h5 {
+  font-weight: bold;
+  margin-bottom: 0.3em;
 }
 .sg-example {
   margin-bottom: 30px;
@@ -1379,6 +1378,13 @@ table.schema .aside {
   background-color: white;
   border: solid #eee 1px;
   border-top: none;
+  padding: 10px;
+  background-color: #fafafa;
+}
+.tabbed-editor .live-preview li {
+  margin-left: 20px;
+  list-style-type: disc;
+  margin-bottom: 0;
 }
 .sg-example-inspector .sg-inspector-state textarea {
   width: 100%;

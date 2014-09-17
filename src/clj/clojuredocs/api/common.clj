@@ -1,6 +1,21 @@
 (ns clojuredocs.api.common
   (:require [slingshot.slingshot :refer [throw+]]
-            [schema.core :as s]))
+            [schema.core :as s]
+            [clojuredocs.util :as util]))
+
+;; Schemas
+
+(def User
+  {:login s/Str
+   :account-source s/Str
+   :avatar-url s/Str})
+
+(def Var
+  {:ns s/Str
+   :name s/Str
+   :library-url s/Str})
+
+
 
 (defn require-login! [user]
   (when-not user
@@ -39,3 +54,8 @@
       (throw+
         {:status 400
          :body {:message "Couldn't parse mongo id"}}))))
+
+(defn update-timestamps [{:keys [created-at updated-at] :as m}]
+  (let [now (util/now)
+        m (if created-at m (assoc m :created-at now))]
+    (assoc m :updated-at now)))

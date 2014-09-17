@@ -528,8 +528,8 @@ form.search {
 }
 
 .syntaxify {
-  padding: 10px;
-  background-color: @code-bg;
+  padding: 0px;
+  background-color: transparent;
   white-space: pre;
   overflow-x: scroll;
 }
@@ -967,7 +967,8 @@ table.ac-results {
 }
 
 .example-meta,
-.see-also .delete-controls {
+.see-also .delete-controls,
+.note-meta {
   .loading {
     width: 9px;
     margin-bottom: 2px;
@@ -1476,11 +1477,6 @@ p.example-instructions {
 }
 
 .add-note {
-  .add-note-content {
-    padding: 30px;
-    background-color: #f8f8f8;
-  }
-
   .instructions {
     color: #555;
     font-size: 12px;
@@ -1488,17 +1484,6 @@ p.example-instructions {
 
   textarea {
     height: 200px;
-  }
-
-  .live-preview {
-    padding: 10px;
-    background-color: #fafafa;
-
-    li {
-      margin-left: 20px;
-      list-style-type: disc;
-      margin-bottom: 0;
-    }
   }
 }
 
@@ -1622,9 +1607,12 @@ p.example-instructions {
 .markdown {
   ol, ul {
     padding-left: 0;
+    margin-bottom: 20px;
+
     li {
       margin-left: 25px;
       padding: 0;
+      margin-bottom: 0;
     }
   }
 
@@ -1638,6 +1626,11 @@ p.example-instructions {
 
   .syntaxify, pre {
     margin-bottom: 40px;
+  }
+
+  h1, h2, h3, h4, h5 {
+    font-weight: bold;
+    margin-bottom: 0.3em;
   }
 }
 
@@ -1788,6 +1781,14 @@ table.schema {
     background-color: white;
     border: solid #eee 1px;
     border-top: none;
+    padding: 10px;
+    background-color: #fafafa;
+
+    li {
+      margin-left: 20px;
+      list-style-type: disc;
+      margin-bottom: 0;
+    }
   }
 }
 

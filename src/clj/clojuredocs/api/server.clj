@@ -6,7 +6,8 @@
             [slingshot.slingshot :refer [try+ throw+]]
             [clojuredocs.util :as util]
             [clojuredocs.api.examples :as examples]
-            [clojuredocs.api.see-alsos :as see-alsos]))
+            [clojuredocs.api.see-alsos :as see-alsos]
+            [clojuredocs.api.notes :as notes]))
 
 (defroutes _routes
   (POST "/examples" [] examples/post-example-handler)
@@ -15,6 +16,11 @@
 
   (POST "/see-alsos" [] see-alsos/post-see-also-handler)
   (DELETE "/see-alsos/:id" [id] (see-alsos/delete-see-also-handler id))
+
+  (POST "/notes" [] notes/post-note-handler)
+  (PATCH "/notes/:id" [id] (notes/patch-note-handler id))
+  (DELETE "/notes/:id" [id] (notes/delete-note-handler id))
+
   (not-found
     {:status 404
      :body {:message "Route not found"}}))

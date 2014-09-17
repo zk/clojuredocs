@@ -268,46 +268,12 @@ f should accept number-of-colls arguments."}
       {:search-loading? true}
       {:target $el}))
 
-  :.sg-notes-null-state
-  (fn [$el]
-    (om/root
-      notes/$notes
-      {}
-      {:target $el}))
-
-  :.sg-notes-populated
-  (fn [$el]
-    (om/root
-      notes/$notes
-      {:notes [{:body "# Hello World\n\nThe quick brown fox **jumps** over the *lazy* dog.<pre>(heres some \"clojure\")</pre>"
-                :user {:login "zk"
-                       :avatar-url "https://avatars.githubusercontent.com/u/7194?"}
-                :created-at (- (util/now) 10000000)}]}
-      {:target $el}))
-
-  :.sg-add-note
-  (fn [$el]
-    (om/root
-      notes/$add
-      {}
-      {:target $el
-       :init-state {:expanded? true}}))
-
   :.sg-see-alsos-null-state
   (fn [$el]
     (om/root
       see-alsos/$see-alsos
       {:var {:ns "foo" :name "bar"}}
       {:target $el}))
-
-  :.sg-add-note-loading
-  (fn [$el]
-    (om/root
-      notes/$add
-      {}
-      {:target $el
-       :init-state {:expanded? true
-                    :loading? true}}))
 
   :.sg-see-alsos-populated
   (fn [$el]

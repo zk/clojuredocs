@@ -8,7 +8,10 @@
             [sablono.core :as sab :refer-macros [html]]
             [clojuredocs.examples :as examples]
             [clojuredocs.see-alsos :as see-alsos]
-            [cljs.reader :as reader])
+            [clojuredocs.notes :as notes]
+            [cljs.reader :as reader]
+            [clojuredocs.util :as util]
+            [cljs.core.async.impl.protocols :as async.protocols])
   (:require-macros [cljs.core.async.macros :refer [go go-loop]]
                    [dommy.macros :refer [node sel sel1]]))
 
@@ -31,6 +34,26 @@
                       false)}
      ""]]]
 
+(defn $expando-ta
+  "A textarea the expands downward with the content (no scroll)"
+  [opts]
+  (let [rows (Math/max
+               (+ (->> text
+                       (filter #(= "\n" %))
+                       count)
+                 3)
+               10)]
+    [:textarea
+     (merge
+       {:class "form-control"
+        :autofocus "autofocus"
+        :cols 80
+        :rows rows}
+       opts)]))
+
+(defn chan? [o]
+  (satisfies? async.protocols/Channel o))
+
 (defn $inspector [$widget]
   (fn [app owner]
     (reify
@@ -39,44 +62,45 @@
         {:text (pr-str app)})
       om/IWillMount
       (will-mount [_]
-        (let [outlets (om/get-state owner :outlets)]
-          (doseq [[k c] outlets]
-            (go-loop []
-              (when-let [res (<! c)]
-                (om/update-state! owner
-                  (fn [m]
-                    (update-in m [:messages] concat [[k res]])))
-                (recur))))))
+        (let [state (om/get-state owner)]
+          (doseq [[k v] state]
+            (when (chan? v)
+              (go-loop []
+                (when-let [res (<! v)]
+                  (prn res)
+                  (om/update-state! owner
+                    (fn [m]
+                      (update-in m [:messages] #(concat [[k res]] %))))
+                  (recur)))))))
       om/IRenderState
-      (render-state [_ {:keys [active text error? outlets messages] :as state}]
+      (render-state [_ {:keys [active text error? messages] :as state}]
         (html
           [:div.sg-example-inspector
            [:div.row
             [:div.col-sm-5
              [:div.sg-inspector-state
-              [:h5 "State"]
+              [:h5 "App State"]
               (let [rows (Math/max
                            (+ (->> text
                                    (filter #(= "\n" %))
                                    count)
                              3)
                            5)]
-                [:textarea
-                 {:class (when error? "error")
-                  :value text
-                  :on-change #(do
-                                (prn "hi")
-                                (let [new-text (.. % -target -value)]
-                                  (om/set-state! owner :text new-text))
-                                (try
-                                  (om/transact! app
-                                    (fn [_]
-                                      (reader/read-string (.. % -target -value))))
-                                  (om/set-state! owner :error? false)
-                                  (catch js/Error e
-                                    (om/set-state! owner :error? true)
-                                    (prn e))))
-                  :rows rows}])]
+                ($expando-ta
+                  {:class (when error? "error")
+                   :value text
+                   :on-change
+                   #(do
+                      (let [new-text (.. % -target -value)]
+                        (om/set-state! owner :text new-text))
+                      (try
+                        (om/transact! app
+                          (fn [_]
+                            (reader/read-string (.. % -target -value))))
+                        (om/set-state! owner :error? false)
+                        (catch js/Error e
+                          (om/set-state! owner :error? true)
+                          (prn e))))}))]
              [:div.sg-inspector-outlets
               [:div.pull-right
                [:a.clear {:href "#"
@@ -92,7 +116,7 @@
             [:div.col-sm-7
              [:div.sg-example
               [:div.checker-bg
-               (om/build $widget app {:init-state outlets})]]]]])))))
+               (om/build $widget app {:init-state state})]]]]])))))
 
 (defn root-sel [selector widget app-state & [opts]]
   (doseq [$el (sel selector)]
@@ -269,7 +293,41 @@ user=> (into {} *1)
      :ac-results [{:ns "clojure.core"
                    :name "foo"
                    :doc "Some docstring here"
-                   :library-url "cclib"}]}))
+                   :library-url "cclib"}]})
+
+  (root-sel
+    :.sg-notes-null-state
+    notes/$notes
+    {}
+    {:target $el})
+
+  (root-sel
+    :.sg-notes-populated
+    notes/$notes
+    {:notes [{:body "# Hello World\n\nThe quick brown fox **jumps** over the *lazy* dog.<pre>(heres some \"clojure\")</pre>"
+              :user {:login "zk"
+                     :avatar-url "https://avatars.githubusercontent.com/u/7194?"}
+              :created-at (- (util/now) 10000000)}]}
+    {:target $el})
+
+  (root-sel
+    :.sg-add-note
+    notes/$add #_($inspector notes/$add)
+    {:expanded? true}
+    {:target $el
+     :init-state {:new-ch (chan)
+                  :delete-ch (chan)}})
+
+  (root-sel
+    :.sg-add-note-loading
+    notes/$add #_($inspector notes/$add)
+    {:expanded? true
+     :loading? true}
+    {:target $el
+     :init-state {:new-ch (chan)
+                  :delete-ch (chan)}})
+
+  )
 
 
 #_(fn [$el]

@@ -112,7 +112,12 @@
                              (map #(assoc % :can-delete? (util/is-author? user %))))
               library (library-for v)
               recent (:recent session)
-              notes (data/find-notes-for v)]
+              notes (->> v
+                         data/find-notes-for
+                         (map #(let [author? (util/is-author? user %)]
+                                 (-> %
+                                     (assoc :can-delete? author?)
+                                     (assoc :can-edit? author?)))))]
           {:session (update-in session [:recent]
                       #(->> %
                             (concat [{:text name
@@ -126,7 +131,7 @@
               :title (str name " - " ns " | ClojureDocs")
               :page-data {:examples (mapv clean-example examples)
                           :var v
-                          :notes (map clean-id notes)
+                          :notes (vec (map clean-id notes))
                           :see-alsos (vec (map clean-see-also see-alsos))
                           :user (when user (select-keys user [:login :avatar-url :account-source]))}
               :page-uri uri
