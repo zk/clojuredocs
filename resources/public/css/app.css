@@ -1258,7 +1258,6 @@ p.example-instructions {
 .markdown h3,
 .markdown h4,
 .markdown h5 {
-  font-weight: bold;
   margin-bottom: 0.3em;
 }
 .sg-example {
