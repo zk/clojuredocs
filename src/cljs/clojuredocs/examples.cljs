@@ -120,7 +120,7 @@
                " more"])]
            [:div.links
             [:a {:href (str "#example_" _id)}
-             "permalink"]
+             "link"]
             #_" / "
             #_[:a {:href (str "/ex/" _id)}
              "history"]

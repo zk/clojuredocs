@@ -26,7 +26,7 @@
                           :doc
                           (take 50)
                           (apply str))
-                 [:span.examples-count.pull-right
+                 #_[:span.examples-count.pull-right
                   "1 ex."]]])
       syms)]])
 
