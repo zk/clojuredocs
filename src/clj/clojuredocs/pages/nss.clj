@@ -43,6 +43,23 @@
        [:td.name [:span (util/$var-link ns name name)]]
        [:td [:div.doc doc]]])))
 
+(defn $var-group [{:keys [heading vars]}]
+  [:div.var-group
+   [:h4.heading heading]
+   (vec
+     (concat
+       [:dl.dl-horizontal]
+       (->> vars
+            (map (fn [{:keys [ns name doc]}]
+                   [:div.dl-row
+                    [:dt.name
+                     (util/$var-link ns name name)]
+                    (if doc
+                      [:dd.doc doc]
+                      [:dd.no-doc "no doc"])])))))])
+
+($var-group {:heading "foo" :vars [{:name "foo" :doc "bar"}]})
+
 (defn page-handler [ns-str]
   (fn [{:keys [user uri] :as r}]
     (let [lib (library-for ns-str)
@@ -54,6 +71,11 @@
            :user user
            :title (str (:name ns) " namespace | ClojureDocs - Community-Powered Clojure Documentation and Examples")
            :page-uri uri
+           :mobile-nav [{:title "Namespaces"
+                         :links (->> lib
+                                     :namespaces
+                                     (map (fn [{:keys [name]}]
+                                            [:a {:href (str "/" name)} name])))}]
            :content [:div
                      [:div.row
                       [:div.col-sm-2.sidenav
@@ -68,7 +90,8 @@
                         (common/memo-markdown-file (str "src/md/namespaces/" ns-str ".md"))]
                        [:section
                         [:h5 "Vars in " ns-str]
-                        [:table {:class "ns-table"}
-                         (->> vars
-                              group-vars
-                              (mapcat $var-group))]]]]]})))))
+                        (->> vars
+                             group-vars
+                             (map $var-group))
+                        #_[:table {:class "ns-table"}
+                           ]]]]]})))))
