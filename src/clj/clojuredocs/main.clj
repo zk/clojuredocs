@@ -14,28 +14,23 @@
           (assoc resp :status 200))))
     opts))
 
-(defn valid-env-or-exit []
-  (let [res (->> [(env/int :port)                  "Port missing"
-                  (:client-id config/gh-creds)     "GH client ID missing"
-                  (:client-secret config/gh-creds) "GH client secret missing"
-                  config/base-url                  "base url missing"]
-                 (partition 2)
-                 (map #(when (nil? (first %))
-                         (println " !" (second %))
-                         true))
-                 (reduce #(or %1 %2)))]
-    (when res
-      (println)
-      (println " ! Missing required config vars, exiting.")
-      (println)
-      #_(System/exit 1))))
-
 (defn create-app []
   {:port (env/int :port 8080)
    :entry #'entry/routes
    :mongo-url (env/str :mongo-url)})
 
+(defn report-and-exit-on-missing-env-vars! []
+  (when-not (empty? config/missing-env-vars)
+    (println)
+    (println "!!! Missing Env Vars:")
+    (doseq [{:keys [key doc type]} config/missing-env-vars]
+      (println "!!! " key (str "[" type "]:") doc))
+    (println "!!! Exiting...")
+    (println)
+    (System/exit -1)))
+
 (defn start [{:keys [port mongo-url entry] :as opts}]
+  (report-and-exit-on-missing-env-vars!)
   (mon/set-connection! (mon/make-connection mongo-url))
   (mon/add-index! :examples [:ns :name :library-url])
   (mon/add-index! :vars [:ns :name :library-url])
@@ -56,5 +51,4 @@
   (dissoc opts :stop-server))
 
 (defn -main []
-  (valid-env-or-exit)
   (start (create-app)))
