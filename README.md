@@ -7,7 +7,7 @@ The clojuredocs.org webapp
 
 ## Rewrite In Progress
 
-https://clojuredocs.herokuapp.com
+http://next.clojuredocs.org
 
 [Rewrite Release Checklist](https://github.com/zk/clojuredocs/blob/clj-rewrite/.notes.zk.org#release-checklist)
 
