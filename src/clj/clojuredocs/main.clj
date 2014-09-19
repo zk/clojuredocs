@@ -29,15 +29,30 @@
     (println)
     (System/exit -1)))
 
+(defn add-indexes! []
+  (mon/add-index! :examples [:var
+                             :deleted-at
+                             :author.login :author.account-source
+                             :editors.login :editors.account-source])
+  (mon/add-index! :namespaces [:name])
+  (mon/add-index! :see-alsos [:from-var.name :from-var.ns :from-var.library-url
+                              :to-var.ns :to-var.name :to-var.library-url
+                              :account.login :account.account-source])
+  (mon/add-index! :libraries [:namespaces])
+  (mon/add-index! :notes [:var.ns :var.name :var.library-url
+                          :account.login :account.account-source])
+
+  (mon/add-index! :legacy-var-redirects [:function-id
+                                         :editor.login :editor.account-source])
+
+  (mon/add-index! :users [:login :account-source])
+
+  (mon/add-index! :migrate-users [:email :migraion-key]))
+
 (defn start [{:keys [port mongo-url entry] :as opts}]
   (report-and-exit-on-missing-env-vars!)
   (mon/set-connection! (mon/make-connection mongo-url))
-  (mon/add-index! :examples [:ns :name :library-url])
-  (mon/add-index! :vars [:ns :name :library-url])
-  (mon/add-index! :namespaces [:name])
-  (mon/add-index! :see-alsos [:name :ns :library-url])
-  (mon/add-index! :libraries [:namespaces])
-  (mon/add-index! :var-notes [:var.ns :var.name :var.library-url])
+  #_(add-indexes!)
   (let [stop-server (start-http-server entry
                       {:port port :join? false})]
     (println (format "Server running on port %d" port))
