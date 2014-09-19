@@ -23,24 +23,23 @@
 
 + Move over from old db
 + Claiming old user accounts
-+ Add user page
 + Redirect old urls to new
-  + /v/# urls
 + Clean data export for dev distribution
-+ Mobile comb-through
 + Jobs
-+ Admin interface
-  + What goes here?
 + Organize ns decls
 + Fix scroll-to on expand in firefox
 + check indexes
 + optimistic network
 + favicon
-+ history page
++ numbers sanity check
 
++ Mobile Fixes
 
 
 ** Done
++ Add user page
++ Redirect old /v/# urls
++ Responsive ns page
 + Notes CRUD
 + See alsos CRUD
 + page titles (var info, etc)
@@ -104,6 +103,10 @@
 + Quickref update
 + Supported libs blurb
 + Split-screen example editing
++ Admin interface
+  + What goes here?
++ Example history page
+
 
 
 * Indexes
