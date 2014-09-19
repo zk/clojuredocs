@@ -141,7 +141,7 @@ footer .right {
   width: 48px;
   height: 48px;
 }
-body.user-page .avatar {
+body.user-page .user-avatar .avatar {
   width: 200px;
   height: 200px;
 }

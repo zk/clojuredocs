@@ -20,7 +20,9 @@
                    [:div.col-sm-10.col-sm-offset-1
                     [:div.row
                      [:div.col-sm-4
-                      (util/$avatar user {:size 200})]
+                      [:span.user-avatar
+                       (util/$avatar user {:size 200})]]
                      [:div.col-sm-8
                       [:h1 login]
-                      [:p "User " [:b login] " has been a member since 2012. Since they joined, they've created " examples-authored-count " examples."]]]]]}))))
+                      [:p "User " [:b login] " has authored " examples-authored-count " examples."]]]]]}))))
+
