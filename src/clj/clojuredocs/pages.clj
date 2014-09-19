@@ -48,6 +48,11 @@
      :title "Clojure's Core Library | ClojureDocs - Community-Powered Clojure Documentation and Examples"
      :user user
      :page-uri uri
+     :mobile-nav [{:title "Namespaces"
+                   :links (->> search/clojure-lib
+                               :namespaces
+                               (map (fn [{:keys [name]}]
+                                      [:a {:href (str "/" name)} name])))}]
      :content
      [:div.row
       [:div.col-sm-2
