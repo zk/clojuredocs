@@ -115,19 +115,23 @@
                       (filter #(get #{"var" "function" "special-form" "macro"} (:type %)))))})
 
 (defn expand-ns [ns]
-  (:name (mon/fetch-one :namespaces
-           :where {:name (->> (str/split ns #"\.")
-                              (map #(str % "[^.]*"))
-                              (interpose "\\.")
-                              (apply str)
-                              re-pattern)})))
+  (let [pattern (->> (str/split ns #"\.")
+                     (map #(str % "[^.]*"))
+                     (interpose "\\.")
+                     (apply str)
+                     re-pattern)]
+    (->> search/clojure-lib
+         :namespaces
+         (map :name)
+         (filter #(re-find pattern %))
+         first)))
 
 (defn lookup-var [ns name]
   (mon/fetch-one :vars :where {:name name :ns ns}))
 
 (defn lookup-var-expand [ns name]
-  (or (lookup-var ns name)
-      (lookup-var (expand-ns ns) name)))
+  (or (search/lookup (str ns "/" name))
+      (search/lookup (str (expand-ns ns) "/" name))))
 
 (defn format-concept-title [concept]
   (->> (str/split concept #"-")
