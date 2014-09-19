@@ -73,11 +73,22 @@
       {:status 301
        :headers {"Location" (str "/" ns "/" name)}})))
 
+(defn old-v-page-redirect [id]
+  (fn [r]
+    (try
+      (let [{:keys [ns name] :as legacy-var}
+            (mon/fetch-one :legacy-var-redirects :where {:function-id (Integer/parseInt id)})]
+        (when legacy-var
+          {:status 307
+           :headers {"Location" (str "/" ns "/" (util/cd-encode name))}}))
+      (catch Exception e nil))))
+
 (defroutes old-url-redirects
   (GET "/clojure_core/:ns/:name" [ns name] (redirect-to-var ns name))
   (GET "/clojure_core/:version/:ns/:name" [ns name] (redirect-to-var ns name))
   (GET "/quickref/*" [] {:status 301 :headers {"Location" "/quickref"}})
-  (GET "/clojure_core" [] {:status 301 :headers {"Location" "/"}}))
+  (GET "/clojure_core" [] {:status 301 :headers {"Location" "/"}})
+  (GET "/v/:id" [id] (old-v-page-redirect id)))
 
 (defroutes _routes
   (context "/api" [] api.server/routes)
