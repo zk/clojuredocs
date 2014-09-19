@@ -37,8 +37,7 @@
 
 (defn scroll-into-view
   [elem & [opts]]
-  (dom/scroll-into-view elem false)
-  #_(let [elem (node elem)
+  (let [elem (node elem)
         {:keys [top bottom]} (dom/bounding-client-rect elem)]
     (when (or (< js/window.innerHeight
                 (+ top (.-offsetHeight elem)))
