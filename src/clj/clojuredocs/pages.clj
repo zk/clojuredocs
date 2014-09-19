@@ -70,35 +70,39 @@
 
 (defn add-see-alsos [results]
   (let [sa-lookup (->> results
-                       (map #(select-keys % [:ns :name]))
-                       (map (fn [{:keys [ns name] :as l}]
-                              [l (->> (mon/fetch-one :see-alsos :where {:var.ns ns :var.name name})
-                                      :refs
-                                      (map (fn [{:keys [ns name]}]
-                                             {:ns ns
-                                              :name name
-                                              :href (str "/" ns "/" name)})))]))
+                       (map #(select-keys % [:ns :name :library-url]))
+                       (map (fn [{:keys [ns name library-url] :as l}]
+                              [l (->> (mon/fetch :see-alsos
+                                        :where {:from-var.ns ns
+                                                :from-var.name name
+                                                :from-var.library-url library-url})
+                                      (map (fn [{:keys [to-var]}]
+                                             {:ns (:ns to-var)
+                                              :name (:name to-var)
+                                              :library-url (:library-url to-var)})))]))
                        (into {}))]
     (->> results
-         (map #(assoc % :see-alsos (get sa-lookup (select-keys % [:ns :name])))))))
+         (map #(assoc % :see-alsos (get sa-lookup (select-keys % [:ns :name :library-url])))))))
 
 (defn add-examples-count [results]
   (let [examples-lookup (->> results
                              (map #(select-keys % [:ns :name :library-url]))
                              (map (fn [{:keys [ns name library-url] :as l}]
-                                    [l (mon/fetch-count :examples :where {:var.ns ns
-                                                                          :var.name name
-                                                                          :var.library-url library-url})]))
+                                    [l (mon/fetch-count :examples
+                                         :where {:var.ns ns
+                                                 :var.name name
+                                                 :var.library-url library-url
+                                                 :deleted-at nil})]))
                              (into {}))]
     (->> results
          (map #(assoc % :examples-count (get examples-lookup (select-keys % [:ns :name :library-url])))))))
-
 
 (defn var-search-handler [{:keys [params]}]
   {:headers {"Content-Type" "application/edn"}
    :body (pr-str (->> params
                       :query
                       search/query
+                      (take 10)
                       add-see-alsos
                       add-examples-count))})
 
