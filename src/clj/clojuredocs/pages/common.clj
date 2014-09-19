@@ -127,7 +127,7 @@
     [:div.mobile-nav-bar
      ($navbar opts)]
     [:div.sticky-wrapper.mobile-push-wrapper
-     (when config/staging?
+     (when config/staging-banner?
        [:div.staging-banner
         "This is the ClojureDocs staging site, where you'll find all the neat things we're working on."])
      [:div.desktop-nav-bar
