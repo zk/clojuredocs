@@ -118,7 +118,7 @@
 
 (defn top-contribs []
   (let [scores (atom {})]
-    (doseq [{:keys [author _id]} (mon/fetch :examples)]
+    (doseq [{:keys [author _id]} (mon/fetch :examples :where {:deleted-at nil})]
       (let [editors (->> (mon/fetch :example-histories :where {:example-id _id})
                          (map :editor))]
         (swap! scores update-in [author] #(+ 4 (or % 0)))
