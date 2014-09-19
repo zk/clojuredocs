@@ -24,7 +24,7 @@
 ;; See Alsos
 
 (defn find-see-alsos-for [{:keys [ns name library-url]}]
-  (->> (mon/fetch-one :see-alsos :where {:var.name name
-                                         :var.ns ns
-                                         :var.library-url "https://github.com/clojure/clojure"})
-       :refs))
+  (mon/fetch-one :see-alsos
+    :where {:var.name name
+            :var.ns ns
+            :var.library-url "https://github.com/clojure/clojure"}))
