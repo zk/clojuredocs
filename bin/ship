@@ -2,8 +2,13 @@
 
 set -e
 
+if [[ $# -eq 0 ]] ; then
+    echo "Usage: ship ENVIRONMENT"
+    exit 0
+fi
+
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # $SCRIPT_DIR/test
 
-cd $SCRIPT_DIR/.. && git push git@heroku.com:clojuredocs.git clj-rewrite:master
+cd $SCRIPT_DIR/.. && git push git@heroku.com:clojuredocs-$1.git clj-rewrite:master
