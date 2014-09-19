@@ -181,5 +181,4 @@ Still maintains the O(n*m) guarantee.
   (when-not (empty? q)
     (->> (clucy/search search-index (str (lucene-escape (str/trim q)) "*") 1000 :default-field "keywords")
          (map #(assoc % :edit-distance (levenshtein-distance (str (:name %)) q)))
-         (sort-by :edit-distance)
-         (take 5))))
+         (sort-by :edit-distance))))

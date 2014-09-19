@@ -111,6 +111,7 @@
    :body (pr-str (->> params
                       :query
                       search/query
+                      (take 5)
                       (filter #(get #{"var" "function" "special-form" "macro"} (:type %)))))})
 
 (defn expand-ns [ns]
