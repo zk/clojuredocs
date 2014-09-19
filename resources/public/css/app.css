@@ -1455,3 +1455,10 @@ table.schema .aside {
 .sg-example-inspector .sg-inspector-outlets .message pre {
   margin: 0;
 }
+.migrate-user-page .controls {
+  text-align: center;
+}
+.migrate-user-page .controls .btn {
+  font-size: 30px;
+  padding: 5px 30px;
+}
