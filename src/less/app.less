@@ -81,7 +81,7 @@ h5 {
   text-transform: uppercase;
   letter-spacing: 1px;
   color: #777;
-  margin-bottom: 15px;
+  margin-bottom: 5px;
 }
 
 p {
@@ -1292,12 +1292,6 @@ p.example-instructions {
   }
 }
 
-.library-nav {
-  @media(max-width: 767px) {
-    display: none;
-  }
-}
-
 .recent-pages {
   font-size: 14px;
   margin-bottom: 30px;
@@ -1608,6 +1602,10 @@ p.example-instructions {
     margin-top: 0;
   }
 
+  & > ul {
+    margin-bottom: 20px;
+  }
+
   li {
     margin-bottom: 0px;
   }
@@ -1618,6 +1616,10 @@ p.example-instructions {
 
   .current {
     font-weight: bold;
+  }
+
+  @media(max-width: 767px) {
+    display: none;
   }
 }
 
@@ -1891,6 +1893,27 @@ table.schema {
     .btn {
       font-size: 30px;
       padding: 5px 30px;
+    }
+  }
+}
+
+.var-namespace-group {
+  h2 {
+    border-bottom: solid orange 2px;
+  }
+}
+
+.var-group {
+  h3 {
+    border-bottom: solid #ccc 1px;
+  }
+
+  ul.var-list {
+    li {
+      display: inline-block;
+      margin-right: 4px;
+      background-color: #eee;
+      padding: 0 4px;
     }
   }
 }

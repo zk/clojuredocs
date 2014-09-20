@@ -22,21 +22,21 @@
 * Release Checklist
 
 + Move over from old db
-+ Claiming old user accounts
-+ Redirect old urls to new
 + Clean data export for dev distribution
-+ Jobs
++ Backups
 + Organize ns decls
 + Fix scroll-to on expand in firefox
 + check indexes
 + optimistic network
 + favicon
 + numbers sanity check
-
 + Mobile Fixes
++ Core namespaces copy
 
 
 ** Done
++ Redirect old urls to new
++ Claiming old user accounts
 + Add user page
 + Redirect old /v/# urls
 + Responsive ns page
@@ -97,6 +97,7 @@
 + Animate scroll-to links
 
 ** Punt
++ Jobs
 + ClojureScript / Clojure.NET support
 + URL shortener howto
 + Investigate bitbucket login
@@ -110,24 +111,52 @@
 
 
 * Indexes
-+ namespaces
-  + name
-+ vars
-  + name
-  + ns
-  + library-url
-+ see-alsos
-  + name
-  + ns
-  + library-url
-+ libraries
-  + namespaces
-+ examples
-  + name
-  + ns
-  + library-url
-+ var-notes
-  + var (ns name library-url)
+
+:namespaces
++ name
+
+:examples
++ var.name
++ var.ns
++ var.library-url
++ deleted-at
++ author.login
++ author.account-source
++ editors.login
++ editors.account-source
+
+:see-alsos
++ from-var.ns
++ from-var.name
++ from-var.library-url
++ to-var.ns
++ to-var.name
++ to-var.library-url
++ author.login
++ author.account-source
+
+:notes
++ var.ns
++ var.name
++ var.library-url
++ account.login
++ account.account-source
+
+:legacy-var-redirects
++ function-id
++ editor.login
++ editor.account-source
+
+:example-histories
++ example-id
+
+:users
++ login
++ account-source
+
+:migrate-users
++ email
++ migration-key
 
 
 * Import
@@ -408,3 +437,30 @@ Reagent. Feels way more performant, and I can remove
 syntaxhighlighter & supporting files from the frontend.
 
 458K pre, 433K post :D
+
+
+<2014-09-19 Fri 16:40>
+
+Feels like I'm getting close. The to do list is down to about 5
+items, but I'm sure I'll add more before launch. Got the DNS servers
+switched over from 1and1 to Route 53. I really need to get that
+domain reg switched over to namecheap. 1and1 is such a POS.
+
+Copy is the next big thing, I'll do on or two passes, but there are
+much better writers in the community that can help out.
+
+Post-launch: autocomplete is way, way to slow. Was getting ~1-2
+seconds turn-around on my mobile tether, prob get around 250ms on
+cable. That's still to slow I think, we need to try shiping all the vars
+down and do the search on the client next. It's not that much, ~1000
+vars clocks in around:
+
+1000 vars * (50B name + 200B docstring + 100B random) = 350K extras
+
+I'm guessing that extra 350K is worth it if cachable.
+
+* Fears
+
++ People will have a harder time finding what they're looking for
++ Site will be slower
++ Site will have more downtime

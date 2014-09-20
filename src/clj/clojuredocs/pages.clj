@@ -48,7 +48,10 @@
      :title "Clojure's Core Library | ClojureDocs - Community-Powered Clojure Documentation and Examples"
      :user user
      :page-uri uri
-     :mobile-nav [{:title "Namespaces"
+     :mobile-nav [{:title "Core Library"
+                   :links [[:a {:href "/core-library"} "Overview"]
+                           [:a {:href "/core-library/vars"} "All The Vars"]]}
+                  {:title "Namespaces"
                    :links (->> search/clojure-lib
                                :namespaces
                                (map (fn [{:keys [name]}]
@@ -58,6 +61,10 @@
       [:div.col-sm-2
        [:div.sidenav
         {:data-sticky-offset "20"}
+        [:h5 "Core Library"]
+        [:ul
+         [:li [:a {:href "/core-library"} "Overview"]]
+         [:li [:a {:href "/core-library/vars"} "All Vars"]]]
         (common/$library-nav search/clojure-lib)]]
       [:div.col-sm-10
        [:section.markdown
@@ -67,6 +74,60 @@
            [:section.markdown
             [:h2 [:a {:href (str "/" name)} name]]
             content]))]]}))
+
+
+(defn group-vars [vars]
+  (->> vars
+       (group-by
+         (fn [v]
+           (let [char (-> v :name first str/lower-case)]
+             (if (< (int (first char)) 97)
+               "*^%"
+               char))))
+       (sort-by #(-> % first))
+       (map (fn [[c vs]]
+              {:heading c
+               :vars vs}))))
+
+(defn core-library-vars-handler [{:keys [user uri]}]
+  (common/$main
+    {:body-class "core-library-page"
+     :title "All Functions, Macros, and Vars in Clojure's Core Library | ClojureDocs - Community-Powered Clojure Documentation and Examples"
+     :page-uri uri
+     :user user
+     :mobile-nav
+     [{:title "Core Library"
+       :links [[:a {:href "/core-library"} "Overview"]
+               [:a {:href "/core-library/vars"} "All The Vars"]]}
+      {:title "Namespaces"
+       :links (->> search/clojure-lib
+                   :namespaces
+                   (map (fn [{:keys [name]}]
+                          [:a {:href (str "/" name)} name])))}]
+     :content
+     [:div.row
+      [:div.col-sm-2
+       [:div.sidenav
+        {:data-sticky-offset "20"}
+        [:h5 "Core Library"]
+        [:ul
+         [:li [:a {:href "/core-library"} "Overview"]]
+         [:li [:a {:href "/core-library/vars"} "All Vars"]]]
+        (common/$library-nav search/clojure-lib)]]
+      [:div.col-sm-10
+       [:h1 "All Vars in Clojure's Core Library"]
+       (for [[ns vars] (->> search/clojure-lib
+                            :vars
+                            (group-by :ns)
+                            (sort-by first))]
+         [:div.var-namespace-group
+          [:h2 [:a {:href (str  "/" ns)} ns]]
+          (for [{:keys [heading vars]} (group-vars vars)]
+            [:div.var-group
+             [:h3 heading]
+             [:ul.var-list
+              (for [{:keys [ns name]} vars]
+                [:li (util/$var-link ns name name)])]])])]]}))
 
 (defn add-see-alsos [results]
   (let [sa-lookup (->> results
@@ -164,7 +225,9 @@
   (GET "/robots.txt" [] robots-resp)
   (GET "/logout" [] logout-resp)
   (GET "/examples-styleguide" [] examples-styleguide-handler)
+
   (GET "/core-library" [] core-library-handler)
+  (GET "/core-library/vars" [] core-library-vars-handler)
 
   (GET "/concepts/:concept" [concept] (concept-page-handler concept))
 

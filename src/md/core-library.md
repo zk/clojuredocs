@@ -10,3 +10,7 @@ object-oriented languages like Java, Ruby, or Python, where behavior
 is grouped using classes. In Clojure, namespaces are used to group
 similar behavior and state, and we've outlined a few of the core
 namespaces to help you find what you're looking for.
+
+We have a
+[page listing all functions, macros, and other vars in Clojure's core library](/core-library/vars)
+as well.

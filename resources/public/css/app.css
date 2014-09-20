@@ -55,7 +55,7 @@ h5 {
   text-transform: uppercase;
   letter-spacing: 1px;
   color: #777;
-  margin-bottom: 15px;
+  margin-bottom: 5px;
 }
 p {
   font-size: 17px;
@@ -996,11 +996,6 @@ p.example-instructions {
   padding: 15px;
   font-size: 14px;
 }
-@media (max-width: 767px) {
-  .library-nav {
-    display: none;
-  }
-}
 .recent-pages {
   font-size: 14px;
   margin-bottom: 30px;
@@ -1240,6 +1235,9 @@ p.example-instructions {
   font-size: 14px;
   margin-top: 0;
 }
+.sidenav > ul {
+  margin-bottom: 20px;
+}
 .sidenav li {
   margin-bottom: 0px;
 }
@@ -1248,6 +1246,11 @@ p.example-instructions {
 }
 .sidenav .current {
   font-weight: bold;
+}
+@media (max-width: 767px) {
+  .sidenav {
+    display: none;
+  }
 }
 .live-preview {
   background-color: #fafafa;
@@ -1461,4 +1464,16 @@ table.schema .aside {
 .migrate-user-page .controls .btn {
   font-size: 30px;
   padding: 5px 30px;
+}
+.var-namespace-group h2 {
+  border-bottom: solid orange 2px;
+}
+.var-group h3 {
+  border-bottom: solid #ccc 1px;
+}
+.var-group ul.var-list li {
+  display: inline-block;
+  margin-right: 4px;
+  background-color: #eee;
+  padding: 0 4px;
 }
