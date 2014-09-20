@@ -676,9 +676,14 @@ table.ac-results {
   }
 
   form.search {
+    background-color: white;
     margin: -30px -25px;
     padding: 30px 25px;
-    background-color: white;
+
+    @media(max-width: 767px) {
+      margin: 0;
+      padding: 0;
+    }
 
     input[name='query'] {
       font-size: 20px;
