@@ -69,6 +69,7 @@ li {
 pre {
   border-radius: 0px;
   border: none;
+  word-wrap: normal;
 }
 ul {
   padding: 0;
@@ -401,8 +402,7 @@ form.search input.placeholder {
 .syntaxify {
   padding: 0px;
   background-color: transparent;
-  white-space: pre;
-  overflow-x: scroll;
+  word-wrap: normal;
 }
 .ac-result-link:hover {
   text-decoration: none;
@@ -1282,6 +1282,9 @@ p.example-instructions {
 .core-library-page .syntaxify {
   background-color: rgba(0, 0, 0, 0.01);
   padding: 20px;
+}
+.core-library-page h2 {
+  border-bottom: solid #ddd 2px;
 }
 .core-library-page h3 {
   margin-top: 30px;
