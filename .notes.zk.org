@@ -28,6 +28,7 @@
 
 
 ** Done
++ Fix original author not being attributed correctly
 + Move over from old db
 + favicon
 + check indexes
