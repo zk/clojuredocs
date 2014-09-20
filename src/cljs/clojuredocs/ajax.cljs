@@ -92,9 +92,9 @@
         opts (if-not (:headers opts)
                (assoc opts
                  :headers (condp = (:data-type opts)
-                            :json {"Content-Type" "application/json"}
-                            :edn {"Content-Type" "application/edn"}
-                            {"Content-Type" "application/edn"}))
+                            :json {"Content-Type" "application/json;charset=utf-8"}
+                            :edn {"Content-Type" "application/edn;charset=utf-8"}
+                            {"Content-Type" "application/edn;charset=utf-8"}))
                opts)
         opts (cond
                (= :json (:data-type opts))

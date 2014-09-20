@@ -29,7 +29,7 @@
   (string? (:body r)))
 
 (defn edn-response? [{:keys [headers]}]
-  (get #{"application/edn"}
+  (re-find #"application/edn"
     (or (get headers "Content-Type")
         (get headers "content-type"))))
 
@@ -74,7 +74,7 @@
 (defn wrap-force-edn [h]
   (fn [r]
     (-> (h r)
-        (assoc-in [:headers "Content-Type"] "application/edn"))))
+        (assoc-in [:headers "Content-Type"] "application/edn;charset=utf-8"))))
 
 (def routes
   (-> _routes

@@ -97,7 +97,7 @@
         new-example)
       (mon/insert! :example-histories example-history)
       {:status 200
-       :headers {"Content-Type" "application/edn"}
+       :headers {"Content-Type" "application/edn;charset=utf-8"}
        :body new-example})))
 
 (defn delete-example-handler [id]
