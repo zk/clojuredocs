@@ -21,8 +21,7 @@ http://next.clojuredocs.org
 
 ## Deploy
 
-* Force add resources/public/app.css, commit with message `deploy commit`
-* Run `bin/ship`
+* Run `bin/ship next | prod`
 
 
 ## Dev
@@ -46,19 +45,23 @@ Occasionally you'll need to compile and run things as they would be in productio
 The ClojureDocs project is set-up to emit source-maps for compiled javascript. To enable in Chrome, check the 'Enable JS source maps' option in the Developer Tools settings pane.
 
 
+### Clojure Version
+
+Clojure vars are pulled directly from the runtime, and are not stored in the database. When new versions of Clojure are released:
+
+* Change the Clojure dep in `project.clj`
+* Update the version string and source base url in `clojuredocs.search/clojure-lib`
+
+
 ### App Structure
 
-The CD webapp is structured around functionality, where each distinct part has it's own root namespace (`quickref`, `vars`, etc). This is different from a traditional *ails app setup, where source files are organized by type (controllers, views, models), instead of by function.
+Interesting files:
 
-See `clj/clojuredocs/site`.
-
-CD is still kind of an MVC app, in that we separate datastore access, transformation, and rendering into different parts. It's just that these parts are all colocated under a single root namespace. Think trees where major bits of functionality are sub-trees.
-
-
-### Interesting Files
-
-* `clj/clojuredocs/main.cljs` -- Root of the app, sets up the aleph server, repl, etc. Things that affect the runtime environment should go here. Not reloadable, don't put things that you're going to dev on here.
-* `clj/clojuredocs/entry.clj` -- Entry point into the webapp. Site-wide middleware and base routes should go here.
+* `src/clj/clojuredocs/main.clj` -- Main entry-point into the app, starts the jetty server
+* `src/clj/clojuredocs/entry.clj` -- Root routes and middleware
+* `src/clj/clojuredocs/pages.clj` -- User-facing HTML pages
+* `src/clj/clojuredocs/api.clj` -- API endpoints for ajax calls from the frontend.
+* `src/cljs/clojuredocs/main.cljs` -- Main js entry-point into the app
 
 
 ### Conventions
@@ -73,7 +76,7 @@ CD is still kind of an MVC app, in that we separate datastore access, transforma
 
 ## License
 
-Copyright © 2013-present Zachary Kim
+Copyright © 2010-present Zachary Kim
 
 Distributed under the Eclipse Public License either version 1.0 or (at
 your option) any later version.
