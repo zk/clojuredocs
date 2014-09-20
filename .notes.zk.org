@@ -21,20 +21,16 @@
 
 * Release Checklist
 
-+ Move over from old db
-+ Clean data export for dev distribution
-+ Backups
-+ Organize ns decls
 + Fix scroll-to on expand in firefox
-+ check indexes
-+ optimistic network
-+ favicon
 + numbers sanity check
 + Mobile Fixes
 + Core namespaces copy
 
 
 ** Done
++ Move over from old db
++ favicon
++ check indexes
 + Redirect old urls to new
 + Claiming old user accounts
 + Add user page
@@ -107,6 +103,10 @@
 + Admin interface
   + What goes here?
 + Example history page
++ Backups
++ Clean data export for dev distribution
++ optimistic network
++ Organize ns decls
 
 
 
