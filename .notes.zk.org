@@ -26,7 +26,8 @@
 
 
 ** Done
-+ fix wrapping on code pres
++ Fix horizontal scroll issue on intro page
++ Fix wrapping on code pres
 + Mobile Fixes
 + Fix scroll-to on expand in firefox
 + Fix original author not being attributed correctly
