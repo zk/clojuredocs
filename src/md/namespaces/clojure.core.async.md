@@ -1,8 +1,5 @@
-Channel primitives for building asynchronous programs. Core.async is not provided as part of Clojure's standard distribution, and must be included as an external dependency.
+Channel primitives for building asynchronous programs. Core.async is not provided as part of Clojure's standard distribution, and must be included as an [external dependency](https://github.com/clojure/core.async#releases-and-dependency-information).
 
-    ;; Leiningen Dependency
-
-    [clojure/core.async "12345"]
 
 ##### Community Links
 
