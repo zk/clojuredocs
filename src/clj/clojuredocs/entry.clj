@@ -121,9 +121,14 @@
         (update-in res [:headers] merge {"Cache-Control" "public, max-age=31536000"})
         res))))
 
+(defn edn-content-type? [{:keys [headers]}]
+  (re-find #"application/edn"
+    (or (get headers "Content-Type")
+        (get headers "content-type"))))
+
 (defn decode-edn-body [h]
   (fn [r]
-    (if (= "application/edn" (get-in r [:headers "content-type"]))
+    (if (edn-content-type? r)
       (try
         (h (assoc r :edn-body (-> r response-body edn/read-string)))
         (catch Exception e

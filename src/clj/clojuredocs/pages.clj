@@ -159,7 +159,7 @@
          (map #(assoc % :examples-count (get examples-lookup (select-keys % [:ns :name :library-url])))))))
 
 (defn var-search-handler [{:keys [params]}]
-  {:headers {"Content-Type" "application/edn"}
+  {:headers {"Content-Type" "application/edn;charset=utf-8"}
    :body (pr-str (->> params
                       :query
                       search/query
@@ -168,7 +168,7 @@
                       add-examples-count))})
 
 (defn ac-vars-handler [{:keys [params]}]
-  {:headers {"Content-Type" "application/edn"}
+  {:headers {"Content-Type" "application/edn;charset=utf-8"}
    :body (pr-str (->> params
                       :query
                       search/query
