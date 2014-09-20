@@ -21,12 +21,14 @@
 (defn scroll-to
     [elem & [{:keys [pad]}]]
     (let [body (sel1 :body)
-          start (.-scrollTop body)
+          html (sel1 :html)
+          start (max  (.-scrollTop body) (.-scrollTop html))
           end (- (offset-top elem) pad)]
       (.tween js/morpheus
         250
         (fn [pos]
-          (aset body "scrollTop" pos))
+          (aset body "scrollTop" pos)
+          (aset html "scrollTop" pos))
         nil
         nil
         start
