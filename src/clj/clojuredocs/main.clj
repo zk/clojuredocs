@@ -29,30 +29,42 @@
     (println)
     (System/exit -1)))
 
-(defn add-indexes! []
-  (mon/add-index! :examples [:var
-                             :deleted-at
-                             :author.login :author.account-source
-                             :editors.login :editors.account-source])
-  (mon/add-index! :namespaces [:name])
-  (mon/add-index! :see-alsos [:from-var.name :from-var.ns :from-var.library-url
-                              :to-var.ns :to-var.name :to-var.library-url
-                              :account.login :account.account-source])
-  (mon/add-index! :libraries [:namespaces])
-  (mon/add-index! :notes [:var.ns :var.name :var.library-url
-                          :account.login :account.account-source])
+(defn add-indexes-to-coll! [coll ks]
+  (doseq [k ks]
+    (mon/add-index! :examples [k])))
 
-  (mon/add-index! :legacy-var-redirects [:function-id
-                                         :editor.login :editor.account-source])
+(defn add-all-indexes! []
+  (add-indexes-to-coll!
+    :examples [:var :deleted-at
+               :author.login :author.account-source
+               :editors.login :editors.account-source])
 
-  (mon/add-index! :users [:login :account-source])
+  (add-indexes-to-coll! :namespaces [:name])
 
-  (mon/add-index! :migrate-users [:email :migraion-key]))
+  (add-indexes-to-coll!
+    :see-alsos [:from-var.name :from-var.ns :from-var.library-url
+                :to-var.ns :to-var.name :to-var.library-url
+                :account.login :account.account-source])
+
+  (add-indexes-to-coll! :libraries [:namespaces])
+
+  (add-indexes-to-coll!
+    :notes [:var.ns :var.name :var.library-url
+            :account.login :account.account-source])
+
+  (add-indexes-to-coll!
+    :legacy-var-redirects [:function-id
+                           :editor.login :editor.account-source])
+
+  (add-indexes-to-coll! :users [:login :account-source])
+
+  (add-indexes-to-coll! :migrate-users [:email :migraion-key]))
+
 
 (defn start [{:keys [port mongo-url entry] :as opts}]
   (report-and-exit-on-missing-env-vars!)
   (mon/set-connection! (mon/make-connection mongo-url))
-  #_(add-indexes!)
+  (add-all-indexes!)
   (let [stop-server (start-http-server entry
                       {:port port :join? false})]
     (println (format "Server running on port %d" port))
