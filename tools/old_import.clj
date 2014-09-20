@@ -18,6 +18,9 @@
 (defn core-nss []
   (j/query mysql-db ["SELECT * FROM namespaces WHERE library_id=3"]))
 
+(defn all-nss []
+  (j/query mysql-db ["SELECT * FROM namespaces"]))
+
 (defn all-libs []
   (j/query mysql-db ["SELECT * FROM libraries"]))
 
@@ -27,12 +30,17 @@
 (defn all-users []
   (j/query mysql-db ["SELECT * FROM users"]))
 
+(defn all-functions []
+  (j/query mysql-db ["SELECT * FROM functions"]))
+
 (defn assoc-avatar-url [{:keys [email] :as m}]
   (if email
     (assoc m :avatar-url (str "https://www.gravatar.com/avatar/"
                               (-> email str/lower-case util/md5)
                               "?r=PG&default=identicon"))
     m))
+
+
 
 (defn format-db-user [u]
   (-> u
@@ -86,7 +94,7 @@
 
 ;; examples
 
-#_(do
+(do
   (prn "Importing examples...")
   (mon/drop-coll! :examples)
   (mon/drop-coll! :example-histories)
@@ -114,10 +122,11 @@
                                                   :created-at created_at
                                                   :updated-at updated_at)))))))
                         (map (fn [{:keys [user-id example-id] :as m}]
-                               (let [user (lookup-user user-id)]
+                               (let [user (lookup-user user-id)
+                                     history (history-for example-id)]
                                  (assoc m
-                                   :author user
-                                   :history (history-for example-id)))))
+                                   :author (:editor (first history))
+                                   :history (rest history)))))
                         (map #(assoc % :library-url "https://github.com/clojure/clojure"))
                         (map (fn [{:keys [author ns name body library-url created-at updated-at history]}]
                                {:_id (org.bson.types.ObjectId.)
@@ -232,7 +241,7 @@
   (mon/update! :vars (select-keys v [:library-url :ns :name]) v))
 
 ;; Vars
-#_(doseq [v searchable-vars]
+(doseq [v searchable-vars]
   (insert-or-update-var v))
 
 
@@ -250,21 +259,23 @@
 
 (def see-alsos (atom {}))
 
-#_(time
-  (doseq [{:keys [from_id to_id user_id created_at]}
-          (j/query mysql-db ["SELECT * FROM see_alsos"])]
-    (let [from (pull-ns-name from_id)
-          to (pull-ns-name to_id)]
-      (swap! see-alsos update-in [from] #(-> %
-                                             (concat [(-> to
-                                                          (select-keys [:ns :name])
-                                                          (assoc
-                                                              :created-at (.getTime created_at)
-                                                              :author (lookup-user user_id)
-                                                              :library-url "https://github.com/clojure/clojure"
-                                                              )
-                                                          )])
-                                             distinct)))))
+(do
+  (prn "Importing see alsos...")
+  (time
+    (doseq [{:keys [from_id to_id user_id created_at]}
+            (j/query mysql-db ["SELECT * FROM see_alsos"])]
+      (let [from (pull-ns-name from_id)
+            to (pull-ns-name to_id)]
+        (swap! see-alsos update-in [from] #(-> %
+                                               (concat [(-> to
+                                                            (select-keys [:ns :name])
+                                                            (assoc
+                                                                :created-at (.getTime created_at)
+                                                                :author (lookup-user user_id)
+                                                                :library-url "https://github.com/clojure/clojure"
+                                                                )
+                                                            )])
+                                               distinct))))))
 
 (def clj-nss (->> clojure-namespaces
                   (map str)
@@ -404,12 +415,7 @@
 (->> (mon/fetch :vars)
      (sort-by #(-> % :doc count))
      reverse
-     first
-     )
-
-
-
-
+     first)
 
 #_(defn import-notes []
   (let [notes (->> (all-notes)
@@ -425,4 +431,38 @@
     (doseq [n notes]
       (data/update-note-where! #(select-keys % [:author :body :var]) n))))
 
-#_(import-notes)
+
+
+;; Account Migration
+
+(doseq [{:keys [login email]} (all-users)]
+  (mon/update! :migrate-users {:login login} {:login login :email email}))
+
+(def ns-lookup (->> (core-nss)
+                    (map #(vector (:id %) %))
+                    (into {})))
+
+
+
+(defn core-functions []
+  (->> (all-functions)
+       (map #(assoc % :ns (get ns-lookup (:namespace_id %))))
+       (filter :ns)))
+
+
+#_(->> (all-functions)
+     (map #(assoc % :ns (get ns-lookup (:namespace_id %))))
+     (filter :ns)
+     count)
+
+(doseq [{:keys [name ns library-url] :as v}
+        (->> (core-functions)
+             (map (fn [{:keys [id namespace_id] :as func}]
+                    (when-let [{:keys [name] :as ns} (get ns-lookup namespace_id)]
+                      {:name (:name func)
+                       :ns (:name ns)
+                       :library-url "https://github.com/clojure/clojure"
+                       :function-id id}))))]
+  (mon/update! :legacy-var-redirects
+    (select-keys v [:ns :name :library-url])
+    v))1
