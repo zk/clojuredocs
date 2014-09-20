@@ -122,9 +122,9 @@
         res))))
 
 (defn edn-content-type? [{:keys [headers]}]
-  (re-find #"application/edn"
-    (or (get headers "Content-Type")
-        (get headers "content-type"))))
+  (when-let [ct (or (get headers "Content-Type")
+                    (get headers "content-type"))]
+    (re-find #"application/edn" ct)))
 
 (defn decode-edn-body [h]
   (fn [r]
