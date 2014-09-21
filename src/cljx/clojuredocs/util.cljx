@@ -28,6 +28,13 @@
   (when s
     (java.net.URLEncoder/encode s)))
 
+#+clj
+(defn html-encode [s]
+  (when s
+    (-> s
+        (str/replace #"<" "&lt;")
+        (str/replace #">" "&gt;"))))
+
 (defn cd-decode [s]
   (when s
     (cond
