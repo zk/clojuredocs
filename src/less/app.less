@@ -1141,28 +1141,60 @@ table.ac-results {
     color: #bbb;
   }
 
+  .dl-row {
+    clear: both;
+    padding: 3px 0;
+
+    &:hover {
+      background-color: #eee;
+    }
+  }
+
   dl {
     font-size: 13px;
   }
 
-  .dl-row {
-    padding-right: 3px;
-    padding-left: 3px;
+  dt {
+    width: 130px;
+    text-align: right;
+    margin-right: 10px;
+    font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+    font-weight: normal;
   }
 
-  dl .dl-row:hover {
-    background-color: rgba(0,0,0,0.04);
-  }
+  dd {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 550px;
+    white-space: nowrap;
+    margin-left: 150px;
 
-  @media (max-width: 767px) {
-    .dl-row {
-      border-top: solid #ccc 1px;
-      padding-bottom: 10px;
-      padding-top: 10px;
+    @media(max-width: 1199px) {
+      width: 430px;
+    }
+
+    @media(max-width: 991px) {
+      width: 380px;
     }
   }
 
-  dt, dd {
+  @media(max-width: 767px) {
+    .dl-row {
+      padding: 0;
+    }
+
+    dt {
+      display: block;
+      text-align: left;
+      padding-top: 10px;
+    }
+
+    dd {
+      display: block;
+      border-bottom: solid #ddd 1px;
+      width: 100%;
+      padding-bottom: 10px;
+    }
   }
 
   dt {
@@ -1364,7 +1396,7 @@ p.example-instructions {
     min-width: 150px;
     text-align: right;
     margin-right: 10px;
-    //font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+    font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
     font-weight: normal;
   }
 

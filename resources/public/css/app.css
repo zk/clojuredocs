@@ -890,21 +890,54 @@ table.ac-results .ac-metadata {
 .sphere .examples-count {
   color: #bbb;
 }
+.sphere .dl-row {
+  clear: both;
+  padding: 3px 0;
+}
+.sphere .dl-row:hover {
+  background-color: #eee;
+}
 .sphere dl {
   font-size: 13px;
 }
-.sphere .dl-row {
-  padding-right: 3px;
-  padding-left: 3px;
+.sphere dt {
+  width: 130px;
+  text-align: right;
+  margin-right: 10px;
+  font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+  font-weight: normal;
 }
-.sphere dl .dl-row:hover {
-  background-color: rgba(0, 0, 0, 0.04);
+.sphere dd {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 550px;
+  white-space: nowrap;
+  margin-left: 150px;
+}
+@media (max-width: 1199px) {
+  .sphere dd {
+    width: 430px;
+  }
+}
+@media (max-width: 991px) {
+  .sphere dd {
+    width: 380px;
+  }
 }
 @media (max-width: 767px) {
   .sphere .dl-row {
-    border-top: solid #ccc 1px;
-    padding-bottom: 10px;
+    padding: 0;
+  }
+  .sphere dt {
+    display: block;
+    text-align: left;
     padding-top: 10px;
+  }
+  .sphere dd {
+    display: block;
+    border-bottom: solid #ddd 1px;
+    width: 100%;
+    padding-bottom: 10px;
   }
 }
 .sphere dt {
@@ -1061,6 +1094,7 @@ p.example-instructions {
   min-width: 150px;
   text-align: right;
   margin-right: 10px;
+  font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
   font-weight: normal;
 }
 .var-group dd {

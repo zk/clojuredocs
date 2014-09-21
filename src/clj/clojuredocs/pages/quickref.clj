@@ -24,7 +24,7 @@
                 [:dd (->> (str "clojure.core/" %)
                           search/lookup-vars
                           :doc
-                          (take 50)
+                          (take 110)
                           (apply str))
                  #_[:span.examples-count.pull-right
                   "1 ex."]]])
