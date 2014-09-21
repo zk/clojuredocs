@@ -20,8 +20,12 @@
   search/clojure-lib)
 
 (defn $arglist [name a]
-  [:li.arglist (str
-                 "(" name (when-not (empty? a) " ") a ")")])
+  [:li.arglist
+   (str "("
+        (util/html-encode name)
+        (when-not (empty? a) " ")
+        a
+        ")")])
 
 (defn see-alsos-for [{:keys [ns name library-url]}]
   (->> (mon/fetch :see-alsos
@@ -84,7 +88,7 @@
 (defn $var-header [{:keys [ns name added arglists] :as v}]
   [:div.row.var-header
    [:div.col-sm-8
-    [:h1.var-name name]]
+    [:h1.var-name (util/html-encode name)]]
    [:div.col-sm-4
     [:div.var-meta
      [:h4 [:a {:href (str "/" ns)} ns]]
