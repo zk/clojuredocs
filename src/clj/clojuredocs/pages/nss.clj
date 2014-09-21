@@ -41,12 +41,13 @@
        [:dl.dl-horizontal]
        (->> vars
             (map (fn [{:keys [ns name doc]}]
-                   (let [name (-> name
-                                   (str/replace #"<" "&lt;")
-                                   (str/replace #">" "&gt;"))]
+                   (let [html-enc-name
+                         (-> name
+                             (str/replace #"<" "&lt;")
+                             (str/replace #">" "&gt;"))]
                      [:div.dl-row
                       [:dt.name
-                       (util/$var-link ns name name)]
+                       (util/$var-link ns name html-enc-name)]
                       (if doc
                         [:dd.doc doc]
                         [:dd.no-doc "no doc"])]))))))])
