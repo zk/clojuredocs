@@ -23,6 +23,7 @@
 
 + numbers sanity check
 + Core namespaces copy
++ Remove non-core see alsos
 
 
 ** Done
@@ -428,7 +429,13 @@ Lifecycle
 * page-wide scripts
 
 
-Man I'm writing some awful code.
+* Fears
+
++ People will have a harder time finding what they're looking for
++ Site will be slower
++ Site will have more (any) downtime
++ Contributing will be difficult because the codebase is a mess
+
 
 
 * Log
@@ -458,12 +465,26 @@ cable. That's still to slow I think, we need to try shiping all the vars
 down and do the search on the client next. It's not that much, ~1000
 vars clocks in around:
 
-1000 vars * (50B name + 200B docstring + 100B random) = 350K extras
+1000 vars * (50B name + 200B docstring + 100B fudge) = 350K extras
+
+Less w/ gzip
 
 I'm guessing that extra 350K is worth it if cachable.
 
-* Fears
 
-+ People will have a harder time finding what they're looking for
-+ Site will be slower
-+ Site will have more downtime
+<2014-09-21 Sun 00:22>
+
+Getting close to a release, just need to get some help banging on the
+thing. Also working on persisting search state:
+
+https://github.com/zk/clojuredocs/issues/68
+
+There's a ton of stuff once you dig in.
+
++ back / forward through queries
++ restoring state on back
++ store autocomplete results in local storage to be able to instantly
+  populate on back nav
+
+The search stuff needs a good refactor anyway, the separation of
+concerns and encapsulaton is poor

@@ -4,7 +4,7 @@
             [clojure.string :as str]
             [clojuredocs.ajax :refer [ajax]]
             [clojuredocs.sticky :as sticky]
-            [clojuredocs.search :as search]
+            [clojuredocs.mods.search :as search]
             [clojuredocs.see-alsos :as see-alsos]
             [clojuredocs.examples :as examples]
             [clojuredocs.notes :as notes]
@@ -103,49 +103,6 @@
 (defn navigate-to [url]
   (aset (.-location js/window) "href" url))
 
-(defn ajax-chan [opts]
-  (let [c (chan)]
-    (ajax
-      (merge
-        opts
-        {:success (fn [res]
-                    (put! c {:success true :res res}))
-         :error (fn [res]
-                  (put! c {:success false :res res}))}))
-    c))
-
-
-(defn throttle [in ms]
-  (let [c (chan)
-        timer (atom nil)]
-    (go-loop []
-      (when-let [new-text (<! in)]
-        (js/clearTimeout @timer)
-        (reset! timer (js/setTimeout #(put! c new-text) ms))
-        (recur)))
-    c))
-
-(defn wire-search [text-chan app-state]
-  (let [throttled-text-chan (throttle text-chan 200)]
-    (go
-      (while true
-        (let [ac-text (<! throttled-text-chan)]
-          (if (empty? ac-text)
-            (swap! app-state assoc :results-empty? false :ac-results [])
-            (do
-              (swap! app-state assoc :search-loading? true)
-              (let [ac-response (<! (ajax-chan {:method :get
-                                                :path (str "/search?query=" (util/url-encode ac-text))
-                                                :data-type :edn}))
-                    data (-> ac-response :res :body)]
-                (when (:success ac-response)
-                  (swap! app-state
-                    assoc
-                    :highlighted-index 0
-                    :search-loading? false
-                    :results-empty? (and (empty? data) (not (empty? ac-text)))
-                    :ac-results data))))))))))
-
 (defn animated-scroll-init [$el]
   (let [href (dommy/attr $el :href)
         $target (if (= "#" href)
@@ -165,8 +122,6 @@
 
 (def text-chan (chan))
 
-(wire-search text-chan app-state)
-
 (defn mk-delete-example [app-state]
   (fn [ex-to-del]
     (swap! app-state update-in [:examples]
@@ -180,17 +135,6 @@
     (prn ex)
     (swap! app-state assoc :create-success? true)
     (recur)))
-
-(on-el-om
-  [:.search-widget search/$quick-lookup {:init-state {:text-chan text-chan}}]
-  [:.quick-search-widget search/$quick-search {:init-state {:text-chan text-chan}}]
-  [:.ac-results-widget search/$ac-results]
-  [:.search-feedback-widget search/$search-feedback
-   (fn [$el app]
-     {:init-state
-      {:query (dommy/attr $el :data-query)}})]
-  )
-
 
 ;; Styleguide
 
@@ -288,7 +232,8 @@ f should accept number-of-colls arguments."}
     (canary/init $el))
 
   :body.var-page var-page/init
-  :body.styleguide-page styleguide/init)
+  :body.styleguide-page styleguide/init
+  :body search/init)
 
 (dommy/listen! (sel1 :body) :keydown
   (fn [e]

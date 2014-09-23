@@ -68,12 +68,12 @@
       [:h5 "Clojure in Production"]
       [:ul
        (for [{:keys [src url]}
-             [{:src "https://g.twimg.com/Twitter_logo_blue.png"
-               :url "https://twitter.com"}
-              {:src "https://upload.wikimedia.org/wikipedia/en/2/22/The_Climate_Corporation_Logo2.jpg"
+             [{:src "https://upload.wikimedia.org/wikipedia/en/2/22/The_Climate_Corporation_Logo2.jpg"
                :url "http://www.climate.com/"}
               {:src "/img/netflix-logo.png"
                :url "https://www.netflix.com"}
+              {:src "https://g.twimg.com/Twitter_logo_blue.png"
+               :url "https://twitter.com"}
               {:src "/img/factual-logo.png"
                :url "http://www.factual.com"}
               {:src "/img/prismatic-logo.png"
@@ -95,7 +95,9 @@
               {:src "/img/walmart-labs.png"
                :url "http://www.walmartlabs.com"}
               {:src "/img/rjmetrics-logo.png"
-               :url "https://rjmetrics.com"}]]
+               :url "https://rjmetrics.com"}
+              {:src "/img/cognician-logo.png"
+               :url "https://www.cognician.com"}]]
          [:li [:a {:href url} [:img {:src src}]]])]]]]
    [:div.row
     [:div.col-md-6

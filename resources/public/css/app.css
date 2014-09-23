@@ -55,7 +55,7 @@ h5 {
   text-transform: uppercase;
   letter-spacing: 1px;
   color: #777;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 }
 p {
   font-size: 17px;
@@ -198,9 +198,6 @@ header.navbar .navbar-nav {
 header.navbar .navbar-nav li {
   margin-bottom: 0;
   font-size: 14px;
-}
-header.navbar .navbar-nav li:last-child a {
-  margin-right: -15px;
 }
 header.navbar .quick-search-widget form {
   margin-right: 10px;
@@ -506,23 +503,23 @@ table.ac-results .ac-metadata {
     margin-bottom: 20px;
   }
 }
-.intro-page form.search {
+.intro-page .quick-lookup-wrapper {
   background-color: white;
   margin: -30px -25px;
   padding: 30px 25px;
 }
 @media (max-width: 767px) {
-  .intro-page form.search {
+  .intro-page .quick-lookup-wrapper {
     margin: 0;
     padding: 0;
   }
 }
-.intro-page form.search input[name='query'] {
+.intro-page .quick-lookup-wrapper input[name='query'] {
   font-size: 20px;
   padding: 10px 15px;
 }
 @media (max-width: 767px) {
-  .intro-page form.search input[name='query'] {
+  .intro-page .quick-lookup-wrapper input[name='query'] {
     font-size: 16px;
   }
 }
@@ -1061,7 +1058,7 @@ p.example-instructions {
   }
 }
 .var-page-nav {
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 .ns-page h1 {
   margin-bottom: 20px;
