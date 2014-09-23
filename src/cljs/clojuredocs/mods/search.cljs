@@ -2,7 +2,7 @@
   (:require [om.core :as om :include-macros true]
             [dommy.core :as dommy]
             [cljs.core.async :as async
-             :refer [<! >! chan close! sliding-buffer put! alts! alts!! timeout pipe mult tap]]
+             :refer [<! >! chan close! sliding-buffer put! alts! timeout pipe mult tap]]
             [clojuredocs.ajax :refer [ajax]]
             [clojuredocs.anim :as anim]
             [clojure.string :as str]
@@ -177,11 +177,6 @@
                 ($ac-entry res)])
              ac-results))]))))
 
-(defn handle-search-scroll-to [app prev-props]
-  (when (and (= 0 (count (:ac-text prev-props)))
-             (= 1 (count (:ac-text app))))
-    (anim/scroll-to (om/get-node owner "input") {:pad 35})))
-
 (defn $quick-lookup-widget
   [{:keys [highlighted-index ac-results ac-text search-loading? results-empty?]
     :or {highlighted-index 0}
@@ -199,7 +194,8 @@
          [:div.not-finding {:class "not-finding"}
           "Can't find what you're looking for? "
           [:a.search-feedback
-           {:href (str "/search-feedback" (when text (str "?query=" (util/url-encode text))))}
+           {:href (str "/search-feedback"
+                       (when ac-text (str "?query=" (util/url-encode ac-text))))}
            "Help make ClojureDocs better"]
           "."]
          (om/build $ac-results app {:init-state {:action-ch action-ch}})]))))
