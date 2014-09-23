@@ -112,6 +112,10 @@
 + optimistic network
 + Organize ns decls
 
+** Dev Release Checklist
+
++ Auto load namespaces on file changes
++ Document live reload
 
 
 * Indexes

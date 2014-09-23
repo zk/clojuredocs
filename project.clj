@@ -31,6 +31,7 @@
                  [clj-fuzzy "0.1.8"]
                  [slingshot "0.10.3"]
                  [prone "0.6.0"]]
+  :java-agents [[com.newrelic.agent.java/newrelic-agent "3.10.0"]]
   :repl-options {:init (do
                          (require 'clojuredocs.main)
                          (-> (clojuredocs.main/create-app)
