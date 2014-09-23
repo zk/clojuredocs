@@ -1,15 +1,17 @@
-(ns clojuredocs.search
+(ns clojuredocs.mods.search
   (:require [om.core :as om :include-macros true]
             [dommy.core :as dommy]
             [cljs.core.async :as async
-             :refer [<! >! chan close! sliding-buffer put! alts! timeout pipe mult tap]]
+             :refer [<! >! chan close! sliding-buffer put! alts! alts!! timeout pipe mult tap]]
             [clojuredocs.ajax :refer [ajax]]
             [clojuredocs.anim :as anim]
             [clojure.string :as str]
             [cljs.reader :as reader]
             [sablono.core :as sab :refer-macros [html]]
-            [clojuredocs.util :as util])
-  (:require-macros [dommy.macros :refer [node sel1]]))
+            [clojuredocs.util :as util]
+            [clojuredocs.metrics :as metrics])
+  (:require-macros [cljs.core.async.macros :refer [go go-loop]]
+                   [dommy.macros :refer [node sel1 sel]]))
 
 (defn ellipsis [n s]
   (if (> (- (count s) 3) n)
@@ -19,8 +21,8 @@
          "...")
     s))
 
-(defn handle-search-active-state [owner]
-  (if (empty? (om/get-state owner :text))
+(defn handle-search-active-state [ac-text]
+  (if (empty? ac-text)
     (dommy/remove-class! (sel1 :body) :search-active)
     (dommy/add-class! (sel1 :body) :search-active)))
 
@@ -77,26 +79,15 @@
     (= "page" type) ($ac-entry-page ac-entry)
     :else (.log js/console (str "Couldn't render ac entry:" type))))
 
-(defn put-text [e text-chan owner]
-  (let [text (.. e -target -value)]
-    (put! text-chan text)
-    (om/set-state! owner :loading? true)
-    (om/set-state! owner :text text)))
-
-(defn search-submit [{:keys [href]}]
-  (when href
-    (util/navigate-to href))
-  false)
-
-(defn search-keydown [e app owner ac-results]
+(defn search-keydown [e app ac-results text-chan]
   (when app
     (let [ctrl? (.-ctrlKey e)
           key-code (.-keyCode e)
           {:keys [highlighted-index]} @app]
       (when (= 27 key-code)
-        (om/set-state! owner :text nil)
+        (om/update! app :ac-text "")
         (om/update! app :ac-results nil)
-        (aset (om/get-node owner "input") "value" nil))
+        (put! text-chan ""))
       (let [f (cond
                 (and ctrl? (= 78 key-code)) inc ; ctrl-n
                 (= 40 key-code) inc             ; down arrow
@@ -112,25 +103,49 @@
         (when (not (= identity f))
           false)))))
 
-(defn $quick-search [{:keys [highlighted-index search-loading? ac-results] :as app} owner]
+
+(defn focused? [$el]
+  (= $el (.-activeElement js/document)))
+
+(defn $quick-search-bar
+  [{:keys [highlighted-index search-loading?
+           ac-results ac-text search-focused?] :as app} owner]
   (reify
+    om/IDidMount
+    (did-mount [_]
+      (let [$input (om/get-node owner "input")]
+        (when (and (not (focused? $input))
+                   search-focused?)
+          (.focus $input)
+          (aset $input "value" (.-value $input)))))
     om/IDidUpdate
     (did-update [_ _ _]
-      (handle-search-active-state owner))
+      (handle-search-active-state ac-text)
+      (let [$input (om/get-node owner "input")]
+        (when (and (not (focused? $input))
+                   search-focused?)
+          (.focus $input)
+          (aset $input "value" (.-value $input)))))
     om/IRenderState
-    (render-state [this {:keys [text-chan text]}]
+    (render-state [this {:keys [text-chan action-ch placeholder]}]
       (sab/html
         [:form.search
          {:autoComplete "off"
-          :on-submit #(search-submit (nth ac-results (or highlighted-index 0)))}
+          :on-submit #(do
+                        (let [{:keys [highlighted-index ac-results]} @app]
+                          (put! action-ch (nth ac-results (or highlighted-index 0))))
+                        false)}
          [:input.form-control
           {:class (when search-loading? " loading")
-           :placeholder "Looking for? (ctrl-s)"
+           :placeholder (or placeholder "Looking for? (ctrl-s)")
            :name "query"
            :autoComplete "off"
            :ref "input"
-           :on-input #(put-text % text-chan owner)
-           :on-key-down #(search-keydown % app owner ac-results)}]]))))
+           :value ac-text
+           :on-change #(let [text (.. % -target -value)]
+                         (put! text-chan text)
+                         (om/update! app :ac-text text))
+           :on-key-down #(search-keydown % app ac-results text-chan)}]]))))
 
 (defn $ac-results [{:keys [highlighted-index ac-results results-empty?]
                     :or {highlighted-index 0}
@@ -144,72 +159,50 @@
           (when (and (not= (:highlighted-index prev-props)
                            (:highlighted-index app))
                      $el)
-            (anim/scroll-into-view $el {:pad 30})))))
-    om/IRender
-    (render [this]
+            (anim/scroll-into-view $el {:pad 130})))))
+    om/IRenderState
+    (render-state [this {:keys [action-ch]}]
       (sab/html
         [:ul.ac-results
          (if results-empty?
            [:li.null-state "Nothing Found"]
            (map-indexed
              (fn [i {:keys [href type] :as res}]
-               [:li {:on-click #(when href (util/navigate-to href))
+               [:li {:on-click #(do
+                                  (put! action-ch res)
+                                  false)
                      :class (when (= i highlighted-index)
                               "highlighted")
                      :ref i}
                 ($ac-entry res)])
              ac-results))]))))
 
-(defn handle-search-scroll-to [owner prev-state]
-  (when (and (= 0 (count (:text prev-state)))
-             (= 1 (count (om/get-state owner :text))))
+(defn handle-search-scroll-to [app prev-props]
+  (when (and (= 0 (count (:ac-text prev-props)))
+             (= 1 (count (:ac-text app))))
     (anim/scroll-to (om/get-node owner "input") {:pad 35})))
 
-(defn $quick-lookup [{:keys [highlighted-index ac-results search-loading? results-empty?]
-                      :or {highlighted-index 0}
-                      :as app}
-                     owner]
+(defn $quick-lookup-widget
+  [{:keys [highlighted-index ac-results ac-text search-loading? results-empty?]
+    :or {highlighted-index 0}
+    :as app}
+   owner]
   (reify
-    om/IDidUpdate
-    (did-update [_ prev-props prev-state]
-      (when (and (not= (:highlighted-index prev-props)
-                       (:highlighted-index app))
-                 (> (count ac-results) 0))
-        (anim/scroll-into-view (om/get-node owner (:highlighted-index app)) {:pad 30}))
-      (handle-search-scroll-to owner prev-state)
-      (handle-search-active-state owner))
     om/IRenderState
-    (render-state [this {:keys [text-chan text]}]
+    (render-state [this {:keys [text-chan
+                                action-ch]}]
       (sab/html
-        [:form.search
-         {:autoComplete "off"
-          :on-submit #(search-submit (nth ac-results highlighted-index))}
-         [:input {:class (str "form-control" (when search-loading? " loading"))
-                  :placeholder "Looking for?"
-                  :name "query"
-                  :autoComplete "off"
-                  :autoFocus "autofocus"
-                  :ref "input"
-                  :on-input #(put-text % text-chan owner)
-                  :on-key-down #(search-keydown % app owner ac-results)}]
-         [:div.not-finding]
+        [:div.quick-lookup-wrapper
+         (om/build $quick-search-bar app {:init-state {:text-chan text-chan
+                                                       :action-ch action-ch
+                                                       :placeholder "Looking for?"}})
          [:div.not-finding {:class "not-finding"}
           "Can't find what you're looking for? "
           [:a.search-feedback
            {:href (str "/search-feedback" (when text (str "?query=" (util/url-encode text))))}
            "Help make ClojureDocs better"]
           "."]
-         [:ul.ac-results
-          (if results-empty?
-            [:li.null-state "Nothing Found"]
-            (map-indexed
-              (fn [i {:keys [href type] :as res}]
-                [:li {:on-click #(when href (util/navigate-to href))
-                      :class (when (= i highlighted-index)
-                               "highlighted")
-                      :ref i}
-                 ($ac-entry res)])
-              ac-results))]]))))
+         (om/build $ac-results app {:init-state {:action-ch action-ch}})]))))
 
 (defn submit-feedback [owner query clojure-level text]
   (om/set-state! owner :loading? true)
@@ -273,7 +266,6 @@
          [:div.form-group
           [:label {:for "feedback"} "Feedback"]
           [:textarea {:class "form-control"
-                      :autoFocus "autofocus"
                       :rows 10
                       :name "feedback"
                       :value text
@@ -288,3 +280,122 @@
            "Send Feedback"]
           [:img {:class (str "pull-right loading" (when-not loading? " hidden"))
                  :src "/img/loading.gif"}]]]))))
+
+(defn ajax-chan [opts]
+  (let [c (chan)]
+    (ajax
+      (merge
+        opts
+        {:success (fn [res]
+                    (put! c {:success true :res res}))
+         :error (fn [res]
+                  (put! c {:success false :res res}))}))
+    c))
+
+(defn throttle [in ms]
+  (let [c (chan)
+        timer (atom nil)]
+    (go-loop []
+      (when-let [new-text (<! in)]
+        (js/clearTimeout @timer)
+        (reset! timer (js/setTimeout #(put! c new-text) ms))
+        (recur)))
+    c))
+
+(defn set-location-hash! [s]
+  (if-not (empty? s)
+    (aset (.. js/window -location) "hash" s)
+    (.replaceState (.-history js/window)
+      #js {}
+      nil
+      (.. js/window -location -pathname))))
+
+
+(defn wire-search [text-chan app-state]
+  (let [throttled-text-chan (throttle text-chan 200)]
+    (go
+      (while true
+        (let [ac-text (<! throttled-text-chan)]
+          (if (empty? ac-text)
+            (do
+              (swap! app-state assoc :results-empty? false :ac-results [])
+              (set-location-hash! ""))
+            (do
+              (swap! app-state assoc :search-loading? true)
+              (let [ac-response (<! (ajax-chan {:method :get
+                                                :path (str "/search?query=" (util/url-encode ac-text))
+                                                :data-type :edn}))
+                    data (-> ac-response :res :body)]
+                (when (:success ac-response)
+                  (metrics/track-search ac-text)
+                  (swap! app-state
+                    assoc
+                    :highlighted-index 0
+                    :search-loading? false
+                    :results-empty? (and (empty? data) (not (empty? ac-text)))
+                    :ac-results data))))
+            (swap! app-state assoc :search-loading? false)))))))
+
+(defn location-hash []
+  (let [hash-str (.. js/window -location -hash)]
+    (->> hash-str
+         (drop 1)
+         (apply str)
+         util/url-decode)))
+
+(defn init [$root]
+  (let [prev-query (location-hash)
+        !state (atom {:ac-text prev-query})
+        text-chan (chan)
+        action-ch (chan)]
+
+    (when-not (empty? (sel :.search-widget))
+      (swap! !state assoc :search-focused? true))
+
+    (go-loop []
+      (when-let [res (<! action-ch)]
+        (metrics/track-search-choose (:ac-text @!state) (:href res))
+        (set-location-hash! (:ac-text @!state))
+        (util/navigate-to (:href res))
+        (recur)))
+
+    (wire-search text-chan !state)
+
+    (dommy/listen! js/window :hashchange
+      (fn [_]
+        (let [loc-hash (location-hash)]
+          (swap! !state assoc :ac-text loc-hash)
+          (put! text-chan loc-hash))))
+
+    (when-not (empty? prev-query)
+      (swap! !state assoc :search-focused? true)
+      (put! text-chan prev-query))
+
+    (doseq [$el (sel :.search-widget)]
+      (om/root
+        $quick-lookup-widget
+        !state
+        {:init-state {:text-chan text-chan
+                      :action-ch action-ch}
+         :target $el}))
+
+    (doseq [$el (sel :.quick-search-widget)]
+      (om/root
+        $quick-search-bar
+        !state
+        {:init-state {:text-chan text-chan
+                      :action-ch action-ch}
+         :target $el}))
+
+    (doseq [$el (sel :.ac-results-widget)]
+      (om/root
+        $ac-results
+        !state
+        {:target $el
+         :init-state {:action-ch action-ch}}))
+
+    (doseq [$el (sel :.search-feedback-widget)]
+      (om/root
+        $search-feedback
+        !state
+        {:target $el}))))

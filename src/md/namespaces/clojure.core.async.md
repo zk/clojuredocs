@@ -6,4 +6,4 @@ Channel primitives for building asynchronous programs. **Core.async is not provi
 * [Blog post announcing core.async](http://clojure.com/blog/2013/06/28/clojure-core-async-channels.html)
 * [Source repo](https://github.com/clojure/core.async)
 * [Rich Hickey on core.async](http://www.infoq.com/presentations/clojure-core-async) (video)
-* [Communicating sequential processes](http://en.wikipedia.org/wiki/Communicating_sequential_processes)
+* [Communicating Sequential Processes](http://swannodette.github.io/2013/07/12/communicating-sequential-processes/) by David Nolen

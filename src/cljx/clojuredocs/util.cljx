@@ -15,6 +15,11 @@
   (when s
     (java.net.URLEncoder/encode s)))
 
+#+clj
+(defn url-decode [s]
+  (when s
+    (java.net.URLDecoder/decode s)))
+
 #+cljs
 (defn url-encode
   [string]
@@ -23,10 +28,11 @@
     (js/encodeURIComponent)
     (.replace "+" "%20")))
 
-#+clj
-(defn url-encode [s]
-  (when s
-    (java.net.URLEncoder/encode s)))
+#+cljs
+(defn url-decode [s]
+  (some-> s
+    str
+    js/decodeURIComponent))
 
 #+clj
 (defn html-encode [s]

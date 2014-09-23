@@ -163,11 +163,11 @@
                    :width "80"
                    :height "20"}]
          #_[:iframe {:src "/github-btn.html?user=zk&repo=clojuredocs&type=fork&count=true"
-                   :allowtransparency "true"
-                   :frameborder "0"
-                   :scrolling "0"
-                   :width "80"
-                   :height "20"}]
+                     :allowtransparency "true"
+                     :frameborder "0"
+                     :scrolling "0"
+                     :width "80"
+                     :height "20"}]
          [:a.twitter-share-button {:href "https://twitter.com/share"
                                    :data-url "http://clojuredocs.org"
                                    :data-text "Community-powered docs and examples for #Clojure"
@@ -175,6 +175,7 @@
           "Tweet"]]]
        [:script
         "!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');"]]]]
+    ($ga-script-tag config/ga-tracking-id)
     (when (env/bool :cljs-dev)
       [:script {:src "/js/fastclick.min.js"}])
     (when (env/bool :cljs-dev)
@@ -188,7 +189,7 @@
     clojuredocs-script
     (when (env/bool :cljs-dev)
       [:script "goog.require(\"clojuredocs.main\");"])
-    ($ga-script-tag config/ga-tracking-id)
+    ;; mobile safari home screen mode
     [:script
      "if((\"standalone\" in window.navigator) && window.navigator.standalone){
 var noddy, remotes = false;
