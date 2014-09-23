@@ -11,6 +11,16 @@ http://next.clojuredocs.org
 
 [Rewrite Release Checklist](https://github.com/zk/clojuredocs/blob/clj-rewrite/.notes.zk.org#release-checklist)
 
+## Contributing
+
+* All the copy could use another set of eyes
+* Content for namespaces (see `src/md/namespaces`) needs to be added /
+  edited. Example of
+  [clojure.core.async](http://next.clojuredocs.org/clojure.core.async)
+* Search quick lookup requires a round-trip to the server, which is
+  way too slow. It would be nice to experiment with embedding vars and
+  doing search directly in the js
+
 
 ## Reqs
 

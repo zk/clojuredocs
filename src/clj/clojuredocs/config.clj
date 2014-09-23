@@ -79,7 +79,17 @@
    {:key :from-email
     :type :string
     :doc "Email address to put in 'from' field "
-    :default "ClojureDocs Development <dev@clojuredocs.org>"}])
+    :default "ClojureDocs Development <dev@clojuredocs.org>"}
+
+   {:key :new-relic-app-name
+    :type :string
+    :doc "App name for display in new relic, ex `cd-dev`, `cd-staging`"
+    :required? false}
+
+   {:key :new-relic-license-key
+    :type :string
+    :doc "New Relic license key"
+    :required? false}])
 
 (defn get-env [lookup key]
   (let [{:keys [key type doc required? default] :as env-var-schema}
