@@ -37,10 +37,23 @@
 (defn scroll-to-top []
   (scroll-to (sel1 :body)))
 
+;; From dommy.attrs
+(defn bounding-client-rect
+  "Returns a map of the bounding client rect of `elem`
+   as a map with [:top :left :right :bottom :width :height]"
+  [elem]
+  (let [r (.getBoundingClientRect (node elem))]
+    {:top (.-top r)
+     :bottom (.-bottom r)
+     :left (.-left r)
+     :right (.-right r)
+     :width (.-width r)
+     :height (.-height r)}))
+
 (defn scroll-into-view
   [elem & [opts]]
   (let [elem (node elem)
-        {:keys [top bottom]} (dom/bounding-client-rect elem)]
+        {:keys [top bottom] :as res} (bounding-client-rect elem)]
     (when (or (< js/window.innerHeight
                 (+ top (.-offsetHeight elem)))
               (< top 0))
