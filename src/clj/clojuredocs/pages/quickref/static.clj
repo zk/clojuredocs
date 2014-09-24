@@ -424,8 +424,7 @@
            ns-map),
          :title "Inspect"}
         {:syms (in-ns ns-resolve ns-unalias ns-unmap alias), :title "Use"}
-        {:syms (namespace-munge print-namespace-doc
-                 ), :title "Misc"})}
+        {:syms (namespace-munge), :title "Misc"})}
       {:title "Hierarchies",
        :groups
        ({:syms
