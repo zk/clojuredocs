@@ -13,6 +13,14 @@ http://next.clojuredocs.org
 
 ## Contributing
 
+* Find & report bugs: https://github.com/zk/clojuredocs/issues
+* Suggestions on how to make development on the site more friendly
+  (docs, codebase organization).
+
+Let's use GH issues for discussion for now
+
+If you're looking for a project:
+
 * All the copy could use another set of eyes
 * Content for namespaces (see `src/md/namespaces`) needs to be added /
   edited. Example of
@@ -20,6 +28,8 @@ http://next.clojuredocs.org
 * Search quick lookup requires a round-trip to the server, which is
   way too slow. It would be nice to experiment with embedding vars and
   doing search directly in the js
+* Listing of clojure training / classes / events on home page
+
 
 
 ## Reqs
