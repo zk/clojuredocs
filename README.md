@@ -29,6 +29,8 @@ If you're looking for a project:
   way too slow. It would be nice to experiment with embedding vars and
   doing search directly in the js
 * Listing of clojure training / classes / events on home page
+* Stand-alone example page, maybe have the var info (signature, doc
+  string, etc) at the top.
 
 
 
