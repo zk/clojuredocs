@@ -21,12 +21,12 @@
 
 * Release Checklist
 
-+ numbers sanity check
-+ Core namespaces copy
-+ Remove non-core see alsos
++ Basic copy for core namespace pages
 
 
 ** Done
++ Remove non-core see alsos
++ numbers sanity check
 + Fix horizontal scroll issue on intro page
 + Fix wrapping on code pres
 + Mobile Fixes
