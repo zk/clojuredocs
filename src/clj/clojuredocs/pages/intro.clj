@@ -24,7 +24,8 @@
       (-> var :name util/html-encode))
     " "
     (util/timeago created-at)
-    " ago."]])
+    " ago."
+    [:div.clear]]])
 
 (defmethod $render-recently-updated :see-also
   [{:keys [from-var to-var author created-at]}]
@@ -44,7 +45,8 @@
       (-> to-var :name util/html-encode))
     " "
     (util/timeago created-at)
-    " ago."]])
+    " ago."
+    [:div.clear]]])
 
 (defmethod $render-recently-updated :note
   [{:keys [var author created-at]}]
