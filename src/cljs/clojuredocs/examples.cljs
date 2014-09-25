@@ -233,7 +233,7 @@
            (when body
              [:div.example-body
               (syntax/syntaxify body)]))]))))
-1
+
 (defn build-examples [user examples state]
   (om/build-all
     $example

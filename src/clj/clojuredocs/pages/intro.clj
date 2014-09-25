@@ -7,7 +7,62 @@
             [clojuredocs.pages.common :as common]
             [clojuredocs.syntax :as syntax]))
 
-(defn $index [top-contribs]
+(defmulti $render-recently-updated :type)
+
+(defmethod $render-recently-updated :default [_] nil)
+
+(defmethod $render-recently-updated :example
+  [{:keys [var author created-at]}]
+  [:div.recently-updated
+   (util/$avatar author)
+   [:span.content
+    (:login author)
+    " authored a new example for "
+    (util/$var-link (:ns var) (:name var)
+      (-> var :ns util/html-encode)
+      "/"
+      (-> var :name util/html-encode))
+    " "
+    (util/timeago created-at)
+    " ago."]])
+
+(defmethod $render-recently-updated :see-also
+  [{:keys [from-var to-var author created-at]}]
+  [:div.recently-updated
+   (util/$avatar author)
+   [:span.content
+    (:login author)
+    " added a see-also from "
+    (util/$var-link (:ns from-var) (:name from-var)
+      (-> from-var :ns util/html-encode)
+      "/"
+      (-> from-var :name util/html-encode))
+    " to "
+    (util/$var-link (:ns to-var) (:name to-var)
+      (-> to-var :ns util/html-encode)
+      "/"
+      (-> to-var :name util/html-encode))
+    " "
+    (util/timeago created-at)
+    " ago."]])
+
+(defmethod $render-recently-updated :note
+  [{:keys [var author created-at]}]
+  [:div.recently-updated
+   (util/$avatar author)
+   [:span.content
+    (:login author)
+    " authored a note for "
+    (util/$var-link (:ns var) (:name var)
+      (-> var :ns util/html-encode)
+      "/"
+      (-> var :name util/html-encode))
+    " "
+    (util/timeago created-at)
+    " ago."]
+   [:div.clear]])
+
+(defn $index [top-contribs recently-updateds]
   [:div
    [:div.row
     [:div.col-md-12
@@ -34,7 +89,15 @@
          (map util/$avatar top-contribs)
          [:div.null-state "Uh-oh, no contributors!"])
        [:div.migrate-account
-        [:a {:href "/migrate-account"} "Migrate your old ClojureDocs account"]]]]]]
+        [:a {:href "/migrate-account"} "Migrate your old ClojureDocs account"]]]]
+     [:section
+      [:h5 "Recently Updated"]
+      [:div.row
+       (->> recently-updateds
+            (map $render-recently-updated)
+            (partition-all 3)
+            (map (fn [rs]
+                   [:div.col-sm-6 rs])))]]]]
    [:section
     [:div.row
      [:div.col-md-12
@@ -141,8 +204,26 @@
 (when-not config/cljs-dev?
   (def top-contribs (memo-ttl top-contribs (* 1000 60 60 6))))
 
+(defn recently-updated []
+  (let [limit 6
+        examples (->> (mon/fetch :examples :sort {:created-at -1} :limit limit)
+                      (map #(assoc % :type :example)))
+        see-alsos (->> (mon/fetch :see-alsos :sort {:created-at -1} :limit limit)
+                       (map #(assoc % :type :see-also)))
+        notes (->> (mon/fetch :notes :sort {:created-at -1} :limit limit)
+                   (map #(assoc % :type :note)))]
+    (->> (concat
+           examples
+           see-alsos
+           notes)
+         (sort-by :created-at)
+         reverse
+         (take limit))))
+
 (defn page-handler [{:keys [user]}]
-  (-> {:content ($index (top-contribs))
+  (-> {:content ($index
+                  (top-contribs)
+                  (recently-updated))
        :body-class "intro-page"
        :hide-search true
        :user user}

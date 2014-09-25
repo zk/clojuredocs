@@ -105,10 +105,11 @@
 
 (defn $avatar [{:keys [email login avatar-url account-source] :as user} & [{:keys [size]}]]
   (let [size (str (or size 32))]
-    [:a {:href (str (if (= "github" account-source)
-                      "/u/"
-                      "/uc/")
-                    login)}
+    [:a.avatar-link
+     {:href (str (if (= "github" account-source)
+                   "/u/"
+                   "/uc/")
+                 login)}
      [:img.avatar
       {:src (or (str avatar-url "&s=" size)
                 (str "https://www.gravatar.com/avatar/"
