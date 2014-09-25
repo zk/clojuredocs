@@ -27,6 +27,9 @@
         a
         ")")])
 
+(defn $argform [s]
+  [:li.arglist s])
+
 (defn see-alsos-for [{:keys [ns name library-url]}]
   (->> (mon/fetch :see-alsos
          :where {:from-var.ns ns
@@ -85,7 +88,7 @@
 (defn $number-badge [num]
   [:span.badge num])
 
-(defn $var-header [{:keys [ns name added arglists] :as v}]
+(defn $var-header [{:keys [ns name added arglists forms] :as v}]
   [:div.row.var-header
    [:div.col-sm-8
     [:h1.var-name (util/html-encode name)]]
@@ -103,7 +106,9 @@
    [:div.col-sm-12
     [:section
      [:ul.arglists
-      (map #($arglist name %) arglists)]]]])
+      (if forms
+        (map #($argform %) forms)
+        (map #($arglist name %) arglists))]]]])
 
 (defn var-page-handler [ns name]
   (let [name (util/cd-decode name)
