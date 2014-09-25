@@ -17,7 +17,7 @@
    (util/$avatar author)
    [:span.content
     (:login author)
-    " authored a new example for "
+    " authored an example for "
     (util/$var-link (:ns var) (:name var)
       (-> var :ns util/html-encode)
       "/"
