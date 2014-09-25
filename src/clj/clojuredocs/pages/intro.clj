@@ -111,13 +111,15 @@
       [:ul.getting-started-resources
        [:li [:a {:href "http://www.infoq.com/presentations/Are-We-There-Yet-Rich-Hickey"} "Are We There Yet? (video)"]]
        [:li [:a {:href "http://www.braveclojure.com"} "Clojure for the Brave and True"]]
+       [:li [:a {:href "http://aphyr.com/posts/301-clojure-from-the-ground-up-welcome"}
+             "Clojure from the Ground Up"]]
        [:li [:a {:href "http://tryclj.com"} "Try Clojure (in your browser)"]]
        [:li [:a {:href "http://clojurescriptkoans.com/"} "ClojureScript Koans"]]
        [:li [:a {:href "http://4clojure.org"} "4Clojure (learn Clojure interactively)"]]]
       [:p "There's no denying that Clojure is just so "
        " *different* "
-       " from what most of us are used to (what is up with all those parentheses?!). "
-       "So it's no surprise that it"
+       " from what most of us are used to (what is up with all those parentheses?!), "
+       "so it's no surprise that it"
        " takes a bit to get your head around it. Stick with it, and you won't be disappointed."]
       [:p "But don't take our word for it, here's what XKCD has to say:"]
       [:p [:img.xkcd {:src "/img/lisp_cycles.png"}]]
