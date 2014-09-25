@@ -31,6 +31,8 @@ If you're looking for a project:
 * Listing of clojure training / classes / events on home page
 * Stand-alone example page, maybe have the var info (signature, doc
   string, etc) at the top.
+* Source-linking on libs not included in the standard library
+  e.g. core.async.
 
 
 
@@ -89,6 +91,14 @@ Interesting files:
 ### Conventions
 
 * Functions that return hiccup structures should be prefixed with a `$`, like `$layout`.
+
+
+### Adding Core Libraries
+
+1. Add dependency to `project.clj`
+1. Add ns sym to `clojure-namespaces` in `clojuredocs.search.static`
+1. Add a short description + links to community articles / videos /
+   other resources to `src/md/namespaces/`
 
 
 ## Dev-Prod differences

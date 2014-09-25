@@ -3,6 +3,7 @@
 (def clojure-namespaces
   '[clojure.core
     clojure.core.async
+    clojure.core.logic
     clojure.data
     clojure.edn
     clojure.inspector
