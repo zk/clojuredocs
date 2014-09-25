@@ -16,7 +16,26 @@
   (first (j/query mysql-db ["SELECT * FROM libraries WHERE id=3"])))
 
 (defn core-nss []
-  (j/query mysql-db ["SELECT * FROM namespaces WHERE library_id=3"]))
+  (j/query mysql-db ["SELECT * FROM namespaces WHERE library_id=3 OR library_id=15"]))
+
+(defn core-functions []
+  (let [ns-ids (map :id (core-nss))]
+    (j/query mysql-db [(format "SELECT * FROM functions WHERE namespace_id IN (%s)"
+                         (->> ns-ids
+                              (interpose ",")
+                              (apply str)))])))
+
+(defn core-see-alsos []
+  (let [fs (core-functions)
+        fids (map :id fs)
+        comma-sep (->> fids
+                       (interpose ",")
+                       (apply str))
+        sas (j/query mysql-db
+              [(format "SELECT * FROM see_alsos WHERE from_id IN (%s)"
+                 comma-sep
+                 comma-sep)])]
+    sas))
 
 (defn all-nss []
   (j/query mysql-db ["SELECT * FROM namespaces"]))
@@ -26,6 +45,17 @@
 
 (defn all-notes []
   (j/query mysql-db ["SELECT * FROM comments"]))
+
+(defn core-notes []
+  (let [fs (core-functions)
+        fids (map :id fs)
+        comma-sep (->> fids
+                       (interpose ",")
+                       (apply str))
+        notes (j/query mysql-db
+                [(format "SELECT * FROM comments WHERE commentable_id IN (%s)"
+                   comma-sep)])]
+    notes))
 
 (defn all-users []
   (j/query mysql-db ["SELECT * FROM users"]))
@@ -39,8 +69,6 @@
                               (-> email str/lower-case util/md5)
                               "?r=PG&default=identicon"))
     m))
-
-
 
 (defn format-db-user [u]
   (-> u
@@ -263,7 +291,7 @@
   (prn "Importing see alsos...")
   (time
     (doseq [{:keys [from_id to_id user_id created_at]}
-            (j/query mysql-db ["SELECT * FROM see_alsos"])]
+            (core-see-alsos)]
       (let [from (pull-ns-name from_id)
             to (pull-ns-name to_id)]
         (swap! see-alsos update-in [from] #(-> %
@@ -417,8 +445,9 @@
      reverse
      first)
 
-#_(defn import-notes []
-  (let [notes (->> (all-notes)
+(defn import-notes []
+  (println "Updating notes...")
+  (let [notes (->> (core-notes)
                    (map #(assoc % :author (lookup-user (:user_id %))))
                    (map #(assoc % :var (lookup-function (:commentable_id %))))
                    (map #(assoc % :created-at (:created_at %)))
@@ -429,8 +458,12 @@
                             :updated-at (when updated-at (.getTime updated-at)))))
                    (map #(select-keys % [:updated-at :var :body :created-at :author])))]
     (doseq [n notes]
-      (data/update-note-where! #(select-keys % [:author :body :var]) n))))
+      (mon/update! :notes
+        {:author (:author n) :var (:var n) :body (:body n)}
+        n))
+    (println "Updated" (count notes) "notes")))
 
+#_(import-notes)
 
 
 ;; Account Migration
