@@ -215,6 +215,7 @@ header.navbar .quick-search-widget form {
 }
 .mobile-nav-menu {
   display: none;
+  -webkit-overflow-scrolling: touch;
 }
 .desktop-side-nav .badge {
   float: right;
@@ -929,12 +930,15 @@ table.ac-results .ac-metadata {
     display: block;
     text-align: left;
     padding-top: 10px;
+    clear: both;
   }
   .sphere dd {
     display: block;
     border-bottom: solid #ddd 1px;
-    width: 100%;
     padding-bottom: 10px;
+    text-align: left;
+    width: 100%;
+    margin-left: 0;
   }
 }
 .sphere dt {
@@ -1219,6 +1223,8 @@ p.example-instructions {
 .note-body {
   background-color: #fafafa;
   padding: 10px;
+  word-wrap: normal;
+  overflow-x: scroll;
 }
 .note-body p {
   margin-bottom: 10px;
@@ -1292,6 +1298,8 @@ p.example-instructions {
 .live-preview {
   background-color: #fafafa;
   margin-bottom: 10px;
+  word-wrap: normal;
+  overflow-x: scroll;
 }
 .live-preview .empty-live-preview {
   text-align: center;
