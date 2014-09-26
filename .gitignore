@@ -10,12 +10,10 @@ pom.xml.asc
 
 .DS_Store
 .sass-cache
+.lein-errors
 
 /resources/public/cljs
 /resources/public/cljs-advanced
 
 resources/public/css/app.css
 resources/public/css/highlighting.css
-
-Dockerfile
-fig.yml
