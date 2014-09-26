@@ -45,7 +45,7 @@
 
    {:key :allow-robots
     :type :bool
-    :doc "Deny-all in robots.txt?"
+    :doc "Allow crawl of the site?"
     :required? true}
 
    {:key :log-exceptions

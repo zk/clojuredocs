@@ -21,7 +21,7 @@
   (fn [r]
     {:headers {"Content-Type" "text/plain"}
      :body (if config/allow-robots?
-             "User-agent: *\nAllow: /"
+             "User-agent: *\nDisallow: /dev"
              "User-agent: *\nDisallow: /")}))
 
 (def logout-resp
