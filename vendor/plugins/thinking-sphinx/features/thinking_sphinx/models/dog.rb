@@ -1,3 +1,0 @@
-class Dog < Animal
-  #
-end

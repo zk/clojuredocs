@@ -1,3 +1,0 @@
-class Cat < Animal
-  #
-end

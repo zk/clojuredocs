@@ -1,7 +1,0 @@
-require 'autotest/fsevent'
-require 'autotest/growl'
-
-Autotest.add_hook :initialize do |autotest|
-  %w{.git .svn .hg .DS_Store ._* vendor}.each {|exception| autotest.add_exception(exception) }
-  false
-end

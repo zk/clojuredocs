@@ -1,4 +1,0 @@
-- Grosser::Autocomplete --> SimpleAutocomplete
-- added autocomplete_for('user','name') to Models
-- simple -> ''
-- auto_complete --> autocomplete (geting crazy with both versions + google trends says its the way to go!)

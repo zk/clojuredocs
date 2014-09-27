@@ -1,1 +1,0 @@
-Category.create :name => "hello"
