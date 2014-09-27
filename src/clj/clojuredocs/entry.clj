@@ -87,7 +87,8 @@
   (GET "/clojure_core/:ns/:name" [ns name] (redirect-to-var ns name))
   (GET "/clojure_core/:version/:ns/:name" [ns name] (redirect-to-var ns name))
   (GET "/quickref/*" [] {:status 301 :headers {"Location" "/quickref"}})
-  (GET "/clojure_core" [] {:status 301 :headers {"Location" "/"}})
+  (GET "/clojure_core" [] {:status 301 :headers {"Location" "/core-library"}})
+  (GET "/clojure_core/:ns" [ns] {:status 301 :headers {"Location" (str "/" ns)}})
   (GET "/v/:id" [id] (old-v-page-redirect id)))
 
 (defroutes _routes

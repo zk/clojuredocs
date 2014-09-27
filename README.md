@@ -13,6 +13,12 @@ http://next.clojuredocs.org
 
 ## Contributing
 
+The codebase needs a good scrub before groking will not be
+painful. However, feel free to jump in if you don't mind digging
+around.
+
+Here's a few ways to contribute:
+
 * Find & report bugs: https://github.com/zk/clojuredocs/issues
 * Suggestions on how to make development on the site more friendly
   (docs, codebase organization).
