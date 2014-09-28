@@ -112,6 +112,11 @@ Interesting files:
 * Dev starts the environment using `lein repl :headless`, prod uses `lein run -m clojuredocs.main`. See `:repl-options` in `project.clj` for initialization options.
 
 
+## Contributors
+
+[Zachary Kim](https://github.com/zk), [Lee Hinman](https://github.com/dakrone), and [more](https://github.com/zk/clojuredocs/graphs/contributors).
+
+
 ## License
 
 Copyright © 2010-present Zachary Kim
