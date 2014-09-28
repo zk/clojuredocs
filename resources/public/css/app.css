@@ -124,6 +124,9 @@ footer .ctas iframe {
   margin-bottom: -6px;
   margin-left: 10px;
 }
+footer .ctas .gh-starred-count {
+  width: 95px;
+}
 footer .left {
   text-align: right;
 }
