@@ -136,13 +136,10 @@
 
 (def lookup-vars
   (->> searchable-vars
-       (reduce #(assoc %1 (str (:ns %2) "/" (:name %2)) %2))))
+       (reduce #(assoc %1 (str (:ns %2) "/" (:name %2)) %2) {})))
 
 (defn lookup [ns-name]
   (get lookup-vars ns-name))
-
-(doseq [m static/special-forms]
-  (clucy/add search-index m))
 
 (defn lucene-escape [s]
   (str/replace s #"[\+\-\!\(\)\{\}\[\]\^\"\~\*\?\:\\\/]" "\\\\$0"))
