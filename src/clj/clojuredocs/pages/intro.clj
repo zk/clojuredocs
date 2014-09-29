@@ -168,7 +168,9 @@
               {:src "/img/qubit-logo.png"
                :url "https://www.qubitproducts.com/"}
               {:src "/img/diligenceengine-logo.png"
-               :url "https://diligenceengine.com/"}]]
+               :url "https://diligenceengine.com/"}
+              {:src "/img/stylefruits-logo.png"
+               :url "http://www.stylefruits.de/"}]]
          [:li [:a {:href url} [:img {:src src}]]])]]]]
    [:div.row
     [:div.col-md-6
