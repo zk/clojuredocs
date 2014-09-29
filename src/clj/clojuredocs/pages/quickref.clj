@@ -12,11 +12,16 @@
       (str/replace #"[^a-z0-9]" "-")
       (str/replace #"-+" "-")))
 
-(defn $group [{:keys [title syms]}]
+(defn $group [{:keys [title syms]} parent-title]
   [:div.group
    [:div.quickref-header.clearfix
     [:h4 title]
-    [:h4.header-reference "Simple Values > Numbers"]]
+    [:h4.header-reference
+     (when parent-title
+       parent-title)
+     (when parent-title
+       " > ")
+     title]]
    [:dl.dl-horizontal
     (mapcat #(vector
                [:div.dl-row
@@ -30,18 +35,18 @@
                   "1 ex."]]])
       syms)]])
 
-(defn $category [{:keys [title groups]}]
+(defn $category [{:keys [title groups]} parent-title]
   [:div.category
    [:div.category-header.clearfix
     [:h3 {:id (title->id title)} title]
-    [:h3.header-reference "Simple Values"]]
-   (map $group groups)])
+    [:h3.header-reference parent-title]]
+   (map #($group % title) groups)])
 
 (defn $sphere [{:keys [title categories]}]
   [:div.sphere
    [:div.sphere-header
     [:h2 {:id (title->id title)} title]]
-   (map $category categories)])
+   (map #($category % title) categories)])
 
 (defn $toc-category [{:keys [title]}]
   [:li [:a {:href (str "#" (title->id title))
