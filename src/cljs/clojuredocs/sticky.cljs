@@ -57,7 +57,7 @@
                 (dom/add-class! $el :sticky)
                 (dom/set-style! $el
                   :width (str width "px")
-                  :max-height (str js/window.innerHeight "px")
+                  :maxHeight (str js/window.innerHeight "px")
                   :top (str px-offset "px")))
               (do
                 (reset! starting-offset nil)
