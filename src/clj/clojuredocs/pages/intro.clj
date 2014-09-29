@@ -210,7 +210,10 @@
 
 (defn recently-updated []
   (let [limit 6
-        examples (->> (mon/fetch :examples :sort {:created-at -1} :limit limit)
+        examples (->> (mon/fetch :examples
+                        :where {:deleted-at nil}
+                        :sort {:created-at -1}
+                        :limit limit)
                       (map #(assoc % :type :example)))
         see-alsos (->> (mon/fetch :see-alsos :sort {:created-at -1} :limit limit)
                        (map #(assoc % :type :see-also)))
