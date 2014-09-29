@@ -9,6 +9,7 @@ body {
   font-size: 16px;
   line-height: 1.5em;
   transition: all 0.2s ease-in;
+  height: 100%;
 }
 body.search-active {
   background-color: rgba(0, 0, 0, 0.05);
@@ -218,7 +219,10 @@ header.navbar .quick-search-widget form {
 }
 .mobile-nav-menu {
   display: none;
+  overflow-y: scroll;
+  overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
+  height: 100%;
 }
 .desktop-side-nav .badge {
   float: right;

@@ -257,3 +257,13 @@ f should accept number-of-colls arguments."}
 (init
   "[data-sticky-offset]" sticky/init
   "[data-animate-scroll]" animated-scroll-init)
+
+;; Hack to fix mobile safari ios 8 scrolling issue
+(doseq [$el (sel :.mobile-nav-menu)]
+  (let [f (fn [$el]
+            (dommy/set-style! $el
+              :height (str (.-innerHeight js/window) "px")))]
+    (dommy/listen! js/window :resize
+      (fn [_]
+        (f $el)))
+    (f $el)))

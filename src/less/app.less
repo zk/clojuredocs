@@ -31,6 +31,7 @@ body {
   font-size: 16px;
   line-height: 1.5em;
   transition: all 0.2s ease-in;
+  height: 100%;
 
   &.search-active {
     background-color: @light-black;
@@ -296,7 +297,10 @@ header.navbar {
 
 .mobile-nav-menu {
   display: none;
+  overflow-y: scroll;
+  overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
+  height: 100%;
 }
 
 .desktop-side-nav {
