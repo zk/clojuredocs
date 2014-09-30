@@ -239,8 +239,10 @@ f should accept number-of-colls arguments."}
   (fn [e]
     ;; ctrl-s to focus search input
     (when (and (.-ctrlKey e) (= 83 (.-keyCode e)))
-      (doseq [$el (sel ".search input[name='query']")]
-        (.focus $el)))))
+      (doseq [$el (sel ".search input.query")]
+        (.focus $el))
+      ;; prevent save dialog
+      (.preventDefault e))))
 
 (def tog (atom false))
 
