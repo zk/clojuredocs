@@ -134,11 +134,13 @@
           :on-submit #(do
                         (let [{:keys [highlighted-index ac-results]} @app]
                           (put! action-ch (nth ac-results (or highlighted-index 0))))
-                        false)}
-         [:input.form-control
+                        false)
+          :action "/search"
+          :method :get}
+         [:input.form-control.query
           {:class (when search-loading? " loading")
            :placeholder (or placeholder "Looking for? (ctrl-s)")
-           :name "query"
+           :name "q"
            :autoComplete "off"
            :ref "input"
            :value ac-text
@@ -319,7 +321,7 @@
             (do
               (swap! app-state assoc :search-loading? true)
               (let [ac-response (<! (ajax-chan {:method :get
-                                                :path (str "/search?query=" (util/url-encode ac-text))
+                                                :path (str "/ac-search?query=" (util/url-encode ac-text))
                                                 :data-type :edn}))
                     data (-> ac-response :res :body)]
                 (when (:success ac-response)

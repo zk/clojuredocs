@@ -137,7 +137,7 @@
            :body
            (common/$main
              {:body-class "var-page"
-              :title (str name " - " ns " | ClojureDocs")
+              :title (str name " - " ns " | ClojureDocs - Community-Powered Clojure Documentation and Examples")
               :page-data {:examples (mapv clean-example examples)
                           :var v
                           :notes (vec (map clean-id notes))

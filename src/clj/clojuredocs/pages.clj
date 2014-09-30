@@ -221,6 +221,89 @@
               common/memo-markdown-file
               common/prep-for-syntaxhighligher)]]]})))
 
+(defn $arglist [name a]
+  [:li.arglist
+   (str "("
+        (util/html-encode name)
+        (when-not (empty? a) " ")
+        a
+        ")")])
+
+(defn $argform [s]
+  [:li.arglist s])
+
+(defn search-page-handler [{:keys [params uri user]}]
+  (let [query (or (:q params) "")
+        limit 10
+        page (or (try
+                   (Integer/parseInt (:page params))
+                   (catch NumberFormatException e
+                     1))
+                 1)
+        offset (* (max (dec page) 0) limit)
+        total-results (search/query query)
+        results (->> total-results
+                     (drop offset)
+                     (take limit)
+                     (map #(search/lookup (str (:ns %) "/" (:name %))))
+                     add-see-alsos
+                     add-examples-count)]
+    (common/$main
+      {:title (str "Search results for: " query " | ClojureDocs - Community-Powered Clojure Documentation and Examples")
+       :page-uri uri
+       :body-class "search-results-page"
+       :user user
+       :content
+       [:div.row
+        [:div.col-sm-12
+         [:div.search-results-header
+          [:h1 "Search results for query: " [:b query]]
+          [:p (inc offset)
+           " to "
+           (min (+ offset limit) (count total-results))
+           " of "
+           (count total-results)
+           " results. "
+           [:span.search-controls.pull-right
+            (if (> page 1)
+              [:a {:href (str "/search?q=" query "&page=" (dec page))} "prev page"]
+              "prev page")
+            " | "
+            (if (= limit (count results))
+              [:a {:href (str "/search?q=" query "&page=" (inc page))} "next page"]
+              "next page")]]]
+         [:ul.search-results
+          (for [{:keys [ns name doc see-alsos examples-count arglists forms]} results]
+            [:li.search-result
+             [:h2 (util/$var-link ns name name)]
+             [:h3 ns]
+             [:ul.arglists
+              (if forms
+                (map #($argform %) forms)
+                (map #($arglist name %) arglists))]
+             [:p (common/ellipsis doc 300)]
+             [:div.meta-info
+              (util/pluralize examples-count "example" "examples")
+              (when-not (empty? see-alsos)
+                [:span.see-alsos
+                 " &middot; "
+                 "See also: "
+                 (->> (for [sa see-alsos]
+                        [:span.see-also
+                         (util/$var-link
+                           (:ns sa)
+                           (:name sa)
+                           [:span.ns (:ns sa) "/"] (:name sa))])
+                      (interpose ", "))])]])]
+         [:div.search-controls
+          (if (> page 1)
+            [:a {:href (str "/search?q=" query "&page=" (dec page))} "prev page"]
+            "prev page")
+          " | "
+          (if (= limit (count results))
+            [:a {:href (str "/search?q=" query "&page=" (inc page))} "next page"]
+            "next page")]]]})))
+
 (defroutes routes
   (GET "/robots.txt" [] robots-resp)
   (GET "/logout" [] logout-resp)
@@ -231,13 +314,16 @@
 
   (GET "/concepts/:concept" [concept] (concept-page-handler concept))
 
+  (GET "/search" [] search-page-handler)
+
   ;; Search Feedback
   (GET "/search-feedback" [] search-feedback/page-handler)
   (POST "/search-feedback" [] search-feedback/submit-feedback-handler)
   (GET "/search-feedback/success" [] search-feedback/success-handler)
 
-  (GET "/search" [] var-search-handler)
+  (GET "/ac-search" [] var-search-handler)
   (GET "/ac-vars" [] ac-vars-handler)
+
   (GET "/" [] intro/page-handler)
   (GET "/u/:login" [login] (user/page-handler login "github"))
   (GET "/uc/:login" [login] (user/page-handler login "clojuredocs"))
