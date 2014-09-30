@@ -246,14 +246,6 @@ f should accept number-of-colls arguments."}
 
 (def tog (atom false))
 
-#_(js/setInterval
-  (fn []
-    (if (swap! tog not)
-      (dommy/add-class! (sel1 :body) :mobile-push)
-      (dommy/remove-class! (sel1 :body) :mobile-push)))
-  1000)
-
-
 (.attach js/FastClick js/document.body)
 
 (init
