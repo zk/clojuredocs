@@ -217,9 +217,10 @@
      :data {:query query
             :clojure-level clojure-level
             :text text}
+     :data-type :edn
      :success (fn [_]
                 (util/navigate-to "/search-feedback/success"))
-     :error (fn [_]
+     :error (fn [& args]
               (om/set-state! owner
                 :error-message
                 "There was a problem sending your feedback, try again.")
