@@ -234,6 +234,7 @@
 
 (defn search-page-handler [{:keys [params uri user]}]
   (let [query (or (:q params) "")
+        html-query (util/html-encode query)
         limit 10
         page (or (try
                    (Integer/parseInt (:page params))
@@ -257,7 +258,7 @@
        [:div.row
         [:div.col-sm-12
          [:div.search-results-header
-          [:h1 "Search results for query: " [:b query]]
+          [:h1 "Search results for query: " [:b html-query]]
           [:p (inc offset)
            " to "
            (min (+ offset limit) (count total-results))
@@ -274,27 +275,28 @@
               "next page")]]]
          [:ul.search-results
           (for [{:keys [ns name doc see-alsos examples-count arglists forms]} results]
-            [:li.search-result
-             [:h2 (util/$var-link ns name name)]
-             [:h3 ns]
-             [:ul.arglists
-              (if forms
-                (map #($argform %) forms)
-                (map #($arglist name %) arglists))]
-             [:p (common/ellipsis doc 300)]
-             [:div.meta-info
-              (util/pluralize examples-count "example" "examples")
-              (when-not (empty? see-alsos)
-                [:span.see-alsos
-                 " &middot; "
-                 "See also: "
-                 (->> (for [sa see-alsos]
-                        [:span.see-also
-                         (util/$var-link
-                           (:ns sa)
-                           (:name sa)
-                           [:span.ns (:ns sa) "/"] (:name sa))])
-                      (interpose ", "))])]])]
+            (let [html-name (util/html-encode name)]
+              [:li.search-result
+               [:h2 (util/$var-link ns name html-name)]
+               [:h3 ns]
+               [:ul.arglists
+                (if forms
+                  (map #($argform %) forms)
+                  (map #($arglist name %) arglists))]
+               [:p (common/ellipsis doc 300)]
+               [:div.meta-info
+                (util/pluralize examples-count "example" "examples")
+                (when-not (empty? see-alsos)
+                  [:span.see-alsos
+                   " &middot; "
+                   "See also: "
+                   (->> (for [sa see-alsos]
+                          [:span.see-also
+                           (util/$var-link
+                             (:ns sa)
+                             (:name sa)
+                             [:span.ns (:ns sa) "/"] (-> sa :name util/html-encode))])
+                        (interpose ", "))])]]))]
          [:div.search-controls
           (if (> page 1)
             [:a {:href (str "/search?q=" query "&page=" (dec page))} "prev page"]
