@@ -50,7 +50,13 @@
   [:div.ac-entry
    [:span.ac-type type " / " examples-count " ex"  #_[:br] #_(util/pluralize examples-count "Example" "Examples")]
    [:h4
-    [:a {:href href} name " (" ns ")"]]
+    [:a {:href href
+         :on-click #(do
+                      (when (or (.-ctrlKey %)
+                                (.-metaKey %)
+                                (= 1 (.-button %))) ; middle click
+                        (.stopPropagation %)))}
+     name " (" ns ")"]]
    [:p (ellipsis 100 doc)]
    ($ac-see-alsos see-alsos)])
 
