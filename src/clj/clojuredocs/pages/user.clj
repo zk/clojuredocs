@@ -1,5 +1,6 @@
 (ns clojuredocs.pages.user
   (:require [clojuredocs.util :as util]
+            [clojuredocs.config :as config]
             [clojuredocs.pages.common :as common]
             [clojuredocs.mail :as mail]
             [somnium.congomongo :as mon]
@@ -138,6 +139,8 @@
                       :where {:author.login login
                               :author.account-source "clojuredocs"})]
 
+            ;; Wheeeeee
+
             (doseq [e examples]
               (mon/update! :examples
                 {:_id (:_id e)}
@@ -195,8 +198,13 @@
                   (count example-edits)
                   " examples edited by you, "
                   (count example-histories)
-                  " example histories "
+                  " example histories, "
                   (count notes)
                   " notes, and "
                   (count sas)
-                  " see alsos."]]]})))))))
+                  " see alsos."]
+                 [:p
+                  "Your new user URL is "
+                  [:a {:href (config/url "/u/" (:login user))}
+                   (config/url "/u/" (:login user))]
+                  ". Please note that the &quot;Top Contributors&quot; section on the home page is cached, and may show your old user URL for the next few minutes."]]]})))))))
