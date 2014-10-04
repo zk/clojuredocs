@@ -166,11 +166,15 @@
               {:src "/img/cognician-logo.png"
                :url "https://www.cognician.com"}
               {:src "/img/qubit-logo.png"
-               :url "https://www.qubitproducts.com/"}
+               :url "https://qubitproducts.com/"}
               {:src "/img/diligenceengine-logo.png"
                :url "https://diligenceengine.com/"}
               {:src "/img/stylefruits-logo.png"
-               :url "http://www.stylefruits.de/"}]]
+               :url "http://www.stylefruits.de/"}
+              {:src "/img/adzerk-logo.png"
+               :url "http://adzerk.com"}
+              {:src "/img/witai-logo.png"
+               :url "http://wit.ai"}]]
          [:li [:a {:href url} [:img {:src src}]]])]]]]
    [:div.row
     [:div.col-md-6
