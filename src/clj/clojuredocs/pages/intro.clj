@@ -190,7 +190,7 @@
         [:p "Sharing your knowledge with fellow Clojurists is easy:"]
         [:p
          "First, take a look at the "
-         [:a {:href "/examples-style-guide"} "examples style guide"]
+         [:a {:href "/examples-styleguide"} "examples style guide"]
          ", and then add an example for your favorite var (or pick one from the list)."]
         [:p "In addition to examples, you also have the ability to add 'see also' references between vars."]]]]]]])
 
