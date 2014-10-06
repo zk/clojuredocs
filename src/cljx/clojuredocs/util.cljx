@@ -49,7 +49,7 @@
       (= "_.." s) ".."
       :else (-> s
                 (str/replace #"_fs" "/")
-                (str/replace #"_bs" "\\")
+                (str/replace #"_bs" "\\\\")
                 (str/replace #"_q" "?")
 
                 ;; legacy
