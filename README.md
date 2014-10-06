@@ -5,12 +5,6 @@ The clojuredocs.org webapp
 ![](http://cl.ly/image/1C2o2d181716/Screen%20Shot%202014-07-12%20at%202.03.25%20AM.png)
 
 
-## Rewrite In Progress
-
-http://next.clojuredocs.org
-
-[Rewrite Release Checklist](https://github.com/zk/clojuredocs/blob/clj-rewrite/.notes.zk.org#release-checklist)
-
 ## Contributing
 
 The codebase needs a good scrub before groking will not be
@@ -41,17 +35,12 @@ If you're looking for a project:
   e.g. core.async.
 
 
-
 ## Reqs
 
 * [lein](http://leiningen.org)
 * [foreman](https://github.com/ddollar/foreman) (see `Procfile`, `bin/dev`)
 * [less](http://lesscss.org/)
 * MongoDB
-
-## Deploy
-
-* Run `bin/ship next | prod`
 
 
 ## Dev
@@ -64,6 +53,7 @@ Connect to the repl and / or visit http://localhost:5000
 You'll notice that var information is already populated. In an effort for not make the same mistakes again, all core-related var info is loaded from the runtime version of Clojure on start up.
 
 OTOH, examples, see-alsos, and notes (and any other user-generated content) are stored in the database.
+
 
 ### Local Data
 
