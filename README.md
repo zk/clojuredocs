@@ -65,6 +65,10 @@ You'll notice that var information is already populated. In an effort for not ma
 
 OTOH, examples, see-alsos, and notes (and any other user-generated content) are stored in the database.
 
+### Local Data
+
+The app uses a MongoDB database named `clojuredocs` to store data. Run `bin/db-reset` to seed the database with a recent production export (you must be running `mongod` for this to work).
+
 ### Prod Local
 
 Occasionally you'll need to compile and run things as they would be in production: `bin/prod-local`
