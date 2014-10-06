@@ -25,7 +25,10 @@
                  [org.clojure/core.async "0.1.267.0-0d7780-alpha"]
                  [org.clojure/core.logic "0.8.8"]
                  [om "0.6.4"]
-                 [prismatic/om-tools "0.2.2"]
+                 [prismatic/om-tools "0.2.2"
+                  :exclusions [org.clojure/clojure]]
+                 [com.keminglabs/cljx "0.3.1"
+                  :exclusions [org.clojure/clojure]]
                  [org.pegdown/pegdown "1.4.2"]
                  [sablono "0.2.21"]
                  [clj-fuzzy "0.1.8"]
