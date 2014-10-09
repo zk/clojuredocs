@@ -259,7 +259,9 @@
         [:div.col-sm-12
          [:div.search-results-header
           [:h1 "Search results for query: " [:b html-query]]
-          [:p (inc offset)
+          [:p (if (> (count results) 0)
+                (inc offset)
+                "0")
            " to "
            (min (+ offset limit) (count total-results))
            " of "

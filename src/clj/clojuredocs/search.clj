@@ -174,8 +174,22 @@ Still maintains the O(n*m) guarantee.
       (map #(identity %2) (cons nil b) (range))
       a)))
 
+(defn drop-leading-stars [q]
+  (when q
+    (if (.startsWith q "*")
+      (->> (str/replace q #"\**" "")
+           (apply str))
+      q)))
+
+(defn format-query [q]
+  (-> q
+      drop-leading-star
+      str/trim
+      lucene-escape
+      (str "*")))
+
 (defn query [q]
   (when-not (empty? q)
-    (->> (clucy/search search-index (str (lucene-escape (str/trim q)) "*") 1000 :default-field "keywords")
+    (->> (clucy/search search-index (format-query q) 1000 :default-field "keywords")
          (map #(assoc % :edit-distance (levenshtein-distance (str (:name %)) q)))
          (sort-by :edit-distance))))
