@@ -89,7 +89,11 @@
   (GET "/quickref/*" [] {:status 301 :headers {"Location" "/quickref"}})
   (GET "/clojure_core" [] {:status 301 :headers {"Location" "/core-library"}})
   (GET "/clojure_core/:ns" [ns] {:status 301 :headers {"Location" (str "/" ns)}})
-  (GET "/v/:id" [id] (old-v-page-redirect id)))
+  (GET "/v/:id" [id] (old-v-page-redirect id))
+  (GET "/examples_style_guide" [] {:status 301 :headers {"Location" "/examples-styleguide"}})
+  (GET "/Clojure%20Core/:ns" [ns] {:status 301 :headers {"Location" (str "/" ns)}})
+  (GET "/Clojure%20Core" [] {:status 301 :headers {"Location" "/core-library"}})
+  (GET "/clojure_core" [] {:status 301 :headers {"Location" "/core-library"}}))
 
 (defroutes _routes
   (context "/api" [] api.server/routes)
