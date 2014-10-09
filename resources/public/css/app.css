@@ -703,9 +703,29 @@ table.ac-results .ac-metadata {
 .var-page .docstring pre,
 .example-page .docstring pre {
   background-color: #f8f8f8;
-  font-size: 13px;
+  color: #555;
+  font-size: 15px;
+  line-height: 1.3em;
   margin-bottom: 0;
-  padding: 20px;
+  padding: 15px 10px;
+}
+@media (max-width: 1199px) {
+  .var-page .docstring pre,
+  .example-page .docstring pre {
+    font-size: 12px;
+  }
+}
+@media (max-width: 991px) {
+  .var-page .docstring pre,
+  .example-page .docstring pre {
+    font-size: 13px;
+  }
+}
+@media (max-width: 767px) {
+  .var-page .docstring pre,
+  .example-page .docstring pre {
+    font-size: 12px;
+  }
 }
 .var-page .docstring .copyright,
 .example-page .docstring .copyright {
