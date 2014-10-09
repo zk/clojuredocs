@@ -1,0 +1,27 @@
+web:
+  build: docker/Dockerfile.web
+  ports:
+    - "5000:5000"
+    - "7888:7888"
+  volumes:
+    - .:/code
+  links:
+    - mongodb
+  command: lein repl :headless :host 0.0.0.0 :port 7888
+  environment:
+    - PORT=5000
+    - SESSION_KEY=Uy9V4nWSL2g92OGemwl28HBfWTeCFAVm
+    - BASE_URL=http://localhost:5000
+    - CLJS_DEV=true
+    - GH_CLIENT_ID=00c7338906c4ac29315b
+    - GH_CLIENT_SECRET=1af3fca29ce3fb36075ca28bb7513e6070847d71
+    - ALLOW_ROBOTS=true
+    - LOG_EXCEPTIONS=false
+    - DEBUG_EXCEPTIONS=true
+    - STAGING_BANNER=false
+    - MAILGUN_API_KEY=key-2006f8148abdc36fcf192c60d9e59329
+    - MAILGUN_API_ENDPOINT="https://api.mailgun.net/v2/sandbox424576b6653e4c64a6882868b08c3858.mailgun.org/messages"
+mongodb:
+  image: dockerfile/mongodb
+  ports:
+    - "27017:27017"

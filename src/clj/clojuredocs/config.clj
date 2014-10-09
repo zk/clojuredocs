@@ -38,7 +38,7 @@
     :required? false
     :default false}
 
-   {:key :mongo-url
+   #_{:key :mongo-url
     :type :string
     :doc "'mongodb://'-style url"
     :required? true}
@@ -118,6 +118,14 @@
 
 (def gh-creds {:client-id (get-env env-vars :gh-client-id)
                :client-secret (get-env env-vars :gh-client-secret)})
+
+(def mongo-url (env/str :mongo-url))
+
+#_(def mongo-url (str "mongodb://"
+                    (env/str :mongodb-1-port-27017-tcp-addr)
+                    ":"
+                    (env/str :mongodb-1-port-27017-tcp-port)
+                    "/clojuredocs"))
 
 (def base-url (get-env env-vars :base-url))
 

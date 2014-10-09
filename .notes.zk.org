@@ -440,6 +440,27 @@ Lifecycle
 + Site will have more (any) downtime
 + Contributing will be difficult because the codebase is a mess
 
+* Docker
+
+Looking at docker to have repeatable dev and prod environments to
+make working on clojuredocs easier.
+
+As it stands there aren't too many prereqs to set up, but from my
+experience contributing to open source projects, this is one of the
+major pain points. Repeatable dev environments, it's what I had tried,
+but was unable to to solve with pair.io.
+
+On the dev side there are a few goals:
+
++ One-button install -- we have the `bin/dev` script, which is
+  wonderful, but doesn't take into account set-up. It sounds like
+  docker will be able to take care of this. Data is an open question.
++ Sharable envornment state
+
+Server side:
+
++
+
 
 
 * Log

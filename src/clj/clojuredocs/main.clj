@@ -17,7 +17,7 @@
 (defn create-app []
   {:port (env/int :port 8080)
    :entry #'entry/routes
-   :mongo-url (env/str :mongo-url)})
+   :mongo-url config/mongo-url})
 
 (defn report-and-exit-on-missing-env-vars! []
   (when-not (empty? config/missing-env-vars)
