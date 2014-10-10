@@ -1,4 +1,4 @@
-(ns clojuredocs.api.common
+(ns clojuredocs.internal-api.common
   (:require [slingshot.slingshot :refer [throw+]]
             [schema.core :as s]
             [clojuredocs.util :as util]))

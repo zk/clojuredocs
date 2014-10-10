@@ -1,9 +1,9 @@
-(ns clojuredocs.api.examples
+(ns clojuredocs.internal-api.examples
   (:require [slingshot.slingshot :refer [throw+]]
             [somnium.congomongo :as mon]
             [schema.core :as s]
             [clojuredocs.util :as util]
-            [clojuredocs.api.common :as c]))
+            [clojuredocs.internal-api.common :as c]))
 ;; Utils
 
 (defn edn-response [payload]

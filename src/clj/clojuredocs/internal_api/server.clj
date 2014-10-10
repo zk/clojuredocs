@@ -1,13 +1,13 @@
-(ns clojuredocs.api.server
+(ns clojuredocs.internal-api.server
   (:require [compojure.core :refer (defroutes GET POST PUT DELETE ANY PATCH) :as cc]
             [compojure.route :refer (not-found)]
             [somnium.congomongo :as mon]
             [clout.core :as clout]
             [slingshot.slingshot :refer [try+ throw+]]
             [clojuredocs.util :as util]
-            [clojuredocs.api.examples :as examples]
-            [clojuredocs.api.see-alsos :as see-alsos]
-            [clojuredocs.api.notes :as notes]))
+            [clojuredocs.internal-api.examples :as examples]
+            [clojuredocs.internal-api.see-alsos :as see-alsos]
+            [clojuredocs.internal-api.notes :as notes]))
 
 (defroutes _routes
   (POST "/examples" [] examples/post-example-handler)

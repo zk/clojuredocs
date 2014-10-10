@@ -1,9 +1,9 @@
-(ns clojuredocs.api.see-alsos
+(ns clojuredocs.internal-api.see-alsos
   (:require [slingshot.slingshot :refer [throw+]]
             [somnium.congomongo :as mon]
             [schema.core :as s]
             [clojuredocs.util :as util]
-            [clojuredocs.api.common :as c]
+            [clojuredocs.internal-api.common :as c]
             [clojuredocs.search :as search]))
 
 ;; Schemas

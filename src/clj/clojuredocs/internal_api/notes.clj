@@ -1,5 +1,5 @@
-(ns clojuredocs.api.notes
-  (:require [clojuredocs.api.common :as c]
+(ns clojuredocs.internal-api.notes
+  (:require [clojuredocs.internal-api.common :as c]
             [schema.core :as s]
             [somnium.congomongo :as mon]
             [slingshot.slingshot :refer [throw+]]))
