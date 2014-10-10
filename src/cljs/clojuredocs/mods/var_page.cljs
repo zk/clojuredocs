@@ -68,7 +68,7 @@
 (defn req-create-example [ex]
   (let [ch (chan)]
     (ajax
-      {:path "/api/examples"
+      {:path "/internal-api/examples"
        :method :post
        :data-type :edn
        :data ex
@@ -148,7 +148,7 @@
   (let [c (chan)]
     (ajax
       {:method :patch
-       :path (str "/api/examples/" _id)
+       :path (str "/internal-api/examples/" _id)
        :data-type :edn
        :data {:body body}
        :success (fn [{:keys [body] :as resp}]
@@ -184,7 +184,7 @@
   (let [c (chan)]
     (ajax
       {:method :delete
-       :path (str "/api/examples/" _id)
+       :path (str "/internal-api/examples/" _id)
        :success (fn [{:keys [body] :as resp}]
                   (put! c {:success true :data body}))
        :error (fn [{:keys [status body] :as r}]
@@ -246,7 +246,7 @@
             (let [{:keys [success res]}
                   (<! (ajax-chan
                         {:method :post
-                         :path "/api/notes"
+                         :path "/internal-api/notes"
                          :data-type :edn
                          :data {:body note-text
                                 :var (select-keys (:var @!state) [:ns :name :library-url])}}))]
@@ -279,7 +279,7 @@
             (let [{:keys [success res]}
                   (<! (ajax-chan
                         {:method :patch
-                         :path (str "/api/notes/" _id)
+                         :path (str "/internal-api/notes/" _id)
                          :data-type :edn
                          :data {:body text}}))]
               (if success
@@ -303,7 +303,7 @@
         (let [{:keys [success re]}
               (<! (ajax-chan
                     {:method :delete
-                     :path (str "/api/notes/" _id)
+                     :path (str "/internal-api/notes/" _id)
                      :data-type :edn}))]
           (if success
             (swap! !state update-in [:notes]
@@ -339,7 +339,7 @@
             (let [{:keys [success res]}
                   (<! (ajax-chan
                         {:method :post
-                         :path "/api/see-alsos"
+                         :path "/internal-api/see-alsos"
                          :data-type :edn
                          :data {:fq-to-var-name ns-name-str
                                 :from-var (select-keys (:var @!state) [:ns :name :library-url])}}))]
@@ -374,7 +374,7 @@
         (let [{:keys [success res]}
               (<! (ajax-chan
                     {:method :delete
-                     :path (str "/api/see-alsos/" (:_id to-del))
+                     :path (str "/internal-api/see-alsos/" (:_id to-del))
                      :data-type :edn}))]
           (if success
             (swap! !state update-in [:see-alsos]

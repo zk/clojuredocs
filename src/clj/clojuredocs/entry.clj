@@ -96,7 +96,7 @@
   (GET "/clojure_core" [] {:status 301 :headers {"Location" "/core-library"}}))
 
 (defroutes _routes
-  (context "/api" [] internal-api.server/routes)
+  (context "/internal-api" [] internal-api.server/routes)
   (var pages/routes)
   ;; Redirect old urls
   (var old-url-redirects)
