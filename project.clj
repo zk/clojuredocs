@@ -17,7 +17,7 @@
                  [clucy "0.4.0"]
                  [watchtower "0.1.1"]
                  [clj-http "0.7.7"]
-                 [cheshire "5.2.0"]
+                 [cheshire "5.3.1"]
                  [org.clojure/java.jdbc "0.3.0-beta2"]
                  [mysql/mysql-connector-java "5.1.25"]
                  [congomongo "0.4.1"]
