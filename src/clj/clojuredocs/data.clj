@@ -3,13 +3,24 @@
 
 ;; Examples
 
-(defn find-examples-for [{:keys [ns name library-url]}]
-  (mon/fetch :examples
+(defn find-examples-for [{:keys [ns name library-url]} & opts]
+  (let [opts (apply hash-map opts)
+        query (merge
+                {:where {:var.name name
+                         :var.ns ns
+                         :var.library-url library-url
+                         :deleted-at nil}
+                 :sort {:created-at 1}}
+                opts)]
+    (prn query)
+    (apply mon/fetch (apply concat [:examples] query))))
+
+(defn count-examples-for [{:keys [ns name library-url]}]
+  (mon/fetch-count :examples
     :where {:var.name name
             :var.ns ns
             :var.library-url library-url
-            :deleted-at nil}
-    :sort {:created-at 1}))
+            :deleted-at nil}))
 
 ;; Notes
 
