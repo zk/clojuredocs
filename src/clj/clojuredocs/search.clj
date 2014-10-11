@@ -183,7 +183,7 @@ Still maintains the O(n*m) guarantee.
 
 (defn format-query [q]
   (-> q
-      drop-leading-star
+      drop-leading-stars
       str/trim
       lucene-escape
       (str "*")))
