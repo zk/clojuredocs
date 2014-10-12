@@ -176,20 +176,30 @@ Still maintains the O(n*m) guarantee.
 
 (defn drop-leading-stars [q]
   (when q
-    (if (.startsWith q "*")
-      (->> (str/replace q #"\**" "")
-           (apply str))
-      q)))
+    (let [stripped (if (.startsWith q "*")
+                     (->> (str/replace q #"\**" "")
+                          (apply str))
+                     q)]
+      (when-not (empty? stripped)
+        stripped))))
+
+(defn escape-query [q]
+  (when-not (empty? q)
+    (org.apache.lucene.queryparser.classic.QueryParser/escape q)))
 
 (defn format-query [q]
-  (-> q
-      drop-leading-stars
-      str/trim
-      lucene-escape
-      (str "*")))
+  (some-> q
+    str/trim
+    drop-leading-stars
+    lucene-escape
+    (str "*")))
 
 (defn query [q]
-  (when-not (empty? q)
-    (->> (clucy/search search-index (format-query q) 1000 :default-field "keywords")
-         (map #(assoc % :edit-distance (levenshtein-distance (str (:name %)) q)))
-         (sort-by :edit-distance))))
+  (cond
+    (= "*" q) [(lookup "clojure.core/*")]
+
+    :else
+    (when-let [q (format-query q)]
+      (->> (clucy/search search-index q 1000 :default-field "keywords")
+           (map #(assoc % :edit-distance (levenshtein-distance (str (:name %)) q)))
+           (sort-by :edit-distance)))))
