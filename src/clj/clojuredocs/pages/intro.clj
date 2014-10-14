@@ -239,5 +239,6 @@
                   (recently-updated))
        :body-class "intro-page"
        :hide-search true
-       :user user}
+       :user user
+       :show-survey-banner? true}
       common/$main))

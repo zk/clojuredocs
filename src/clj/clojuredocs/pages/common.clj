@@ -116,7 +116,14 @@
           :href (str "/css/font-awesome.min.css?"
                      (md5-path "resources/public/css/font-awesome.min.css"))}])
 
-(defn $main [{:keys [page-uri content title body-class user page-data full-width?] :as opts}]
+(defn $main [{:keys [page-uri
+                     content
+                     title
+                     body-class
+                     user
+                     page-data
+                     full-width?
+                     show-survey-banner?] :as opts}]
   [:html5
    [:head
     [:meta {:name "viewport" :content "width=device-width, maximum-scale=1.0"}]
@@ -138,6 +145,11 @@
      (when config/staging-banner?
        [:div.staging-banner
         "This is the ClojureDocs staging site, where you'll find all the neat things we're working on."])
+     (when show-survey-banner?
+       [:div.state-of-clojure-banner
+        "Have a few minutes to help out the community? Please take the "
+        [:a {:href "http://blog.cognitect.com/blog/2014/10/3/2014-state-of-clojure-clojurescript-survey"} "2014 State of Clojure survey"]
+        "."])
      [:div.desktop-nav-bar
       ($navbar opts)]
      [:div
@@ -195,6 +207,8 @@
     (when (env/bool :cljs-dev)
       [:script {:src "/cljs/goog/base.js"}])
     clojuredocs-script
+
+
     (when (env/bool :cljs-dev)
       [:script "goog.require(\"clojuredocs.main\");"])
     ($ga-script-tag config/ga-tracking-id)
