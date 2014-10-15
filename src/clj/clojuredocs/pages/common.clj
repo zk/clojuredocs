@@ -36,7 +36,7 @@
     [:img.avatar {:src (:avatar-url user)}]
     " Log Out"]])
 
-(defn $navbar [{:keys [user hide-search page-uri full-width?]}]
+(defn $navbar [{:keys [user hide-search page-uri full-width? show-stars?]}]
   [:header.navbar
    [:div
     {:class (if full-width? "container-fluid" "container")}
@@ -59,14 +59,15 @@
          [:li
           [:a {:href (gh-auth-url page-uri)}
            [:i.fa.fa-github-square] "Log In"]])
-       [:li
-        [:iframe.gh-starred-count
-         {:src "/github-btn.html?user=zk&repo=clojuredocs&type=watch&count=true"
-          :allowtransparency "true"
-          :frameborder "0"
-          :scrolling "0"
-          :width "100"
-          :height "20"}]]]
+       (when show-stars?
+         [:li
+          [:iframe.gh-starred-count
+           {:src "/github-btn.html?user=zk&repo=clojuredocs&type=watch&count=true"
+            :allowtransparency "true"
+            :frameborder "0"
+            :scrolling "0"
+            :width "100"
+            :height "20"}]])]
       (when-not hide-search
         [:div.quick-search-widget.navbar-right.navbar-form
          [:form.search
