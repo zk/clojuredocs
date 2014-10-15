@@ -206,6 +206,11 @@ header.navbar .navbar-nav li {
 header.navbar .quick-search-widget form {
   margin-right: 10px;
 }
+header.navbar .gh-starred-count {
+  margin-top: 15px;
+  line-height: 20px;
+  margin-left: 10px;
+}
 .mobile-nav-bar {
   display: none;
 }

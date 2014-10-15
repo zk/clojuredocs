@@ -51,13 +51,22 @@
       [:button.btn.btn-default.navbar-btn.pull-right.mobile-menu
        [:i.fa.fa-bars]]
       [:ul.navbar-nav.nav.navbar-right.desktop-navbar-nav
+
        [:li [:a {:href "/core-library"} "Core Library"]]
        [:li [:a {:href "/quickref"} "Quick Reference"]]
        (if user
          ($user-area user)
          [:li
           [:a {:href (gh-auth-url page-uri)}
-           [:i.fa.fa-github-square] "Log In"]])]
+           [:i.fa.fa-github-square] "Log In"]])
+       [:li
+        [:iframe.gh-starred-count
+         {:src "/github-btn.html?user=zk&repo=clojuredocs&type=watch&count=true"
+          :allowtransparency "true"
+          :frameborder "0"
+          :scrolling "0"
+          :width "100"
+          :height "20"}]]]
       (when-not hide-search
         [:div.quick-search-widget.navbar-right.navbar-form
          [:form.search
