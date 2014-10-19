@@ -1650,11 +1650,3 @@ table.schema .aside {
   text-align: center;
   color: #888;
 }
-.state-of-clojure-banner {
-  text-align: center;
-  background-color: rgba(66, 139, 202, 0.2);
-  font-size: 13px;
-  color: #777;
-  padding: 8px;
-  margin-bottom: 10px;
-}

@@ -240,6 +240,5 @@
        :body-class "intro-page"
        :hide-search true
        :user user
-       :show-survey-banner? true
        :show-stars? true}
       common/$main))
