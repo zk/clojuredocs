@@ -140,6 +140,7 @@
     [:meta {:name "apple-mobile-web-app-capable" :content "yes"}]
     [:meta {:name "apple-mobile-web-app-status-bar-style" :content "default"}]
     [:meta {:name "apple-mobile-web-app-title" :content "ClojureDocs"}]
+    [:meta {:name "google-site-verification" :content "XjzqkjEPtcgtLjhnqAvtnVSeveEccs-O_unFGGlbk4g"}]
     [:title (or title "Community-Powered Clojure Documentation and Examples | ClojureDocs")]
     font-awesome-link
     bootstrap-link
