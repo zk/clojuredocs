@@ -38,7 +38,8 @@
                          (-> (clojuredocs.main/create-app)
                              clojuredocs.main/start))}
   :plugins [[lein-cljsbuild "1.0.3"]
-            [com.keminglabs/cljx "0.4.0"]] ;; required for heroku deploy
+            ;; required for heroku deploy
+            [com.keminglabs/cljx "0.4.0" :exclusions [org.clojure/clojure]]]
   :cljx {:builds [{:source-paths ["src/cljx"]
                    :output-path "target/generated/clj"
                    :rules :clj}
