@@ -798,6 +798,12 @@ table.ac-results .ac-metadata {
 .var-example {
   margin-bottom: 30px;
 }
+.var-example.highlighted {
+  border-top: solid #FFA500 4px;
+  border-bottom: solid #FFA500 4px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
 .var-example .example {
   margin-bottom: 30px;
 }
