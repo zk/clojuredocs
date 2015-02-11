@@ -341,16 +341,10 @@
                     :ac-results data))))
             (swap! app-state assoc :search-loading? false)))))))
 
-(defn location-hash []
-  (let [hash-str (.. js/window -location -hash)]
-    (->> hash-str
-         (drop 1)
-         (apply str)
-         util/url-decode)))
-
 (defn init [$root]
-  (let [prev-query (location-hash)
-        !state (atom {:ac-text prev-query})
+  (let [prev-query (util/location-hash)
+        !state (atom {:ac-text (when-not (re-find #"^example[_-]" prev-query)
+                                 prev-query)})
         text-chan (chan)
         action-ch (chan)]
 
@@ -368,11 +362,13 @@
 
     (dommy/listen! js/window :hashchange
       (fn [_]
-        (let [loc-hash (location-hash)]
-          (swap! !state assoc :ac-text loc-hash)
-          (put! text-chan loc-hash))))
+        (let [loc-hash (util/location-hash)]
+          (when-not (re-find #"^example[_-]" loc-hash)
+            (swap! !state assoc :ac-text loc-hash)
+            (put! text-chan loc-hash)))))
 
-    (when-not (empty? prev-query)
+    (when (and (not (empty? prev-query))
+               (not (re-find #"^example[_-]" prev-query)))
       (swap! !state assoc :search-focused? true)
       (put! text-chan prev-query))
 
