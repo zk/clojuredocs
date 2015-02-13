@@ -36,8 +36,9 @@ If you're looking for a project:
 
 ## Deploy
 
-Production is deployed on a Digital Ocean droplet. There's an nginx
-process balancing to two JVMs managed by Upstart.
+Production is deployed on an AWS t2.micro instance. There's an nginx
+process running on the box, balancing to two JVMs managed by Upstart
+to support zero-downtime deploys.
 
 To regenerate the upstart scripts:
 
@@ -53,7 +54,7 @@ sudo service clojuredocs-web-1 start
 sudo service clojuredocs-web-2 start
 ```
 
-To redeploy (zero downtime):
+To redeploy:
 
 ```
 # in $REPO
