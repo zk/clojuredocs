@@ -172,6 +172,8 @@
                :url "https://qubitproducts.com/"}
               {:src "/img/diligenceengine-logo.png"
                :url "https://diligenceengine.com/"}
+              {:src "/img/farmlogs-logo.png"
+               :url "http://www.farmlogs.com"}
               {:src "/img/stylefruits-logo.png"
                :url "http://www.stylefruits.de/"}
               {:src "/img/adzerk-logo.png"
