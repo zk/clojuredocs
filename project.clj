@@ -13,7 +13,7 @@
                  [prismatic/schema "0.2.6"]
                  [hiccup "1.0.4"]
                  [prismatic/dommy "0.1.2"]
-                 [org.clojure/clojurescript "0.0-2277"]
+                 [org.clojure/clojurescript "0.0-3058"]
                  [clucy "0.4.0"]
                  [watchtower "0.1.1"]
                  [clj-http "0.7.7"]
@@ -39,7 +39,7 @@
                              clojuredocs.main/start))}
   :plugins [[lein-cljsbuild "1.0.3"]
             ;; required for heroku deploy
-            [com.keminglabs/cljx "0.4.0" :exclusions [org.clojure/clojure]]]
+            [com.keminglabs/cljx "0.6.0" :exclusions [org.clojure/clojure]]]
   :cljx {:builds [{:source-paths ["src/cljx"]
                    :output-path "target/generated/clj"
                    :rules :clj}
