@@ -148,7 +148,7 @@
 
               {:src "/img/prismatic-logo.png"
                :url "https://getprismatic.com"}
-              {:src "https://www.simple.com/img/logo-a_2x.CREAM-bbc497f18505b852.png"
+              {:src "/img/simple-logo.png"
                :url "https://simple.com"}
               {:src "https://d1lpkba4w1baqt.cloudfront.net/heroku-logo-light-234x60.png"
                :url "https://www.heroku.com"}
