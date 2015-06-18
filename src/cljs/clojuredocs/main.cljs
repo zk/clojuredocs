@@ -132,7 +132,6 @@
 
 (go-loop []
   (when-let [ex (<! new-example-ch)]
-    (prn ex)
     (swap! app-state assoc :create-success? true)
     (recur)))
 
@@ -183,6 +182,8 @@ f should accept number-of-colls arguments."}
       (dommy/listen! $a :click #(doseq [s push-sels]
                                   (dommy/remove-class! (sel1 s) :mobile-push)))))
 
+
+  ;; Styleguide
   :.sg-quick-lookup
   (fn [$el]
 

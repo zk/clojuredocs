@@ -137,15 +137,18 @@
        (for [{:keys [src url]}
              [{:src "/img/netflix-logo.png"
                :url "https://www.netflix.com"}
+              {:src "/img/amazon-logo.png"
+               :url "http://www.amazon.com"}
               {:src "https://upload.wikimedia.org/wikipedia/en/2/22/The_Climate_Corporation_Logo2.jpg"
                :url "http://www.climate.com/"}
               {:src "https://g.twimg.com/Twitter_logo_blue.png"
                :url "https://twitter.com"}
               {:src "/img/factual-logo.png"
                :url "http://www.factual.com"}
+
               {:src "/img/prismatic-logo.png"
                :url "https://getprismatic.com"}
-              {:src "https://www.simple.com/img/logo-a_2x.CREAM-bbc497f18505b852.png"
+              {:src "/img/simple-logo.png"
                :url "https://simple.com"}
               {:src "https://d1lpkba4w1baqt.cloudfront.net/heroku-logo-light-234x60.png"
                :url "https://www.heroku.com"}
@@ -169,6 +172,8 @@
                :url "https://qubitproducts.com/"}
               {:src "/img/diligenceengine-logo.png"
                :url "https://diligenceengine.com/"}
+              {:src "/img/farmlogs-logo.png"
+               :url "http://www.farmlogs.com"}
               {:src "/img/stylefruits-logo.png"
                :url "http://www.stylefruits.de/"}
               {:src "/img/adzerk-logo.png"
@@ -239,5 +244,6 @@
                   (recently-updated))
        :body-class "intro-page"
        :hide-search true
-       :user user}
+       :user user
+       :show-stars? true}
       common/$main))

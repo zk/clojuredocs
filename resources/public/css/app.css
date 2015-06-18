@@ -206,6 +206,11 @@ header.navbar .navbar-nav li {
 header.navbar .quick-search-widget form {
   margin-right: 10px;
 }
+header.navbar .gh-starred-count {
+  margin-top: 15px;
+  line-height: 20px;
+  margin-left: 10px;
+}
 .mobile-nav-bar {
   display: none;
 }
@@ -793,6 +798,12 @@ table.ac-results .ac-metadata {
 .var-example {
   margin-bottom: 30px;
 }
+.var-example.highlighted {
+  border-top: solid #FFA500 4px;
+  border-bottom: solid #FFA500 4px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
 .var-example .example {
   margin-bottom: 30px;
 }
@@ -1268,7 +1279,6 @@ p.example-instructions {
   background-color: #fafafa;
   padding: 10px;
   word-wrap: normal;
-  overflow-x: scroll;
 }
 .note-body p {
   margin-bottom: 10px;

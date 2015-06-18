@@ -89,6 +89,16 @@
    {:key :new-relic-license-key
     :type :string
     :doc "New Relic license key"
+    :required? false}
+
+   {:key :new-relic-browser-id
+    :type :string
+    :doc "New Relic Browser perf tracking id"
+    :required? false}
+
+   {:key :new-relic-browser-key
+    :type :string
+    :doc "New Relic Browser perf tracking key"
     :required? false}])
 
 (defn get-env [lookup key]
@@ -146,3 +156,7 @@
   {:endpoint mailgun-api-endpoint
    :api-key mailgun-api-key
    :from from-email})
+
+(def new-relic-browser-key (get-env env-vars :new-relic-browser-key))
+
+(def new-relic-browser-id (get-env env-vars :new-relic-browser-id))

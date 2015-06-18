@@ -40,12 +40,12 @@
      [:div.row
       [:div.col-sm-2
        [:div.sidenav
-        [:section
-         [:h5 "Dev"]
-         [:ul
-          [:li [:a {:href "/dev/api"} "API Docs"]]
-          [:li [:a {:href "/dev/search-perf"} "Search Perf"]]
-          [:li [:a {:href "/dev/canary"} "Canary Tests"]]]]
+        #_[:section
+           [:h5 "Dev"]
+           [:ul
+            [:li [:a {:href "/dev/api"} "API Docs"]]
+            [:li [:a {:href "/dev/search-perf"} "Search Perf"]]
+            [:li [:a {:href "/dev/canary"} "Canary Tests"]]]]
         [:section
          [:h5 "Styleguide"]
          [:ul

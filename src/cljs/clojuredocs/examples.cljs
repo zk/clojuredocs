@@ -2,14 +2,15 @@
   (:require [om.core :as om :include-macros true]
             [dommy.core :as dommy]
             [cljs.core.async :as async
-             :refer [<! >! chan close! sliding-buffer put! alts! timeout pipe mult tap]]
+             :refer [<! >! chan close! sliding-buffer put!
+                     alts! timeout pipe mult tap]]
+            [clojuredocs.util :as util]
             [clojuredocs.ajax :refer [ajax]]
             [clojuredocs.anim :as anim]
             [clojuredocs.syntax :as syntax]
             [clojure.string :as str]
             [cljs.reader :as reader]
             [sablono.core :as sab :refer-macros [html]]
-            [clojuredocs.util :as util]
             [clojure.data :refer [diff]])
   (:require-macros [dommy.macros :refer [node sel1]]
                    [cljs.core.async.macros :refer [go go-loop]]))
@@ -119,7 +120,7 @@
                (- (count authors) num-to-show)
                " more"])]
            [:div.links
-            [:a {:href (str "#example_" _id)}
+            [:a {:href (str "#example-" _id)}
              "link"]
             #_" / "
             #_[:a {:href (str "/ex/" _id)}
@@ -221,7 +222,9 @@
     (render-state [_ {:keys [delete-ch update-example-ch]}]
       (html
         [:div.var-example
-         [:a {:id (str "example_" _id)}]
+         {:class (if (= (str "example-" _id) (util/location-hash))
+                   "highlighted")}
+         [:a {:id (str "example-" _id)}]
          [:div
           (om/build $example-meta ex {:init-state {:delete-ch delete-ch}})]
          (if editing?

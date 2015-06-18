@@ -176,3 +176,11 @@
 (defn is-author? [user o]
   (= (select-keys user [:login :account-source])
      (select-keys (:author o) [:login :account-source])))
+
+#+cljs
+(defn location-hash []
+  (let [hash-str (.. js/window -location -hash)]
+    (->> hash-str
+         (drop 1)
+         (apply str)
+         url-decode)))

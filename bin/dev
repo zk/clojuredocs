@@ -23,8 +23,13 @@ export STAGING_BANNER=false
 export MAILGUN_API_KEY=key-2006f8148abdc36fcf192c60d9e59329
 export MAILGUN_API_ENDPOINT="https://api.mailgun.net/v2/sandbox424576b6653e4c64a6882868b08c3858.mailgun.org/messages"
 
+
+# Test account used to verify data's making it to New Relic
+
 # export NEW_RELIC_APP_NAME=cd-dev
 # export NEW_RELIC_LICENSE_KEY=d239f729cebbb2f0742fadcf9a6616dfb9bbcf73
+# export NEW_RELIC_BROWSER_ID=4996968
+# export NEW_RELIC_BROWSER_KEY=da19d87a54
 
 cd $SCRIPT_DIR && lein clean
 cd $SCRIPT_DIR && lein cljsbuild clean

@@ -34,6 +34,39 @@ If you're looking for a project:
 * Source-linking on libs not included in the standard library
   e.g. core.async.
 
+## Deploy
+
+Production is deployed on an AWS t2.micro instance. There's an nginx
+process running on the box, balancing to two JVMs managed by Upstart
+to support zero-downtime deploys.
+
+To regenerate the upstart scripts:
+
+```
+cd $REPO
+sudo foreman export -a clojuredocs -e ./.env -u ubuntu -c "web=2" upstart /etc/init/
+```
+
+To start the app processes:
+
+```
+sudo service clojuredocs-web-1 start
+sudo service clojuredocs-web-2 start
+```
+
+To redeploy:
+
+```
+# in $REPO
+sudo service clojuredocs-web-1 stop
+git pull origin master
+# This will compile assets & run tests
+bin/build
+sudo service clojuredocs-web-1 start
+# Wait for proc 1 to start serving requests
+sudo service clojuredocs-web-2 restart
+```
+
 
 ## Reqs
 
