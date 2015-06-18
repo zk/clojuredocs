@@ -182,7 +182,8 @@
                            [:div.docstring
                             (if doc
                               [:pre (-> doc
-                                        (str/replace #"\n\s\s" "\n"))]
+                                        (str/replace #"\n\s\s" "\n")
+                                        util/html-encode)]
                               [:div.null-state "No Doc"])
                             (when doc
                               [:div.copyright
