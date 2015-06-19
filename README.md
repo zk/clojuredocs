@@ -72,7 +72,7 @@ sudo service clojuredocs-web-2 restart
 
 * [lein](http://leiningen.org)
 * [foreman](https://github.com/ddollar/foreman) (see `Procfile`, `bin/dev`)
-* [less](http://lesscss.org/)
+* [less](http://lesscss.org/#using-less-installation)
 * [entr](http://entrproject.org/) (available in homebrew)
 * MongoDB
 
