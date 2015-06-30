@@ -111,6 +111,7 @@ Clojure vars are pulled directly from the runtime, and are not stored in the dat
 
 * Change the Clojure dep in `project.clj`
 * Update the version string and source base url in `clojuredocs.search/clojure-lib`
+* Update the github URL in `clojuredocs.pages.vars/source-url`.
 
 
 ### App Structure
