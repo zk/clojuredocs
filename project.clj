@@ -6,7 +6,7 @@
   :min-lein-version "2.0.0"
   :source-paths ["src/clj" "target/generated/clj"]
   :test-paths ["test/clj"]
-  :dependencies [[org.clojure/clojure "1.7.0-RC1"]
+  :dependencies [[org.clojure/clojure "1.7.0"]
                  [ring "1.2.1"]
                  [compojure "1.1.6"]
                  [aleph "0.3.0-rc2"]
