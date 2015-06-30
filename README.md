@@ -70,11 +70,14 @@ sudo service clojuredocs-web-2 restart
 
 ## Reqs
 
+* [> JDK 7](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
+* [JCE Unlimited Strength Jurisdiction Policy Files](http://www.oracle.com/technetwork/java/javase/downloads/jce8-download-2133166.html)
 * [lein](http://leiningen.org)
 * [foreman](https://github.com/ddollar/foreman) (see `Procfile`, `bin/dev`)
 * [less](http://lesscss.org/#using-less-installation)
 * [entr](http://entrproject.org/) (available in homebrew)
 * MongoDB
+
 
 
 ## Dev
@@ -109,6 +112,7 @@ Clojure vars are pulled directly from the runtime, and are not stored in the dat
 
 * Change the Clojure dep in `project.clj`
 * Update the version string and source base url in `clojuredocs.search/clojure-lib`
+* Update the github URL in `clojuredocs.pages.vars/source-url`.
 
 
 ### App Structure
