@@ -70,10 +70,13 @@ sudo service clojuredocs-web-2 restart
 
 ## Reqs
 
+* [> JDK 7](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
+* [JCE Unlimited Strength Jurisdiction Policy Files](http://www.oracle.com/technetwork/java/javase/downloads/jce8-download-2133166.html)
 * [lein](http://leiningen.org)
 * [foreman](https://github.com/ddollar/foreman) (see `Procfile`, `bin/dev`)
 * [less](http://lesscss.org/)
 * MongoDB
+
 
 
 ## Dev
