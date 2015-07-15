@@ -145,7 +145,8 @@ in this vector will be queried for public vars to be made searchable
 and displayable on the site.
 
 Special forms are specified in the
-`clojuredocs.search.static/special-forms` list.
+`clojuredocs.search.static/special-forms` list, and require a server
+restart to be picked up in a dev environment.
 
 
 ### Adding Core Libraries
