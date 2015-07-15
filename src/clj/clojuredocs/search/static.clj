@@ -109,10 +109,12 @@ or local bindings. Only Java fields, Vars, Refs and Agents are mutable in
 Clojure. See http://clojure.org/special_forms for more information."}
         {:name 'monitor-enter
          :ns "clojure.core"
-         :doc "A synchronization primitive that should be avoided in user code. Use the locking macro. See http://clojure.org/special_forms for more information."}
+         :doc "A synchronization primitive that should be avoided in user code. Use the
+locking macro. See http://clojure.org/special_forms for more information."}
         {:name 'monitor-exit
          :ns "clojure.core"
-         :doc "A synchronization primitive that should be avoided in user code. Use the locking macro. See http://clojure.org/special_forms for more information."}]
+         :doc "A synchronization primitive that should be avoided in user code. Use the
+locking macro. See http://clojure.org/special_forms for more information."}]
        (map #(assoc % :type "special-form"))))
 
 (def concept-pages
