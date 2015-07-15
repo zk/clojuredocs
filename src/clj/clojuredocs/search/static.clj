@@ -117,7 +117,8 @@ locking macro. See http://clojure.org/special_forms for more information."}
 locking macro. See http://clojure.org/special_forms for more information."}
         {:name 'new
          :ns "clojure.core"
-         :doc "Instantiate a class. See http://clojure.org/java_interop#new for more information."}]
+         :doc "Instantiate a class. See http://clojure.org/java_interop#new for
+more information."}]
        (map #(assoc % :type "special-form"))))
 
 (def concept-pages
