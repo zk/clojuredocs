@@ -131,7 +131,27 @@ Interesting files:
 * Functions that return hiccup structures should be prefixed with a `$`, like `$layout`.
 
 
+### Adding Functions, Macros, Special Forms, Namespaces & Other Vars
+
+Most vars are picked up from Clojure at runtime, using core namespace
+and var introspection utilities. Special forms and namespaces to
+include on the site are specified explicitly in the
+`clojuredocs.search.static` namespace.
+
+Vars are picked up automatically based on the namespaces specified in
+`clojuredocs.search.static/clojure-namespaces` vector. Any namespace
+in this vector will be queried for public vars to be made searchable
+and displayable on the site.
+
+Special forms are specified in the
+`clojuredocs.search.static/special-forms` list.
+
+
 ### Adding Core Libraries
+
+Sometimes we'd like to add core libraries that are not part of the
+standard Clojure distribution (like core.async) to the site. Here's
+how to do that:
 
 1. Add dependency to `project.clj`
 1. Add ns sym to `clojure-namespaces` in `clojuredocs.search.static`
