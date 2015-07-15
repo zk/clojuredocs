@@ -106,7 +106,13 @@ form, the assignment is to the corresponding field. If it is an instance
 field, the instance expr will be evaluated, then the expr. In all cases
 the value of expr is returned. Note - you cannot assign to function params
 or local bindings. Only Java fields, Vars, Refs and Agents are mutable in
-Clojure. See http://clojure.org/special_forms for more information."}]
+Clojure. See http://clojure.org/special_forms for more information."}
+        {:name 'monitor-enter
+         :ns "clojure.core"
+         :doc "A synchronization primitive that should be avoided in user code. Use the locking macro. See http://clojure.org/special_forms for more information."}
+        {:name 'monitor-exit
+         :ns "clojure.core"
+         :doc "A synchronization primitive that should be avoided in user code. Use the locking macro. See http://clojure.org/special_forms for more information."}]
        (map #(assoc % :type "special-form"))))
 
 (def concept-pages
