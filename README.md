@@ -129,6 +129,7 @@ Interesting files:
 ### Conventions
 
 * Functions that return hiccup structures should be prefixed with a `$`, like `$layout`.
+* Mutable state should be prefixed with a `!`, ex: `!my-atom`.
 
 
 ### Adding Functions, Macros, Special Forms, Namespaces & Other Vars
