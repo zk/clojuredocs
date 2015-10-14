@@ -24,11 +24,11 @@
    (str "("
         (util/html-encode name)
         (when-not (empty? a) " ")
-        a
+        (util/html-encode a)
         ")")])
 
 (defn $argform [s]
-  [:li.arglist s])
+  [:li.arglist (util/html-encode s)])
 
 (defn see-alsos-for [{:keys [ns name library-url]}]
   (->> (mon/fetch :see-alsos
@@ -137,7 +137,7 @@
            :body
            (common/$main
              {:body-class "var-page"
-              :title (str name " - " ns " | ClojureDocs - Community-Powered Clojure Documentation and Examples")
+              :title (util/html-encode (str name " - " ns " | ClojureDocs - Community-Powered Clojure Documentation and Examples"))
               :page-data {:examples (mapv clean-example examples)
                           :var v
                           :notes (vec (map clean-id notes))
