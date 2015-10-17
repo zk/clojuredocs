@@ -145,7 +145,7 @@
     font-awesome-link
     bootstrap-link
     app-link
-    [:script "window.PAGE_DATA=" (util/to-json (pr-str page-data)) ";"]]
+    [:script "// <![CDATA[\nwindow.PAGE_DATA=" (util/to-json (pr-str page-data)) ";\n//]]>"]]
    [:body
     (when body-class
       {:class body-class})

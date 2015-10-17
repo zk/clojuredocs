@@ -38,6 +38,7 @@
 (defn html-encode [s]
   (when s
     (-> s
+        (str/replace #"&" "&amp;")
         (str/replace #"<" "&lt;")
         (str/replace #">" "&gt;"))))
 
