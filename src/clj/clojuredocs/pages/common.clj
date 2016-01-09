@@ -126,7 +126,7 @@
           :href (str "/css/font-awesome.min.css?"
                      (md5-path "resources/public/css/font-awesome.min.css"))}])
 
-(def omnisearch-link
+(def opensearch-link
   [:link {:rel "search"
           :href "/opensearch.xml"
           :type "application/opensearchdescription+xml"
@@ -148,7 +148,7 @@
     [:meta {:name "apple-mobile-web-app-title" :content "ClojureDocs"}]
     [:meta {:name "google-site-verification" :content "XjzqkjEPtcgtLjhnqAvtnVSeveEccs-O_unFGGlbk4g"}]
     [:title (or title "Community-Powered Clojure Documentation and Examples | ClojureDocs")]
-    omnisearch-link
+    opensearch-link
     font-awesome-link
     bootstrap-link
     app-link
