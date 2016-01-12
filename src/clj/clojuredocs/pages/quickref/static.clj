@@ -45,8 +45,10 @@
      :categories
      ({:title "Flow Control",
        :groups
-       ({:syms
-         (if
+       ({:syms (not and or), :title "Boolean"}
+        {:syms
+         (let
+             if
              if-not
            if-let
            when
