@@ -55,9 +55,8 @@ the recursion point to the values of the exprs. See
 http://clojure.org/special_forms for more information."}
         {:name 'throw
          :ns "clojure.core"
-         :doc "Evaluates the exprs in order, then, in parallel, rebinds the bindings of the
-recursion point to the values of the exprs. See
-http://clojure.org/special_forms for more information."}
+         :doc "The expr is evaluated and thrown, therefore it should yield an instance of
+some derivee of Throwable. Please see http://clojure.org/special_forms#throw"}
         {:name 'try
          :ns "clojure.core"
          :doc "The exprs are evaluated and, if no exceptions occur, the value of the last
