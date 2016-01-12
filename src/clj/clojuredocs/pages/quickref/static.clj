@@ -261,7 +261,7 @@
            merge
            merge-with),
          :title "Use (Sorted Maps)"}
-        {:syms (rseq subseq subseq rsubseq rsubseq),
+        {:syms (rseq subseq rsubseq),
 
          :title "Use"})}
       {:title "Sets",
