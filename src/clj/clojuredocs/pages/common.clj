@@ -126,6 +126,12 @@
           :href (str "/css/font-awesome.min.css?"
                      (md5-path "resources/public/css/font-awesome.min.css"))}])
 
+(def opensearch-link
+  [:link {:rel "search"
+          :href "/opensearch.xml"
+          :type "application/opensearchdescription+xml"
+          :title "ClojureDocs"}])
+
 (defn $main [{:keys [page-uri
                      content
                      title
@@ -142,6 +148,7 @@
     [:meta {:name "apple-mobile-web-app-title" :content "ClojureDocs"}]
     [:meta {:name "google-site-verification" :content "XjzqkjEPtcgtLjhnqAvtnVSeveEccs-O_unFGGlbk4g"}]
     [:title (or title "Community-Powered Clojure Documentation and Examples | ClojureDocs")]
+    opensearch-link
     font-awesome-link
     bootstrap-link
     app-link
@@ -247,7 +254,7 @@ document.location.href = noddy.href;
     {:src (or avatar-url
               (str "https://www.gravatar.com/avatar/"
                    (util/md5 email)
-                   "?r=PG&s=32&default=identicon")) }]])
+                   "?r=PG&s=32&default=identicon"))}]])
 
 (defn group-levels [path ns-lookup current-ns ls]
   (when-not (empty? ls)

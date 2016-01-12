@@ -1,0 +1,9 @@
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/" xmlns:moz="http://www.mozilla.org/2006/browser/search/">
+  <ShortName>ClojureDocs</ShortName>
+  <Description>
+    ClojureDocs is a community-powered documentation and examples repository for the Clojure programming language.
+  </Description>
+  <InputEncoding>UTF-8</InputEncoding>
+  <Image width="16" height="16" type="image/x-icon">http://clojuredocs.org/favicon.ico</Image>
+  <Url type="text/html" method="get" template="http://www.clojuredocs.org/search?q={searchTerms}"/>
+</OpenSearchDescription>
