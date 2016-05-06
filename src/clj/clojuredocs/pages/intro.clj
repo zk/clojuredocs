@@ -141,13 +141,12 @@
                :url "http://www.amazon.com"}
               {:src "https://upload.wikimedia.org/wikipedia/en/2/22/The_Climate_Corporation_Logo2.jpg"
                :url "http://www.climate.com/"}
+              {:src "/img/funding-circle-logo.png"
+               :url "https://www.fundingcircle.com"}
               {:src "https://g.twimg.com/Twitter_logo_blue.png"
                :url "https://twitter.com"}
               {:src "/img/factual-logo.png"
                :url "http://www.factual.com"}
-
-              {:src "/img/prismatic-logo.png"
-               :url "https://getprismatic.com"}
               {:src "/img/simple-logo.png"
                :url "https://simple.com"}
               {:src "https://d1lpkba4w1baqt.cloudfront.net/heroku-logo-light-234x60.png"
@@ -156,8 +155,8 @@
                :url "http://www.brightcove.com"}
               {:src "https://upload.wikimedia.org/wikipedia/en/9/92/SoundCloud_logo.svg"
                :url "https://soundcloud.com"}
-              {:src "https://puppetlabs.com/wp-content/uploads/2010/12/PL_logo_horizontal_RGB_sm.png"
-               :url "https://puppetlabs.com"}
+              {:src "/img/puppet-logo.jpg"
+               :url "https://puppet.com"}
               {:src "/img/living-social-logo.png"
                :url "https://livingsocial.com"}
               {:src "/img/circleci-logo.png"
@@ -169,9 +168,9 @@
               {:src "/img/cognician-logo.png"
                :url "https://www.cognician.com"}
               {:src "/img/qubit-logo.png"
-               :url "https://qubitproducts.com/"}
-              {:src "/img/diligenceengine-logo.png"
-               :url "https://diligenceengine.com/"}
+               :url "https://qubit.com/"}
+              {:src "/img/kira-logo.png"
+               :url "https://kirasystems.com"}
               {:src "/img/farmlogs-logo.png"
                :url "http://www.farmlogs.com"}
               {:src "/img/stylefruits-logo.png"
