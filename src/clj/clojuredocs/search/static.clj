@@ -4,6 +4,7 @@
   '[clojure.core
     clojure.core.async
     clojure.core.logic
+    clojure.core.reducers
     clojure.data
     clojure.edn
     clojure.inspector
