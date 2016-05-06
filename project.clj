@@ -22,7 +22,7 @@
                  [mysql/mysql-connector-java "5.1.25"]
                  [congomongo "0.4.1"]
                  [unk "0.9.1"]
-                 [org.clojure/core.async "0.1.267.0-0d7780-alpha"]
+                 [org.clojure/core.async "0.2.374"]
                  [org.clojure/core.logic "0.8.8"]
                  [om "0.6.4"]
                  [prismatic/om-tools "0.2.2"
