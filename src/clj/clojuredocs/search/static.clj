@@ -4,6 +4,8 @@
   '[clojure.core
     clojure.core.async
     clojure.core.logic
+    clojure.core.logic.fd
+    clojure.core.logic.pldb
     clojure.core.reducers
     clojure.data
     clojure.edn
