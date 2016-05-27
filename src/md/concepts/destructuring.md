@@ -41,4 +41,4 @@ structure of the passed map:
 
 ```
 
-See John Del Rosario's [destructuring cheat sheet](http://john2x.com/blog/clojure-destructuring/) for a more comprehensive overview.
+See John Del Rosario's [destructuring cheat sheet](https://gist.github.com/john2x/e1dca953548bfdfb9844) for a more comprehensive overview.
