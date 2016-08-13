@@ -1,6 +1,5 @@
 (ns clojuredocs.anim
-  (:require [dommy.core :as dom])
-  (:require-macros [dommy.macros :refer [node sel1]]))
+  (:require [dommy.core :as dom :refer-macros [sel1]]))
 
 (defn offset-parents
   "a lazy seq of offset parents of `node`"
@@ -42,7 +41,7 @@
   "Returns a map of the bounding client rect of `elem`
    as a map with [:top :left :right :bottom :width :height]"
   [elem]
-  (let [r (.getBoundingClientRect (node elem))]
+  (let [r (.getBoundingClientRect elem)]
     {:top (.-top r)
      :bottom (.-bottom r)
      :left (.-left r)
@@ -52,8 +51,7 @@
 
 (defn scroll-into-view
   [elem & [opts]]
-  (let [elem (node elem)
-        {:keys [top bottom] :as res} (bounding-client-rect elem)]
+  (let [{:keys [top bottom] :as res} (bounding-client-rect elem)]
     (when (or (< js/window.innerHeight
                 (+ top (.-offsetHeight elem)))
               (< top 0))

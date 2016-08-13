@@ -1,6 +1,6 @@
 (ns clojuredocs.mods.search
   (:require [om.core :as om :include-macros true]
-            [dommy.core :as dommy]
+            [dommy.core :as dommy :refer-macros [sel1 sel]]
             [cljs.core.async :as async
              :refer [<! >! chan close! sliding-buffer put! alts! timeout pipe mult tap]]
             [clojuredocs.ajax :refer [ajax]]
@@ -10,8 +10,7 @@
             [sablono.core :as sab :refer-macros [html]]
             [clojuredocs.util :as util]
             [clojuredocs.metrics :as metrics])
-  (:require-macros [cljs.core.async.macros :refer [go go-loop]]
-                   [dommy.macros :refer [node sel1 sel]]))
+  (:require-macros [cljs.core.async.macros :refer [go go-loop]]))
 
 (defn ellipsis [n s]
   (if (> (- (count s) 3) n)
@@ -163,7 +162,7 @@
     om/IDidUpdate
     (did-update [_ prev-props prev-state]
       (when (> (count ac-results) 0)
-        (let [$el (om/get-node owner (:highlighted-index app))]
+        (let [$el (om/get-node owner)]
           (when (and (not= (:highlighted-index prev-props)
                            (:highlighted-index app))
                      $el)

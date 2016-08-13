@@ -1,5 +1,5 @@
 (ns clojuredocs.mods.var-page
-  (:require [dommy.core :as dommy]
+  (:require [dommy.core :as dommy :refer-macros [sel sel1]]
             [om.core :as om :include-macros true]
             [sablono.core :as sab :refer-macros [html]]
             [cljs.core.async :as async
@@ -10,8 +10,7 @@
             [clojuredocs.notes :as notes]
             [clojuredocs.anim :as anim]
             [clojuredocs.ajax :refer [ajax]])
-  (:require-macros [dommy.macros :refer [node sel sel1]]
-                   [cljs.core.async.macros :refer [go go-loop]]))
+  (:require-macros [cljs.core.async.macros :refer [go go-loop]]))
 
 (enable-console-print!)
 

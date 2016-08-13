@@ -1,6 +1,6 @@
 (ns clojuredocs.see-alsos
   (:require [om.core :as om :include-macros true]
-            [dommy.core :as dommy]
+            [dommy.core :as dommy :refer-macros [sel1]]
             [cljs.core.async :as async
              :refer [<! >! chan close! sliding-buffer put! alts! timeout pipe mult tap]]
             [clojuredocs.ajax :refer [ajax]]
@@ -9,8 +9,7 @@
             [cljs.reader :as reader]
             [sablono.core :as sab :include-macros true]
             [clojuredocs.util :as util])
-  (:require-macros [cljs.core.async.macros :refer [go]]
-                   [dommy.macros :refer [node sel1]]))
+  (:require-macros [cljs.core.async.macros :refer [go]]))
 
 (defn toggle [owner key]
   (om/update-state! owner (fn [state]

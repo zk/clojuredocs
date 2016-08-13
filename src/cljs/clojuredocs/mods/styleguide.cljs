@@ -1,5 +1,5 @@
 (ns clojuredocs.mods.styleguide
-  (:require [dommy.core :as dommy]
+  (:require [dommy.core :as dommy :refer-macros [sel sel1]]
             [clojure.string :as str]
             [cljs.core.async :as async
              :refer [<! >! chan close! sliding-buffer put! alts! timeout pipe mult tap]]
@@ -12,8 +12,7 @@
             [cljs.reader :as reader]
             [clojuredocs.util :as util]
             [cljs.core.async.impl.protocols :as async.protocols])
-  (:require-macros [cljs.core.async.macros :refer [go go-loop]]
-                   [dommy.macros :refer [node sel sel1]]))
+  (:require-macros [cljs.core.async.macros :refer [go go-loop]]))
 
 
 ;; Inspectable react widgets -- internal state & egress

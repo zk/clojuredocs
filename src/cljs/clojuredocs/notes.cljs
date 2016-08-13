@@ -1,6 +1,6 @@
 (ns clojuredocs.notes
   (:require [om.core :as om :include-macros true]
-            [dommy.core :as dommy]
+            [dommy.core :as dommy :refer-macros [sel1]]
             [cljs.core.async :as async
              :refer [<! >! chan close! sliding-buffer put! alts! timeout pipe mult tap]]
             [clojuredocs.ajax :refer [ajax]]
@@ -13,8 +13,7 @@
             [goog.crypt.Sha1 :as Sha1]
             [sablono.core :as sab :include-macros true]
             [clojuredocs.util :as util])
-  (:require-macros [cljs.core.async.macros :refer [go go-loop]]
-                   [dommy.macros :refer [node sel1]]))
+  (:require-macros [cljs.core.async.macros :refer [go go-loop]]))
 
 (defn $expando-ta
   "A textarea the expands downward with the content (no scroll)"

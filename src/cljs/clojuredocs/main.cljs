@@ -1,6 +1,6 @@
 (ns clojuredocs.main
   (:require [clojuredocs.util :as util]
-            [dommy.core :as dommy]
+            [dommy.core :as dommy :refer-macros [sel sel1]]
             [clojure.string :as str]
             [clojuredocs.ajax :refer [ajax]]
             [clojuredocs.sticky :as sticky]
@@ -18,15 +18,14 @@
              :refer [<! >! chan close! sliding-buffer put! alts! timeout pipe mult tap]]
             [clojuredocs.syntax :as syntax]
             #_[clj-fuzzy.metrics1 :as fuzzy])
-  (:require-macros [cljs.core.async.macros :refer [go go-loop]]
-                   [dommy.macros :refer [node sel sel1]]))
+  (:require-macros [cljs.core.async.macros :refer [go go-loop]]))
 
 (enable-console-print!)
 
 (doseq [$el (sel :pre.clojure)]
   (let [contents (dommy/text $el)
         highlighted (syntax/syntaxify contents :stringify-style? true)]
-    (dommy/replace! $el (node highlighted))))
+    (dommy/replace! $el highlighted)))
 
 (defn log [& args]
   (.log js/console args))
