@@ -111,5 +111,7 @@
       (when-not (util/is-author? user example)
         (throw+ {:status 401
                  :body {:message "Not authorized to delete that example"}}))
-      (mon/update! :examples example (assoc example :deleted-at (util/now)))
+      (mon/update! :examples
+        {:_id _id}
+        (assoc example :deleted-at (util/now)))
       {:status 200 :body example})))
