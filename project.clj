@@ -63,11 +63,9 @@
                                           :source-map "resources/public/cljs/clojuredocs.js.map"
                                           :optimizations :advanced
                                           :preamble ["public/js/morpheus.min.js"
-                                                     "react/react.min.js"
                                                      "public/js/marked.min.js"
                                                      "public/js/fastclick.min.js"]
-                                          :externs ["externs/react.js"
-                                                    "externs/morpheus.js"
+                                          :externs ["externs/morpheus.js"
                                                     "externs/marked.js"
                                                     "externs/fastclick.js"]}}
 
@@ -76,11 +74,9 @@
                                  :optimizations :advanced
                                  :pretty-print false
                                  :preamble ["public/js/morpheus.min.js"
-                                            "react/react.min.js"
                                             "public/js/marked.min.js"
                                             "public/js/fastclick.min.js"]
-                                 :externs ["externs/react.js"
-                                           "externs/morpheus.js"
+                                 :externs ["externs/morpheus.js"
                                            "externs/marked.js"
                                            "externs/fastclick.js"]}
                       :jar true}}})
