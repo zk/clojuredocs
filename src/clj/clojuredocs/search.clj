@@ -101,7 +101,7 @@
 
 (def clojure-lib
   (-> {:library-url "https://github.com/clojure/clojure"
-       :version "1.7.0"
+       :version "1.8.0"
        :source-base-url "https://github.com/clojure/clojure/1.7.0/blob"
        :namespaces static/clojure-namespaces}
       gather-namespaces
