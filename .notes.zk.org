@@ -476,7 +476,7 @@ Less w/ gzip
 I'm guessing that extra 350K is worth it if cachable.
 
 
-<2014-09-21 Sun 00:22>
+* <2014-09-21 Sun 00:22>
 
 Getting close to a release, just need to get some help banging on the
 thing. Also working on persisting search state:
@@ -492,3 +492,32 @@ There's a ton of stuff once you dig in.
 
 The search stuff needs a good refactor anyway, the separation of
 concerns and encapsulaton is poor
+
+
+* <2016-08-13 Sat 17:08>
+
+Getting everything updated to 1.8, which was released months ago. You
+know, 1.9 alpha 10 is out, I should update to that while I'm at it.
+
+Also I've just noticed that the delete example link isn't working.
+
+Add / update works.
+
+Delete on see-alsos work. Delete on notes work.
+
+I should compile for prod locally to double check on this release.
+
+
+* <2016-08-20 Sat 16:46>
+
+Added display of the current clojure version to the homepage for
+desktop / mobile. Really love the mobile slide-out menu, that thing
+has really held up over time.
+
+https://cl.ly/2S100u241x2y/Screen%20Shot%202016-08-20%20at%204.48.04%20PM.png
+
+https://cl.ly/3m3E3f3l1F2o/Screen%20Shot%202016-08-20%20at%204.48.36%20PM.png
+
+
+Also checked 1.9.0-alpha10, seems to be good to go so the next version
+bump will be nice and easy.

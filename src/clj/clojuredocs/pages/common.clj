@@ -3,7 +3,8 @@
             [clojuredocs.util :as util]
             [clojuredocs.config :as config]
             [clojuredocs.env :as env]
-            [clojuredocs.github :as gh]))
+            [clojuredocs.github :as gh]
+            [clojuredocs.search :as search]))
 
 (defn gh-auth-url [& [redirect-to-after-auth-url]]
   (let [redirect-url (str "/gh-callback" redirect-to-after-auth-url)]
@@ -48,10 +49,15 @@
       [:a.navbar-brand {:href "/"}
        [:i.fa.fa-rocket]
        "ClojureDocs"]
+      #_[:div.navbar-brand.clojure-version
+         (:version search/clojure-lib)]
       [:button.btn.btn-default.navbar-btn.pull-right.mobile-menu
        [:i.fa.fa-bars]]
       [:ul.navbar-nav.nav.navbar-right.desktop-navbar-nav
-
+       [:li
+        [:div.navbar-brand.clojure-version
+         [:a {:href (:gh-tag-url search/clojure-lib)}
+          (:version search/clojure-lib)]]]
        [:li [:a {:href "/core-library"} "Core Library"]]
        [:li [:a {:href "/quickref"} "Quick Reference"]]
        (if user
@@ -87,7 +93,9 @@
    [:section
     [:h4 [:i.fa.fa-rocket] "ClojureDocs"]
     [:ul.navbar-nav.mobile-navbar-nav.nav
-     [:li [:a {:href "/core-library"} "Core Library"]]
+     [:li
+      [:a {:href "/core-library"} "Core Library"
+       [:span.clojure-version "(1.8.0)"]]]
      [:li [:a {:href "/quickref"} "Quick Reference"]]
      (if user
        ($user-area user)

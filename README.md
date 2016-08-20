@@ -98,7 +98,7 @@ The app uses a MongoDB database named `clojuredocs` to store data. Run `bin/db-r
 
 ### Prod Local
 
-Occasionally you'll need to compile and run things as they would be in production: `bin/prod-local`
+Occasionally you'll need to compile and run things as they would be in production (checking advanced cljs compilation, for example): `bin/prod-local`.
 
 
 ### CLJS Source Maps
@@ -111,7 +111,8 @@ The ClojureDocs project is set-up to emit source-maps for compiled javascript. T
 Clojure vars are pulled directly from the runtime, and are not stored in the database. When new versions of Clojure are released:
 
 * Change the Clojure dep in `project.clj`
-* Update the version string and source base url in `clojuredocs.search/clojure-lib`
+* Update the version string, source base url, and gh tag url in
+  `clojuredocs.search/clojure-lib`
 * Update the github URL in `clojuredocs.pages.vars/source-url`.
 
 

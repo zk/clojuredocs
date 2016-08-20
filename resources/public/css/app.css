@@ -211,6 +211,18 @@ header.navbar .gh-starred-count {
   line-height: 20px;
   margin-left: 10px;
 }
+header.navbar .clojure-version {
+  font-weight: 300;
+  font-size: 12px;
+  font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+  color: #ccc;
+  line-height: 21px;
+}
+header.navbar .clojure-version a {
+  line-height: 20px;
+  color: #ccc;
+  font-weight: 300;
+}
 .mobile-nav-bar {
   display: none;
 }
@@ -345,6 +357,13 @@ header.navbar .gh-starred-count {
   }
   body.search-active {
     background-color: transparent;
+  }
+  .clojure-version {
+    font-weight: 300;
+    color: rgba(255, 255, 255, 0.7);
+    font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+    margin-left: 5px;
+    font-size: 10px;
   }
 }
 .xkcd {
