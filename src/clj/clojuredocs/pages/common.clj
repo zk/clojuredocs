@@ -54,10 +54,11 @@
       [:button.btn.btn-default.navbar-btn.pull-right.mobile-menu
        [:i.fa.fa-bars]]
       [:ul.navbar-nav.nav.navbar-right.desktop-navbar-nav
-       [:li
-        [:div.navbar-brand.clojure-version
-         [:a {:href (:gh-tag-url search/clojure-lib)}
-          (:version search/clojure-lib)]]]
+       (when hide-search
+         [:li
+          [:div.navbar-brand.clojure-version
+           [:a {:href (:gh-tag-url search/clojure-lib)}
+            (:version search/clojure-lib)]]])
        [:li [:a {:href "/core-library"} "Core Library"]]
        [:li [:a {:href "/quickref"} "Quick Reference"]]
        (if user
