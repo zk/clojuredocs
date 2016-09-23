@@ -15,7 +15,8 @@
             [clojuredocs.pages.gh-auth :as gh-auth]
             [clojuredocs.pages.quickref :as quickref]
             [clojuredocs.pages.vars :as vars]
-            [clojuredocs.pages.nss :as nss]))
+            [clojuredocs.pages.nss :as nss]
+            [clojuredocs.pages.jobs :as jobs]))
 
 (def robots-resp
   (fn [r]
@@ -324,6 +325,11 @@
   (GET "/search-feedback" [] search-feedback/page-handler)
   (POST "/search-feedback" [] search-feedback/submit-feedback-handler)
   (GET "/search-feedback/success" [] search-feedback/success-handler)
+
+
+  (GET "/jobs" [] jobs/list-handler)
+  (GET "/jobs/:job-id" [job-id] (jobs/single-handler job-id))
+  (GET "/jobs/:job-id/:url-slug" [job-id] (jobs/single-handler job-id))
 
   (GET "/ac-search" [] var-search-handler)
   (GET "/ac-vars" [] ac-vars-handler)

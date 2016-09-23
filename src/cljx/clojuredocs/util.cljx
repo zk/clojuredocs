@@ -185,3 +185,14 @@
          (drop 1)
          (apply str)
          url-decode)))
+
+(defn ellipsis [n s]
+  (when s
+    (let [len (count s)]
+      (if (> len n)
+        (str (->> s
+                  (take n)
+                  (apply str)
+                  str/trim)
+             "...")
+        s))))
