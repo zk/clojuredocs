@@ -1675,3 +1675,25 @@ table.schema .aside {
   text-align: center;
   color: #888;
 }
+.jobs-page .btn {
+  border-radius: 0;
+}
+.jobs-page .job-description ul,
+.jobs-page .company-description ul {
+  margin-left: 20px;
+}
+.jobs-page .job-description li,
+.jobs-page .company-description li {
+  margin-bottom: 0.5em;
+  list-style-type: disc;
+}
+.jobs-page .apply-now {
+  border-top: solid #ccc 1px;
+  border-bottom: solid #ccc 1px;
+  padding: 15px 0;
+  text-align: center;
+}
+.jobs-page .apply-now .btn {
+  width: 75%;
+  border-radius: 0;
+}

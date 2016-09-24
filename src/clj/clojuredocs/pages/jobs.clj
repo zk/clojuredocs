@@ -41,6 +41,7 @@
 (def DATA [{:job-title "Site Reliability Engineer"
             :job-type "Permanent"
             :job-location "Manhatten, New York"
+            :job-apply-href "https://www.google.com"
             :short-id "xD"
             :posted-at (util/now)
             :visa-sponsorship? true
@@ -51,7 +52,13 @@
 
 As a Senior Developer, you’ll be crafting and implementing with the team a data synchronisation service for tree data structures using operational transformation on a large scale. All the hard problem of OT with nested tree data, n-squared complexity issue, support of key-value maps and many other challenges are solved in Synchrony.
 
-We are supported by robust deployment systems, mature algorithmic solutions, and an experienced team with a strong desire to build the best synchronisation technology out there. Think Nasa launching the Rover on Mars or Cochlear gifting children born deaf with the ability to hear, your work directly impacts the products they use to advance humanity. You'll need a strong technical prowess with incredible coding ability across a diverse set of languages and technologies."
+We are supported by robust deployment systems, mature algorithmic solutions, and an experienced team with a strong desire to build the best synchronisation technology out there. Think Nasa launching the Rover on Mars or Cochlear gifting children born deaf with the ability to hear, your work directly impacts the products they use to advance humanity. You'll need a strong technical prowess with incredible coding ability across a diverse set of languages and technologies.
+
+**Types of projects we do**
+
+* Built a community-based  competition/contest platform that connects musicians with major artists and brands for the creation of original songs as well as remixes. indabamusic.com
+* Built the world’s premiere royalty free sample library. converse.com/samplelibrary
+* Building unprecedented platform for creating, distributing and monetizing derivative works (e.g. sampled songs, remixes) by bringing content, composers, musicians, and producers together."
             :key-technologies ["Clojure" "ClojureScript" "Ruby-on-Rails"]
             :skills "* One\n* Two\n* Three"
             :company-name "Google, Inc"
@@ -67,9 +74,13 @@ We are supported by robust deployment systems, mature algorithmic solutions, and
                             posted-at
                             comp
                             company-name company-image-url]
-                     :as job}]
+                     :as job}
+                    &
+                    [{:keys [description?
+                             comp?
+                             posted-at?]}]]
   [:div.row
-   {:style "border-bottom:solid #ccc 1px;padding-bottom:20px;position:relative"}
+   {:style "position:relative"}
    [:div.col-sm-2.text-center
     [:img {:src company-image-url
            :style "width:100%;max-width:150px"}]]
@@ -77,17 +88,7 @@ We are supported by robust deployment systems, mature algorithmic solutions, and
     {:style "vertical-align:top;"}
     [:div
      [:h3 {:style "margin:0"}
-      [:a {:href (str "/jobs/" short-id "/" (job-slug job))} job-title]]
-     (when comp
-       [:div.compensation {:style "position:absolute;top:5px;right:15px;color:#aaa"}
-        (format-currency
-          (:currency comp))
-        (format-number
-          (:minimum comp)
-          (delim-for (:currency comp)))
-        "-"
-        (format-number (:maximum comp)
-          (delim-for (:currency comp)))])]
+      [:a {:href (str "/jobs/" short-id "/" (job-slug job))} job-title]]]
     [:h4 {:style "font-size:14px;margin:0"}
      [:span.company-name
       {:style "margin-right:10px;font-weight:normal"}
@@ -97,18 +98,30 @@ We are supported by robust deployment systems, mature algorithmic solutions, and
       [:i.fa.fa-map-marker
        {:style "margin-right:5px"}]
       job-location]]
-    [:div.description-preview
-     {:style "margin-top:0px;font-size:13px;color:#777;font-weight:300"}
-     (util/ellipsis 80 job-description)]
-    [:div.posted-at.text-right
-     {:style "font-size:10px;font-weight:bold;text-transform:uppercase;color:#aaa;margin-top:3px"}
-     "Posted " (util/timeago posted-at) " ago"]
+    (when (and comp)
+      [:div.compensation {:style "color:#aaa"}
+       (format-currency
+         (:currency comp))
+       (format-number
+         (:minimum comp)
+         (delim-for (:currency comp)))
+       "-"
+       (format-number (:maximum comp)
+         (delim-for (:currency comp)))])
+    (when description?
+      [:div.description-preview
+       {:style "margin-top:0px;font-size:13px;color:#777;font-weight:300"}
+       (util/ellipsis 80 job-description)])
+    (when posted-at?
+      [:div.posted-at.text-right
+       {:style "font-size:10px;font-weight:bold;text-transform:uppercase;color:#aaa;margin-top:3px"}
+       "Posted " (util/timeago posted-at) " ago"])
     ]])
 
 (defn list-handler [{:keys [params uri user]}]
   (common/$main
     {:body-class "jobs-page"
-     :title (str "Send Us Some Feedback | ClojureDocs - Community-Powered Clojure Documentation and Examples")
+     :title (str "Jobs | ClojureDocs - Community-Powered Clojure Documentation and Examples")
      :user user
      :page-uri uri
      :content
@@ -116,16 +129,52 @@ We are supported by robust deployment systems, mature algorithmic solutions, and
       [:div.col-md-12
        [:h2 {:style "text-align:center;border-bottom:solid #ccc 1px;padding-bottom:10px"} "Latest Jobs"]
        (->> DATA
-            (map $job-preview))]]}))
+            (map (fn [job]
+                   [:div
+                    {:style "border-bottom:solid #ccc 1px;padding-bottom:20px;"}
+                    ($job-preview job
+                      {:description? true
+                       :comp? true
+                       :posted-at? true})])))]]}))
+
+(defn find-job [job-id]
+  (first DATA))
 
 (defn single-handler [job-id]
   (fn [{:keys [params uri user]}]
-    (common/$main
-      {:body-class "jobs-page"
-       :title (str "Send Us Some Feedback | ClojureDocs - Community-Powered Clojure Documentation and Examples")
-       :user user
-       :page-uri uri
-       :content
-       [:div.row
-        [:div.col-md-12
-         [:h3 "Jobs"]]]})))
+    (let [job (find-job job-id)]
+      (when job
+        (common/$main
+          {:body-class "jobs-page"
+           :title (str "Jobs | ClojureDocs - Community-Powered Clojure Documentation and Examples")
+           :user user
+           :page-uri uri
+           :content
+           [:div.row
+            [:div.col-md-10.col-md-offset-1
+             (let [{:keys [job-description company-description
+                           company-name
+                           job-apply-href]} job]
+               [:div {:style "border-top:solid #ccc 1px;padding:20px 0px"}
+                [:div.job-preview
+                 {:style "position:relative;"}
+                 ($job-preview job)
+                 [:a.btn.btn-success
+                  {:href job-apply-href
+                   :target "_blank"
+                   :style "position:absolute;top:0px;right:0px"}
+                  "Apply Now"]]
+                [:br]
+                [:div.job-description
+                 [:h2 "Job Description"]
+                 (util/markdown job-description)]
+                [:br]
+                [:div.company-description
+                 [:h2 "About " company-name]
+                 (util/markdown company-description)]
+                [:br]
+                [:div.apply-now
+                 [:a.btn.btn-success.btn-lg
+                  {:href job-apply-href
+                   :target "_blank"}
+                  "Apply Now"]]])]]})))))
