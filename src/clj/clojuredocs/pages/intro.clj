@@ -5,7 +5,8 @@
             [somnium.congomongo :as mon]
             [fogus.unk :refer (memo-ttl)]
             [clojuredocs.pages.common :as common]
-            [clojuredocs.syntax :as syntax]))
+            [clojuredocs.syntax :as syntax]
+            [clojuredocs.pages.jobs :as jobs]))
 
 (defmulti $render-recently-updated :type)
 
@@ -64,6 +65,45 @@
     " ago."]
    [:div.clear]])
 
+(defn $job-preview [{:keys [job-title
+                            company-name
+                            company-image-url
+                            short-id
+                            job-location
+                            comp]
+                     :as job}]
+  [:div.job-preview
+   {:style "background-color:#fafafa;padding:5px"}
+
+   [:img {:src company-image-url
+          :style "max-width:17px;max-height:17px;margin-top:-2px"}]
+   [:span {:style "margin-right:5px"}]
+   (->> [[:span.company-name company-name]
+         [:span.job-title [:a {:href (str "/jobs/"
+                                          short-id
+                                          "/"
+                                          (jobs/job-slug job))} job-title]]
+         (when job-location
+           [:span.job-location job-location])
+         (when comp
+           [:span.comp (jobs/currency-range comp)])]
+        (remove nil?)
+        (interpose [:span " ∙ "]))])
+
+(defn $jobs-preview [jobs]
+  [:div.jobs-preview
+   [:div.row
+    [:div.col-md-12
+     [:h5 "Featured Jobs"]]]
+   [:div.row
+    [:div.col-md-12
+     (->> jobs
+          (map $job-preview))]]
+   [:div.row
+    [:div.col-md-12.text-right
+     [:a {:style "font-size:12px"
+          :href "/jobs"} "More Clojure jobs"]]]])
+
 (defn $index [top-contribs recently-updateds]
   [:div
    [:div.row
@@ -92,6 +132,8 @@
          [:div.null-state "Uh-oh, no contributors!"])
        [:div.migrate-account
         [:a {:href "/migrate-account"} "Migrate your old ClojureDocs account"]]]]
+     [:section
+      ($jobs-preview jobs/DATA)]
      [:section
       [:h5 "Recently Updated"]
       [:div.row

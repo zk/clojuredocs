@@ -1675,6 +1675,9 @@ table.schema .aside {
   text-align: center;
   color: #888;
 }
+.jobs-page .job-info .section-header {
+  border-bottom: solid #eee 1px;
+}
 .jobs-page .btn {
   border-radius: 0;
 }

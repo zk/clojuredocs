@@ -59,8 +59,9 @@
           [:div.navbar-brand.clojure-version
            [:a {:href (:gh-tag-url search/clojure-lib)}
             (:version search/clojure-lib)]]])
+       [:li [:a {:href "/jobs"} "Jobs"]]
        [:li [:a {:href "/core-library"} "Core Library"]]
-       [:li [:a {:href "/quickref"} "Quick Reference"]]
+       [:li [:a {:href "/quickref"} "Quick Ref"]]
        (if user
          ($user-area user)
          [:li
@@ -147,6 +148,7 @@
                      body-class
                      user
                      page-data
+                     meta
                      full-width?
                      show-survey-banner?] :as opts}]
   [:html5
@@ -156,6 +158,9 @@
     [:meta {:name "apple-mobile-web-app-status-bar-style" :content "default"}]
     [:meta {:name "apple-mobile-web-app-title" :content "ClojureDocs"}]
     [:meta {:name "google-site-verification" :content "XjzqkjEPtcgtLjhnqAvtnVSeveEccs-O_unFGGlbk4g"}]
+    (->> meta
+         (map (fn [[k v]]
+                [:meta {:name k :content v}])))
     [:title (or title "Community-Powered Clojure Documentation and Examples | ClojureDocs")]
     opensearch-link
     font-awesome-link

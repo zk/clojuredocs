@@ -8,6 +8,7 @@
   :test-paths ["test/clj"]
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.clojure/clojurescript "1.9.93"]
+                 [nsfw "0.11.42"]
                  [ring "1.2.1"]
                  [compojure "1.1.6"]
                  [aleph "0.4.1"]
@@ -39,7 +40,7 @@
                          (require 'clojuredocs.main)
                          (-> (clojuredocs.main/create-app)
                              clojuredocs.main/start))}
-  :plugins [[lein-cljsbuild "1.1.1"]
+  :plugins [[lein-cljsbuild "1.1.4"]
             ;; required for heroku deploy
             [com.keminglabs/cljx "0.6.0" :exclusions [org.clojure/clojure]]]
   :cljx {:builds [{:source-paths ["src/cljx"]
