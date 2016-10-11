@@ -70,23 +70,38 @@
                             company-image-url
                             short-id
                             job-location
-                            comp]
+                            remote-ok?
+                            comp-cash
+                            comp-equity]
                      :as job}]
   [:div.job-preview
    {:style "background-color:#fafafa;padding:5px"}
-
-   [:img {:src company-image-url
-          :style "max-width:17px;max-height:17px;margin-top:-2px"}]
-   [:span {:style "margin-right:5px"}]
-   (->> [[:span.company-name company-name]
-         [:span.job-title [:a {:href (str "/jobs/"
+   #_[:img {:src company-image-url
+            :style "max-width:17px;max-height:17px;margin-top:-2px"}]
+   #_[:span {:style "margin-right:5px"}]
+   (->> [[:span.job-title [:a {:href (str "/jobs/"
                                           short-id
                                           "/"
                                           (jobs/job-slug job))} job-title]]
+         [:span.company-name
+          {:style "font-weight:bold;"}
+          company-name]
          (when job-location
-           [:span.job-location job-location])
-         (when comp
-           [:span.comp (jobs/currency-range comp)])]
+           [:span.job-location
+            {:style "color:#888;font-weight:normal"}
+            [:i.fa.fa-map-marker
+             {:style "margin-right:5px"}]
+            job-location])
+         (when comp-cash
+           [:span.comp-cash (jobs/currency-range comp-cash)])
+         (when comp-equity
+           [:span.comp-equity (jobs/equity-range comp-equity)])
+         (when remote-ok?
+           [:span.remote-ok
+            {:style "color:#888"}
+            [:i.fa.fa-globe
+             {:style "margin-right:5px"}]
+            "Remote"])]
         (remove nil?)
         (interpose [:span " ∙ "]))])
 
@@ -102,7 +117,7 @@
    [:div.row
     [:div.col-md-12.text-right
      [:a {:style "font-size:12px"
-          :href "/jobs"} "More Clojure jobs"]]]])
+          :href "/jobs"} "More Clojure Jobs"]]]])
 
 (defn $index [top-contribs recently-updateds]
   [:div
@@ -133,7 +148,7 @@
        [:div.migrate-account
         [:a {:href "/migrate-account"} "Migrate your old ClojureDocs account"]]]]
      [:section
-      ($jobs-preview jobs/DATA)]
+      ($jobs-preview (take 3 jobs/DATA))]
      [:section
       [:h5 "Recently Updated"]
       [:div.row

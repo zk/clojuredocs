@@ -172,6 +172,9 @@ header.navbar {
     margin-bottom: 10px;
   }
 }
+header.navbar .nav > li > a {
+  padding: 15px 12px;
+}
 header.navbar i {
   margin-right: 5px;
 }
@@ -1675,8 +1678,36 @@ table.schema .aside {
   text-align: center;
   color: #888;
 }
+.job-preview .job-location,
+.job-preview .comp,
+.job-preview .remote-ok,
+.job-preview .comp-equity,
+.job-preview .comp-cash {
+  color: #888;
+}
+.jobs-page .job-preview-wrapper,
+.jobs-page .list-jobs-header {
+  border-bottom: solid #eee 1px;
+}
+.jobs-page .job-preview-wrapper {
+  padding: 20px 0;
+}
+.jobs-page .job-preview .comp {
+  margin-top: 3px;
+  color: #aaa;
+  font-size: 13px;
+}
 .jobs-page .job-info .section-header {
   border-bottom: solid #eee 1px;
+  color: #888;
+  font-size: 20px;
+}
+.jobs-page .job-info ul {
+  margin-bottom: 20px;
+}
+.jobs-page .job-info h1 {
+  font-size: 20px;
+  font-weight: bold;
 }
 .jobs-page .btn {
   border-radius: 0;

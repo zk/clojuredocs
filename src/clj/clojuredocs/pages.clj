@@ -329,6 +329,7 @@
 
   (GET "/jobs" [] jobs/list-handler)
   (GET "/jobs/post" [] jobs/post-handler)
+  (GET "/jobs/about" [] jobs/about-handler)
   (GET "/jobs/:job-id" [job-id] (jobs/single-handler job-id))
   (GET "/jobs/:job-id/:url-slug" [job-id] (jobs/single-handler job-id))
 

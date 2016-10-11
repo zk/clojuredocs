@@ -32,6 +32,5 @@ export MAILGUN_API_ENDPOINT="https://api.mailgun.net/v2/sandbox424576b6653e4c64a
 # export NEW_RELIC_BROWSER_KEY=da19d87a54
 
 cd $SCRIPT_DIR && lein clean
-cd $SCRIPT_DIR && lein cljsbuild clean
 cd $SCRIPT_DIR && lein cljx once
 cd $SCRIPT_DIR/.. && foreman start -f Procfile.dev
