@@ -10,7 +10,6 @@
             [clojuredocs.notes :as notes]
             [clojuredocs.mods.var-page :as var-page]
             [clojuredocs.mods.styleguide :as styleguide]
-            [clojuredocs.post-jobs :as post-jobs]
             [om.core :as om :include-macros true]
             [clojuredocs.anim :as anim]
             [clojuredocs.canary :as canary]
@@ -234,9 +233,7 @@ f should accept number-of-colls arguments."}
 
   :body.var-page var-page/init
   :body.styleguide-page styleguide/init
-  :body search/init
-
-  :body.post-job-page post-jobs/init)
+  :body search/init)
 
 (dommy/listen! (sel1 :body) :keydown
   (fn [e]

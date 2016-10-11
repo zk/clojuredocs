@@ -8,7 +8,6 @@
   :test-paths ["test/clj"]
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.clojure/clojurescript "1.9.93"]
-                 [nsfw "0.11.44"]
                  [ring "1.2.1"]
                  [compojure "1.1.6"]
                  [aleph "0.4.1"]
@@ -25,7 +24,11 @@
                  [unk "0.9.1"]
                  [org.clojure/core.async "0.2.374"]
                  [org.clojure/core.logic "0.8.8"]
+                 [org.omcljs/om "0.9.0"]
+                 [prismatic/om-tools "0.4.0"
+                  :exclusions [org.clojure/clojure]]
                  [org.pegdown/pegdown "1.4.2"]
+                 [sablono "0.3.6"]
                  ;;[cljsjs/react "0.13.1-0"]
                  ;;[cljsjs/react-dom "0.14.0-1"]
                  [clj-fuzzy "0.1.8"]
@@ -37,7 +40,6 @@
                          (-> (clojuredocs.main/create-app)
                              clojuredocs.main/start))}
   :plugins [[lein-cljsbuild "1.1.1"]
-            [lein-figwheel "0.5.1"]
             ;; required for heroku deploy
             [com.keminglabs/cljx "0.6.0" :exclusions [org.clojure/clojure]]]
   :cljx {:builds [{:source-paths ["src/cljx"]
@@ -52,7 +54,6 @@
                                  :output-dir "resources/public/cljs"
                                  :optimizations :none
                                  :source-map true
-                                 :main "clojuredocs.entry"
                                  :externs ["externs/morpheus.js"]}}
 
                ;; for debugging advanced compilation problems
@@ -60,7 +61,6 @@
                                :compiler {:output-to "resources/public/cljs/clojuredocs.js"
                                           :output-dir "resources/public/cljs-advanced"
                                           :source-map "resources/public/cljs/clojuredocs.js.map"
-                                          :main "rx.entry"
                                           :optimizations :advanced
                                           :preamble ["public/js/morpheus.min.js"
                                                      "public/js/marked.min.js"
@@ -73,14 +73,10 @@
                       :compiler {:output-to "resources/public/cljs/clojuredocs.js"
                                  :optimizations :advanced
                                  :pretty-print false
-                                 :main "rx.entry"
                                  :preamble ["public/js/morpheus.min.js"
                                             "public/js/marked.min.js"
                                             "public/js/fastclick.min.js"]
                                  :externs ["externs/morpheus.js"
                                            "externs/marked.js"
                                            "externs/fastclick.js"]}
-                      :jar true}}}
-  :figwheel {:http-server-root "resources/public"
-             :css-dirs ["resources/public/css"]
-             :repl false})
+                      :jar true}}})

@@ -1,5 +1,5 @@
 web: lein repl :headless
 less: find ./src/less -name '*.less' | entr lessc src/less/app.less resources/public/css/app.css --verbose
-cljs: lein figwheel dev
+cljs: lein trampoline cljsbuild auto dev
 cljx: lein cljx auto
 mongo: mongod
