@@ -8,6 +8,7 @@
             :job-type "Permanent"
             :job-location "Seattle, WA"
             :job-apply-href "https://jobs.lever.co/amperity.com/a3890aff-1688-4ad0-ba9b-5203ac44fd7f"
+            :id "amp1"
             :short-id "amp1"
             :remote-ok? false
             :posted-at (util/now)
@@ -59,6 +60,7 @@ Click 'apply now' below to apply, or contact [sami@amperity.com](mailto:sami@amp
             :job-type "Permanent"
             :job-location "Durham, NC"
             :job-apply-href "https://angel.co/adzerk/jobs"
+            :id "adz1"
             :short-id "adz1"
             :remote-ok? false
             :posted-at (util/now)
@@ -106,6 +108,7 @@ You must be eligible to work in the United States and willing to work in Adzerk'
             :job-type "Permanent"
             :job-location "Charlottesville, VA"
             :job-apply-href "https://www.roomkey.com/careers.html#back-end-dev"
+            :id "rk1"
             :short-id "rk1"
             :remote-ok? false
             :posted-at (util/now)
@@ -162,6 +165,7 @@ E-mail your resume to [jobs@roomkey.com](jobs@roomkey.com). Please also include 
             :job-type "Permanent"
             :job-location "Charlottesville, VA"
             :job-apply-href "https://www.roomkey.com/careers.html#front-end-dev"
+            :id "rk2"
             :short-id "rk2"
             :remote-ok? false
             :posted-at (util/now)
@@ -225,7 +229,8 @@ Interested? Please email a resume to [jobs@roomkey.com](jobs@roomkey.com). Pleas
             :job-type "Permanent"
             :job-location "Toronto, Canada"
             :job-apply-href "https://kirasystems.com/careers#op-131123-clojureclojurescript-web-developer"
-            :short-id "kira1"
+            :id "ki1"
+            :short-id "ki1"
             :remote-ok? true
             :posted-at (util/now)
             :company-name "Kira Systems"
@@ -270,6 +275,7 @@ We want to hear from you. Apply on this page or email your resume to kirasystems
             :job-type "Permanent"
             :job-location "Ann Arbor, MI"
             :job-apply-href ""
+            :id "fl1"
             :short-id "fl1"
             :remote-ok? false
             :posted-at (util/now)
@@ -326,7 +332,8 @@ Nice to have:
             :job-type "Permanent"
             :job-location "New York, NY"
             :job-apply-href "http://intentmedia.com/jobs/?gh_jid=453872"
-            :short-id "intmed1"
+            :id "im1"
+            :short-id "im1"
             :remote-ok? false
             :posted-at (util/now)
             :company-name "Intent Media"
@@ -519,10 +526,16 @@ We offer competitive compensation and great benefits; stock options; learning bu
        (filter #(= job-id (:short-id %)))
        first))
 
+(defn track-job-view [job]
+  (mon/update! :job-metrics
+    {:_id (:id job)}
+    {:$inc {:views 1}}))
+
 (defn single-handler [job-id]
   (fn [{:keys [params uri user]}]
     (let [job (find-job job-id)]
       (when job
+        (track-job-view job)
         (common/$main
           {:body-class "jobs-page"
            :title (str "Jobs | ClojureDocs - Community-Powered Clojure Documentation and Examples")
