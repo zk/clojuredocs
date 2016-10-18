@@ -3,9 +3,6 @@
             [clojure.string :as str]
             [cljs.core.async :as async
              :refer [<! >! chan close! sliding-buffer put! alts! timeout pipe mult tap]]
-            [om.core :as om :include-macros true]
-            [om.dom :as omdom]
-            [sablono.core :as sab :refer-macros [html]]
             [clojuredocs.examples :as examples]
             [clojuredocs.see-alsos :as see-alsos]
             [clojuredocs.notes :as notes]

@@ -1,7 +1,5 @@
 (ns clojuredocs.mods.var-page
   (:require [dommy.core :as dommy :refer-macros [sel sel1]]
-            [om.core :as om :include-macros true]
-            [sablono.core :as sab :refer-macros [html]]
             [cljs.core.async :as async
              :refer [<! >! chan close! sliding-buffer put! alts! timeout pipe mult tap]]
             [clojuredocs.util :as util]

@@ -521,3 +521,8 @@ https://cl.ly/3m3E3f3l1F2o/Screen%20Shot%202016-08-20%20at%204.48.36%20PM.png
 
 Also checked 1.9.0-alpha10, seems to be good to go so the next version
 bump will be nice and easy.
+
+* <2016-10-17 Mon 20:37>
+
+TODO
++ searc.cljs -- update :ac-text (om/update! app :ac-text text)

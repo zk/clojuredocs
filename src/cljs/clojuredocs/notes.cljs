@@ -1,6 +1,5 @@
 (ns clojuredocs.notes
-  (:require [om.core :as om :include-macros true]
-            [dommy.core :as dommy :refer-macros [sel1]]
+  (:require [dommy.core :as dommy :refer-macros [sel1]]
             [cljs.core.async :as async
              :refer [<! >! chan close! sliding-buffer put! alts! timeout pipe mult tap]]
             [clojuredocs.ajax :refer [ajax]]
@@ -11,7 +10,6 @@
             [goog.crypt :as gcrypt]
             [goog.crypt.Md5 :as Md5]
             [goog.crypt.Sha1 :as Sha1]
-            [sablono.core :as sab :include-macros true]
             [clojuredocs.util :as util])
   (:require-macros [cljs.core.async.macros :refer [go go-loop]]))
 
