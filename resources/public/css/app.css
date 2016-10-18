@@ -1540,6 +1540,7 @@ table.schema .aside {
 .tabbed-editor .nav-tabs li.active > a:hover,
 .tabbed-editor .nav-tabs li.active > a:focus {
   border-color: #eee;
+  border-bottom: none;
 }
 .tabbed-editor .nav-tabs li a {
   border-radius: 0;
@@ -1551,7 +1552,7 @@ table.schema .aside {
   margin-bottom: 0;
 }
 .tabbed-editor .live-preview {
-  min-height: 238px;
+  min-height: 241px;
   background-color: white;
   border: solid #eee 1px;
   border-top: none;

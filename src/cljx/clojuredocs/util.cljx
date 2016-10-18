@@ -106,6 +106,7 @@
 
 (defn $avatar [{:keys [email login avatar-url account-source] :as user} & [{:keys [size]}]]
   (let [size (str (or size 32))]
+    ^{:key (or avatar-url email)}
     [:a.avatar-link
      {:href (str (if (= "github" account-source)
                    "/u/"
