@@ -1,7 +1,5 @@
 (ns clojuredocs.canary
-  (:require [om.core :as om :include-macros true]
-            [sablono.core :as sab :include-macros true]
-            [clojure.string :as str]
+  (:require [clojure.string :as str]
             [cljs.core.async :as async
              :refer [<! >! chan close! sliding-buffer put! alts! timeout pipe mult tap]]
             [clojuredocs.ajax :refer [ajax]])

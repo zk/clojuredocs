@@ -1,6 +1,5 @@
 (ns clojuredocs.examples
-  (:require [om.core :as om :include-macros true]
-            [dommy.core :as dommy :refer-macros [sel1]]
+  (:require [dommy.core :as dommy :refer-macros [sel1]]
             [cljs.core.async :as async
              :refer [<! >! chan close! sliding-buffer put!
                      alts! timeout pipe mult tap]]
@@ -10,7 +9,6 @@
             [clojuredocs.syntax :as syntax]
             [clojure.string :as str]
             [cljs.reader :as reader]
-            [sablono.core :as sab :refer-macros [html]]
             [clojure.data :refer [diff]])
   (:require-macros [cljs.core.async.macros :refer [go go-loop]]))
 

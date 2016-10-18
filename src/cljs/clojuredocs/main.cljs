@@ -1,6 +1,7 @@
 (ns clojuredocs.main
   (:require [clojuredocs.util :as util]
             [dommy.core :as dommy :refer-macros [sel sel1]]
+            [reagent.core :as rea]
             [clojure.string :as str]
             [clojuredocs.ajax :refer [ajax]]
             [clojuredocs.sticky :as sticky]
@@ -10,7 +11,6 @@
             [clojuredocs.notes :as notes]
             [clojuredocs.mods.var-page :as var-page]
             [clojuredocs.mods.styleguide :as styleguide]
-            [om.core :as om :include-macros true]
             [clojuredocs.anim :as anim]
             [clojuredocs.canary :as canary]
             [cljs.reader :as reader]
@@ -46,18 +46,18 @@
     (doseq [$el (sel selector)]
       (f $el app-state))))
 
-(defn on-el-om [& ws]
-  (doseq [[sel widget-fn root-overrides] ws]
-    (on-el sel
-      (fn [$el app-state]
-        (om/root
-          widget-fn
-          app-state
-          (merge
-            {:target $el}
-            (if (fn? root-overrides)
-              (root-overrides $el app-state)
-              root-overrides)))))))
+#_(defn on-el-om [& ws]
+    (doseq [[sel widget-fn root-overrides] ws]
+      (on-el sel
+        (fn [$el app-state]
+          (om/root
+            widget-fn
+            app-state
+            (merge
+              {:target $el}
+              (if (fn? root-overrides)
+                (root-overrides $el app-state)
+                root-overrides)))))))
 
 (defn ellipsis [s n]
   (cond
@@ -185,47 +185,46 @@ f should accept number-of-colls arguments."}
   ;; Styleguide
   :.sg-quick-lookup
   (fn [$el]
+    #_(om/root
+        search/$quick-lookup
+        {}
+        {:target $el}))
 
-    (om/root
-      search/$quick-lookup
-      {}
-      {:target $el}))
+  #_ :.sg-quick-lookup-autocomplete
+  #_(fn [$el]
+      (om/root
+        search/$quick-lookup
+        ex-ac-results
+        {:target $el}))
 
-  :.sg-quick-lookup-autocomplete
-  (fn [$el]
-    (om/root
-      search/$quick-lookup
-      ex-ac-results
-      {:target $el}))
+  #_ :.sg-quick-lookup-null-state
+  #_ (fn [$el]
+       (om/root
+         search/$quick-lookup
+         {:results-empty? true}
+         {:target $el :init-state {:text "foo bar"}}))
 
-  :.sg-quick-lookup-null-state
-  (fn [$el]
-    (om/root
-      search/$quick-lookup
-      {:results-empty? true}
-      {:target $el :init-state {:text "foo bar"}}))
+  #_ :.sg-quick-lookup-loading
+  #_ (fn [$el]
+       (om/root
+         search/$quick-lookup
+         {:search-loading? true}
+         {:target $el}))
 
-  :.sg-quick-lookup-loading
-  (fn [$el]
-    (om/root
-      search/$quick-lookup
-      {:search-loading? true}
-      {:target $el}))
+  #_ :.sg-see-alsos-null-state
+  #_ (fn [$el]
+       (om/root
+         see-alsos/$see-alsos
+         {:var {:ns "foo" :name "bar"}}
+         {:target $el}))
 
-  :.sg-see-alsos-null-state
-  (fn [$el]
-    (om/root
-      see-alsos/$see-alsos
-      {:var {:ns "foo" :name "bar"}}
-      {:target $el}))
-
-  :.sg-see-alsos-populated
-  (fn [$el]
-    (om/root
-      see-alsos/$see-alsos
-      {:var {:ns "foo" :name "bar"}
-       :see-alsos [{:_id "", :user {:login "mmwaikar"}, :created-at #inst "2011-10-14T13:29:04.000-00:00", :name "map-indexed", :ns "clojure.core", :doc "Returns a lazy sequence consisting of the result of applying f to 0\nand the first item of coll, followed by applying f to 1 and the second\nitem in coll, etc, until coll is exhausted. Thus function f should\naccept 2 arguments, index and item."} {:_id "", :user {:login "gstamp"}, :created-at #inst "2012-09-06T11:28:04.000-00:00", :name "pmap", :ns "clojure.core", :doc "Like map, except f is applied in parallel. Semi-lazy in that the\nparallel computation stays ahead of the consumption, but doesn't\nrealize the entire result unless required. Only useful for\ncomputationally intensive functions where the time of f dominates\nthe coordination overhead."} {:_id "", :user {:login "gstamp"}, :created-at #inst "2012-09-06T11:28:33.000-00:00", :name "amap", :ns "clojure.core", :doc "Maps an expression across an array a, using an index named idx, and\nreturn value named ret, initialized to a clone of a, then setting \neach element of ret to the evaluation of expr, returning the new \narray ret."} {:_id "", :user {:login "adereth"}, :created-at #inst "2013-06-21T19:20:53.000-00:00", :name "mapcat", :ns "clojure.core", :doc "Returns the result of applying concat to the result of applying map\nto f and colls.  Thus function f should return a collection."}]}
-      {:target $el}))
+  #_ :.sg-see-alsos-populated
+  #_ (fn [$el]
+       (om/root
+         see-alsos/$see-alsos
+         {:var {:ns "foo" :name "bar"}
+          :see-alsos [{:_id "", :user {:login "mmwaikar"}, :created-at #inst "2011-10-14T13:29:04.000-00:00", :name "map-indexed", :ns "clojure.core", :doc "Returns a lazy sequence consisting of the result of applying f to 0\nand the first item of coll, followed by applying f to 1 and the second\nitem in coll, etc, until coll is exhausted. Thus function f should\naccept 2 arguments, index and item."} {:_id "", :user {:login "gstamp"}, :created-at #inst "2012-09-06T11:28:04.000-00:00", :name "pmap", :ns "clojure.core", :doc "Like map, except f is applied in parallel. Semi-lazy in that the\nparallel computation stays ahead of the consumption, but doesn't\nrealize the entire result unless required. Only useful for\ncomputationally intensive functions where the time of f dominates\nthe coordination overhead."} {:_id "", :user {:login "gstamp"}, :created-at #inst "2012-09-06T11:28:33.000-00:00", :name "amap", :ns "clojure.core", :doc "Maps an expression across an array a, using an index named idx, and\nreturn value named ret, initialized to a clone of a, then setting \neach element of ret to the evaluation of expr, returning the new \narray ret."} {:_id "", :user {:login "adereth"}, :created-at #inst "2013-06-21T19:20:53.000-00:00", :name "mapcat", :ns "clojure.core", :doc "Returns the result of applying concat to the result of applying map\nto f and colls.  Thus function f should return a collection."}]}
+         {:target $el}))
 
   :.canary-tests-container
   (fn [$el]
@@ -261,3 +260,6 @@ f should accept number-of-colls arguments."}
       (fn [_]
         (f $el)))
     (f $el)))
+
+(defn reload-hook []
+  (prn "RELOAD"))

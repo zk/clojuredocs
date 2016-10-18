@@ -8,6 +8,7 @@
   :test-paths ["test/clj"]
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.clojure/clojurescript "1.9.93"]
+                 [nsfw "0.11.44"]
                  [ring "1.2.1"]
                  [compojure "1.1.6"]
                  [aleph "0.4.1"]
@@ -24,11 +25,7 @@
                  [unk "0.9.1"]
                  [org.clojure/core.async "0.2.374"]
                  [org.clojure/core.logic "0.8.8"]
-                 [org.omcljs/om "0.9.0"]
-                 [prismatic/om-tools "0.4.0"
-                  :exclusions [org.clojure/clojure]]
                  [org.pegdown/pegdown "1.4.2"]
-                 [sablono "0.3.6"]
                  ;;[cljsjs/react "0.13.1-0"]
                  ;;[cljsjs/react-dom "0.14.0-1"]
                  [clj-fuzzy "0.1.8"]
@@ -40,6 +37,7 @@
                          (-> (clojuredocs.main/create-app)
                              clojuredocs.main/start))}
   :plugins [[lein-cljsbuild "1.1.1"]
+            [lein-figwheel "0.5.1"]
             ;; required for heroku deploy
             [com.keminglabs/cljx "0.6.0" :exclusions [org.clojure/clojure]]]
   :cljx {:builds [{:source-paths ["src/cljx"]
@@ -52,9 +50,12 @@
               {:dev  {:source-paths ["src/cljs" "target/generated/cljs"]
                       :compiler {:output-to "resources/public/cljs/clojuredocs.js"
                                  :output-dir "resources/public/cljs"
+                                 :main "clojuredocs.main"
                                  :optimizations :none
                                  :source-map true
-                                 :externs ["externs/morpheus.js"]}}
+                                 :asset-path "/cljs"
+                                 :externs ["externs/morpheus.js"]}
+                      :figwheel {:on-jsload "clojuredocs.main/reload-hook"}}
 
                ;; for debugging advanced compilation problems
                :dev-advanced  {:source-paths ["src/cljs" "target/generated/cljs"]
@@ -79,4 +80,7 @@
                                  :externs ["externs/morpheus.js"
                                            "externs/marked.js"
                                            "externs/fastclick.js"]}
-                      :jar true}}})
+                      :jar true}}}
+  :figwheel {:http-server-root "resources/public"
+             :css-dirs ["resources/public/css"]
+             :repl false})
