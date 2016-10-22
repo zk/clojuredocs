@@ -526,3 +526,13 @@ bump will be nice and easy.
 
 TODO
 + searc.cljs -- update :ac-text (om/update! app :ac-text text)
+
+* <2016-10-22 Sat 18:57>
+
+Continuing the reagent transition. Still in the middle of the yak
+shave to get the app lifecycle stuff implemented -- js reloading (that
+reminds me I need to convert the less over to garden, and to do that I
+need to get reup in).
+
+I'm a little burned out on getting examples moved over, so let me get
+reup in.

@@ -63,4 +63,7 @@
                 (dom/remove-class! $el :sticky))))]
     (dom/listen! js/window :scroll f)
     (dom/listen! js/window :resize f)
-    (f nil)))
+    (f nil)
+    (fn []
+      (dom/unlisten! js/window :scroll f)
+      (dom/unlisten! js/window :resize f))))
