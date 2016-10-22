@@ -98,80 +98,76 @@
   (= (select-keys user [:login :account-source])
      (select-keys author [:login :account-source])))
 
-(defn $example-meta [{:keys [_id editing? author editors
-                             can-delete? can-edit? delete-state] :as ex}
+(defn $example-meta [{:keys [can-delete? can-edit?]}
+                     !state
                      bus]
-  (let [!local (rea/atom {:preview-text nil})]
-    (fn []
-      (let [{:keys [preview-text]} @!local
-            authors (distinct
-                      (concat
-                        [author]
-                        editors))
-            num-to-show 7]
-        [:div.example-meta
-         [:div.contributors
-          (->> authors
-               (take num-to-show)
-               (map util/$avatar))
-          (when (> (count authors) num-to-show)
-            [:div.contributors
-             "+ "
-             (- (count authors) num-to-show)
-             " more"])]
-         [:div.links
-          [:a {:href (str "#example-" _id)}
-           "link"]
-          #_" / "
-          #_[:a {:href (str "/ex/" _id)}
-             "history"]
-          (when can-edit?
-            [:span
-             " / "
-             (if editing?
-               [:a {:href "#"
-                    :on-click (fn [e]
-                                (.preventDefault e)
-                                (swap! !local assoc :editing? false)
-                                nil)}
-                "cancel edit"]
-               [:a {:href "#"
-                    :on-click (fn [e]
-                                (.preventDefault e)
-                                (swap! !local assoc
-                                  :editing? true
-                                  :preview-text nil)
-                                nil)}
-                "edit"])])
-          (when (and can-delete? (not editing?))
-            [:span
-             " / "
-             (if (get #{:confirm :loading} delete-state)
-               (if (= :loading delete-state)
-                 [:img.loading {:src "/img/loading.gif"}]
-                 [:span
-                  [:a {:href "#"
-                       :on-click (fn [e]
-                                   (.preventDefault e)
-                                   (swap! !local assoc :delete-state :none)
-                                   nil)}
-                   "cancel"]
-                  " | "
-                  [:a {:href "#"
-                       :on-click (fn [e]
-                                   (.preventDefault e)
-                                   (ops/send bus ::delete (:_id @ex))
-                                   nil)}
-                   "confirm delete?"]])
-               [:span
-                {:class (when (= :error delete-state) "error-deleting bg-danger")}
-                [:a {:href "#"
-                     :on-click (fn [e]
-                                 (.preventDefault e)
-                                 (swap! !local assoc :delete-state :confirm)
-                                 nil)}
-                 "delete"]])])
-          [:span.edit-example-widget]]]))))
+  (let [{:keys [preview-text delete-state editing? _id author editors]} @!state
+        authors (distinct
+                  (concat
+                    [author]
+                    editors))
+        num-to-show 7]
+    [:div.example-meta
+     [:div.contributors
+      (->> authors
+           (take num-to-show)
+           (map util/$avatar))
+      (when (> (count authors) num-to-show)
+        [:div.contributors
+         "+ "
+         (- (count authors) num-to-show)
+         " more"])]
+     [:div.links
+      [:a {:href (str "#example-" _id)}
+       "link"]
+      #_" / "
+      #_[:a {:href (str "/ex/" _id)}
+         "history"]
+      (when can-edit?
+        [:span
+         " / "
+         (if editing?
+           [:a {:href "#"
+                :on-click (fn [e]
+                            (.preventDefault e)
+                            (swap! !state assoc :editing? false)
+                            nil)}
+            "cancel edit"]
+           [:a {:href "#"
+                :on-click (fn [e]
+                            (.preventDefault e)
+                            (swap! !state assoc :editing? true)
+                            nil)}
+            "edit"])])
+      (when (and can-delete? (not editing?))
+        [:span
+         " / "
+         (if (get #{:confirm :loading} delete-state)
+           (if (= :loading delete-state)
+             [:img.loading {:src "/img/loading.gif"}]
+             [:span
+              [:a {:href "#"
+                   :on-click (fn [e]
+                               (.preventDefault e)
+                               (swap! !state assoc :delete-state :none)
+                               nil)}
+               "cancel"]
+              " | "
+              [:a {:href "#"
+                   :on-click (fn [e]
+                               (.preventDefault e)
+                               (ops/send bus ::delete _id)
+                               nil)}
+               "confirm delete?"]])
+           [:span
+            {:class (when (= :error delete-state) "error-deleting bg-danger")}
+            [:a {:href "#"
+                 :on-click (fn [e]
+                             (.preventDefault e)
+                             (swap! !state assoc :delete-state :confirm)
+                             nil)}
+             "delete"]])])
+      [:span.edit-example-widget]]]))
 
 (def $example-instructions
   [:p.example-instructions
@@ -184,12 +180,11 @@
    "."])
 
 (defn $example-editor [{:keys [submit-button-text]}
-                       {:keys [editing? loading? error var _id
-                               text text-ch] :as app}
+                       !state
                        bus]
-  (fn []
+  (let [{:keys [editing? loading? error var _id text] :as ex} !state]
     [:div
-     [$tabbed-clojure-editor app bus]
+     [$tabbed-clojure-editor ex bus]
      $example-instructions
      (when error
        [:div.form-group
@@ -201,7 +196,7 @@
        {:disabled (when loading? "disabled")
         :on-click (fn [e]
                     (.preventDefault e)
-                    (ops/send bus ::cancel-editing)
+                    (swap! !state assoc :editing? false)
                     nil)}
        "Cancel"]
       [:button.btn.btn-success.pull-right
@@ -215,65 +210,52 @@
        {:class (when-not loading? " hidden")
         :src "/img/loading.gif"}]]]))
 
-(defn $example [{:keys [body editing? _id] :as ex} bus]
-  [:div.var-example
-   {:class (if (= (str "example-" _id) (util/location-hash))
-             "highlighted")}
-   [:a {:id (str "example-" _id)}]
-   [:div
-    [$example-meta ex bus]]
-   (if editing?
+
+;; Example API
+;; + [$example opts bus]
+
+(defn $example [{:keys [can-delete? can-edit?] :as ex}
+                !state
+                bus]
+  (let [{:keys [body editing? _id] :as ex} @!state]
+    [:div.var-example
+     {:class (if (= (str "example-" _id) (util/location-hash))
+               "highlighted")}
+     [:a {:id (str "example-" _id)}]
      [:div
-      [:h5 "Edit Example"]
-      [$example-editor
-       (merge ex {:submit-button-text "Update Example"})
+      [$example-meta
+       {:editing? editing?
+        :can-delete? can-delete?
+        :can-edit? can-edit?}
+       !state
        bus]]
-     (when body
-       [:div.example-body
-        (syntax/syntaxify body)]))])
+     (if editing?
+       [:div
+        [:h5 "Edit Example"]
+        [$example-editor
+         {:submit-button-text "Update Example"}
+         !state
+         bus]]
+       (when body
+         [:div.example-body
+          (syntax/syntaxify body)]))]))
 
-(defn build-examples [user examples bus]
-  [:div
-   (->> examples
-        (map-indexed
-          (fn [i ex]
-            (with-meta
-              [$example
-               (merge
-                 ex
-                 {:can-delete? (user-can-delete? user ex)
-                  :can-edit? (not (nil? user))})
-               bus]
-              {:key i}))))])
-
-(defn $create-example [{:keys [editing? should-focus? var] :as app} bus]
-  [:div.add-example {:ref "wrapper"}
-   [:div.toggle-controls
-    [:a.toggle-link
-     {:href "#"
-      :on-click (fn [e]
-                  (.preventDefault e)
-                  #_(om/transact!
-                      app
-                      #(assoc %
-                         :editing? (not editing?)
-                         :should-focus? true))
-                  nil)}
-     (if-not editing? "Add an Example" "Collapse")]]
-   [:div.add-example-content {:class (when-not editing? " hidden")}
-    [$example-editor
-     {:submit-button-text "Add Example"}
-     app
-     bus]]]
-  #_(reify
-      om/IDidUpdate
-      (did-update [this prev-props prev-state]
-        (when (and should-focus? editing?)
-          (om/transact! app #(assoc % :should-focus? false))
-          (anim/scroll-to (om/get-node owner "wrapper") {:pad 10})))
-
-      om/IRenderState
-      ))
+(defn $create-example [!state bus]
+  (let [{:keys [editing? should-focus? var] :as app} @!state]
+    [:div.add-example {:ref "wrapper"}
+     [:div.toggle-controls
+      [:a.toggle-link
+       {:href "#"
+        :on-click (fn [e]
+                    (.preventDefault e)
+                    (swap! !state update-in [:editing?] not)
+                    nil)}
+       (if-not editing? "Add an Example" "Collapse")]]
+     [:div.add-example-content {:class (when-not editing? " hidden")}
+      [$example-editor
+       {:submit-button-text "Add Example"}
+       app
+       bus]]]))
 
 (defn $examples [!state bus]
   (let [{:keys [user examples var] :as app} @!state]
@@ -282,10 +264,21 @@
      (if (empty? examples)
        [:div.null-state
         "No examples for " (:ns var) "/" (:name var) "."]
-       (build-examples user examples bus))
+       (->> examples
+            (map-indexed
+              (fn [i example]
+                (with-meta
+                  [$example
+                   {:can-delete? (user-can-delete? user example)
+                    :can-edit? (not (nil? user))}
+                   (rea/cursor !state [:examples i]) bus]
+                  {:key (:_id example)})))))
      (if user
        [$create-example
-        (:add-example app)
+        (rea/cursor !state [:add-example])
         bus]
        [:div.login-required-message
         "Log in to add an example"])]))
+
+(defn $examples-widget [!state bus]
+  [$examples !state bus])

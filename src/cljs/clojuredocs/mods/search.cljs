@@ -237,7 +237,7 @@
                (.focus $input)
                (aset $input "value" (.-value $input)))))})))
 
-(defn $quick-search-widget [!state bus]
+(defn $nav-search-widget [!state bus]
   [$quick-search-bar
    (merge @!state {:placeholder "Looking for? (ctrl-s)"})
    bus])
@@ -560,6 +560,7 @@
             (swap! app-state assoc :search-loading? false)))))))
 
 (defn init [$root]
+  (prn "SEARCH INIT")
   (let [prev-query (util/location-hash)
         !state (rea/atom {:ac-text (when-not (re-find #"^example[_-]" prev-query)
                                      prev-query)})
@@ -644,9 +645,9 @@
         [$quick-lookup-widget !state bus]
         $el))
 
-    (doseq [$el (sel :.quick-search-widget)]
+    (doseq [$el (sel :.nav-search-widget)]
       (rea/render-component
-        [$quick-search-widget !state bus]
+        [$nav-search-widget !state bus]
         $el))
 
     (doseq [$el (sel :.ac-results-widget)]
@@ -657,4 +658,6 @@
     (doseq [$el (sel :.search-feedback-widget)]
       (rea/render-component
         [$search-feedback @!state bus]
-        $el))))
+        $el))
+    (fn []
+      (prn "UNMOUNT SEARCH"))))

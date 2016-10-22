@@ -77,7 +77,7 @@
             :width "100"
             :height "20"}]])]
       (when-not hide-search
-        [:div.quick-search-widget.navbar-right.navbar-form
+        [:div.nav-search-widget.navbar-right.navbar-form
          [:form.search
           {:autocomplete "off"}
           [:input.placeholder.form-control

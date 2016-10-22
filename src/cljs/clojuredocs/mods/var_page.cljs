@@ -142,12 +142,12 @@
       (swap! !state update-in [:add-example] dissoc :loading?)
       (recur))))
 
-(defn update-example [{:keys [examples] :as state} _id f]
+(defn update-example [{:keys [examples] :as state} _id f & args]
   (assoc state
     :examples (->> examples
                    (map (fn [ex]
                           (if (= _id (:_id ex))
-                            (f ex)
+                            (apply f ex args)
                             ex)))
                    vec)))
 
@@ -237,19 +237,34 @@
         bus (ops/kit
               !state
               {}
-              {})]
+              {:clojuredocs.examples/delete
+               (fn [state _id]
+                 (let [ch (chan)]
+                   (go
+                     (put! ch #(update-example % _id
+                                 merge
+                                 {:delete-state :loading}))
+                     (let [{:keys [success data]} (<! (req-delete-example _id))]
+                       (put! ch (fn [state]
+                                  (if success
+                                    (update-in
+                                      state
+                                      [:examples]
+                                      (fn [es] (vec (remove #(= _id (:_id %)) es))))
+                                    (update-example
+                                      state
+                                      _id
+                                      merge
+                                      {:delete-state :error})))))
+                     (close! ch))
+                   ch))})]
 
-    (new-example-loop !state new-example-ch)
-    (update-example-loop !state update-example-ch)
-    (delete-example-loop !state delete-ch)
-
-    #_(doseq [$el (sel $root :.var-page-nav)]
-        (rea/render-component
-          [$nav !state bus]
-          $el))
+    #_(new-example-loop !state new-example-ch)
+    #_(update-example-loop !state update-example-ch)
+    #_(delete-example-loop !state delete-ch)
 
     (rea/render-component
-      [examples/$examples !state bus]
+      [examples/$examples-widget !state bus]
       (sel1 $root :.examples-widget))))
 
 (defn update-new-note [state f & args]
@@ -292,7 +307,8 @@
                              (update-new-note
                                merge
                                {:text nil
-                                :loading? false}))
+                                :loading? false
+                                :expanded? false}))
                          (-> state
                              (update-new-note
                                merge
@@ -355,9 +371,6 @@
     ch))
 
 (defn init-notes [$root !state]
-  (swap! !state
-    assoc-in
-    [:add-note] {:expanded? true :text "hello world"})
   (let [bus (ops/kit
               !state
               {}

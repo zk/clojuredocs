@@ -1,5 +1,7 @@
 (ns clojuredocs.main
   (:require [clojuredocs.util :as util]
+            [nsfw.util :as nu]
+            [nsfw.page :as page]
             [dommy.core :as dommy :refer-macros [sel sel1]]
             [reagent.core :as rea]
             [clojure.string :as str]
@@ -33,31 +35,24 @@
 (defn clog [& args]
   (.log js/console (pr-str args)))
 
-(defn init [& pairs]
-  (doseq [[selector f] (partition 2 pairs)]
-    (doseq [$el (sel selector)]
-      (f $el))))
+#_(def app-state
+    (atom (or (reader/read-string (aget js/window "PAGE_DATA")) {})))
 
-(def app-state
-  (atom (or (reader/read-string (aget js/window "PAGE_DATA")) {})))
-
-(defn on-el [& pairs]
-  (doseq [[selector f] (partition 2 pairs)]
-    (doseq [$el (sel selector)]
-      (f $el app-state))))
-
-#_(defn on-el-om [& ws]
-    (doseq [[sel widget-fn root-overrides] ws]
-      (on-el sel
-        (fn [$el app-state]
-          (om/root
-            widget-fn
-            app-state
-            (merge
-              {:target $el}
-              (if (fn? root-overrides)
-                (root-overrides $el app-state)
-                root-overrides)))))))
+(defn on-el
+  [init-state & pairs]
+  (let [unmount-fns
+        (->> (partition 2 pairs)
+             (mapcat
+               (fn [[selector f]]
+                 (->> (sel selector)
+                      (map (fn [$el]
+                             (f $el init-state)))
+                      doall)))
+             doall)]
+    (fn []
+      (doseq [f unmount-fns]
+        (if (ifn? f)
+          (f))))))
 
 (defn ellipsis [s n]
   (cond
@@ -119,20 +114,16 @@
         (anim/scroll-to $target {:pad buffer})
         (.preventDefault e)))))
 
-(def text-chan (chan))
-
 (defn mk-delete-example [app-state]
   (fn [ex-to-del]
     (swap! app-state update-in [:examples]
       (fn [exs]
         (vec (remove #(= ex-to-del %) exs))))))
 
-(def new-example-ch (chan))
-
-(go-loop []
-  (when-let [ex (<! new-example-ch)]
-    (swap! app-state assoc :create-success? true)
-    (recur)))
+#_(go-loop []
+    (when-let [ex (<! new-example-ch)]
+      (swap! app-state assoc :create-success? true)
+      (recur)))
 
 ;; Styleguide
 
@@ -153,113 +144,114 @@ f should accept number-of-colls arguments."}
                  :name "Getting Started"
                  :desc "Where to go to get started with Clojure. Provides a host of information  con the language, core concepts, tutorials, books, and videos to help you learn Clojure."}]})
 
-(on-el
-  :.btn.mobile-menu
-  (fn [$el]
-    (dommy/listen! $el :click
-      (fn [e]
-        (doseq [s push-sels]
-          (dommy/toggle-class! (sel1 s) :mobile-push))
-        (.stopPropagation e))))
-
-  :body
-  (fn [$el]
-    (let [h (fn [_]
-              (doseq [s push-sels]
-                (dommy/remove-class! (sel1 s) :mobile-push)))]
-      (dommy/listen! $el :click h)))
-
-  :.mobile-nav-menu
-  (fn [$el]
-    (let [h (fn [e] (.stopPropagation e))]
-      #_(dommy/listen! $el
-          :click h
-          :touchstart h
-          :touchend h))
-
-    (doseq [$a (sel $el :a)]
-      (dommy/listen! $a :click #(doseq [s push-sels]
-                                  (dommy/remove-class! (sel1 s) :mobile-push)))))
-
-
-  ;; Styleguide
-  :.sg-quick-lookup
-  (fn [$el]
-    #_(om/root
-        search/$quick-lookup
-        {}
-        {:target $el}))
-
-  #_ :.sg-quick-lookup-autocomplete
-  #_(fn [$el]
-      (om/root
-        search/$quick-lookup
-        ex-ac-results
-        {:target $el}))
-
-  #_ :.sg-quick-lookup-null-state
-  #_ (fn [$el]
-       (om/root
-         search/$quick-lookup
-         {:results-empty? true}
-         {:target $el :init-state {:text "foo bar"}}))
-
-  #_ :.sg-quick-lookup-loading
-  #_ (fn [$el]
-       (om/root
-         search/$quick-lookup
-         {:search-loading? true}
-         {:target $el}))
-
-  #_ :.sg-see-alsos-null-state
-  #_ (fn [$el]
-       (om/root
-         see-alsos/$see-alsos
-         {:var {:ns "foo" :name "bar"}}
-         {:target $el}))
-
-  #_ :.sg-see-alsos-populated
-  #_ (fn [$el]
-       (om/root
-         see-alsos/$see-alsos
-         {:var {:ns "foo" :name "bar"}
-          :see-alsos [{:_id "", :user {:login "mmwaikar"}, :created-at #inst "2011-10-14T13:29:04.000-00:00", :name "map-indexed", :ns "clojure.core", :doc "Returns a lazy sequence consisting of the result of applying f to 0\nand the first item of coll, followed by applying f to 1 and the second\nitem in coll, etc, until coll is exhausted. Thus function f should\naccept 2 arguments, index and item."} {:_id "", :user {:login "gstamp"}, :created-at #inst "2012-09-06T11:28:04.000-00:00", :name "pmap", :ns "clojure.core", :doc "Like map, except f is applied in parallel. Semi-lazy in that the\nparallel computation stays ahead of the consumption, but doesn't\nrealize the entire result unless required. Only useful for\ncomputationally intensive functions where the time of f dominates\nthe coordination overhead."} {:_id "", :user {:login "gstamp"}, :created-at #inst "2012-09-06T11:28:33.000-00:00", :name "amap", :ns "clojure.core", :doc "Maps an expression across an array a, using an index named idx, and\nreturn value named ret, initialized to a clone of a, then setting \neach element of ret to the evaluation of expr, returning the new \narray ret."} {:_id "", :user {:login "adereth"}, :created-at #inst "2013-06-21T19:20:53.000-00:00", :name "mapcat", :ns "clojure.core", :doc "Returns the result of applying concat to the result of applying map\nto f and colls.  Thus function f should return a collection."}]}
-         {:target $el}))
-
-  :.canary-tests-container
-  (fn [$el]
-    (canary/init $el))
-
-  :body.var-page var-page/init
-  :body.styleguide-page styleguide/init
-  :body search/init)
-
-(dommy/listen! (sel1 :body) :keydown
-  (fn [e]
-    ;; ctrl-s to focus search input
-    (when (and (.-ctrlKey e) (= 83 (.-keyCode e)))
-      (doseq [$el (sel ".search input.query")]
-        (.focus $el))
-      ;; prevent save dialog
-      (.preventDefault e))))
-
-(def tog (atom false))
+#_(dommy/listen! (sel1 :body) :keydown
+    (fn [e]
+      ;; ctrl-s to focus search input
+      (when (and (.-ctrlKey e) (= 83 (.-keyCode e)))
+        (doseq [$el (sel ".search input.query")]
+          (.focus $el))
+        ;; prevent save dialog
+        (.preventDefault e))))
 
 (.attach js/FastClick js/document.body)
 
-(init
-  "[data-sticky-offset]" sticky/init
-  "[data-animate-scroll]" animated-scroll-init)
-
 ;; Hack to fix mobile safari ios 8 scrolling issue
-(doseq [$el (sel :.mobile-nav-menu)]
-  (let [f (fn [$el]
-            (dommy/set-style! $el
-              :height (str (.-innerHeight js/window) "px")))]
-    (dommy/listen! js/window :resize
-      (fn [_]
-        (f $el)))
-    (f $el)))
+#_(doseq [$el (sel :.mobile-nav-menu)]
+    (let [f (fn [$el]
+              (dommy/set-style! $el
+                :height (str (.-innerHeight js/window) "px")))]
+      (dommy/listen! js/window :resize
+        (fn [_]
+          (f $el)))
+      (f $el)))
 
-(defn reload-hook []
-  (prn "RELOAD"))
+(defn init []
+  (on-el
+    {}
+    :.btn.mobile-menu
+    (fn [$el]
+      (dommy/listen! $el :click
+        (fn [e]
+          (doseq [s push-sels]
+            (dommy/toggle-class! (sel1 s) :mobile-push))
+          (.stopPropagation e))))
+
+    :body
+    (fn [$el]
+      (let [h (fn [_]
+                (doseq [s push-sels]
+                  (dommy/remove-class! (sel1 s) :mobile-push)))]
+        (dommy/listen! $el :click h)
+        (fn []
+          (dommy/unlisten! $el :click h))))
+
+    :.mobile-nav-menu
+    (fn [$el]
+      (let [h (fn [e] (.stopPropagation e))]
+        #_(dommy/listen! $el
+            :click h
+            :touchstart h
+            :touchend h))
+
+      (doseq [$a (sel $el :a)]
+        (dommy/listen! $a :click #(doseq [s push-sels]
+                                    (dommy/remove-class! (sel1 s) :mobile-push)))))
+
+
+    ;; Styleguide
+    :.sg-quick-lookup
+    (fn [$el]
+      #_(om/root
+          search/$quick-lookup
+          {}
+          {:target $el}))
+
+    #_ :.sg-quick-lookup-autocomplete
+    #_(fn [$el]
+        (om/root
+          search/$quick-lookup
+          ex-ac-results
+          {:target $el}))
+
+    #_ :.sg-quick-lookup-null-state
+    #_ (fn [$el]
+         (om/root
+           search/$quick-lookup
+           {:results-empty? true}
+           {:target $el :init-state {:text "foo bar"}}))
+
+    #_ :.sg-quick-lookup-loading
+    #_ (fn [$el]
+         (om/root
+           search/$quick-lookup
+           {:search-loading? true}
+           {:target $el}))
+
+    #_ :.sg-see-alsos-null-state
+    #_ (fn [$el]
+         (om/root
+           see-alsos/$see-alsos
+           {:var {:ns "foo" :name "bar"}}
+           {:target $el}))
+
+    #_ :.sg-see-alsos-populated
+    #_ (fn [$el]
+         (om/root
+           see-alsos/$see-alsos
+           {:var {:ns "foo" :name "bar"}
+            :see-alsos [{:_id "", :user {:login "mmwaikar"}, :created-at #inst "2011-10-14T13:29:04.000-00:00", :name "map-indexed", :ns "clojure.core", :doc "Returns a lazy sequence consisting of the result of applying f to 0\nand the first item of coll, followed by applying f to 1 and the second\nitem in coll, etc, until coll is exhausted. Thus function f should\naccept 2 arguments, index and item."} {:_id "", :user {:login "gstamp"}, :created-at #inst "2012-09-06T11:28:04.000-00:00", :name "pmap", :ns "clojure.core", :doc "Like map, except f is applied in parallel. Semi-lazy in that the\nparallel computation stays ahead of the consumption, but doesn't\nrealize the entire result unless required. Only useful for\ncomputationally intensive functions where the time of f dominates\nthe coordination overhead."} {:_id "", :user {:login "gstamp"}, :created-at #inst "2012-09-06T11:28:33.000-00:00", :name "amap", :ns "clojure.core", :doc "Maps an expression across an array a, using an index named idx, and\nreturn value named ret, initialized to a clone of a, then setting \neach element of ret to the evaluation of expr, returning the new \narray ret."} {:_id "", :user {:login "adereth"}, :created-at #inst "2013-06-21T19:20:53.000-00:00", :name "mapcat", :ns "clojure.core", :doc "Returns the result of applying concat to the result of applying map\nto f and colls.  Thus function f should return a collection."}]}
+           {:target $el}))
+
+    :.canary-tests-container
+    (fn [$el]
+      (canary/init $el))
+
+    :body.var-page var-page/init
+    :body.styleguide-page styleguide/init
+    :body search/init
+    "[data-sticky-offset]" sticky/init
+    "[data-animate-scroll]" animated-scroll-init))
+
+
+;; project.clj entry
+(defonce reload-hook (page/hook-reload-fn init))

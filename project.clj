@@ -73,6 +73,7 @@
                :prod {:source-paths ["src/cljs" "target/generated/cljs"]
                       :compiler {:output-to "resources/public/cljs/clojuredocs.js"
                                  :optimizations :advanced
+                                 :main "clojuredocs.main"
                                  :pretty-print false
                                  :preamble ["public/js/morpheus.min.js"
                                             "public/js/marked.min.js"
