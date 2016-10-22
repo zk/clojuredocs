@@ -536,3 +536,18 @@ need to get reup in).
 
 I'm a little burned out on getting examples moved over, so let me get
 reup in.
+
++ Mongo connection shutdown in main/start / stop
++ Switch start to passing through stop function
+
+Sometimes when you have to restart the server it's a huge PITA because
+you can't get the repl back up until you fix the errors. This causes
+your eval cycle time to jump to 10s of seconds.
+
+
+* <2016-10-22 Sat 19:33>
+
+Yup, had to do 7/8 edits to fix the problem, ran into a side case
+where generated cljs (and cljc) files were referencing a removed
+library (sablono). Why this was reported through the reup.clj path I
+have no idea. Tests maybe? nsfw.reup/setup?

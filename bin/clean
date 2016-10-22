@@ -1,0 +1,5 @@
+#/bin/sh
+
+rm -rf ./resources/public/cljs
+rm -rf ./resources/public/cljs-advanced
+lein clean

@@ -60,22 +60,20 @@
 
   (add-indexes-to-coll! :migrate-users [:email :migraion-key]))
 
+(defn start-app []
+  (let [{:keys [mongo-url port entry] :as app} (create-app)]
+    (report-and-exit-on-missing-env-vars!)
+    (mon/set-connection! (mon/make-connection mongo-url))
+    (add-all-indexes!)
+    (let [stop-server (start-http-server entry
+                        {:port port :join? false})]
+      (println (format "Server running on port %d" port))
+      (fn []
+        (.stop stop-server)))))
 
-(defn start [{:keys [port mongo-url entry] :as opts}]
-  (report-and-exit-on-missing-env-vars!)
-  (mon/set-connection! (mon/make-connection mongo-url))
-  (add-all-indexes!)
-  (let [stop-server (start-http-server entry
-                      {:port port :join? false})]
-    (println (format "Server running on port %d" port))
-    (merge
-      opts
-      {:stop-server stop-server})))
-
-(defn stop [{:keys [stop-server] :as opts}]
-  (when stop-server
-    @(stop-server))
-  (dissoc opts :stop-server))
+(defn stop-app [f]
+  (prn "STOP APP" f)
+  (when f (f)))
 
 (defn -main []
-  (start (create-app)))
+  (start-app))

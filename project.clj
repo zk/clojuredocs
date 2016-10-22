@@ -32,10 +32,7 @@
                  [slingshot "0.10.3"]
                  [prone "0.6.0"]]
   :java-agents [[com.newrelic.agent.java/newrelic-agent "3.10.0"]]
-  :repl-options {:init (do
-                         (require 'clojuredocs.main)
-                         (-> (clojuredocs.main/create-app)
-                             clojuredocs.main/start))}
+  :repl-options {:init (load-file "reup.clj")}
   :plugins [[lein-cljsbuild "1.1.1"]
             [lein-figwheel "0.5.1"]
             ;; required for heroku deploy
