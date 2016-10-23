@@ -551,3 +551,8 @@ Yup, had to do 7/8 edits to fix the problem, ran into a side case
 where generated cljs (and cljc) files were referencing a removed
 library (sablono). Why this was reported through the reup.clj path I
 have no idea. Tests maybe? nsfw.reup/setup?
+
+* <2016-10-23 Sun 15:27>
+
++ Highlighting broken on var page, check
++
