@@ -99,7 +99,6 @@
 (defn pluralize [n single plural]
   (str n " " (if (= 1 n) single plural)))
 
-
 (defn now []
   #+clj  (System/currentTimeMillis)
   #+cljs (.now js/Date))

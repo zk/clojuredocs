@@ -3,7 +3,23 @@
             [somnium.congomongo :as mon]
             [clojuredocs.env :as env]
             [clojuredocs.entry :as entry]
-            [clojuredocs.config :as config]))
+            [clojuredocs.config :as config]
+            [clojuredocs.css :as css]
+            [garden.core :as garden]))
+
+(defn compile-css []
+  (garden/css
+    {:output-to "resources/public/css/app.css"
+     :pretty-print? false
+     :vendors ["webkit" "moz" "ms"]
+     :auto-prefix #{:justify-content
+                    :align-items
+                    :flex-direction
+                    :flex-wrap
+                    :align-self
+                    :transition
+                    :transform}}
+    css/app))
 
 (defn start-http-server [entry-point opts]
   (jetty/run-jetty
@@ -61,18 +77,20 @@
   (add-indexes-to-coll! :migrate-users [:email :migraion-key]))
 
 (defn start-app []
-  (let [{:keys [mongo-url port entry] :as app} (create-app)]
+  (compile-css)
+  (let [{:keys [mongo-url port entry] :as app} (create-app)
+        mongo-conn (mon/make-connection mongo-url)]
     (report-and-exit-on-missing-env-vars!)
-    (mon/set-connection! (mon/make-connection mongo-url))
+    (mon/set-connection! mongo-conn)
     (add-all-indexes!)
     (let [stop-server (start-http-server entry
                         {:port port :join? false})]
       (println (format "Server running on port %d" port))
       (fn []
+        (mon/close-connection mongo-conn)
         (.stop stop-server)))))
 
 (defn stop-app [f]
-  (prn "STOP APP" f)
   (when f (f)))
 
 (defn -main []

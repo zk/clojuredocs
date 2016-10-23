@@ -170,11 +170,13 @@ f should accept number-of-colls arguments."}
     {}
     :.btn.mobile-menu
     (fn [$el]
-      (dommy/listen! $el :click
-        (fn [e]
-          (doseq [s push-sels]
-            (dommy/toggle-class! (sel1 s) :mobile-push))
-          (.stopPropagation e))))
+      (let [f (fn [e]
+                (doseq [s push-sels]
+                  (dommy/toggle-class! (sel1 s) :mobile-push))
+                (.stopPropagation e))]
+        (dommy/listen! $el :click f)
+        (fn []
+          (dommy/unlisten! $el :click f))))
 
     :body
     (fn [$el]
@@ -193,9 +195,13 @@ f should accept number-of-colls arguments."}
             :touchstart h
             :touchend h))
 
-      (doseq [$a (sel $el :a)]
-        (dommy/listen! $a :click #(doseq [s push-sels]
-                                    (dommy/remove-class! (sel1 s) :mobile-push)))))
+      (let [f #(doseq [s push-sels]
+                 (dommy/remove-class! (sel1 s) :mobile-push))]
+        (doseq [$a (sel $el :a)]
+          (dommy/listen! $a :click f))
+        (fn []
+          (doseq [$a (sel $el :a)]
+            (dommy/unlisten! $a :click f)))))
 
 
     ;; Styleguide
