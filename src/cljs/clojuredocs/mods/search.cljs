@@ -41,7 +41,7 @@
                (fn [i {:keys [ns name] :as sa}]
                  ^{:key i}
                  [:li
-                  [:a {:href "#" :class "var-link"}
+                  [:a {:href (util/var-path ns name) :class "var-link"}
                    [:span.namespace ns]
                    "/"
                    [:span.name name]]])))]
@@ -299,11 +299,11 @@
                           (map-indexed
                             (fn [i {:keys [href type] :as res}]
                               ^{:key i}
-                              [:li {:on-click (fn [_]
+                              [:li {:on-click (fn [e]
+                                                (.preventDefault e)
                                                 (ops/send bus
-                                                  ::select-ac-result
-                                                  res)
-                                                nil)
+                                                  ::ac-select
+                                                  res))
                                     :class (when (= i highlighted-index)
                                              "highlighted")
                                     :id (str "ac-" i)}
@@ -560,7 +560,6 @@
             (swap! app-state assoc :search-loading? false)))))))
 
 (defn init [$root]
-  (prn "SEARCH INIT")
   (let [prev-query (util/location-hash)
         !state (rea/atom {:ac-text (when-not (re-find #"^example[_-]" prev-query)
                                      prev-query)})
@@ -659,5 +658,4 @@
       (rea/render-component
         [$search-feedback @!state bus]
         $el))
-    (fn []
-      (prn "UNMOUNT SEARCH"))))
+    (fn [])))
