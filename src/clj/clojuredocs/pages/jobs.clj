@@ -4,7 +4,72 @@
             [clojuredocs.pages.common :as common]
             [clojure.string :as str]))
 
-(def DATA [{:job-title "Senior Software Engineer"
+(def DATA [{:job-title "Clojure Engineer"
+            :job-type "Permanent"
+            :job-location "San Francisco, CA"
+            :job-apply-href "https://www.fundingcircle.com/us/about/careers/"
+            :id "fc1"
+            :short-id "fc1"
+            :remote-ok? false
+            :posted-at (util/now)
+            :company-name "Funding Circle"
+            :company-url "https://www.fundingcircle.com/us/about/"
+            :company-image-url "/img/funding-circle-box-logo.png"
+            :company-description "Funding Circle is the world’s leading marketplace exclusively focused on small businesses — more than $2.5bn has been lent to 20,000 businesses in the UK, USA, Germany, Spain and the Netherlands. Today, businesses can borrow directly from a wide range of investors, including more than 55,000 people, the UK Government, local councils, a university and a number of financial organizations."
+            :job-description "Funding Circle brings together small businesses and investors in a way that is truly revolutionary. We're here to foster an environment where small business can thrive. Our online platform provides a marketplace where investors receive better returns and small businesses find lower rates. The driving force behind our product is our engineering team; we are building elegant, sustainable, and scalable infrastructure on a global scale, and we want you to be a part of it!
+
+Our mission: to build a better financial world.
+
+# Prospectus
+
+Would you describe yourself as a creative and ambitious engineer who’s always ready to take on the next cutting edge technology? If your answer is yes, you’re going to fit right in with our global team. We’re looking for an experienced and enthusiastic Clojure Engineer who will bring elegance and simplicity to the forefront of our distributed systems. We are a group of passionate engineers whose bread and butter is learning new technologies and fostering a collaborative and inclusive environment - we’re looking for partners in crime who feel the same.
+
+
+# Bird’s eye view of the role
+
+* Be an automator: we are continually reevaluating our stack to improve efficiency throughout the pipeline. We practice continuous integration and have a container-based deployment workflow.
+* Be a builder: you’ll build and expand our highly-available architecture to handle over $2 billion in loans originated through our pipeline.
+* Be a collector: you’ll help build scalable infrastructure to collect data for real time analytics and risk modeling.
+* Be a collaborator: you’ll be expected to forge deep bonds with your business counterparts to truly understand the needs of our Borrowers and Investors. We work in an Agile environment including pair programming and daily stand-ups.
+* Be a teacher: be generous with your time and expertise to teach stakeholders and our fellow engineers how to answer their own questions with tools you build.
+
+
+# Our ideal teammate has
+
+* At least 1 year of professional experience working with Clojure (or really strong personal projects using Clojure).
+* 3+ years of overall software engineering experience in any language (Ruby, Python, Java, etc).
+* An interest in Functional Programming languages.
+* Comfortable in a Unix/Linux environment.
+
+
+# Brownie points for
+
+* Github or other open source code we can check out.
+* Distributed systems experience.
+* Experience with microservices and/or event-driven architecture.
+* Operating at scale with low-latency systems.
+* Familiarity with Docker, Mesos, and/or experience with distributed database systems, such as Cassandra.
+
+
+# Why Join Us?
+
+Happy employees are productive employees, that’s why we offer a hearty benefits package. From learning and development and commuter stipends, to a competitive salary, equity, and health benefits, we’ve got you covered! That being said, have you heard about what we're doing?! Our mission is what really motivates us to come to work each day:
+
+* We're supporting small business, the engine of economic growth.
+* We're helping facilitate higher yields for investors and lower interest rates for borrowers.
+* We can fund loans extremely quickly, all online!
+* We have a clear competitive advantage globally in areas like domain expertise and regulatory processes.
+
+To learn more about our work environment, culture, and perks, visit:
+
+* https://www.fundingcircle.com/us/careers
+* https://www.themuse.com/companies/fundingcircle
+
+
+*Pursuant to the San Francisco Fair Chance Ordinance, we will consider for employment qualified applicants with arrest and conviction records.*
+
+*Funding Circle provides equal employment opportunity to all individuals regardless of their race, age, creed, color, religion, national origin or ancestry, sex, gender, disability, veteran status, genetic information, sexual orientation, gender identity or expression, pregnancy, or any other characteristic protected by state, federal, or local law.*"}
+           {:job-title "Senior Software Engineer"
             :job-type "Permanent"
             :job-location "Seattle, WA"
             :job-apply-href "https://jobs.lever.co/amperity.com/a3890aff-1688-4ad0-ba9b-5203ac44fd7f"
