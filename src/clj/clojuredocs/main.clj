@@ -18,7 +18,8 @@
                     :flex-wrap
                     :align-self
                     :transition
-                    :transform}}
+                    :transform
+                    :box-shadow}}
     css/app))
 
 (defn start-http-server [entry-point opts]

@@ -272,8 +272,48 @@
     [:li {:margin-bottom 0}]
     ["li > ul" {:margin-left "10px"}]
     [:.current {:font-weight 'bold}]]
-   [:.syntaxify [:* {:font-weight monospace-font}]]])
-
+   [:.syntaxify [:* {:font-weight monospace-font}]]
+   [:.add-see-also
+    [:.add-see-also-content
+     {:border "solid #eee 1px"
+      :padding "20px"}]
+    [:form {:margin-bottom "10px"}]
+    [:input {:border-radius 0}]
+    [:.error-message {:padding "5px"}
+     [:i {:margin-right "5px"}]]
+    [:.ac-results {:color "#555"}]]
+   [:.note-body
+    {:background-color "#fafafa"
+     :padding "10px"
+     :word-wrap 'normal}
+    [:p {:margin-bottom "10px"}]]
+   [:.add-example
+    [:.add-example-content
+     {:padding "10px"
+      :background-color "#fafafa"}]]
+   [:.add-note
+    [:.instructions
+     {:color "#555"
+      :font-size "12px"}]
+    [:textarea {:height "200px"}]]
+   [:.search-feedback-page
+    [:.radio {:margin-top 0}
+     [:label {:font-size "14px"
+              :line-height "20px"
+              :margin-bottom "5px"}]]
+    [:.loading {:margin-top "9px"
+                :margin-right "10px"}]
+    [:.error-message
+     {:line-height "28px"
+      :display 'inline-block
+      :color "#555"}
+     [:i {:margin-right "5px"}]]]
+   [:.examples-styleguide-content
+    [:.syntaxify {:margin-bottom "20px"
+                  :background-color code-bg}]
+    [:ul {:margin-bottom "30px"}]
+    [:li {:list-style-type 'disc
+          :margin-left "25px"}]]])
 
 (def quickref
   [[:.toc {:margin-bottom "20px"}
@@ -362,19 +402,19 @@
 
 (def example-editor
   [[:.example-editor
-     {:background-color 'white
-      :margin-bottom "10px"}
-     [:&.disabled {:background-color "#eee"}]
-     [:form {:margin-bottom "20px"}]
-     [:textarea {:font-family monospace-font
-                 :margin-bottom 0
-                 :padding "10px"
-                 :font-size "13px"}]
-     [:.add-example-controls
-      {:margin-bottom "10px"}]
-     [:.add-example-content
-      {:padding "30px"
-       :background-color "#f8f8f8"}]
+    {:background-color 'white
+     :margin-bottom "10px"}
+    [:&.disabled {:background-color "#eee"}]
+    [:form {:margin-bottom "20px"}]
+    [:textarea {:font-family monospace-font
+                :margin-bottom 0
+                :padding "10px"
+                :font-size "13px"}]
+    [:.add-example-controls
+     {:margin-bottom "10px"}]
+    [:.add-example-content
+     {:padding "30px"
+      :background-color "#f8f8f8"}]
     ]
    [:p.example-instructions
     {:margin-bottom "10px"
@@ -419,6 +459,42 @@
      [:h1 :h2 :h3 :h4 :h5 :h6
       {:line-height "50px"
        :margin 0}]]]])
+
+(def jobs
+  [[:.job-preview
+    [:.job-location :.comp :.remote-ok :.comp-equity :.comp-cash
+     {:color "#888"}]]
+   [:.jobs-page
+    [:.job-preview-wrapper
+     :.list-jobs-header
+     {:border-bottom "solid #eee 1px"}]
+    [:.job-preview-wrapper
+     {:padding "20px 0"}]
+    [:.job-preview
+     [:.comp
+      {:margin-top "3px"
+       :color "#aaa"
+       :font-size "13px"}]]
+    [:.job-info
+     [:.section-header
+      {:border-bottom "solid #eee 1px"
+       :color "#888"
+       :font-size "20px"}]
+     [:ul {:margin-bottom "20px"}]
+     [:h1 {:font-size "20px"
+           :font-weight 'bold}]]
+    [:.btn {:border-radius 0}]
+    [:.job-description :.company-description
+     [:ul {:margin-left "20px"}]
+     [:li {:margin-bottom "0.5em"
+           :list-style-type 'disc}]]
+    [:.apply-now
+     {:border-top "solid #ccc 1px"
+      :border-bottom "solid #ccc 1px"
+      :padding "15px 0"
+      :text-align 'center}
+     [:.btn {:width "75%"
+             :border-radius 0}]]]])
 
 (def app
   [[:html :body {:-webkit-font-smothing 'antialiased
@@ -766,4 +842,239 @@
        :font-size "14px"}]
      [:.heading {:margin-top "20px"
                  :margin-bottom "5px"
-                 :border-bottom "solid #ccc 2px"}]]]])
+                 :border-bottom "solid #ccc 2px"}]]]
+   [:.error-page
+    [:h1 {:text-align 'center
+          :font-size "20px"
+          :color "#333"}]
+    [:a.four-oh-four
+     {:max-width "300px"
+      :max-height "100%"
+      :display 'block
+      :margin "20px auto"}]]
+   [:.muted {:color "#aaa"}]
+   [:.var-link
+    {:color "#888"}
+    [:.namespace {:color "#888"}]
+    [:.name {:color blue}]]
+   [:.staging-banner
+    {:text-align 'center
+     :background-color "rgb(201,48,44)"
+     :color "rgba(255,255,255, 0.8)"
+     :font-size "14px"
+     :font-weight 400
+     :padding "3px"}]
+   [:.toggle-controls :.login-required-message
+    {:text-align 'right
+     :margin-bottom "4px"
+     :font-size "12px"}]
+   [:.toggle-link {:color light-blue}]
+   [:.sidenav {:font-size "14px"}
+    [:h5 {:font-size "14px"
+          :margin-top 0}]
+    ["& > ul" {:margin-bottom "20px"}]
+    [:li {:margin-bottom 0}]
+    ["li > ul" {:margin-left "10px"}]
+    [:.current {:font-weight 'bold}]
+    (nc/at-bp :xs {:display 'none})]
+   [:.live-preview
+    {:background-color "#fafafa"
+     :margin-bottom "10px"
+     :word-wrap 'normal
+     :overflow-x 'scroll}
+    [:.empty-live-preview
+     {:text-align 'center
+      :color "#aaa"
+      :font-size "14px"
+      :padding "10px"}]]
+   [:.ac-results-widget {:margin "0 -20px"
+                         :padding "0 20px"}]
+   [:.search-active
+    [:ac-results-widget
+     {:background-color 'white}
+     [:ul.ac-results
+      {:overflow 'auto}]
+     ["ul.ac-results > li"
+      [:&:first-child {:margin-top "20px"}]
+      [:&:last-child {:margin-bottom "20px"}]]]]
+   [:.core-library-page
+    [:pre :.syntaxify
+     {:background-color code-bg
+      :padding "20px"}]
+    [:h2 {:border-bottom "solid #ddd 2px"}]
+    [:h3 {:margin-top "30px"}]]
+   [:.markdown
+    [:ol :ul
+     {:padding-left 0
+      :margin-bottom "20px"}
+     [:li {:margin-left "25px"
+           :padding 0
+           :margin-bottom 0}]]
+    [:ul [:li {:list-style-type 'disc}]]
+    [:ol [:li {:list-style-type 'decimal}]]
+    [:.syntaxify [:pre {:margin-bottom "40px"}]]
+    [:h1 :h2 :h3 :h4 :h5 {:margin-bottom "0.5em"}]]
+   [:.sg-example
+    {:margin-bottom "30px"
+     :border "solid #eee 1px"
+     :padding "3px"}
+    [:.caption
+     {:text-align 'center
+      :background-color "#fafafa"
+      :padding "5px"
+      :color "#999"
+      :font-size "11px"
+      :letter-spacing "1px"}]]
+   [:.field-schemas :table.schema
+    [:td {:padding-right "10px"
+          :vertical-align 'top}]]
+   [:table.schema
+    {:border-top "solid #ccc 3px"
+     :width "100%"}
+    [:td {:border 'none
+          :padding "5px"
+          }]
+    [:.aside {:font-size "12px"}]]
+   [:.test-result
+    {:padding "3px"
+     :color 'white}
+    [:&.pass {:background-color "#5a5"}]
+    [:&.fail {:background-color "#a55"}]
+    [:&.error {:background-color "#555"}]
+    [:&.pending {:background-color "#999"}]]
+   [:.add-example-page
+    [:.syntaxify
+     [:code {:font-size "12px"}]]
+    [:textarea :pre {:font-size "12px"}]]
+   [:.tabbed-editor
+    [:.example-editor
+     {:border-color "#eee"
+      :border "solid #eee 1px"
+      :border-top 'none}
+     [:.columns-guide
+      {:background-color 'transparent
+       :color "#ccc"
+       :margin 0}]]
+    [:.null-state
+     {:background-color 'white
+      :border 'none
+      :border-top 'none}]
+    [:textarea
+     {:border 'none
+      :border-radius 0
+      :overflow 'auto
+      :outline 'none
+      :outline-width 0
+      :resize 'none
+      :box-shadow 'none}
+     [:&:focus {:box-shadow 'none}]]
+    [:.nav-tabs
+     {:background-color "#eee"
+      :border-bottom 'none}
+     [:li {:margin-bottom 0
+           :border-bottom 'none}
+      ["& > li.active" {:border-bottom 'none}
+       [:&:hover {:border-color "#eee"}]
+       ["& > a:focus" {:border-color "#eee"}]
+       ]]
+     ["li.active > a" "li.active>a:hover" "li.active>a:focus"
+      {:border-color "#eee"
+       :border-bottom 'none}
+      [:&:hover {:border-bottom 'none
+                 :margin-bottom 0}]]
+     [:li
+      [:a {:border-radius 0
+           :border-bottom 'none
+           :margin-bottom 0}
+       [:&:hover {:border-bottom 'none
+                  :margin-bottom 0}]]]
+     [:.live-preview
+      {:min-height "241px"
+       :border "solid #eee 1px"
+       :border-top 'none
+       :padding "10px"
+       :background-color "#fafafa"}
+      [:li {:margin-left "20px"
+            :list-style-type 'disc
+            :margin-bottom 0}]]]]
+   [:.sg-example-inspector
+    [:.sg-inspector-state
+     [:textarea
+      {:width "100%"
+       :border "solid #eee 1px"
+       :padding "5px"}
+      [:&.error {:background-color "#fcc"}]]]
+    [:.sg-inspector-outlets
+     [:.message
+      {:margin-bottom "10px"}
+      [:h6 {:padding "3px"
+            :margin 0
+            :color "#555"}]
+      [:pre {:margin 0}]]]]
+   [:.migrate-user-page
+    [:.controls {:text-align 'center}
+     [:.btn {:font-size "30px"
+             :padding "5px 30px"}]]]
+   [:.var-namespace-group
+    [:h2 {:border-bottom "solid orange 2px"}]]
+   [:.var-group
+    [:h3 {:border-bottom "solid #ccc 1px"}]
+    [:ul.var-list
+     [:li {:display 'inline-block
+           :margin-right "4px"
+           :background-color "#eee"
+           :padding "0 4px"}]]]
+   [:.search-results-page
+    [:.search-results-header
+     {:border-bottom "solid #ddd 1px"
+      :margin-bottom "20px"}
+     [:h1 {:margin-bottom 0}]
+     [:p {:color "#888"
+          :margin-bottom "5px"}]]
+    [:.search-results
+     {:margin-bottom "30px"}]
+    [:.search-result
+     {:margin-bottom "30px"
+      :line-height "24px"}
+     [:h1 {:border-bottom "solid #ccc 2px"}]
+     [:h2 {:margin-top "5px"
+           :margin-bottom 0
+           :font-size "24px"}]
+     [:h3 {:margin-top 0
+           :margin-bottom "5px"
+           :font-size "16px"
+           :font-weight 500
+           :color "#888"}]
+     [:p {:margin-bottom "5px"
+          :font-size "16px"
+          :line-height "24px"}]
+     [:.examples-count {:font-size "13px"
+                        :color "#888"}]
+     [:.arglists
+      {:margin-left 0
+       :margin-bottom 0
+       :padding-left 0
+       :font-family monospace-font
+       :font-size "14px"}
+      [:li {:margin 0
+            :display 'inline-block
+            :margin-right "10px"
+            :margin-bottom "10px"
+            :padding "0 5px"
+            :background-color "#f8f8f8"}]]
+     [:.meta-info
+      {:font-size "13px"
+       :color "#888"
+       :line-height "20px"}]
+     [:.see-alsos
+      [:.see-also
+       {:display 'inline-block
+        :margin-bottom 0
+        :line-height "12px"}
+       [:a {:color blue}]
+       [:.ns {:color "#888"}]]]]
+    [:.search-controls
+     {:text-align 'center
+      :color "#888"}]]
+
+   jobs])
