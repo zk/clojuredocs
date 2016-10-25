@@ -556,3 +556,7 @@ have no idea. Tests maybe? nsfw.reup/setup?
 
 + Highlighting broken on var page, check
 +
+
+* <2016-10-25 Tue 16:19>
+
++ Check search results page
