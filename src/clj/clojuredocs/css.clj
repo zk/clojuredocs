@@ -93,7 +93,12 @@
       {:margin-right "10px"
        :float 'left
        :display 'inline-block
-       :padding-top "2px"}]]]])
+       :padding-top "2px"}]]]
+   [:.not-finding {:text-align 'right
+                   :font-size "12px"
+                   :line-height "18px"
+                   :opacity 0.8
+                   :margin-top "5px"}]])
 
 (def autocomplete
   [[:.ac-result-link:hover {:text-decoration 'none
@@ -267,8 +272,11 @@
     [:li {:margin-bottom 0}]
     ["li > ul" {:margin-left "10px"}]
     [:.current {:font-weight 'bold}]]
-   [:.syntaxify [:* {:font-weight monospace-font}]]
-   [:.toc {:margin-bottom "20px"}
+   [:.syntaxify [:* {:font-weight monospace-font}]]])
+
+
+(def quickref
+  [[:.toc {:margin-bottom "20px"}
     [:h5 {:margin 0
           :margin-bottom "10px"
           :font-size "12px"
@@ -283,13 +291,134 @@
      [:li {:margin-left "10px"
            :font-size "12px"
            :margin-bottom 0
-           :line-height "1.5em"}]]
-    [:.quickref-mobile-toc
-     [:h5 {:color 'white
-           :margin-bottom "5px"
-           :margin-top 0}]
-     [:.categories {:font-size "12px"
-                    :line-height "16px"}]]]])
+           :line-height "1.5em"}]]]
+   [:.quickref-mobile-toc
+    [:h5 {:color 'white
+          :margin-bottom "5px"
+          :margin-top 0}]
+    [:.categories {:font-size "12px"
+                   :line-height "16px"}]]
+   [:.sticky {:position 'fixed
+              :overflow-y 'scroll
+              :overflow-x 'auto}]
+   [:.sphere
+    [:h2 :h3 :h4
+     {:display 'inline-block
+      :margin 0
+      :margin-bottom "10px"}]
+    [:h4 {:font-size "14px"
+          :font-weight 500}]
+    [:.sphere-header
+     {:border-bottom "solid orange 3px"
+      :margin-bottom "10px"}]
+    [:.category-header
+     {:border-bottom "solid #ccc 2px"
+      :margin-bottom "10px"}]
+    [:.category
+     {:margin-bottom "40px"}]
+    [:.header-reference
+     {:color "#bbb"
+      :font-weight 'normal
+      :float 'right
+      :margin-right 0}]
+    [:.quickref-header
+     [:.header-reference
+      {:color "#999"
+       :font-size "14px"}]]
+    [:.examples-count
+     {:color "#bbb"}]
+    [:.dl-row
+     {:clear 'both
+      :padding "3px 0"}
+     [:&:hover {:background-color "#eee"}]]
+    [:dl {:font-size "13px"}]
+    [:dt {:width "130px"
+          :text-align 'right
+          :margin-right "10px"
+          :font-family monospace-font
+          :font-weight 'normal}]
+    [:dd
+     nc/ellipsis-text
+     {:width "550px"
+      :margin-left "150px"}
+     (nc/at-bp :md {:width "430px"})
+     (nc/at-bp :sm {:width "380px"})]
+    [:dt {:font-weight 'normal}]
+    (nc/at-bp :xs
+      [:.dl-row {:padding 0}]
+      [:dt {:display 'block
+            :text-align 'left
+            :padding-top "10px"
+            :clear 'both}]
+      [:dd {:display 'block
+            :border-bottom "solid #ddd 1px"
+            :padding-bottom "10px"
+            :text-align 'left
+            :width "100%"
+            :margin-left 0}])]
+   [:.quickref-other
+    {:display 'inline-block}
+    [:li {:display 'inline-block}]]])
+
+(def example-editor
+  [[:.example-editor
+     {:background-color 'white
+      :margin-bottom "10px"}
+     [:&.disabled {:background-color "#eee"}]
+     [:form {:margin-bottom "20px"}]
+     [:textarea {:font-family monospace-font
+                 :margin-bottom 0
+                 :padding "10px"
+                 :font-size "13px"}]
+     [:.add-example-controls
+      {:margin-bottom "10px"}]
+     [:.add-example-content
+      {:padding "30px"
+       :background-color "#f8f8f8"}]
+    ]
+   [:p.example-instructions
+    {:margin-bottom "10px"
+     :font-size "12px"
+     :line-height "20px"
+     :color "#888"}]])
+
+(def styleguide-page
+  [(let [color "#f0f0f0"
+         size 40]
+     [:.checker-bg
+      {:background-color "#fafafa"
+       :background-image (str "linear-gradient(45deg,"
+                              color
+                              " 25%,transparent 25%,transparent 75%,"
+                              color " 75%," color "),"
+                              "linear-gradient(45deg,"
+                              color " 25%, transparent 25%, transparent 75%,"
+                              color " 75%, " color ")")
+       :background-size (str size "px " size "px")
+       :background-position (str "0 0, "
+                                 (/ size 2) "px"
+                                 " "
+                                 (/ size 2) "px")
+       :padding "20px"}])
+   [:.styleguide-page
+    [:.styleguide-section
+     {:margin-bottom "50px"}
+     ["& > h2" {:border-bottom "solid #ddd 1px"
+                :padding-bottom "5px"}]]
+    [:.example
+     {:margin-bottom "30px"}]
+    [:.buttons-ex
+     [:button
+      {:margin-right "10px"}]]
+    [:.contextual-bgs
+     ["& > div"
+      {:display 'inline-block
+       :padding "10px 20px"
+       :margin-right "10px"}]]
+    [:.headers-ex
+     [:h1 :h2 :h3 :h4 :h5 :h6
+      {:line-height "50px"
+       :margin 0}]]]])
 
 (def app
   [[:html :body {:-webkit-font-smothing 'antialiased
@@ -557,4 +686,84 @@
 
    autocomplete
 
-   var-page])
+   var-page
+
+   quickref
+
+   example-editor
+
+   styleguide-page
+
+   [:.example-body
+    {:padding "10px"
+     :font-size "14px"
+     :background-color "#fafafa"
+     :margin-bottom "10px"}]
+
+   [:pre.raw-example
+    {:background-color "#fafafa"
+     :margin-bottom "0px"
+     :padding "15px"
+     :font-size "14px"}]
+   [:.recent-pages
+    {:font-size "14px"
+     :margin-bottom "30px"}
+    [:li {:margin-bottom 0}]
+    (nc/at-bp :xs
+      [:& {:margin-bottom "10px"}]
+      [:h3 {:display 'inline-block
+            :margin-right "20px"}]
+      [:ul {:display 'inline-block}]
+      [:li {:display 'inline-block
+            :margin-right "10px"
+            :background-color "#fafafa"
+            :padding "0 5px"}])]
+   [:.var-page-nav {:margin-bottom "20px"}]
+   [:.ns-page
+    [:h1 {:margin-bottom "20px"}]
+    [:pre.doc {:margin-bottom "20px"}]
+    [:section {:margin-bottom "50px"}]]
+   [:.var-group
+    {:clear 'both}
+    [:h4 {:margin-top "20px"
+          :margin-bottom "5px"
+          :border-bottom "solid #ccc 2px"}]
+    [:.dl-row {:clear 'both
+               :padding "3px 0"}
+     [:&:hover {:background-color "#eee"}]]
+    [:dl {:font-size "13px"}]
+    [:dt {:min-width "150px"
+          :text-align 'right
+          :margin-right "10px"
+          :font-family monospace-font
+          :font-weight 'normal}]
+    [:dd
+     nc/ellipsis-text
+     {:width "580px"}
+     (nc/at-bp :md {:width "460px"})
+     (nc/at-bp :sm {:width "400px"})]
+    (nc/at-bp :xs
+      [:.dl-row {:padding 0}]
+      [:dt {:display 'block
+            :text-align 'left
+            :padding-top "10px"}]
+      [:dd {:display 'block
+            :border-bottom "solid #ddd 1px"
+            :width "100%"
+            :padding-bottom "10px"}])
+    [:.no-doc {:color "#aaa"}]
+    [:.ns-table
+     {:width "100%"}
+     [:.name {:text-align 'right}]
+     [".name > span" {:padding-right "20px"
+                      :font-family monospace-font
+                      :font-size "12px"
+                      :line-height "24px"
+                      :vertical-align 'middle}]
+     [:.doc
+      nc/ellipsis-text
+      {:line-height "24px"
+       :font-size "14px"}]
+     [:.heading {:margin-top "20px"
+                 :margin-bottom "5px"
+                 :border-bottom "solid #ccc 2px"}]]]])
