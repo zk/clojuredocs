@@ -387,28 +387,28 @@
         ac-ch (chan)
         throttled-ac-ch (throttle ac-ch 200)
         bus (ops/kit !state {} {})]     ; ugly
-    (go-loop []
-      (when-let [ns-name-str (<! new-ch)]
-        (if (empty? ns-name-str)
-          (swap! !state assoc-in [:add-see-also :error]
-            "Whoops, looks like the var name is blank.")
-          (do
-            (swap! !state assoc-in [:add-see-also :loading?] true)
-            (let [{:keys [success res]}
-                  (<! (ajax-chan
-                        {:method :post
-                         :path "/api/see-alsos"
-                         :data-type :edn
-                         :data {:fq-to-var-name ns-name-str
-                                :from-var (select-keys (:var @!state) [:ns :name :library-url])}}))]
-              (if success
-                (swap! !state (fn [m]
-                                (-> m
-                                    (update-in [:see-alsos] #(vec (concat % [(:body res)])))
-                                    (assoc :add-see-also {:ac-text ""}))))
-                (swap! !state assoc-in [:add-see-also :error] (-> res :body :message))))
-            (swap! !state assoc-in [:add-see-also :loading?] false)))
-        (recur)))
+    #_(go-loop []
+        (when-let [ns-name-str (<! new-ch)]
+          (if (empty? ns-name-str)
+            (swap! !state assoc-in [:add-see-also :error]
+              "Whoops, looks like the var name is blank.")
+            (do
+              (swap! !state assoc-in [:add-see-also :loading?] true)
+              (let [{:keys [success res]}
+                    (<! (ajax-chan
+                          {:method :post
+                           :path "/api/see-alsos"
+                           :data-type :edn
+                           :data {:fq-to-var-name ns-name-str
+                                  :from-var (select-keys (:var @!state) [:ns :name :library-url])}}))]
+                (if success
+                  (swap! !state (fn [m]
+                                  (-> m
+                                      (update-in [:see-alsos] #(vec (concat % [(:body res)])))
+                                      (assoc :add-see-also {:ac-text ""}))))
+                  (swap! !state assoc-in [:add-see-also :error] (-> res :body :message))))
+              (swap! !state assoc-in [:add-see-also :loading?] false)))
+          (recur)))
     (go-loop []
       (when-let [ac-text (<! throttled-ac-ch)]
         (swap! !state assoc-in [:add-see-also :completing?] true)
@@ -423,35 +423,35 @@
           (swap! !state assoc-in [:add-see-also :completing?] false)
           (recur))))
 
-    (go-loop []
-      (when-let [to-del (<! delete-ch)]
-        (swap! !state update-sa
-          (:_id to-del)
-          (fn [sa]
-            (assoc sa :delete-state :loading)))
-        (let [{:keys [success res]}
-              (<! (ajax-chan
-                    {:method :delete
-                     :path (str "/api/see-alsos/" (:_id to-del))
-                     :data-type :edn}))]
-          (if success
-            (swap! !state update-in [:see-alsos]
-              (fn [sas]
-                (->> sas
-                     (remove #(= (:_id %) (:_id to-del)))
-                     vec)))
-            (swap! !state update-sa
-              (:_id to-del)
-              (fn [sa]
-                (assoc sa :delete-state :error)))))
-        (recur)))
+    #_(go-loop []
+        (when-let [to-del (<! delete-ch)]
+          (swap! !state update-sa
+            (:_id to-del)
+            (fn [sa]
+              (assoc sa :delete-state :loading)))
+          (let [{:keys [success res]}
+                (<! (ajax-chan
+                      {:method :delete
+                       :path (str "/api/see-alsos/" (:_id to-del))
+                       :data-type :edn}))]
+            (if success
+              (swap! !state update-in [:see-alsos]
+                (fn [sas]
+                  (->> sas
+                       (remove #(= (:_id %) (:_id to-del)))
+                       vec)))
+              (swap! !state update-sa
+                (:_id to-del)
+                (fn [sa]
+                  (assoc sa :delete-state :error)))))
+          (recur)))
 
     (rea/render-component
-        [see-alsos/$see-alsos !state bus]
-        (sel1 $root :.see-alsos-widget))))
+      [see-alsos/$see-alsos !state bus]
+      (sel1 $root :.see-alsos-widget))))
 
 (defn init [$root]
   (let [!state (rea/atom (init-state))]
     (init-examples $root !state)
-    #_(init-see-alsos $root !state)
+    (init-see-alsos $root !state)
     (init-notes $root !state)))
