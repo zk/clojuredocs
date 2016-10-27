@@ -91,78 +91,6 @@
 (defn focused? [$el]
   (= $el (.-activeElement js/document)))
 
-#_(defn $quick-search-bar
-    [{:keys [highlighted-index search-loading?
-             ac-results ac-text search-focused?] :as app} owner]
-    (reify
-      om/IDidMount
-      (did-mount [_]
-        (let [$input (om/get-node owner "input")]
-          (when (and (not (focused? $input))
-                     search-focused?)
-            (.focus $input)
-            (aset $input "value" (.-value $input)))))
-      om/IDidUpdate
-      (did-update [_ _ _]
-        (handle-search-active-state ac-text)
-        (let [$input (om/get-node owner "input")]
-          (when (and (not (focused? $input))
-                     search-focused?)
-            (.focus $input)
-            (aset $input "value" (.-value $input)))))
-      om/IRenderState
-      (render-state [this {:keys [text-chan action-ch placeholder]}]
-        (sab/html
-          [:form.search
-           {:autoComplete "off"
-            :on-submit #(do
-                          (let [{:keys [highlighted-index ac-results]} @app]
-                            (put! action-ch (nth ac-results (or highlighted-index 0))))
-                          false)
-            :action "/search"
-            :method :get}
-           [:input.form-control.query
-            {:class (when search-loading? " loading")
-             :placeholder (or placeholder "Looking for? (ctrl-s)")
-             :name "q"
-             :autoComplete "off"
-             :ref "input"
-             :value ac-text
-             :on-change #(let [text (.. % -target -value)]
-                           (put! text-chan text)
-                           (om/update! app :ac-text text))
-             :on-key-down #(search-keydown % app ac-results text-chan)}]]))))
-
-#_ #(search-keydown % app ac-results text-chan)
-
-#_(defn search-keydown [e app ac-results text-chan]
-    (when app
-      (let [ctrl? (.-ctrlKey e)
-            key-code (.-keyCode e)
-            {:keys [highlighted-index]} @app]
-
-        ;; execute search
-        (when (= 27 key-code)
-          (om/update! app :ac-text "")
-          (om/update! app :ac-results nil)
-          (put! text-chan ""))
-
-
-        (let [f (cond
-                  (and ctrl? (= 78 key-code)) inc ; ctrl-n
-                  (= 40 key-code) inc             ; down arrow
-                  (and ctrl? (= 80 key-code)) dec ; ctrl-p
-                  (= 38 key-code) dec             ; up arrow
-                  :else identity)]
-          (when (and (not (= identity f))
-                     (not (and (= inc f)
-                               (= highlighted-index (dec (count ac-results)))))
-                     (not (and (= dec f)
-                               (= highlighted-index 0))))
-            (om/transact! app :highlighted-index f))
-          (when (not (= identity f))
-            false)))))
-
 (defn cancel-search? [{:keys [key-code]}]
   (= 27 key-code))
 
@@ -191,9 +119,15 @@
          [:form.search
           {:autoComplete "off"
            :on-submit (fn [e]
-                        (ops/send bus
-                          ::ac-select
-                          (nth ac-results (or highlighted-index 0)))
+                        (let [res (and (not (empty? ac-results))
+                                       (nth ac-results (or highlighted-index 0)))]
+                          (if res
+                            (ops/send bus
+                              ::ac-select
+                              (nth ac-results (or highlighted-index 0)))
+                            (ops/send bus
+                              ::var-search
+                              ac-text)))
                         (.preventDefault e)
                         nil)
            :action "/search"
@@ -611,9 +545,14 @@
                                  (dissoc state :search-loading? :ac-results :ac-text :results-empty?))
 
                ::ac-select (fn [state res]
-                             (util/navigate-to (util/var-path
-                                                 (:ns res)
-                                                 (:name res))))})]
+                             (if (and (:ns res) (:name res))
+                               (util/navigate-to
+                                 (util/var-path
+                                   (:ns res)
+                                   (:name res)))))
+               ::var-search (fn [state text]
+                              (util/navigate-to
+                                (str "/search?q=" (util/url-encode text))))})]
 
     (when-not (empty? (sel :.search-widget))
       (swap! !state assoc :search-focused? true))

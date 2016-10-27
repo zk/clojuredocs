@@ -272,7 +272,7 @@
     [:li {:margin-bottom 0}]
     ["li > ul" {:margin-left "10px"}]
     [:.current {:font-weight 'bold}]]
-   [:.syntaxify [:* {:font-weight monospace-font}]]
+   [:.syntaxify [:* {:font-family monospace-font}]]
    [:.add-see-also
     [:.add-see-also-content
      {:border "solid #eee 1px"
@@ -987,16 +987,16 @@
            :border-bottom 'none
            :margin-bottom 0}
        [:&:hover {:border-bottom 'none
-                  :margin-bottom 0}]]]
-     [:.live-preview
-      {:min-height "241px"
-       :border "solid #eee 1px"
-       :border-top 'none
-       :padding "10px"
-       :background-color "#fafafa"}
-      [:li {:margin-left "20px"
-            :list-style-type 'disc
-            :margin-bottom 0}]]]]
+                  :margin-bottom 0}]]]]
+    [:.live-preview
+     {:min-height "227px"
+      :border "solid #eee 1px"
+      :border-top 'none
+      :padding "10px"
+      :background-color "#fafafa"}
+     [:li {:margin-left "20px"
+           :list-style-type 'disc
+           :margin-bottom 0}]]]
    [:.sg-example-inspector
     [:.sg-inspector-state
      [:textarea

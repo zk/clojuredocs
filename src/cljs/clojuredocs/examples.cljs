@@ -49,50 +49,46 @@
       post-text)))
 
 (defn $tabbed-clojure-editor
-  [{:keys [body error create-success? loading? _id] :as app} bus]
-  (let [!editor (rea/atom {:text body
-                           :error error
-                           :create-success? create-success?
-                           :loading? loading?
-                           :active :editor})]
-    (fn []
-      (let [{:keys [text error create-success? loading? active]} @!editor]
-        [:div.tabbed-editor
-         [:ul.nav.nav-tabs
-          [:li
-           {:class (when (= :editor active) "active")}
-           [:a {:href "#"
-                :on-click (fn [e]
-                            (.preventDefault e)
-                            (swap! !editor assoc :active :editor)
-                            nil)}
-            [:i.fa.fa-code] " Editor"]]
-          [:li
-           {:class (when (= :preview active) "active")}
-           [:a {:href "#"
-                :on-click (fn [e]
-                            (.preventDefault e)
-                            (swap! !editor assoc :active :preview)
-                            nil)}
-            [:i.fa.fa-eye] " Preview"]]]
-         [:div {:class (when (= :preview active) "hidden")}
-          [:div.example-editor
-           {:class (when loading? "disabled")}
-           ($expando-ta
-             text
-             {:on-change (fn [e]
-                           (let [v (.. e -target -value)]
-                             (.preventDefault e)
-                             (swap! !editor assoc :text v)
-                             false))
-              :value text
-              :disabled (when loading? "disabled")
-              :placeholder "Code Here"})
-           [:pre.columns-guide (eighty-columns)]]]
-         [:div.live-preview {:class (when (= :editor active) "hidden")}
-          (if-not (empty? text)
-            (syntax/syntaxify text)
-            [:div.null-state "Live Preview"])]]))))
+  [!editor bus]
+  (let [{:keys [text body error create-success? loading? active]
+         :or {active :editor}} @!editor
+         text (or text body)]
+    [:div.tabbed-editor
+     [:ul.nav.nav-tabs
+      [:li
+       {:class (when (= :editor active) "active")}
+       [:a {:href "#"
+            :on-click (fn [e]
+                        (.preventDefault e)
+                        (swap! !editor assoc :active :editor)
+                        nil)}
+        [:i.fa.fa-code] " Editor"]]
+      [:li
+       {:class (when (= :preview active) "active")}
+       [:a {:href "#"
+            :on-click (fn [e]
+                        (.preventDefault e)
+                        (swap! !editor assoc :active :preview)
+                        nil)}
+        [:i.fa.fa-eye] " Preview"]]]
+     [:div {:class (when (= :preview active) "hidden")}
+      [:div.example-editor
+       {:class (when loading? "disabled")}
+       ($expando-ta
+         text
+         {:on-change (fn [e]
+                       (let [v (.. e -target -value)]
+                         (.preventDefault e)
+                         (swap! !editor assoc :text v)
+                         false))
+          :value text
+          :disabled (when loading? "disabled")
+          :placeholder "Code Here"})
+       [:pre.columns-guide (eighty-columns)]]]
+     [:div.live-preview {:class (when (= :editor active) "hidden")}
+      (if-not (empty? text)
+        (syntax/syntaxify text)
+        [:div.null-state "Live Preview"])]]))
 
 (defn user-can-delete? [user {:keys [author]}]
   (= (select-keys user [:login :account-source])
@@ -136,7 +132,7 @@
            [:a {:href "#"
                 :on-click (fn [e]
                             (.preventDefault e)
-                            (swap! !state assoc :editing? true)
+                            (swap! !state assoc :editing? true :text nil)
                             nil)}
             "edit"])])
       (when (and can-delete? (not editing?))
@@ -182,9 +178,10 @@
 (defn $example-editor [{:keys [submit-button-text]}
                        !state
                        bus]
-  (let [{:keys [editing? loading? error var _id text] :as ex} !state]
+  (let [{:keys [editing? loading? error var body text] :as ex} @!state
+        text (or body text)]
     [:div
-     [$tabbed-clojure-editor ex bus]
+     [$tabbed-clojure-editor !state bus]
      $example-instructions
      (when error
        [:div.form-group
@@ -196,14 +193,14 @@
        {:disabled (when loading? "disabled")
         :on-click (fn [e]
                     (.preventDefault e)
-                    (swap! !state assoc :editing? false)
+                    (swap! !state assoc :editing? false :text nil)
                     nil)}
        "Cancel"]
       [:button.btn.btn-success.pull-right
        {:disabled (when loading? "disabled")
         :on-click (fn [e]
                     (.preventDefault e)
-                    (ops/send bus ::update {:body text :_id _id})
+                    (ops/send bus ::save {:var var :text text})
                     nil)}
        (or submit-button-text "Submit")]
       [:img.loading.pull-right
@@ -254,7 +251,7 @@
      [:div.add-example-content {:class (when-not editing? " hidden")}
       [$example-editor
        {:submit-button-text "Add Example"}
-       app
+       !state
        bus]]]))
 
 (defn $examples [!state bus]
