@@ -164,7 +164,7 @@
    :body (pr-str (->> params
                       :query
                       search/query
-                      (take 10)
+                      (take 8)
                       add-see-alsos
                       add-examples-count))})
 
@@ -173,7 +173,7 @@
    :body (pr-str (->> params
                       :query
                       search/query
-                      (take 5)
+                      (take 10)
                       (filter #(get #{"var" "function" "special-form" "macro"} (:type %)))))})
 
 (defn expand-ns [ns]

@@ -2,6 +2,7 @@
   (:require [dommy.core :as dommy :refer-macros [sel sel1]]
             [reagent.core :as rea]
             [nsfw.ops :as ops]
+            [nsfw.page :as page]
             [cljs.core.async :as async
              :refer [<! >! chan close! sliding-buffer put! alts! timeout pipe mult tap]]
             [clojuredocs.util :as util]
@@ -151,23 +152,11 @@
                             ex)))
                    vec)))
 
-(defn update-sa [{:keys [see-alsos] :as state} _id f]
-  (assoc state
-    :see-alsos (->> see-alsos
-                    (map (fn [ex]
-                           (if (= _id (:_id ex))
-                             (f ex)
-                             ex)))
-                    vec)))
-
-(defn update-note [{:keys [notes] :as state} _id f & args]
-  (assoc state
-    :notes (->> notes
-                (map (fn [ex]
-                       (if (= _id (:_id ex))
-                         (apply f ex args)
-                         ex)))
-                vec)))
+(defn merge-with-ex [state _id & maps]
+  (update-example
+    state
+    _id
+    #(apply merge % maps)))
 
 (defn req-update-example [_id body]
   (let [c (chan)]
@@ -187,6 +176,70 @@
                       401 body
                       {:message "Unknown server error"}))))})
     c))
+
+(defn handle-new-example [state {:keys [text _id]}]
+  (let [var (select-keys (:var state) [:ns :name :library-url])
+        ch (chan)]
+    (go
+      (if (empty? text)
+        (put! ch #(-> %
+                      (assoc-in
+                        [:add-example :error]
+                        "Please provide an example body")))
+        (let [{:keys [success error data]}
+              (<! (req-create-example {:body text
+                                       :var var}))]
+          (put! ch
+            (fn [state]
+              (if success
+                (-> state
+                    (assoc :add-example {:text nil :body nil})
+                    (assoc :examples (vec (concat (:examples state) [data]))))
+                (-> state
+                    (update-in [:add-example] assoc :error error)))))))
+      (close! ch))
+    ch))
+
+(defn handle-update-example [state {:keys [text _id]}]
+  (let [ch (chan)]
+    (put! ch (merge-with-ex state _id {:loading? true}))
+    (go
+      (let [res (<! (req-update-example _id text))]
+        (put! ch
+          (fn [state]
+            (if (:success res)
+              (merge-with-ex state _id
+                (:data res)
+                {:loading? false :editing? false})
+
+              (merge-with-ex state
+                {:error (:message res)
+                 :loading? false})))))
+      (close! ch))
+    ch))
+
+(defn handle-save-example [state {:keys [_id] :as pl}]
+  (if _id
+    (handle-update-example state pl)
+    (handle-new-example state pl)))
+
+(defn update-sa [{:keys [see-alsos] :as state} _id f]
+  (assoc state
+    :see-alsos (->> see-alsos
+                    (map (fn [ex]
+                           (if (= _id (:_id ex))
+                             (f ex)
+                             ex)))
+                    vec)))
+
+(defn update-note [{:keys [notes] :as state} _id f & args]
+  (assoc state
+    :notes (->> notes
+                (map (fn [ex]
+                       (if (= _id (:_id ex))
+                         (apply f ex args)
+                         ex)))
+                vec)))
 
 (defn update-example-loop [!state ex-chan]
   (go-loop []
@@ -230,19 +283,17 @@
       (recur))))
 
 (defn init-examples [$root !state]
-  (let [ex-ch (chan)
-        update-example-ch (chan)
-        new-example-ch (chan)
-        delete-ch (chan)
-        bus (ops/kit
+  #_(swap! !state assoc :add-example
+      {:editing? true
+       :text "hello world"})
+  (let [bus (ops/kit
               !state
               {}
               {:clojuredocs.examples/delete
                (fn [state _id]
                  (let [ch (chan)]
                    (go
-                     (put! ch #(update-example % _id
-                                 merge
+                     (put! ch #(merge-with-ex % _id
                                  {:delete-state :loading}))
                      (let [{:keys [success data]} (<! (req-delete-example _id))]
                        (put! ch (fn [state]
@@ -251,13 +302,13 @@
                                       state
                                       [:examples]
                                       (fn [es] (vec (remove #(= _id (:_id %)) es))))
-                                    (update-example
+                                    (merge-with-ex
                                       state
                                       _id
-                                      merge
                                       {:delete-state :error})))))
                      (close! ch))
-                   ch))})]
+                   ch))
+               :clojuredocs.examples/save handle-save-example})]
 
     #_(new-example-loop !state new-example-ch)
     #_(update-example-loop !state update-example-ch)
@@ -381,71 +432,121 @@
       [notes/$notes !state bus]
       (sel1 $root :.notes-widget))))
 
-(defn init-see-alsos [$root !state]
-  (let [new-ch (chan)
-        delete-ch (chan)
-        ac-ch (chan)
-        throttled-ac-ch (throttle ac-ch 200)
-        bus (ops/kit !state {} {})]     ; ugly
-    #_(go-loop []
-        (when-let [ns-name-str (<! new-ch)]
-          (if (empty? ns-name-str)
-            (swap! !state assoc-in [:add-see-also :error]
-              "Whoops, looks like the var name is blank.")
-            (do
-              (swap! !state assoc-in [:add-see-also :loading?] true)
-              (let [{:keys [success res]}
-                    (<! (ajax-chan
-                          {:method :post
-                           :path "/api/see-alsos"
-                           :data-type :edn
-                           :data {:fq-to-var-name ns-name-str
-                                  :from-var (select-keys (:var @!state) [:ns :name :library-url])}}))]
-                (if success
-                  (swap! !state (fn [m]
-                                  (-> m
-                                      (update-in [:see-alsos] #(vec (concat % [(:body res)])))
-                                      (assoc :add-see-also {:ac-text ""}))))
-                  (swap! !state assoc-in [:add-see-also :error] (-> res :body :message))))
-              (swap! !state assoc-in [:add-see-also :loading?] false)))
-          (recur)))
-    (go-loop []
-      (when-let [ac-text (<! throttled-ac-ch)]
-        (swap! !state assoc-in [:add-see-also :completing?] true)
-        (let [{:keys [success res]}
-              (<! (ajax-chan
-                    {:method :get
-                     :path (str "/ac-vars?query=" (util/url-encode ac-text))
-                     :data-type :edn}))]
-          (if success
-            (swap! !state assoc-in [:add-see-also :ac-results] (vec (:body res)))
-            (swap! !state assoc-in [:add-see-also :error] (-> res :body :error)))
-          (swap! !state assoc-in [:add-see-also :completing?] false)
-          (recur))))
+(defn format-ac-results [current-var see-alsos ac-results]
+  (let [existing (->> see-alsos
+                      (map :to-var)
+                      set)]
+    (->> ac-results
+         (map (fn [ac-result]
+                (cond
+                  (= (select-keys current-var [:ns :name :library-url])
+                     (select-keys ac-result [:ns :name :library-url]))
+                  (merge ac-result
+                         {:disabled? true
+                          :disabled-text "This Var"})
 
-    #_(go-loop []
-        (when-let [to-del (<! delete-ch)]
-          (swap! !state update-sa
-            (:_id to-del)
-            (fn [sa]
-              (assoc sa :delete-state :loading)))
-          (let [{:keys [success res]}
-                (<! (ajax-chan
-                      {:method :delete
-                       :path (str "/api/see-alsos/" (:_id to-del))
-                       :data-type :edn}))]
+                  (get existing (select-keys ac-result [:ns :name :library-url]))
+                  (merge ac-result
+                         {:disabled? true
+                          :disabled-text "Already Exists"})
+
+                  :else ac-result))))))
+
+(defn handle-sa-ac-text [state ac-text]
+  (let [ch (chan)]
+    (put! ch #(assoc-in % [:add-see-also :completing?] true))
+    (go
+      (let [{:keys [success res]}
+            (<! (ajax-chan
+                  {:method :get
+                   :path (str "/ac-vars?query=" (util/url-encode ac-text))
+                   :data-type :edn}))]
+        (put! ch
+          (fn [state]
+            (-> (if success
+                  (-> state
+                      (assoc-in
+                        [:add-see-also :ac-results]
+                        (format-ac-results
+                          (:var state)
+                          (:see-alsos state)
+                          (vec (:body res))))
+                      (assoc-in
+                        [:add-see-also :error]
+                        nil))
+                  (assoc-in state
+                    [:add-see-also :error]
+                    (-> res :body :error)))
+                (assoc-in [:add-see-also :completing?] false)))))
+      (close! ch))
+    ch))
+
+(defn handle-sa-create [state var]
+  (let [ch (chan)]
+    (put! ch #(assoc-in % [:add-see-also :loading?] true))
+    (go
+      (let [{:keys [success res]}
+            (<! (ajax-chan
+                  {:method :post
+                   :path "/api/see-alsos"
+                   :data-type :edn
+                   :data {:fq-to-var-name (str (:ns var)
+                                               "/"
+                                               (:name var))
+                          :from-var (select-keys (:var state) [:ns :name :library-url])}}))]
+        (put! ch
+          (fn [state]
             (if success
-              (swap! !state update-in [:see-alsos]
+              (-> state
+                  (update-in [:see-alsos] #(vec (concat % [(:body res)])))
+                  (assoc :add-see-also {:ac-text ""
+                                        :loading? false}))
+              (update-in state
+                [:add-see-also]
+                merge
+                {:error (-> res :body :message)
+                 :loading? false})))))
+      (close! ch))
+    ch)
+
+  )
+
+(defn handle-sa-delete [state to-del]
+  (let [ch (chan)]
+    (put! ch #(update-sa
+                state
+                (:_id to-del)
+                (fn [sa]
+                  (assoc sa :delete-state :loading))))
+    (go
+      (let [{:keys [success res]}
+            (<! (ajax-chan
+                  {:method :delete
+                   :path (str "/api/see-alsos/" (:_id to-del))
+                   :data-type :edn}))]
+        (put! ch
+          (fn [state]
+            (if success
+              (update-in state
+                [:see-alsos]
                 (fn [sas]
                   (->> sas
                        (remove #(= (:_id %) (:_id to-del)))
                        vec)))
-              (swap! !state update-sa
+              (update-sa
+                state
                 (:_id to-del)
                 (fn [sa]
-                  (assoc sa :delete-state :error)))))
-          (recur)))
+                  (assoc sa :delete-state :error)))))))
+      (close! ch))
+    ch))
 
+(defn init-see-alsos [$root !state]
+  (let [bus (ops/kit !state
+              {}
+              {:clojuredocs.see-alsos/ac-text handle-sa-ac-text
+               :clojuredocs.see-alsos/create handle-sa-create
+               :clojuredocs.see-alsos/delete handle-sa-delete})]
     (rea/render-component
       [see-alsos/$see-alsos !state bus]
       (sel1 $root :.see-alsos-widget))))

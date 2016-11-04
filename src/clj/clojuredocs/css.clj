@@ -497,7 +497,9 @@
              :border-radius 0}]]]])
 
 (def app
-  [[:html :body {:-webkit-font-smothing 'antialiased
+  [nc/flex-defaults
+
+   [:html :body {:-webkit-font-smothing 'antialiased
                  :height "100%"
                  :font-family "\"Helvetica Neue\", Helvetica, sans-serif"
                  :color "#444"}]
@@ -605,7 +607,7 @@
                    :margin 0}
      [:li {:margin-bottom 0
            :font-size "14px"}]]
-    [:.quick-search-widget
+    [:.nav-search-widget
      [:form
       {:margin-right "10px"}]]
     [:.gh-starred-count
@@ -651,7 +653,7 @@
       [:.btn.mobile-menu
        {:display 'block
         :margin-right "-11px"}]
-      [:.quick-search-widget {:display 'none}]
+      [:.nav-search-widget {:display 'none}]
       [:.navbar-nav {:display 'none}]]
      [:.mobile-push-wrapper
       (merge
@@ -735,7 +737,9 @@
      [:.name {:color "#428bca"}
       [:&:hover {:color "#2a6496"}]]]
     [:p {:color "#555"
-         :margin-bottom 0}]
+         :margin-bottom 0
+         :font-size "15px"}]
+    [:.var-title {:margin-bottom "3px"}]
     [:.meta {:font-size "10px"
              :color "#ccc"
              :text-transform 'uppercase}

@@ -178,8 +178,8 @@
 (defn $example-editor [{:keys [submit-button-text]}
                        !state
                        bus]
-  (let [{:keys [editing? loading? error var body text] :as ex} @!state
-        text (or body text)]
+  (let [{:keys [editing? loading? error var body text _id] :as ex} @!state
+        text (or text body)]
     [:div
      [$tabbed-clojure-editor !state bus]
      $example-instructions
@@ -200,7 +200,8 @@
        {:disabled (when loading? "disabled")
         :on-click (fn [e]
                     (.preventDefault e)
-                    (ops/send bus ::save {:var var :text text})
+                    (ops/send bus ::save {:text text
+                                          :_id _id})
                     nil)}
        (or submit-button-text "Submit")]
       [:img.loading.pull-right
