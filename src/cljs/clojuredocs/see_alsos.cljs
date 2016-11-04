@@ -1,6 +1,7 @@
 (ns clojuredocs.see-alsos
   (:require [dommy.core :as dommy :refer-macros [sel1]]
             [nsfw.ops :as ops]
+            [nsfw.page :as page]
             [reagent.core :as rea]
             [cljs.core.async :as async
              :refer [<! >! chan close! sliding-buffer put! alts! timeout pipe mult tap]]
@@ -20,7 +21,7 @@
                 delete-state
                 _id] :as sa} @!sa]
     [:div.col-sm-6.see-also
-     [:div
+     [:div.var-title
       (util/$var-link (:ns to-var) (:name to-var)
         [:span.ns (:ns to-var) "/"]
         [:span.name (:name to-var)])]
@@ -49,7 +50,7 @@
                      [:a {:href "#"
                           :on-click (fn [e]
                                       (.preventDefault e)
-                                      (ops/send bus ::delete-see-also sa)
+                                      (ops/send bus ::delete sa)
                                       nil)}
                       "confirm delete"]]
 
@@ -62,50 +63,59 @@
                              nil)}
              "delete"]])])]]))
 
-(defn $add [!app bus]
-  (let [{:keys [expanded? loading? completing? error ac-results ac-text] :as app} @!app]
-    [:div.add-see-also
-     [:div.toggle-controls
-      (if true
-        [:a.toggle-link {:href "#"
-                         :on-click (fn [e]
-                                     (.preventDefault e)
-                                     (swap! !app update-in [:expanded?] not)
-                                     nil)}
-         (if-not expanded?
-           "Add See Also"
-           "Collapse")]
-        [:span.muted "log in to add a see also"])]
-     [:div.add-see-also-content {:class (when-not expanded? "hidden")}
-      [:form {:on-submit (fn [e]
-                           (.preventDefault e)
-                           (ops/send bus ::create (or ac-text ""))
-                           nil)
-              :autoComplete "off"}
-       [:div.input-group
-        [:input.form-control
-         {:class (when (or loading? completing?) "loading")
-          :name "see-also-name"
-          :ref "input"
-          :placeholder "Var Name"
-          :disabled (when loading? "disabled")
-          :value ac-text
-          :on-change (fn [e]
-                       (let [text (.. e -target -value)]
-                         (ops/send bus ::ac-text (or text ""))
-                         (swap! !app assoc :ac-text text)))}]
-        [:span.input-group-btn
-         [:button.btn.btn-success
-          {:disabled (when loading? "disabled")}
-          "Add See-Also"]]]
-       (when error
-         [:div.error-message.text-danger
-          [:i.fa.fa-exclamation-circle]
-          error])]
-      [:div.ac-results
-       [:ul
-        (for [{:keys [ns name]} ac-results]
-          [:li ns "/" name])]]]]))
+(defn $add-sa [{:keys [throttle debounce]} !app bus]
+  (let [handle-ac-text (page/throttle-debounce
+                         (fn [text]
+                           (ops/send bus ::ac-text (or text "")))
+                         {:throttle throttle
+                          :debounce debounce})]
+    (fn []
+      (let [{:keys [expanded? loading? completing?
+                    error ac-results ac-text] :as app} @!app]
+        [:div.add-see-also
+         [:div.toggle-controls
+          [:a.toggle-link {:href "#"
+                           :on-click (fn [e]
+                                       (.preventDefault e)
+                                       (swap! !app update-in [:expanded?] not)
+                                       nil)}
+           (if-not expanded?
+             "Add See Also"
+             "Collapse")]]
+         [:div.add-see-also-content {:class (when-not expanded? "hidden")}
+          [:form {:autoComplete "off"}
+           [:input.form-control
+            {:class (when (or loading? completing?) "loading")
+             :name "see-also-name"
+             :ref "input"
+             :placeholder "Var Name"
+             :disabled (when loading? "disabled")
+             :value ac-text
+             :on-change (fn [e]
+                          (let [text (.. e -target -value)]
+                            (handle-ac-text text)
+                            (swap! !app assoc :ac-text text)))}]
+           (when error
+             [:div.error-message.text-danger
+              [:i.fa.fa-exclamation-circle]
+              error])]
+          [:div.ac-results
+           [:ul
+            (for [{:keys [ns name disabled? disabled-text] :as res} ac-results]
+              ^{:key (str ns name)}
+              [:li.flex-apart
+               [:div ns "/" name]
+               (if disabled?
+                 [:button.btn.btn-default.btn-xs
+                  {:disabled "disabled"}
+                  (or disabled-text "Can't Add")]
+                 [:button.btn.btn-success.btn-xs
+                  {:disabled (when loading? "disabled")
+                   :on-click (fn [e]
+                               (.preventDefault e)
+                               (ops/send bus ::create res)
+                               nil)}
+                  "Add"])])]]]]))))
 
 (defn $see-alsos [!app bus]
   (let [{:keys [see-alsos var user add-see-also] :as app} @!app]
@@ -123,6 +133,10 @@
                                      {:key i}
                                      cs]))))
      (if user
-       [$add (rea/cursor !app [:add-see-also]) bus]
+       [$add-sa
+        {:debounce 100
+         :throttle 200}
+        (rea/cursor !app [:add-see-also])
+        bus]
        [:div.login-required-message
         "Log in to add a see-also"])]))

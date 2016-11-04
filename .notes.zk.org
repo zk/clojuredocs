@@ -560,3 +560,157 @@ have no idea. Tests maybe? nsfw.reup/setup?
 * <2016-10-25 Tue 16:19>
 
 + Check search results page
+
+
+* <2016-10-28 Fri 14:32>
+
+Something's been bugging me about the ops/kit stuff. It's really nice
+to be able to not think about the state transitions, to handle sync
+and async updates well, to handle context well. But something bugs me
+about the way you do updates:
+
+#+BEGIN_SRC clojure
+
+  (defn handle-update-example [state {:keys [text _id]}]
+    (let [ch (chan)]
+      (go
+        (put! ch (-> state
+                     (update-example _id
+                       merge
+                       {:loading? true})))
+        (let [res (<! (req-update-example _id text))]
+          (put! ch
+            (fn [state]
+              (if (:success res)
+                (update-example
+                  state
+                  _id
+                  merge
+                  (:data res)
+                  {:loading? false :editing? false})
+
+                (update-example
+                  state
+                  _id
+                  merge
+                  {:error (:message res)
+                   :loading? false})))))
+        (close! ch))
+      ch))
+
+#+END_SRC
+
+Maybe I don't know enough about core.async, but the puts seem
+redundant. Shouldn't whatever the last statement evaluates to be put
+on the channel the go block returns? Do go blocks return channels, or
+did I make that up?
+
+The larger issue is that my lack of understanding means I'm possibly
+missing or misusing some of the functionality that solves some of the
+problems I've been having composing async code.
+
+Yup, go blocks return a channel with the last value calculated from
+the body:
+
+`Returns a channel which will receive the result of the body when
+completed`
+
+Anyways, what don't I like about the block above?
+
++ Have to remember to close the channel, if you forget it stays open
+  forever.
++ Feels ugly. Why? The meat of the post-backend-request code is the
+  updating of state, but there's a lot of ceremonoy there: Put value
+  on `ch`, wrap in function, provide where to update the data.
++ Mixing place-oriented and other stuff.
+
+For the entire scope of the function we're only updating the target
+example.
+
+
+So I could create a function that closes over some of the repeated
+info:
+
+#+BEGIN_SRC clojure
+
+  (defn handle-update-example [state {:keys [text _id]}]
+    (let [ch (chan)
+          update-cur-example (fn [state & maps]
+                               (update-example
+                                 state
+                                 _id
+                                 #(apply merge % maps)))]
+      (put! ch (uef state {:loading? true}))
+      (go
+        (let [res (<! (req-update-example _id text))]
+          (put! ch
+            (fn [state]
+              (if (:success res)
+                (update-cur-example state
+                  (:data res)
+                  {:loading? false :editing? false})
+
+                (update-cur-example state
+                  {:error (:message res)
+                   :loading? false})))))
+        (close! ch))
+      ch))
+
+#+END_SRC
+
+This doesn't really feel like an improvement. Just moving the problem
+around. You do save a few lines, but is it more readable?
+
+Next, have a `set-in-example` function that mirrors the clojure.core
+assoc / update pairs:
+
+
+#+BEGIN_SRC clojure
+
+(defn handle-update-example [state {:keys [text _id]}]
+  (let [ch (chan)]
+    (put! ch (set-in-example state _id {:loading? true}))
+    (go
+      (let [res (<! (req-update-example _id text))]
+        (put! ch
+          (fn [state]
+            (if (:success res)
+              (set-in-example state _id
+                (:data res)
+                {:loading? false :editing? false})
+
+              (set-in-example state
+                {:error (:message res)
+                 :loading? false})))))
+      (close! ch))
+    ch))
+
+#+END_SRC
+
+This does feel more readable, and the `set-in-example` function is
+probably useful in multiple contexts. `merge-with-example` is probably
+a better name. The tough thing with these functions is that they're
+hard-coding the location of examples, but that shouldn't change.
+
+Meh.
+
+
+* <2016-10-28 Fri 16:58>
+
+2nd problem. I've got a single component -- example editor --that's
+used in two different contexts: when the user is creating examples and
+when they're editing examples. The final action is to either create or
+update, but the component only has one signal (::save). I'm handling
+the different cases using top-level logic (create if no _id, update if
+_id), but this information is also available to the component. So
+these two cases are still hard-coded. Kind of?
+
+Anyway, onto see alsos. I remember the UI I did last time was
+wonky, time to fix that.
+
+Ok, so throttle / debounce on the component side or on the logic side?
+First hunch was on the logic side, but maybe this is an option that
+should be on the component.
+
+On the SA UI, why is there an add button? The add buttons should be on
+the AC results (can't add a SA to a var that doesn't exist). Yay!

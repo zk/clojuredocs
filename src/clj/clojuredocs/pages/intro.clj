@@ -180,7 +180,7 @@
        " takes a bit to get your head around it. Stick with it, and you won't be disappointed."]
       [:p "But don't take our word for it, here's what XKCD has to say:"]
       [:p [:img.xkcd {:src "/img/lisp_cycles.png"}]]
-      [:p "Seems like more than a few, these days. Happy coding!"]]
+      [:p "Seems like more than a few these days. Happy coding!"]]
      [:div.col-md-6
       [:div.example-code
        (-> "src/examples/clj/first.clj"
