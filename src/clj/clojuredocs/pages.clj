@@ -354,7 +354,6 @@
   (GET "/dev/styleguide/examples" [] dev/examples-styleguide-handler)
   (GET "/dev/styleguide/inspector" [] dev/styleguide-inspector-handler)
   (GET "/dev/search-perf" [] dev/perf-handler)
-  (GET "/dev/canary" [] dev/canary-tests-handler)
   (GET "/dev/api" [] dev/api-docs-handler)
 
   (GET "/gh-callback*" {{path :*} :route-params} (gh-auth/callback-handler path))

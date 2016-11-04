@@ -176,36 +176,6 @@
    (merge @!state {:placeholder "Looking for? (ctrl-s)"})
    bus])
 
-#_(defn $ac-results [{:keys [highlighted-index ac-results results-empty?]
-                      :or {highlighted-index 0}
-                      :as app}
-                     owner]
-    (reify
-      om/IDidUpdate
-      (did-update [_ prev-props prev-state]
-        (when (> (count ac-results) 0)
-          (let [$el (om/get-node owner)]
-            (when (and (not= (:highlighted-index prev-props)
-                             (:highlighted-index app))
-                       $el)
-              (anim/scroll-into-view $el {:pad 130})))))
-      om/IRenderState
-      (render-state [this {:keys [action-ch]}]
-        (sab/html
-          [:ul.ac-results
-           (if results-empty?
-             [:li.null-state "Nothing Found"]
-             (map-indexed
-               (fn [i {:keys [href type] :as res}]
-                 [:li {:on-click #(do
-                                    (put! action-ch res)
-                                    false)
-                       :class (when (= i highlighted-index)
-                                "highlighted")
-                       :ref i}
-                  ($ac-entry res)])
-               ac-results))]))))
-
 (defn $ac-results [{:keys [highlighted-index ac-results results-empty?]
                     :or {highlighted-index 0}
                     :as app}
@@ -247,29 +217,6 @@
 (defn $ac-results-widget [!state bus]
   [$ac-results @!state bus])
 
-#_(defn $quick-lookup-widget
-    [{:keys [highlighted-index ac-results ac-text search-loading? results-empty?]
-      :or {highlighted-index 0}
-      :as app}
-     owner]
-    (reify
-      om/IRenderState
-      (render-state [this {:keys [text-chan
-                                  action-ch]}]
-        (sab/html
-          [:div.quick-lookup-wrapper
-           (om/build $quick-search-bar app {:init-state {:text-chan text-chan
-                                                         :action-ch action-ch
-                                                         :placeholder "Looking for?"}})
-           [:div.not-finding {:class "not-finding"}
-            "Can't find what you're looking for? "
-            [:a.search-feedback
-             {:href (str "/search-feedback"
-                         (when ac-text (str "?query=" (util/url-encode ac-text))))}
-             "Help make ClojureDocs better"]
-            "."]
-           (om/build $ac-results app {:init-state {:action-ch action-ch}})]))))
-
 (defn $quick-lookup-widget
   [!state bus]
   (let [{:keys [highlighted-index ac-results ac-text search-loading? results-empty?]
@@ -280,164 +227,7 @@
      [$quick-search-bar
       (merge app {:placeholder "Looking for?"})
       bus]
-     [:div.not-finding {:class "not-finding"}
-      "Can't find what you're looking for? "
-      [:a.search-feedback
-       {:href (str "/search-feedback"
-                   (when ac-text (str "?query=" (util/url-encode ac-text))))}
-       "Help make ClojureDocs better"]
-      "."]
      [$ac-results app bus]]))
-
-#_(defn submit-feedback [owner query clojure-level text]
-    (om/set-state! owner :loading? true)
-    (om/set-state! owner :error-message nil)
-    (ajax
-      {:method :post
-       :path (str "/search-feedback")
-       :data {:query query
-              :clojure-level clojure-level
-              :text text}
-       :data-type :edn
-       :success (fn [_]
-                  (util/navigate-to "/search-feedback/success"))
-       :error (fn [& args]
-                (om/set-state! owner
-                  :error-message
-                  "There was a problem sending your feedback, try again.")
-                (om/set-state! owner :loading? false))})
-    false)
-
-#_(defn $search-feedback [app owner]
-    (reify
-      om/IWillMount
-      (will-mount [_]
-        (let [query (om/get-state owner :query)]
-          (om/set-state! owner
-            :text (when-not (empty? query)
-                    (str
-                      "Hey ClojureDocs, I searched for \""
-                      query
-                      "\", but couldn't find what I was looking for. Here's a description of what I would have liked to find:")))))
-      om/IRenderState
-      (render-state [_ {:keys [text loading? clojure-level query error-message]}]
-        (sab/html
-          [:form {:on-submit #(submit-feedback owner query clojure-level text)}
-           [:div.form-group
-            [:label.clojure-level
-             "Level of Clojuring"]
-            [:div.radio
-             [:label.radio
-              [:input {:type "radio"
-                       :name "clojure-level"
-                       :value "beginner"
-                       :on-click #(om/set-state! owner :clojure-level "beginner")
-                       :disabled (if loading? "disabled")}]
-              "I haven't written any Clojure"]
-             [:label.radio
-              [:input {:type "radio"
-                       :name "clojure-level"
-                       :value "intermediate"
-                       :on-click #(om/set-state! owner :clojure-level "intermediate")
-                       :disabled (if loading? "disabled")}]
-              "I've done a few things in Clojure"]
-             [:label.radio
-              [:input.radio
-               {:type "radio"
-                :name "clojure-level"
-                :value "advanced"
-                :on-click #(om/set-state! owner :clojure-level "advanced")
-                :disabled (if loading? "disabled")}]
-              "I'm comfortable contributing to Clojure projects"]]]
-           [:div.form-group
-            [:label {:for "feedback"} "Feedback"]
-            [:textarea {:class "form-control"
-                        :rows 10
-                        :name "feedback"
-                        :value text
-                        :on-input #(om/set-state! owner :text (.. % -target -value))
-                        :disabled (if loading? "disabled")}]]
-           [:div.form-group
-            [:span {:class (str "error-message" (when-not error-message " hidden"))}
-             [:i.fa.fa-exclamation-circle]
-             error-message]
-            [:button.btn.btn-default.pull-right
-             {:disabled (if loading? "disabled")}
-             "Send Feedback"]
-            [:img {:class (str "pull-right loading" (when-not loading? " hidden"))
-                   :src "/img/loading.gif"}]]]))))
-
-#_(fn []
-    (om/set-state! owner
-      :text (when-not (empty? query)
-              (str
-                "Hey ClojureDocs, I searched for \""
-                query
-                "\", but couldn't find what I was looking for. Here's a description of what I would have liked to find:"))))
-
-(defn $search-feedback [{:keys [query clojure-level text
-                                loading? error-message] :as app} bus]
-  (let [!form (rea/atom {:text (when-not (empty? query)
-                                 (str
-                                   "Hey ClojureDocs, I searched for \""
-                                   query
-                                   "\", but couldn't find what I was looking for. Here's a description of what I would have liked to find:"))
-                         :clojure-level clojure-level
-                         :query query})]
-    (fn []
-      [:form {:on-submit (fn [e]
-                           (ops/send bus
-                             ::submit-feedback
-                             {:query query
-                              :clojure-level clojure-level
-                              :text text}))}
-       [:div.form-group
-        [:label.clojure-level
-         "Level of Clojuring"]
-        [:div.radio
-         [:label.radio
-          [:input {:type "radio"
-                   :name "clojure-level"
-                   :value "beginner"
-                   :on-click (fn [_]
-                               (swap! !form assoc :clojure-level "beginner"))
-                   :disabled (if loading? "disabled")}]
-          "I haven't written any Clojure"]
-         [:label.radio
-          [:input {:type "radio"
-                   :name "clojure-level"
-                   :value "intermediate"
-                   :on-click (fn [_]
-                               (swap! !form assoc :clojure-level "intermediate"))
-                   :disabled (if loading? "disabled")}]
-          "I've done a few things in Clojure"]
-         [:label.radio
-          [:input.radio
-           {:type "radio"
-            :name "clojure-level"
-            :value "advanced"
-            :on-click (fn [_]
-                        (swap! !form assoc :clojure-level "advanced"))
-            :disabled (if loading? "disabled")}]
-          "I'm comfortable contributing to Clojure projects"]]]
-       [:div.form-group
-        [:label {:for "feedback"} "Feedback"]
-        [:textarea {:class "form-control"
-                    :rows 10
-                    :name "feedback"
-                    :value text
-                    :on-input (fn [e]
-                                (swap! !form assoc :text (.. e -target -value)))
-                    :disabled (if loading? "disabled")}]]
-       [:div.form-group
-        [:span {:class (str "error-message" (when-not error-message " hidden"))}
-         [:i.fa.fa-exclamation-circle]
-         error-message]
-        [:button.btn.btn-default.pull-right
-         {:disabled (if loading? "disabled")}
-         "Send Feedback"]
-        [:img {:class (str "pull-right loading" (when-not loading? " hidden"))
-               :src "/img/loading.gif"}]]])))
 
 (defn ajax-chan [opts]
   (let [c (chan)]
@@ -564,8 +354,6 @@
           (util/navigate-to (:href res))
           (recur)))
 
-    #_(wire-search text-chan !state)
-
     #_(dommy/listen! js/window :hashchange
         (fn [_]
           (let [loc-hash (util/location-hash)]
@@ -593,8 +381,4 @@
         [$ac-results-widget !state bus]
         $el))
 
-    (doseq [$el (sel :.search-feedback-widget)]
-      (rea/render-component
-        [$search-feedback @!state bus]
-        $el))
     (fn [])))
