@@ -40,12 +40,6 @@
      [:div.row
       [:div.col-sm-2
        [:div.sidenav
-        #_[:section
-           [:h5 "Dev"]
-           [:ul
-            [:li [:a {:href "/dev/api"} "API Docs"]]
-            [:li [:a {:href "/dev/search-perf"} "Search Perf"]]
-            [:li [:a {:href "/dev/canary"} "Canary Tests"]]]]
         [:section
          [:h5 "Styleguide"]
          [:ul
@@ -283,15 +277,6 @@
      :content
      [:div
       [:h1 "Search Performance"]]}))
-
-(defn canary-tests-handler [{:keys [user uri]}]
-  ($tpl
-    {:user user
-     :page-uri uri
-     :content
-     [:div
-      [:h1 "Canary Tests"]
-      [:div.canary-tests-container]]}))
 
 (defn format-http-method [k]
   (-> k name str/upper-case))
