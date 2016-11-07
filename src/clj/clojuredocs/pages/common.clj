@@ -227,17 +227,9 @@
       [:script {:src "/js/fastclick.min.js"}])
     (when (env/bool :cljs-dev)
       [:script {:src "/js/morpheus.min.js"}])
-    #_(when (env/bool :cljs-dev)
-        [:script {:src "/js/react.js"}])
     (when (env/bool :cljs-dev)
       [:script {:src "/js/marked.min.js"}])
-    #_(when (env/bool :cljs-dev)
-        [:script {:src "/cljs/goog/base.js"}])
     clojuredocs-script
-
-
-    (when (env/bool :cljs-dev)
-      [:script "goog.require(\"clojuredocs.main\");"])
     ($ga-script-tag config/ga-tracking-id)
     ($new-relic-script-tag)
     ;; mobile safari home screen mode

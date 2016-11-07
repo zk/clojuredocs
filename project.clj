@@ -8,7 +8,7 @@
   :test-paths ["test/clj"]
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.clojure/clojurescript "1.9.93"]
-                 [nsfw "0.11.44"]
+                 [nsfw "0.11.46"]
                  [ring "1.2.1"]
                  [compojure "1.1.6"]
                  [aleph "0.4.1"]
