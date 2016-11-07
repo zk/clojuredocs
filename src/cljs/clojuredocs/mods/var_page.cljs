@@ -26,7 +26,7 @@
                   (put! c {:success false :res res}))}))
     c))
 
-(defn $nav [!state owner]
+(defn $nav [!state]
   (let [{:keys [examples see-alsos notes]} @!state]
     [:div
      [:h5 "Nav"]
@@ -449,8 +449,14 @@
       [see-alsos/$see-alsos !state bus]
       (sel1 $root :.see-alsos-widget))))
 
+(defn init-nav [$root !state]
+  (rea/render-component
+    [$nav !state]
+    (sel1 $root :.var-page-nav)))
+
 (defn init [$root]
   (let [!state (rea/atom (init-state))]
+    (init-nav $root !state)
     (init-examples $root !state)
     (init-see-alsos $root !state)
     (init-notes $root !state)))
