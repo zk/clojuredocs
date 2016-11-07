@@ -134,9 +134,7 @@
           :placeholder "Looking for?"
           :autoFocus "autofocus"
           :autoComplete "off"}]
-        [:ul.ac-results]
-        [:div.not-finding
-         "Can't find what you're looking for? " [:a {:href "/search-feedback"} "Help make ClojureDocs better"] "."]]]]]]
+        [:ul.ac-results]]]]]]
    [:div.row
     [:div.col-md-12
      [:section
