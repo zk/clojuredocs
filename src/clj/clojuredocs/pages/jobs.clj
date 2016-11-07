@@ -631,7 +631,8 @@ We offer competitive compensation and great benefits; stock options; learning bu
 (defn list-handler [{:keys [params uri user]}]
   (common/$main
     {:body-class "jobs-page"
-     :title (str "Jobs | ClojureDocs - Community-Powered Clojure Documentation and Examples")
+     :title (str "Clojure Jobs | ClojureDocs - Community-Powered Clojure Documentation and Examples")
+     :meta {:description "Find open Clojure jobs from companies that fit you."}
      :user user
      :page-uri uri
      :content
@@ -668,7 +669,7 @@ We offer competitive compensation and great benefits; stock options; learning bu
         (track-job-view job)
         (common/$main
           {:body-class "jobs-page"
-           :title (str "Jobs | ClojureDocs - Community-Powered Clojure Documentation and Examples")
+           :title (str "Clojure Jobs | ClojureDocs - Community-Powered Clojure Documentation and Examples")
            :user user
            :page-uri uri
            :meta {:robots "noindex"}
@@ -705,7 +706,7 @@ We offer competitive compensation and great benefits; stock options; learning bu
 (defn post-handler [{:keys [params uri user]}]
   (common/$main
     {:body-class "post-job-page"
-     :title (str "Post a Jobs | ClojureDocs - Community-Powered Clojure Documentation and Examples")
+     :title (str "Post a Job | ClojureDocs - Community-Powered Clojure Documentation and Examples")
      :user user
      :page-uri uri
      :content
@@ -714,7 +715,7 @@ We offer competitive compensation and great benefits; stock options; learning bu
 (defn about-handler [{:keys [params uri user]}]
   (common/$main
     {:body-class "jobs-page"
-     :title (str "About Clojure Jobs | ClojureDocs - Community-Powered Clojure Documentation and Examples")
+     :title (str "About ClojureDocs Jobs | ClojureDocs - Community-Powered Clojure Documentation and Examples")
      :user user
      :page-uri uri
      :content
