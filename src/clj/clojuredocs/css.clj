@@ -296,18 +296,6 @@
      {:color "#555"
       :font-size "12px"}]
     [:textarea {:height "200px"}]]
-   [:.search-feedback-page
-    [:.radio {:margin-top 0}
-     [:label {:font-size "14px"
-              :line-height "20px"
-              :margin-bottom "5px"}]]
-    [:.loading {:margin-top "9px"
-                :margin-right "10px"}]
-    [:.error-message
-     {:line-height "28px"
-      :display 'inline-block
-      :color "#555"}
-     [:i {:margin-right "5px"}]]]
    [:.examples-styleguide-content
     [:.syntaxify {:margin-bottom "20px"
                   :background-color code-bg}]
@@ -636,6 +624,8 @@
      :-webkit-overflow-scrolling 'touch
      :height "100%"}]
    [:.desktop-side-nav
+    {:overflow-y 'scroll
+     :max-height "100%"}
     [:.badge
      {:float 'right}]]
 
