@@ -15,16 +15,6 @@
 
 (enable-console-print!)
 
-(defn throttle [in ms]
-  (let [c (chan)
-        timer (atom nil)]
-    (go-loop []
-      (when-let [new-text (<! in)]
-        (js/clearTimeout @timer)
-        (reset! timer (js/setTimeout #(put! c new-text) ms))
-        (recur)))
-    c))
-
 (defn ajax-chan [opts]
   (let [c (chan)]
     (ajax
@@ -35,35 +25,6 @@
          :error (fn [res]
                   (put! c {:success false :res res}))}))
     c))
-
-#_(defn $nav [{:keys [examples see-alsos notes]} owner]
-    (reify
-      om/IRender
-      (render [_]
-        (html
-          [:div
-           [:h5 "Nav"]
-           [:ul
-            [:li [:a {:href "#"
-                      :data-animate-scroll "true"
-                      :data-animate-buffer "20"}
-                  "Top"]]
-            [:li [:a {:href "#examples"
-                      :data-animate-scroll "true"
-                      :data-animate-buffer "20"}
-                  "Examples "
-                  [:span.badge (count examples)]]]
-            [:li [:a {:href "#see-also"
-                      :data-animate-scroll "true"
-                      :data-animate-buffer "10"}
-                  "See Also "
-                  [:span.badge (count see-alsos)]]]
-            (when (> (count notes) 0)
-              [:li [:a {:href "#notes"
-                        :data-animate-scroll "true"
-                        :data-animate-buffer "10"}
-                    "Notes"
-                    [:span.badge (count notes)]]])]]))))
 
 (defn $nav [!state owner]
   (let [{:keys [examples see-alsos notes]} @!state]
@@ -116,32 +77,8 @@
      :add-example {}
      :add-see-also {}
      :add-note {}
-     :user {:login "zk" :account-source "github"}}
+     :user nil}
     (util/page-data!)))
-
-(defn new-example-loop [!state ex-chan]
-  (go-loop []
-    (when-let [ex (<! ex-chan)]
-      (let [ex (-> ex
-                   (dissoc :_id)
-                   (assoc :var (select-keys (:var @!state) [:ns :name :library-url])))]
-        (swap! !state update-in [:add-example]
-          (fn [m]
-            (-> m
-                (dissoc :error)
-                (assoc :loading? true))))
-        (if-let [error (when (empty? (:body ex)) "Please provide an example body")]
-          (swap! !state update-in [:add-example] assoc :error error)
-          (let [{:keys [success error data]} (<! (req-create-example ex))]
-            (if success
-              (swap! !state
-                (fn [m]
-                  (-> m
-                      (assoc :add-example {:body ""})
-                      (assoc :examples (vec (concat (:examples m) [data]))))))
-              (swap! !state update-in [:add-example] assoc :error error)))))
-      (swap! !state update-in [:add-example] dissoc :loading?)
-      (recur))))
 
 (defn update-example [{:keys [examples] :as state} _id f & args]
   (assoc state
@@ -241,23 +178,6 @@
                          ex)))
                 vec)))
 
-(defn update-example-loop [!state ex-chan]
-  (go-loop []
-    (when-let [{:keys [body _id]} (<! ex-chan)]
-      (swap! !state update-example _id
-        #(merge % {:loading? true}))
-      (let [res (<! (req-update-example _id body))]
-        (if (:success res)
-          (swap! !state update-example
-            _id #(merge
-                   %
-                   (:data res)
-                   {:loading? false :editing? false}))
-          (swap! !state update-example
-            _id #(merge % {:error (:message res)
-                           :loading? false}))))
-      (recur))))
-
 (defn req-delete-example [_id]
   (let [c (chan)]
     (ajax
@@ -269,23 +189,7 @@
                 (put! c {:success false :data body}))})
     c))
 
-(defn delete-example-loop [!state delete-ch]
-  (go-loop []
-    (when-let [_id (<! delete-ch)]
-      (swap! !state update-example
-        _id #(merge % {:delete-state :loading}))
-      (let [{:keys [success data]} (<! (req-delete-example _id))]
-        (if success
-          (swap! !state
-            update-in [:examples] (fn [es] (vec (remove #(= _id (:_id %)) es))))
-          (swap! !state update-example
-            _id #(merge % {:delete-state :error}))))
-      (recur))))
-
 (defn init-examples [$root !state]
-  #_(swap! !state assoc :add-example
-      {:editing? true
-       :text "hello world"})
   (let [bus (ops/kit
               !state
               {}
@@ -309,10 +213,6 @@
                      (close! ch))
                    ch))
                :clojuredocs.examples/save handle-save-example})]
-
-    #_(new-example-loop !state new-example-ch)
-    #_(update-example-loop !state update-example-ch)
-    #_(delete-example-loop !state delete-ch)
 
     (rea/render-component
       [examples/$examples-widget !state bus]
@@ -507,9 +407,7 @@
                 {:error (-> res :body :message)
                  :loading? false})))))
       (close! ch))
-    ch)
-
-  )
+    ch))
 
 (defn handle-sa-delete [state to-del]
   (let [ch (chan)]
