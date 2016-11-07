@@ -8,7 +8,6 @@
             [clojuredocs.search :as search]
             [clojuredocs.search.static :as search.static]
             [clojuredocs.pages.common :as common]
-            [clojuredocs.pages.search-feedback :as search-feedback]
             [clojuredocs.pages.intro :as intro]
             [clojuredocs.pages.user :as user]
             [clojuredocs.pages.dev :as dev]
@@ -320,12 +319,6 @@
   (GET "/concepts/:concept" [concept] (concept-page-handler concept))
 
   (GET "/search" [] search-page-handler)
-
-  ;; Search Feedback
-  (GET "/search-feedback" [] search-feedback/page-handler)
-  (POST "/search-feedback" [] search-feedback/submit-feedback-handler)
-  (GET "/search-feedback/success" [] search-feedback/success-handler)
-
 
   (GET "/jobs" [] jobs/list-handler)
   (GET "/jobs/post" [] jobs/post-handler)
