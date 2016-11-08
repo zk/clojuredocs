@@ -314,12 +314,14 @@
                              (metrics/track-search ac-text)
                              (put! ch
                                (fn [state]
-                                 (merge
-                                   state
-                                   {:highlighted-index 0
-                                    :results-empty? (and (empty? data) (not (empty? ac-text)))
-                                    :ac-results data
-                                    :search-loading? false})))))))
+                                 ;; Make sure results are for the last ac-text input
+                                 (when (= (:ac-text state) ac-text)
+                                   (merge
+                                     state
+                                     {:highlighted-index 0
+                                      :results-empty? (and (empty? data) (not (empty? ac-text)))
+                                      :ac-results data
+                                      :search-loading? false}))))))))
                      (close! ch))
                    ch))
 
@@ -346,25 +348,6 @@
 
     (when-not (empty? (sel :.search-widget))
       (swap! !state assoc :search-focused? true))
-
-    #_(go-loop []
-        (when-let [res (<! action-ch)]
-          (metrics/track-search-choose (:ac-text @!state) (:href res))
-          (set-location-hash! (:ac-text @!state))
-          (util/navigate-to (:href res))
-          (recur)))
-
-    #_(dommy/listen! js/window :hashchange
-        (fn [_]
-          (let [loc-hash (util/location-hash)]
-            (when-not (re-find #"^example[_-]" loc-hash)
-              (swap! !state assoc :ac-text loc-hash)
-              (put! text-chan loc-hash)))))
-
-    #_(when (and (not (empty? prev-query))
-                 (not (re-find #"^example[_-]" prev-query)))
-        (swap! !state assoc :search-focused? true)
-        (put! text-chan prev-query))
 
     (doseq [$el (sel :.search-widget)]
       (rea/render-component

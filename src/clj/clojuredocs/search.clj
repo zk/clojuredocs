@@ -2,6 +2,7 @@
   (:require [clucy.core :as clucy]
             [clojure.string :as str]
             [clojuredocs.util :as util]
+            [nsfw.util :as nu]
             [clojure.pprint :refer [pprint]]
             [clojuredocs.search.static :as static]))
 
@@ -42,10 +43,10 @@
 
 (defn type-of [{:keys [type macro arglists special-form]}]
   (cond
-    type type
     macro "macro"
     (> (count arglists) 0) "function"
     special-form "special-form"
+    type (name type)
     :else "var"))
 
 (defn transform-var-meta [m]
@@ -71,6 +72,13 @@
        (map second)
        (map meta)))
 
+(defn format-for-cd [library-url v]
+  (-> v
+      transform-var-meta
+      (assoc :library-url library-url)
+      (assoc :type (type-of v))
+      (assoc :href (str "/" (:ns v) "/" (util/cd-encode (:name v))))))
+
 (defn gather-vars [{:keys [namespaces library-url] :as lib}]
   (assoc lib :vars (->> namespaces
                         (map :name)
@@ -78,10 +86,7 @@
                         (map find-ns)
                         (mapcat gather-var)
                         (concat static/special-forms)
-                        (map transform-var-meta)
-                        (map #(assoc % :library-url library-url))
-                        (map #(assoc % :type (type-of %)))
-                        (map #(assoc % :href (str "/" (:ns %) "/" (util/cd-encode (:name %))))))))
+                        (map #(format-for-cd library-url %)))))
 
 (defn gather-namespace [ns-name]
   (require (symbol ns-name))

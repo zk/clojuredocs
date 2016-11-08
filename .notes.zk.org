@@ -714,3 +714,67 @@ should be on the component.
 
 On the SA UI, why is there an add button? The add buttons should be on
 the AC results (can't add a SA to a var that doesn't exist). Yay!
+
+
+* <2016-11-08 Tue 12:19>
+
+Woo! The reagent changes are up, fixed a few other minor bugs, and
+closed a few issues.
+
+Next up is working on CLJS support, which requires moving off of using
+the JVM as a database for clj vars.
+
+I'm thinking, for now, I'm going to generate edn files that are read
+on startup.
+
+Looking into using Codox as the core of this process, three benefits
+here. Weavejester's code is solid, don't have to maintain separate
+import code, and (when I get there) many great 3rd party libraries
+already provide codox metadata somewhere, so I can take advantage of
+that.
+
+3rd party support is going to be tricky, I'll have to see if there are
+any sites that do this well.
+
+Anyways, onto cljs support.
+
+So given a var, need the following:
+
++ name / ns
++ lib url
++ source base url -- in conjunction with file / line gets you to a
+  page with the source code
++ copyright
++ license
++ doc
++ version
+
+At the ns level:
+
++ ns
++ lib url
++ soruce base url
++ files? (doesn't look like it comes from codox, could generate from
+  vars)
+
+
+At the lib level: overview / doc
+
+Hrm, search stuff is interesting. It's been long enough that I'm
+finding neat little things about how the code works.
+
+Ok, first thing is to pull out the querying of var from transformation.
+
+I should just stick a source-url on there and use that instead of a
+source base url.
+
+Alright, well it's messy but I should just jump in and get from point
+a to point b. 1:14p let's see if I can crack this in an hour. Goal is
+to get the 'database' files written to the repo somewhere and back
+search / var pages from that dataset.
+
+Ok, ran into a snag. So looking at the cljs source I don't think I can
+automatically match up clojure / clojurescript namespaces. Core for
+clojure is `clojure.core` and for cljs it's `cljs.core`. But I need
+the names in those namespaces to match up. I'll have to step back and
+think about this some more.
