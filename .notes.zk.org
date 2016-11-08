@@ -778,3 +778,14 @@ automatically match up clojure / clojurescript namespaces. Core for
 clojure is `clojure.core` and for cljs it's `cljs.core`. But I need
 the names in those namespaces to match up. I'll have to step back and
 think about this some more.
+
+What are the cases:
+
+Var in...
++ clojure but not in cljs
++ both
++ cljs but not clojure
+
+[cljs.core] gets mapped to clojure.core meaning any vars found in the
+input namespaces with the same name as a var found in the target
+namespace get mapped to target ns/name var.
