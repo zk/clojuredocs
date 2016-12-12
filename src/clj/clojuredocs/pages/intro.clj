@@ -164,7 +164,7 @@
       [:p
        "New to Clojure and not sure where to start? Here are a few good resources to get you off on the right foot:"]
       [:ul.getting-started-resources
-       [:li [:a {:href "http://thechangelog.com/rich-hickeys-greatest-hits/"} "Rich Hickey's Greatest Hits (videos)"]]
+       [:li [:a {:href "https://changelog.com/posts/rich-hickeys-greatest-hits/"} "Rich Hickey's Greatest Hits (videos)"]]
        [:li [:a {:href "http://www.braveclojure.com"} "Clojure for the Brave and True"]]
        [:li [:a {:href "http://aphyr.com/posts/301-clojure-from-the-ground-up-welcome"}
              "Clojure from the Ground Up"]]
