@@ -628,7 +628,6 @@
      :max-height "100%"}
     [:.badge
      {:float 'right}]]
-
    [:.mobile-nav-menu
     [:.badge
      {:font-size "16px"
@@ -1071,4 +1070,14 @@
      {:text-align 'center
       :color "#888"}]]
 
-   jobs])
+   jobs
+
+   [:.header-banner
+    {:background-color "#3498db"
+     :color 'white
+     :text-align 'center
+     :padding "3px"
+     :font-weight '300
+     :font-size "13px"}
+    [:a {:color 'white
+         :text-decoration 'underline}]]])

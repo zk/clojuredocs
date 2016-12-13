@@ -178,6 +178,11 @@
        [:div.staging-banner
         "This is the ClojureDocs staging site, where you'll find all the neat things we're working on."])
      [:div.desktop-nav-bar
+      [:div.header-banner
+       "It's that time of the year again! Take the "
+       [:a {:href "http://blog.cognitect.com/blog/2016/12/8/2016-clojure-community-survey"}
+        "2016 State of Clojure Community Survey"]
+       "."]
       ($navbar opts)]
      [:div
       {:class (if full-width?
