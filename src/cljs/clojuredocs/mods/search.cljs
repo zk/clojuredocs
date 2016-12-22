@@ -104,7 +104,7 @@
       (= 38 key-code)             ; up arrow
       ))
 
-(defn $quick-search-bar [app bus]
+(defn $quick-search-bar [{:keys [autofocus?]} bus]
   (let [on-change-throttle
         (page/throttle-debounce
           (fn [text]
@@ -133,37 +133,40 @@
            :action "/search"
            :method :get}
           [:input.form-control.query
-           {:class (when search-loading? " loading")
-            :placeholder (or placeholder "Looking for? (ctrl-s)")
-            :name "q"
-            :autoComplete "off"
-            :autoFocus "autofocus"
-            :value ac-text
-            :on-change (fn [e]
-                         (let [text (.. e -target -value)]
-                           (ops/send bus ::ac-text-changed text)
-                           (on-change-throttle text)))
-            :on-key-down (fn [e]
-                           (let [act {:key-code (.-keyCode e)
-                                      :ctrl? (.-ctrlKey e)}]
-                             (cond
-                               (cancel-search? act) (do
-                                                      (ops/send bus ::cancel-search ac-text)
-                                                      (.preventDefault e))
-                               (next-res? act) (do
-                                                 (ops/send bus ::move-highlight 1)
-                                                 (.preventDefault e))
-                               (prev-res? act) (do
-                                                 (ops/send bus ::move-highlight -1)
-                                                 (.preventDefault e)))))}]])
+           (merge
+             {:class (when search-loading? " loading")
+              :placeholder (or placeholder "Looking for? (ctrl-s)")
+              :name "q"
+              :autoComplete "off"
+              :value ac-text
+              :on-change (fn [e]
+                           (let [text (.. e -target -value)]
+                             (ops/send bus ::ac-text-changed text)
+                             (on-change-throttle text)))
+              :on-key-down (fn [e]
+                             (let [act {:key-code (.-keyCode e)
+                                        :ctrl? (.-ctrlKey e)}]
+                               (cond
+                                 (cancel-search? act) (do
+                                                        (ops/send bus ::cancel-search ac-text)
+                                                        (.preventDefault e))
+                                 (next-res? act) (do
+                                                   (ops/send bus ::move-highlight 1)
+                                                   (.preventDefault e))
+                                 (prev-res? act) (do
+                                                   (ops/send bus ::move-highlight -1)
+                                                   (.preventDefault e)))))}
+             (when autofocus?
+               {:autoFocus "autofocus"}))]])
        :component-did-mount
        (fn [this]
-         (when-let [$form (rea/dom-node this)]
-           (let [$input (dommy/sel1 $form :input.query)]
-             (when (and $input
-                        (not (focused? $input)))
-               (.focus $input)
-               (aset $input "value" (.-value $input))))))
+         (when autofocus?
+           (when-let [$form (rea/dom-node this)]
+             (let [$input (dommy/sel1 $form :input.query)]
+               (when (and $input
+                          (not (focused? $input)))
+                 (.focus $input)
+                 (aset $input "value" (.-value $input)))))))
        :did-update (fn [])
        #_(fn []
            (handle-search-active-state ac-text)
@@ -175,7 +178,8 @@
 
 (defn $nav-search-widget [!state bus]
   [$quick-search-bar
-   (merge @!state {:placeholder "Looking for? (ctrl-s)"})
+   (merge @!state {:placeholder "Looking for? (ctrl-s)"
+                   :autofocus? false})
    bus])
 
 (defn $ac-results [{:keys [highlighted-index ac-results results-empty?]
@@ -227,7 +231,8 @@
         @!state]
     [:div.quick-lookup-wrapper
      [$quick-search-bar
-      (merge app {:placeholder "Looking for?"})
+      (merge app {:placeholder "Looking for?"
+                  :autofocus? true})
       bus]
      [$ac-results app bus]]))
 
