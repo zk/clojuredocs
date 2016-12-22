@@ -137,7 +137,7 @@
             :placeholder (or placeholder "Looking for? (ctrl-s)")
             :name "q"
             :autoComplete "off"
-            :ref "input"
+            :autoFocus "autofocus"
             :value ac-text
             :on-change (fn [e]
                          (let [text (.. e -target -value)]
@@ -156,12 +156,14 @@
                                (prev-res? act) (do
                                                  (ops/send bus ::move-highlight -1)
                                                  (.preventDefault e)))))}]])
-       :did-mount (fn []
-                    #_(let [$input (om/get-node owner "input")]
-                        (when (and (not (focused? $input))
-                                   search-focused?)
-                          (.focus $input)
-                          (aset $input "value" (.-value $input)))))
+       :component-did-mount
+       (fn [this]
+         (when-let [$form (rea/dom-node this)]
+           (let [$input (dommy/sel1 $form :input.query)]
+             (when (and $input
+                        (not (focused? $input)))
+               (.focus $input)
+               (aset $input "value" (.-value $input))))))
        :did-update (fn [])
        #_(fn []
            (handle-search-active-state ac-text)
