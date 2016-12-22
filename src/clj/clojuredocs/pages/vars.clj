@@ -111,7 +111,7 @@
         (map #($arglist name %) arglists))]]]])
 
 (defn var-page-handler [ns name]
-  (let [name (util/cd-decode name)
+  (let [name (util/cd-decode (util/url-decode name))
         {:keys [arglists name ns doc runtimes added file] :as v} (lookup-var ns name)]
     (fn [{:keys [user session uri]}]
       (when v
