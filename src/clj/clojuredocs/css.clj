@@ -327,8 +327,8 @@
     [:.categories {:font-size "12px"
                    :line-height "16px"}]]
    [:.sticky {:position 'fixed
-              :overflow-y 'scroll
-              :overflow-x 'auto}]
+              :overflow 'hidden
+              :bottom 0}]
    [:.sphere
     [:h2 :h3 :h4
      {:display 'inline-block
@@ -862,14 +862,19 @@
      :margin-bottom "4px"
      :font-size "12px"}]
    [:.toggle-link {:color light-blue}]
-   [:.sidenav {:font-size "14px"}
+   [:.sidenav {:font-size "14px"
+               :max-height "100%"}
     [:h5 {:font-size "14px"
           :margin-top 0}]
     ["& > ul" {:margin-bottom "20px"}]
     [:li {:margin-bottom 0}]
     ["li > ul" {:margin-left "10px"}]
     [:.current {:font-weight 'bold}]
-    (nc/at-bp :xs {:display 'none})]
+    (nc/at-bp :xs {:display 'none})
+
+    [:.library-nav {:max-height "100%"
+                    :overflow-y 'scroll
+                    :overflow-x 'hidden}]]
    [:.live-preview
     {:background-color "#fafafa"
      :margin-bottom "10px"
