@@ -208,7 +208,7 @@
                :url "https://www.heroku.com"}
               {:src "https://img.brightcove.com/logo-corporate-new.png"
                :url "http://www.brightcove.com"}
-              {:src "https://upload.wikimedia.org/wikipedia/en/9/92/SoundCloud_logo.svg"
+              {:src "https://upload.wikimedia.org/wikipedia/commons/f/f4/SoundCloud_logo%2C_orange_color%2C_plain.svg"
                :url "https://soundcloud.com"}
               {:src "/img/puppet-logo.jpg"
                :url "https://puppet.com"}
