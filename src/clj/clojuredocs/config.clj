@@ -160,3 +160,5 @@
 (def new-relic-browser-key (get-env env-vars :new-relic-browser-key))
 
 (def new-relic-browser-id (get-env env-vars :new-relic-browser-id))
+
+(def session-key (env/str :session-key))

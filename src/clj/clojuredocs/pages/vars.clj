@@ -40,7 +40,7 @@
 
 (defn source-url [{:keys [file line ns]}]
   (when (= "clojure.core" ns)
-    (str "https://github.com/clojure/clojure/blob/clojure-1.8.0/src/clj/" file "#L" line)))
+    (str "https://github.com/clojure/clojure/blob/clojure-1.9.0-alpha14/src/clj/" file "#L" line)))
 
 (defn lookup-var [ns name]
   (search/lookup (str ns "/" name)))
@@ -95,9 +95,8 @@
    [:div.col-sm-4
     [:div.var-meta
      [:h4 [:a {:href (str "/" ns)} ns]]
-     (if added
-       [:span "Available since " added]
-       [:span "Available in 1.6"])
+     (when added
+       [:span "Available since " added])
      (when-let [su (source-url v)]
        [:span.source-link
         " ("

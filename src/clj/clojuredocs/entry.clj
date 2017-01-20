@@ -106,7 +106,7 @@
 
 (def session-store
   (cookie-store
-    {:key (env/str :session-key)
+    {:key config/session-key
      :domain ".clojuredocs.org"}))
 
 (defn promote-session-user [h]

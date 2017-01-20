@@ -1,4 +1,4 @@
-export SESSION_KEY=Uy9V4nWSL2g92OGemwl28HBfWTeCFAVm
+export SESSION_KEY=Uy9V4nWSL2g92OGe
 
 export BASE_URL=http://localhost:5000
 
