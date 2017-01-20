@@ -1,4 +1,3 @@
 web: lein repl :headless
 cljs: lein figwheel
-cljx: lein cljx auto
 mongo: mongod

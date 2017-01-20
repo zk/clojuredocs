@@ -2,7 +2,6 @@
 
 set -e
 
-lein cljx once
 lein cljsbuild once prod
 
 lein test

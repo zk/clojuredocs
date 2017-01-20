@@ -4,7 +4,7 @@
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :min-lein-version "2.0.0"
-  :source-paths ["src/clj" "target/generated/clj"]
+  :source-paths ["src/clj" "src/cljc"]
   :test-paths ["test/clj"]
   :dependencies [[org.clojure/clojure "1.9.0-alpha14"]
                  [org.clojure/clojurescript "1.9.293"]
@@ -33,18 +33,10 @@
                  [prone "0.6.0"]]
   :java-agents [[com.newrelic.agent.java/newrelic-agent "3.10.0"]]
   :repl-options {:init (load-file "reup.clj")}
-  :plugins [[lein-cljsbuild "1.1.1"]
-            [lein-figwheel "0.5.1"]
-            ;; required for heroku deploy
-            [com.keminglabs/cljx "0.6.0" :exclusions [org.clojure/clojure]]]
-  :cljx {:builds [{:source-paths ["src/cljx"]
-                   :output-path "target/generated/clj"
-                   :rules :clj}
-                  {:source-paths ["src/cljx"]
-                   :output-path "target/generated/cljs"
-                   :rules :cljs}]}
+  :plugins [[lein-cljsbuild "1.1.5"]
+            [lein-figwheel "0.5.1"]]
   :cljsbuild {:builds
-              {:dev  {:source-paths ["src/cljs" "target/generated/cljs"]
+              {:dev  {:source-paths ["src/cljs" "src/cljc"]
                       :compiler {:output-to "resources/public/cljs/clojuredocs.js"
                                  :output-dir "resources/public/cljs"
                                  :main "clojuredocs.main"
@@ -55,7 +47,7 @@
                       :figwheel {:on-jsload "clojuredocs.main/reload-hook"}}
 
                ;; for debugging advanced compilation problems
-               :dev-advanced  {:source-paths ["src/cljs" "target/generated/cljs"]
+               :dev-advanced  {:source-paths ["src/cljs" "src/cljc"]
                                :compiler {:output-to "resources/public/cljs/clojuredocs.js"
                                           :output-dir "resources/public/cljs-advanced"
                                           :source-map "resources/public/cljs/clojuredocs.js.map"
@@ -67,7 +59,7 @@
                                                     "externs/marked.js"
                                                     "externs/fastclick.js"]}}
 
-               :prod {:source-paths ["src/cljs" "target/generated/cljs"]
+               :prod {:source-paths ["src/cljs" "src/cljc"]
                       :compiler {:output-to "resources/public/cljs/clojuredocs.js"
                                  :optimizations :advanced
                                  :main "clojuredocs.main"
