@@ -36,7 +36,11 @@
                  :from-var.name name
                  :from-var.library-url library-url})
        (map (fn [{:keys [to-var] :as sa}]
-              (assoc sa :doc (-> (str (:ns to-var) "/" (:name to-var)) search/lookup :doc))))))
+         (let [ns-name (str (:ns to-var) "/" (:name to-var))
+               looked-up-var (search/lookup ns-name)]
+           (if (nil? looked-up-var) nil
+               (assoc sa :doc (:doc looked-up-var))))))
+       (remove nil?)))
 
 (defn source-url [{:keys [file line ns]}]
   (when (= "clojure.core" ns)
