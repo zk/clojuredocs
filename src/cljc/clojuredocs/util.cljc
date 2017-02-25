@@ -109,14 +109,17 @@
       :cljs
       (.now js/Date)))
 
+(defn profile-url [{:keys [login account-source]}]
+  (str (if (= "github" account-source)
+         "/u/"
+         "/uc/")
+    login))
+
 (defn $avatar [{:keys [email login avatar-url account-source] :as user} & [{:keys [size]}]]
   (let [size (str (or size 32))]
     ^{:key (or avatar-url email)}
     [:a.avatar-link
-     {:href (str (if (= "github" account-source)
-                   "/u/"
-                   "/uc/")
-                 login)}
+     {:href (profile-url user)}
      [:img.avatar
       {:src (or (str avatar-url "&s=" size)
                 (str "https://www.gravatar.com/avatar/"

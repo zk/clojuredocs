@@ -33,7 +33,7 @@
         "...")]
      [:div.meta
       "Added by "
-      [:a {:href (str "/u/" (:login author))} (:login author)]
+      [:a {:href (util/profile-url author)} (:login author)]
       (when can-delete?
         [:span.delete-controls
          " / "
