@@ -10,7 +10,7 @@
 
 (defn page-handler [login account-source]
   (let [{:keys [login account-source] :as user}
-        (mon/fetch-one :users :where {:login (codec/percent-decode login)
+        (mon/fetch-one :users :where {:login (codec/url-decode login)
                                       :account-source account-source})
 
         examples-authored-count
