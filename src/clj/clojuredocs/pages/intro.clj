@@ -218,6 +218,8 @@
                :url "https://circleci.com"}
               {:src "/img/walmart-labs.png"
                :url "http://www.walmartlabs.com"}
+              {:src "/img/oscaro-logo.png"
+               :url "https://www.oscaro.com/"}
               {:src "/img/rjmetrics-logo.png"
                :url "https://rjmetrics.com"}
               {:src "/img/cognician-logo.png"
