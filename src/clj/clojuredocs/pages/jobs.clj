@@ -726,7 +726,7 @@ We offer competitive compensation and great benefits; stock options; learning bu
         "About ClojureDocs Jobs"]
        [:p "Hey Everybody!"]
        [:p "So we're trying something new here in the form of a jobs board hosted here on ClojureDocs. We'll be starting slow; rolling out a few listings over the coming weeks while we track how they're doing and adjust."]
-       [:p "Ultimately, I'd like to use this as a way to fund development on the site and cover maintenece costs, so the biggest thing you can do to help out (other than switching jobs) is to get the word out. For those of you working at great Clojure shops, "
+       [:p "Ultimately, I'd like to use this as a way to fund development on the site and cover maintenance costs, so the biggest thing you can do to help out (other than switching jobs) is to get the word out. For those of you working at great Clojure shops, "
         [:a {:href "mailto:zachary.kim@gmail.com"} "drop me a line"]
         " and I'll reach out to see if we can get your company listed."]
        [:p "The goal is to make this work great for everybody. I think that's going to take a few iterations, so let me know if you have any ideas along these lines."]
