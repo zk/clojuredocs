@@ -4,7 +4,120 @@
             [clojuredocs.pages.common :as common]
             [clojure.string :as str]))
 
-(def DATA [{:job-title "Clojure Engineer"
+(def DATA [{:job-title "Backend Clojure Engineer"
+            :job-type "Permanent"
+            :job-location "Redwood City, CA"
+            :job-apply-href "https://jobs.lever.co/outpostgames/506cbe36-439f-46d0-8b94-e1406d0abef3"
+            :id "outpost1"
+            :short-id "outpost1"
+            :remote-ok? false
+            :posted-at (util/now)
+            :company-name "Outpost Games"
+            :company-url "https://corp.outpostgames.com/#intro"
+            :company-image-url "/img/outpost-logo.png"
+            :company-description "We believe that every player should experince the thrill of the spotlight. On our platform, Hero, streamers will be discovered by their audience and feel the roar of their crowd.
+
+Every audience member has the ability to deeply interact with their favorite performers and influence the key moments in critical matches.
+
+Our goal is for players and game developers to better understand their audience in order to foster incredible performances.
+
+Outpost Games was founded by gaming veterans from Electronic Arts and Zynga, and has raised over $19M from Benchmark and other strategic investors.
+
+Our team is made up of forward thinking people who collaborate in a self-directed environment."
+            :job-description "We're in the middle of a huge industry shift where gaming is not just about content, but will instead be powered by the performances from players and their audiences. This is a great time to join us at Outpost Games as we're building a technology platform to turn every player into a performer through live interactive tools and APIs. To showcase our platform, we're creating a multiplayer survival game, titled SOS, which is built from the ground up to be as thrilling to watch as it is to play. Join us and work alongside industry veterans from EA, Zynga, Naughty Dog, and Google to take a fresh approach on gaming and entertainment.
+
+We’re looking for an exceptional server-side engineer to join our platform team. This is an early role in a highly iterative environment with the opportunity to have a large impact from day one.
+
+
+## Core Technologies
+
+Clojure, Python, JavaScript, DynamoDB, Redis, Memcached, AWS (lots). We mostly build services using Clojure, but evaluate new tools and technologies where they provide leverage.
+
+
+# What You'll Do
+
+* Design, develop, and maintain services powering our platform clients (mobile/native/web) and 1st-party game, SOS, including account, leaderboard, matchmaking, storage, and real-time stream interaction services
+* Improve the reliability, scalability, and performance of REST (JSON over HTTP), GraphQL, and WebSocket services
+* Write maintainable, secure, and well-tested code
+* Constructively review other engineers code and provide architectural feedback
+* Work in a professional software engineering environment (source control, dev/stage/prod release cycle, live monitoring)
+* Collaborate early and often with a cross-functional team on new product features
+
+
+# What We're Looking For
+
+* 6+ years experience building and scaling customer-facing web applications or distributed systems
+* Bachelor's degree in Computer Science, or equivalent demonstrated experience
+* Expertise in Clojure, Scala, Java, Go, Python, or C++. Clojure or other functional programming languages strongly preferred.
+* Proficiency with other languages and technologies, and enthusiasm for learning
+* An effective communicator, who seeks and values a diversity of perspectives
+* Authorization to work in the U.S.
+
+
+# Bonus Points
+
+* Start-up experience
+* Full-stack ability, particularly JavaScript
+* Experience building JVM oriented systems
+* Hands-on experience with AWS
+* Practical experience with analytics systems (data pipelines, ETL and streaming)
+* A passion for playing or watching video games
+
+
+Changing the entertainment business is hard work, but we do it sustainably. We invest in your health and productivity through great benefits, including medical, dental, vision, 401k, commuter benefits, unlimited PTO, and free lunch if you eat with 4 or more colleagues!
+
+Outpost Games is proud to be an Equal Opportunity Employer committed to a diverse and inclusive workforce – Minority / Female / Disability / Veteran / Gender Identity / Sexual Orientation."}
+
+
+           {:job-title "Software Engineer"
+            :job-type "Permanent"
+            :job-location "Durham, NC"
+            :job-apply-href "https://angel.co/adzerk/jobs"
+            :id "adz1"
+            :short-id "adz1"
+            :remote-ok? false
+            :posted-at (util/now)
+            :comp-cash {:currency "USD"
+                        :minimum 70000
+                        :maximum 120000}
+            :comp-equity {:minimum 0.001
+                          :maximum 0.005}
+            :company-name "Adzerk"
+            :company-url "https://www.adzerk.com/"
+            :company-image-url "/img/adzerk-logo.png"
+            :company-description "At Adzerk we are passionate about making the internet a better place. We are the ad serving infrastructure for awesome companies like reddit, StackOverflow, Bittorrent, Yummly, Strava and many others. We serve over a billion impressions a month, over 25k requests a second, and continue to grow at an awesome pace."
+            :job-description "Ready to put all those ideas about scalability into practice in a situation where you really need it? We’re helping StackOverflow, reddit, and other sites that you’ve probably heard of serve over a billion ads per day… and that number is growing very fast.
+
+Adzerk engineers are responsible for working on all parts of the system. This includes the front-end web application, back-end services, and the ad delivery engines. Our platform is built using Node.js with Coffeescript, Clojure, Mono, JQuery, MongoDB, and Hadoop, with a whole lot of AWS and Chef. We’re currently serving over 25,000 req/sec (and growing fast), so you’ll get to work on some real scalability challenges.
+
+Performance and scalability are our two primary concerns, and with the traffic and growth rates that we’re experiencing, lots of the lessons that you’ve learned start to break down. Because of that, it’s not as important what you know right now – what matters is how quickly you can learn and adapt.
+
+Things you should be interested in -- or even better, have experience with:
+
+* Clojure
+* Large-scale distributed systems
+* HTML, CSS, JavaScript
+* Bonus points for startup experience!
+* Things you should know about us:
+
+We have an engineering-driven culture, and our CEO is a software developer. We have no professional managers — everyone contributes.
+
+Your work will have an immediate and profound impact on our product and business.
+
+We ship code dozens of times a week.
+
+You will have the freedom and responsibility for choosing what tools and libraries we use.
+
+We use the open source model internally to manage our work. We submit pull requests, and other engineers review them before merging.
+
+We prize open source, and do our best to contribute back to the community.
+
+Everyone gets equity. We want a team of partners.
+
+We all have unlimited vacation. We work hard, but at a sustainable pace.
+
+You must be eligible to work in the United States and willing to work in Adzerk's Durham, NC office."}
+           {:job-title "Clojure Engineer"
             :job-type "Permanent"
             :job-location "San Francisco, CA"
             :job-apply-href "https://www.fundingcircle.com/us/about/careers/"
@@ -121,54 +234,7 @@ If you thrive on solving difficult problems, have a desire to push yourself to t
 We offer all the benefits you’d expect from a “great place to work”. Transportation subsidies, 100% healthcare coverage, and a comfortable snack-laden work environment. We’ve got all that superficial stuff, and more. All that is great, but Amperity provides benefits that are hard to find: a place where you’ll be proud to call your colleagues “friends”, for real. An environment where you’ll be challenged to find and unlock your full potential. The opportunity to make a lifetime’s worth of memories building a world-class company with world-class people.
 
 Click 'apply now' below to apply, or contact [sami@amperity.com](mailto:sami@amperity.com) for more information."}
-           {:job-title "Software Engineer"
-            :job-type "Permanent"
-            :job-location "Durham, NC"
-            :job-apply-href "https://angel.co/adzerk/jobs"
-            :id "adz1"
-            :short-id "adz1"
-            :remote-ok? false
-            :posted-at (util/now)
-            :comp-cash {:currency "USD"
-                        :minimum 70000
-                        :maximum 120000}
-            :comp-equity {:minimum 0.001
-                          :maximum 0.005}
-            :company-name "Adzerk"
-            :company-url "https://www.adzerk.com/"
-            :company-image-url "/img/adzerk-logo.png"
-            :company-description "At Adzerk we are passionate about making the internet a better place. We are the ad serving infrastructure for awesome companies like reddit, StackOverflow, Bittorrent, Yummly, Strava and many others. We serve over a billion impressions a month, over 25k requests a second, and continue to grow at an awesome pace."
-            :job-description "Ready to put all those ideas about scalability into practice in a situation where you really need it? We’re helping StackOverflow, reddit, and other sites that you’ve probably heard of serve over a billion ads per day… and that number is growing very fast.
 
-Adzerk engineers are responsible for working on all parts of the system. This includes the front-end web application, back-end services, and the ad delivery engines. Our platform is built using Node.js with Coffeescript, Clojure, Mono, JQuery, MongoDB, and Hadoop, with a whole lot of AWS and Chef. We’re currently serving over 25,000 req/sec (and growing fast), so you’ll get to work on some real scalability challenges.
-
-Performance and scalability are our two primary concerns, and with the traffic and growth rates that we’re experiencing, lots of the lessons that you’ve learned start to break down. Because of that, it’s not as important what you know right now – what matters is how quickly you can learn and adapt.
-
-Things you should be interested in -- or even better, have experience with:
-
-* Clojure
-* Large-scale distributed systems
-* HTML, CSS, JavaScript
-* Bonus points for startup experience!
-* Things you should know about us:
-
-We have an engineering-driven culture, and our CEO is a software developer. We have no professional managers — everyone contributes.
-
-Your work will have an immediate and profound impact on our product and business.
-
-We ship code dozens of times a week.
-
-You will have the freedom and responsibility for choosing what tools and libraries we use.
-
-We use the open source model internally to manage our work. We submit pull requests, and other engineers review them before merging.
-
-We prize open source, and do our best to contribute back to the community.
-
-Everyone gets equity. We want a team of partners.
-
-We all have unlimited vacation. We work hard, but at a sustainable pace.
-
-You must be eligible to work in the United States and willing to work in Adzerk's Durham, NC office."}
            {:job-title "Sr. Clojure Engineer"
             :job-type "Permanent"
             :job-location "San Francisco, CA"
