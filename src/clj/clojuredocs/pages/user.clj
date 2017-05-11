@@ -4,12 +4,14 @@
             [clojuredocs.pages.common :as common]
             [clojuredocs.mail :as mail]
             [somnium.congomongo :as mon]
+            [ring.util.codec :as codec]
             [ring.util.response :refer (redirect)]
             [compojure.core :refer (defroutes GET)]))
 
 (defn page-handler [login account-source]
   (let [{:keys [login account-source] :as user}
-        (mon/fetch-one :users :where {:login login :account-source account-source})
+        (mon/fetch-one :users :where {:login (codec/url-decode login)
+                                      :account-source account-source})
 
         examples-authored-count
         (mon/fetch-count :examples :where {:author.login login
