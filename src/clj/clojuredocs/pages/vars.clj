@@ -5,6 +5,7 @@
             [clojuredocs.search :as search]
             [clojuredocs.pages.common :as common]
             [clojuredocs.data :as data]
+            [ring.util.codec :as codec]
             [hiccup.core :as hc]))
 
 (defn ellipsis [s n]
@@ -114,7 +115,7 @@
         (map #($arglist name %) arglists))]]]])
 
 (defn var-page-handler [ns name]
-  (let [name (util/cd-decode (util/url-decode name))
+  (let [name (util/cd-decode (codec/url-decode name))
         {:keys [arglists name ns doc runtimes added file] :as v} (lookup-var ns name)]
     (fn [{:keys [user session uri]}]
       (when v
