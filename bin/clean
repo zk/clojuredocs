@@ -1,4 +1,4 @@
-#/bin/sh
+#/bin/bash
 
 rm -rf ./resources/public/cljs
 rm -rf ./resources/public/cljs-advanced
