@@ -182,59 +182,6 @@ To learn more about our work environment, culture, and perks, visit:
 *Pursuant to the San Francisco Fair Chance Ordinance, we will consider for employment qualified applicants with arrest and conviction records.*
 
 *Funding Circle provides equal employment opportunity to all individuals regardless of their race, age, creed, color, religion, national origin or ancestry, sex, gender, disability, veteran status, genetic information, sexual orientation, gender identity or expression, pregnancy, or any other characteristic protected by state, federal, or local law.*"}
-           {:job-title "Senior Software Engineer"
-            :job-type "Permanent"
-            :job-location "Seattle, WA"
-            :job-apply-href "https://jobs.lever.co/amperity.com/a3890aff-1688-4ad0-ba9b-5203ac44fd7f"
-            :id "amp1"
-            :short-id "amp1"
-            :remote-ok? false
-            :posted-at (util/now)
-            :company-name "Amperity"
-            :company-url "https://amperity.com"
-            :company-image-url "/img/amperity-logo.jpg"
-            :company-description "Amperity is an early-stage software company driving advances in machine learning to create a ground-breaking capability for marketers at the world’s leading consumer brands. We are an experienced team with deep expertise in building software that helps companies use their existing data and technology investments to reimagine the customer experience. Our company is backed by entrepreneurs and executives responsible for some of the most preeminent technology companies in the world."
-            :job-description
-            "Amperity is a stealth-mode enterprise software company founded by repeat entrepreneurs Kabir Shahani and Derek Slager. After a successful exit of their prior venture in 2013, the two are back at it again to address one of the largest unmet needs in the marketing technology space, and are building a powerhouse team to do so.
-
-Through the use of functional programming, modern big data tools, and a machine learning- powered data stitching platform, our team of talented engineers and trusted advisors are building a one-of-a-kind data-first application for marketing.
-
-Amperity is backed by some of the most notable names in tech -- including Madrona Venture Group, Liquid 2 Ventures, Hyde Park Ventures, and top executives and founders from multi-billion dollar companies like Concur, ExactTarget, Microsoft, and Isilon Systems. Full press release.
-
-If you thrive on solving difficult problems, have a desire to push yourself to the limits, and want to have fun in the process, then we would love to have a chat with you about joining our team.
-
-
-
-# Technologies We Use
-
-* Clojure for back end services
-* ClojureScript for our front end, a reactive SPA
-* Big data tools, including Mesos, Spark, Kafka and Accumulo
-* Modern provisioning infrastructure, including Apache Aurora and SaltStack
-
-
-# Interesting Problems
-
-* Our system involves ingestion of very large amounts of data, and blending this processing with real-time events
-* We automatically stitch data together across disparate systems, and improve this process in generalized ways
-* We allow users to perform complex, real-time queries across aggregated datasets
-
-
-# About You
-
-* You are excited about using Clojure in a production environment, and have experience with Clojure or other functional languages
-* Experience building JVM oriented production systems
-* Experience working with large-scale data oriented systems
-* Your ears perk up when somebody says “graph traversal”
-* Open minded, inclusive, and motivated to make good decisions
-
-
-# Benefits
-
-We offer all the benefits you’d expect from a “great place to work”. Transportation subsidies, 100% healthcare coverage, and a comfortable snack-laden work environment. We’ve got all that superficial stuff, and more. All that is great, but Amperity provides benefits that are hard to find: a place where you’ll be proud to call your colleagues “friends”, for real. An environment where you’ll be challenged to find and unlock your full potential. The opportunity to make a lifetime’s worth of memories building a world-class company with world-class people.
-
-Click 'apply now' below to apply, or contact [sami@amperity.com](mailto:sami@amperity.com) for more information."}
-
            {:job-title "Sr. Clojure Engineer"
             :job-type "Permanent"
             :job-location "San Francisco, CA"
