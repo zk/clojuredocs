@@ -200,7 +200,7 @@
        [:div.ctas
         [:div.col-sm-6.left
          "Brought to you by "
-         [:a {:href "https://twitter.com/heyzk"} "@heyzk"]
+         [:a {:href "https://zacharykim.com"} "Zachary Kim"]
          ". "]
         [:div.col-sm-6.right
          [:iframe.gh-starred-count
