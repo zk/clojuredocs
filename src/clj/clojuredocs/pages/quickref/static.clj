@@ -5,7 +5,8 @@
      :categories
      ({:title "Numbers",
        :groups
-       ({:syms (+ - * / quot rem mod inc dec max min with-precision),
+       ({:syms (+ - * / quot rem mod inc dec max min with-precision
+                  numerator denominator rand rand-int),
          :title "Arithmetic"}
         {:syms (= == not= < > <= >=), :title "Compare"}
         {:syms
@@ -14,6 +15,7 @@
            bit-xor
            bit-flip
            bit-not
+           bit-and-not
            bit-clear
            bit-set
            bit-shift-left
@@ -23,13 +25,42 @@
         {:syms
          (byte short int long float double bigint bigdec num rationalize),
          :title "Cast"}
-        {:syms (nil? identical? zero? pos? neg? even? odd?),
+        {:syms (identical?
+                zero?
+                pos?
+                neg?
+                even?
+                odd?
+                number?
+                ratio?
+                rational?
+                integer?
+                int?
+                pos-int?
+                nat-int?
+                decimal?
+                bigdec?
+                float?
+                double?),
          :title "Test"})}
+      {:title "Booleans"
+       :groups
+       ({:syms (nil? true? false?), :title "Test"}
+        {:syms (boolean), :title "Cast"})}
       {:title "Symbols / Keywords",
        :groups
        ({:syms (keyword symbol), :title "Create"}
         {:syms (name intern namespace), :title "Use"}
-        {:syms (keyword? symbol?), :title "Test"})}
+        {:syms (keyword?
+                symbol?
+                ident?
+                simple-keyword?
+                simple-symbol?
+                simple-ident?
+                qualified-keyword?
+                qualified-symbol?
+                qualified-ident?),
+         :title "Test"})}
       {:title "Strings / Characters",
        :groups
        ({:syms (str print-str println-str pr-str prn-str with-out-str),
@@ -51,12 +82,19 @@
              if
              if-not
            if-let
+           if-some
            when
            when-not
            when-let
            when-first
+           when-some
            cond
            condp
+           cond->
+           cond->>
+           some->
+           some->>
+           as->
            case
            do
            eval
@@ -103,6 +141,7 @@
            restart-agent
            shutdown-agents
            *agent*
+           agent-errors
            error-handler
            set-error-handler!
            error-mode
@@ -117,6 +156,7 @@
            future-cancelled?
            future?),
          :title "Futures"}
+        {:syms (volatile! vswap! vreset!), :title "Volatiles"}
         {:syms
          (bound-fn
            bound-fn*
@@ -151,12 +191,17 @@
            memfn
            comp
            complement
+           comparator
+           fnil
            partial
            juxt
-           memoize),
+           memoize
+           some-fn
+           every-pred),
          :title "Create"}
         {:syms (-> ->> apply), :title "Call"}
-        {:syms (fn? ifn?), :title "Test"})}
+        {:syms (fn? ifn?), :title "Test"}
+        {:syms (compare hash), :title "Misc"})}
       {:title "Multifunctions",
        :groups
        ({:syms (defmulti defmethod), :title "Create"}
@@ -258,14 +303,15 @@
            vals
            get
            get-in
+           update
            update-in
            select-keys
            merge
-           merge-with),
-         :title "Use (Sorted Maps)"}
+           merge-with
+           reduce-kv),
+         :title "Use"}
         {:syms (rseq subseq rsubseq),
-
-         :title "Use"})}
+         :title "Use (Sorted Collections)"})}
       {:title "Sets",
        :groups
        ({:syms (hash-set set sorted-set sorted-set-by), :title "Create"}
@@ -280,6 +326,7 @@
        ({:syms
          (seq
            sequence
+           eduction
            repeat
            replicate
            range
@@ -310,6 +357,7 @@
            nnext
            nth
            nthnext
+           nthrest
            rand-nth
            butlast
            take
@@ -318,10 +366,7 @@
            take-while
            drop
            drop-last
-           drop-while
-           keep
-
-           keep-indexed),
+           drop-while),
          :title "Use (General)"}
         {:syms
          (conj
@@ -334,18 +379,29 @@
            split-at
            split-with
            filter
+           filterv
            remove
            replace
-           shuffle),
+           shuffle
+           random-sample
+           flatten
+           sort
+           sort-by
+           reverse
+           dedupe),
          :title "Use ('Modification')"}
         {:syms
          (for
              doseq
            map
+           mapv
            map-indexed
+           keep
+           keep-indexed
            mapcat
            reduce
            reductions
+           transduce
            max-key
            min-key
            doall
@@ -354,36 +410,7 @@
       {:title "Transients",
        :groups
        ({:syms (transient persistent!), :title "Create"}
-        {:syms (conj! pop! assoc! dissoc! disj!), :title "Use (General)"}
-        {:syms
-         (conj
-           concat
-           distinct
-           group-by
-           partition
-           partition-all
-           partition-by
-           split-at
-           split-with
-           filter
-           remove
-           replace
-           shuffle),
-         :title "Use ('Modification')"}
-        {:syms
-         (for
-             doseq
-           map
-           map-indexed
-           mapcat
-
-           reduce
-           reductions
-           max-key
-           min-key
-           doall
-           dorun),
-         :title "Use (Iteration)"})})}
+        {:syms (conj! pop! assoc! dissoc! disj!), :title "Use (General)"})})}
     {:title "Code Structure",
      :categories
      ({:title "Variables",
