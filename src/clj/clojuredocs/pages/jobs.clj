@@ -4,7 +4,96 @@
             [clojuredocs.pages.common :as common]
             [clojure.string :as str]))
 
-(def DATA [{:job-title "Backend Clojure Engineer"
+(def DATA [{:job-title "Lead Clojure Engineer"
+            :job-type "Permanent"
+            :job-location "New York City, NY"
+            :job-apply-href "https://jobs.lever.co/spacious/b0f65550-8a4a-40c8-8694-389d6b10dc16"
+            :id "spacious1"
+            :short-id "spcs1"
+            :remote-ok? false
+            :posted-at (util/now)
+            :company-name "Spacious"
+            :company-url "https://www.spacious.com/"
+            :company-image-url "/img/spacious-logo.jpg"
+            :company-description "Spacious offers a new way to access the most important urban centers of commerce, creativity, and humanity. Using a unique approach to commercial property, we can increase access to our densest and most valuable urban destinations. We believe that the diversity of people, ideas, and resources is what makes cities attractive, and Spacious seeks to remove the artificial boundaries that otherwise might prevent many of us from participating in everything that cities have to offer.
+
+The first part of our mission is focused on making unused spaces available during the hours that they're not being used, starting with high end restaurants that are closed before dinner. We open the doors to these beautiful spaces in their off hours, creating a space where our members can work, meet, connect, and be creative.
+
+We are fundamentally changing how urban dwellers interact with their city. We do this through a unique business model, extraordinary hospitality, and an obsession with building seamless technology that underpins the entire operation. Everything we do, and all the technology we build, is designed to make the lives of every stakeholder simpler, easier, and more empowering."
+            :job-description "Spacious is looking for an experienced, enthusiastic Lead Clojure Engineer to join our team and lead us in building Clojure and Datomic backend services.
+
+We’d like someone to help us build more sustainable processes around our infrastructure and in the long term, evaluate our options and build our future architecture and development patterns. There is room for improvement in how our small engineering team maintains and adds to a wide range of APIs and interfaces. We want to build automated, self-healing services that are highly available to our stakeholder, easy to deploy and add to, and let the entire team sleep well at night.
+
+Reporting to the CTO, you will be responsible for researching, designing and developing a broad range of infrastructure required to support our many existing and planned products. Our tech team is still small and incredibly interdisciplinary. To build and maintain our many products everyone is expected to be a bit of a generalist, to collaborate, and to share knowledge. We prize simplicity and repeatability in the systems we build, and that is why we are embracing Clojure despite being new to it.
+
+## What you will achieve:
+
+* **Within your first month**
+* You'll build a deep understanding of Spacious’ current initiatives and technology infrastructure(Javascript, Python running on Heroku and Google), coding style and standards, and have contributed code to our repositories.
+* As Lead Clojure Engineer you'll begin to set up our Clojure development environment and deployment process.
+You'll pair regularly with other engineers to gain familiarity with our systems and help all of us be proficient in Clojure.
+
+
+* **By the end of month 3**
+* You should have added features to our existing projects, and (re)architected at least one core system.
+Understand one problem domain in depth e.g.: location discovery, check in, onboarding, in space communication, space administration.
+* Improve the infrastructure of your chosen domain to be faster, more reliable, and easier to reason about and build upon.
+
+
+* **From there your role will continue to evolve**
+* Right now scaling into new cities is our biggest priority. Due to the complexity of operating physical spaces, there is still plenty of work to be done automating the most repetitive tasks, increasing reliability, and improving performance. We are also constantly prototyping new ideas and services we might offer our members. Some of the projects and ideas underway include:
+* Adding to our GraphQL API
+* Seamless WiFi authorization and onboarding
+* Native mobile apps for members and for our hosts
+* Kioskless check in/out via GPS, iBeacons, Computer Vision
+* Fully integrated and automated expense tracking, payroll, accounting, and payouts
+* Testing out other space partnerships and forms of space consumption
+* Logistics and reducing the time to open a new location from weeks to days
+
+
+## What we expect:
+
+* **Know your Computer Science**
+* Have a strong CS background, in order to choose the right algorithms, systems approaches and patterns to solve problems, without reinventing the wheel.
+* Because of the speed at which we're moving and the seniority of the role, candidates need to be able to hit the ground running from day one. Therefore, 4+ years of industry experience are expected.
+
+
+* **Have real expertise in web infrastructure and backend services**
+* Experience building Clojure and Datomic backends, ideally in production environments.
+Familiarity profiling everything from the request to the DB.
+Be comfortable weighing performance, developer velocity and code quality with business goals.
+
+
+* **Act as a technologist**
+* Bias towards action and shipping. Once you’ve sketched out an idea, you find the fastest path to a prototype to prove the concept
+* Strong ability to write production code quickly.
+* Be comfortable with a range of languages and open source tools and frameworks, and make good decisions about which to use to solve a particular problem.
+* Be creative: you’ll come up with new ideas based on your broad understanding of technological possibilities and domain knowledge.
+
+
+* **Solve problems, together**
+* Come up with novel solutions, working well with non-technologists and others.
+* Ask hard questions and challenge assumptions to ensure that we’re solving the right problems
+
+
+
+## What you can expect:
+* A membership to Spacious. We don’t have an office or central headquarters. Instead we work out of our locations, side by side with our customers
+* Flexible schedule. Work when and where you want, including from home
+* Unlimited vacation
+* 80% of health, dental & vision insurance
+* One Medical and Teledoc
+* Paid parental leave
+* Life insurance
+* 401(k)
+* Citi Bike membership
+* Wage works commuter benefits
+* 50% reimbursement for a personal computer
+
+
+At Spacious, we don’t just accept differences in background and perspective - we celebrate it, we support it, and we thrive on it for the benefit of our employees, our products and our community. Spacious is proud to be an equal opportunity workplace and is an affirmative action employer. We are committed to equal employment opportunity regardless of race, color, ancestry, religion, sex, national origin, sexual orientation, age, citizenship, marital status, disability, gender identity or Veteran status. We also consider qualified applicants regardless of criminal histories, consistent with legal requirements. If you have a disability or special need that requires accommodation, please let us know."}
+
+           {:job-title "Backend Clojure Engineer"
             :job-type "Permanent"
             :job-location "Redwood City, CA"
             :job-apply-href "https://jobs.lever.co/outpostgames/506cbe36-439f-46d0-8b94-e1406d0abef3"
@@ -120,7 +209,7 @@ You must be eligible to work in the United States and willing to work in Adzerk'
            {:job-title "Clojure Engineer"
             :job-type "Permanent"
             :job-location "San Francisco, CA"
-            :job-apply-href "https://www.fundingcircle.com/us/about/careers/"
+            :job-apply-href "https://www.fundingcircle.com/us/about/careers/?source=clojuredocs"
             :id "fc1"
             :short-id "fc1"
             :remote-ok? false
@@ -185,7 +274,7 @@ To learn more about our work environment, culture, and perks, visit:
            {:job-title "Sr. Clojure Engineer"
             :job-type "Permanent"
             :job-location "San Francisco, CA"
-            :job-apply-href "https://www.fundingcircle.com/us/about/careers/"
+            :job-apply-href "https://www.fundingcircle.com/us/about/careers/?source=clojuredocs"
             :id "fc2"
             :short-id "fc2"
             :remote-ok? false
