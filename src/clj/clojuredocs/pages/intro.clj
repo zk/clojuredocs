@@ -204,7 +204,7 @@
                :url "http://www.factual.com"}
               {:src "/img/simple-logo.png"
                :url "https://simple.com"}
-              {:src "https://d1lpkba4w1baqt.cloudfront.net/heroku-logo-light-234x60.png"
+              {:src "/img/heroku-logo.png"
                :url "https://www.heroku.com"}
               {:src "https://img.brightcove.com/logo-corporate-new.png"
                :url "http://www.brightcove.com"}

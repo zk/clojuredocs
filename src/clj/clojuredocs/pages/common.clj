@@ -231,7 +231,7 @@
       [:script {:src "/js/marked.min.js"}])
     clojuredocs-script
     ($ga-script-tag config/ga-tracking-id)
-    ($new-relic-script-tag)
+    #_($new-relic-script-tag)
     ;; mobile safari home screen mode
     [:script
      "if((\"standalone\" in window.navigator) && window.navigator.standalone){
