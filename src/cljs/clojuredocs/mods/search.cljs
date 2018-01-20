@@ -281,7 +281,7 @@
                                                 :data-type :edn}))
                     data (-> ac-response :res :body)]
                 (when (:success ac-response)
-                  (metrics/track-search ac-text)
+                  #_(metrics/track-search ac-text)
                   (swap! app-state
                     assoc
                     :highlighted-index 0
@@ -326,7 +326,7 @@
                                     :results-empty? (and (empty? data) (not (empty? ac-text)))
                                     :ac-results data
                                     :search-loading? false})))
-                             (metrics/track-search ac-text)))))
+                             #_(metrics/track-search ac-text)))))
                      (close! ch))
                    ch))
 
