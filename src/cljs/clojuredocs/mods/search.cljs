@@ -318,7 +318,6 @@
                                                            :data-type :edn}))
                                data (-> ac-response :res :body)]
                            (when (:success ac-response)
-                             (metrics/track-search ac-text)
                              (put! ch
                                (fn [state]
                                  (merge
@@ -326,7 +325,8 @@
                                    {:highlighted-index 0
                                     :results-empty? (and (empty? data) (not (empty? ac-text)))
                                     :ac-results data
-                                    :search-loading? false})))))))
+                                    :search-loading? false})))
+                             (metrics/track-search ac-text)))))
                      (close! ch))
                    ch))
 
