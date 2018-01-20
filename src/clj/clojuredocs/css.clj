@@ -327,7 +327,7 @@
     [:.categories {:font-size "12px"
                    :line-height "16px"}]]
    [:.sticky {:position 'fixed
-              :overflow 'hidden
+              :overflow 'auto
               :bottom 0}]
    [:.sphere
     [:h2 :h3 :h4
