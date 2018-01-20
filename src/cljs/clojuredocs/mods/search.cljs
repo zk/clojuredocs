@@ -342,11 +342,11 @@
                                  (dissoc state :search-loading? :ac-results :ac-text :results-empty?))
 
                ::ac-select (fn [state res]
-                             (if (and (:ns res) (:name res))
-                               (util/navigate-to
-                                 (util/var-path
-                                   (:ns res)
-                                   (:name res)))))
+                             (util/navigate-to
+                               (or (:href res)
+                                   (util/var-path
+                                     (:ns res)
+                                     (:name res)))))
                ::var-search (fn [state text]
                               (util/navigate-to
                                 (str "/search?q=" (util/url-encode text))))})]
