@@ -43,8 +43,8 @@
                (assoc sa :doc (:doc looked-up-var))))))
        (remove nil?)))
 
-(defn source-url [{:keys [file line ns]}]
-  (when (= "clojure.core" ns)
+(defn source-url [{:keys [file line ns] :as var}]
+  (when (and (= "clojure.core" ns) file)
     (str "https://github.com/clojure/clojure/blob/clojure-1.9.0/src/clj/" file "#L" line)))
 
 (defn lookup-var [ns name]
