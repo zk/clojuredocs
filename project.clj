@@ -7,8 +7,10 @@
   :source-paths ["src/clj" "src/cljc"]
   :test-paths ["test/clj"]
   :dependencies [[org.clojure/clojure "1.9.0"]
-                 [org.clojure/clojurescript "1.9.293"]
-                 [nsfw "0.11.72" :exclusions [org.clojure/core.async]]
+                 [org.clojure/clojurescript "1.9.946"]
+                 [nsfw "0.11.72" :exclusions
+                  [org.clojure/core.async
+                   org.clojure/clojurescript]]
                  [ring "1.5.1"]
                  [compojure "1.1.6"]
                  [aleph "0.4.2-alpha12"]
