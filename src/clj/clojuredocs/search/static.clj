@@ -20,7 +20,7 @@
     clojure.reflect
     clojure.repl
     clojure.set
-    clojure.spec
+    clojure.spec.alpha
     clojure.stacktrace
     clojure.string
     clojure.template
