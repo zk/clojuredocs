@@ -7,7 +7,30 @@
             [clojuredocs.util :as util]
             [clojuredocs.api.examples :as examples]
             [clojuredocs.api.see-alsos :as see-alsos]
-            [clojuredocs.api.notes :as notes]))
+            [clojuredocs.api.notes :as notes]
+            [fogus.unk :as unk]
+            [nsfw.util :as nu]))
+
+(defn all-see-alsos-relations-map []
+  (->> (mon/fetch
+         :see-alsos)
+       (group-by #(select-keys (:from-var %) [:ns :name]))
+       (map (fn [[{:keys [ns name]} to-vars]]
+              [(str ns "/" name)
+               (->> to-vars
+                    (map (fn [{:keys [to-var]}]
+                           (str (:ns to-var) "/" (:name to-var))))
+                    vec)]))
+       (into {})
+       nu/pp-str))
+
+(def memo-all-see-alsos-relations-map
+  (unk/memo-ttl all-see-alsos-relations-map
+    (* 1000 60 60 1)))
+
+(defn see-alsos-relations-handler [r]
+  {:body (memo-all-see-alsos-relations-map)
+   :headers {"Content-Type" "application/edn"}})
 
 (defroutes _routes
   (POST "/examples" [] examples/post-example-handler)
@@ -20,6 +43,9 @@
   (POST "/notes" [] notes/post-note-handler)
   (PATCH "/notes/:id" [id] (notes/patch-note-handler id))
   (DELETE "/notes/:id" [id] (notes/delete-note-handler id))
+
+
+  (GET "/exports/see-alsos-relations" [] see-alsos-relations-handler)
 
   (not-found
     {:status 404
