@@ -166,6 +166,10 @@ how to do that:
 
 * Dev starts the environment using `lein repl :headless`, prod uses `lein run -m clojuredocs.main`. See `:repl-options` in `project.clj` for initialization options.
 
+## Data Exports
+
+* [See also relations](https://clojuredocs.org/api/exports/see-alsos-relations) (ns/name -> [ns/name]), results cached for 1 minute.
+
 
 ## Contributors
 
