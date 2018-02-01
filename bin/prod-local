@@ -2,7 +2,7 @@
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-export SESSION_KEY=b29689d1842e4a20b7cf100333f6d8cb
+export SESSION_KEY="b46ca2a152173e68"
 
 export BASE_URL=http://localhost:5000
 
@@ -30,8 +30,5 @@ set -e
 lein clean
 
 bin/build
-
-lein clean
-lein cljx once
 
 foreman start -f Procfile.prod-local
