@@ -43,9 +43,9 @@
 
 (defn parse-headers [s]
   (when s
-    (->> (str/split s #"\r\n")
+    (->> (str/split s #"\n")
          (mapcat (fn [header]
-                   (->> (str/split header ":")
+                   (->> (str/split header #":" 2)
                         (map str/trim))))
          (apply hash-map))))
 
