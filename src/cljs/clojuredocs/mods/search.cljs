@@ -86,7 +86,7 @@
     (= "namespace" type) ($ac-entry-ns ac-entry)
 
     (= "page" type) ($ac-entry-page ac-entry)
-    :else (.log js/console (str "Couldn't render ac entry:" type))))
+    :else (.log js/console (str "Couldn't render ac entry:" (pr-str ac-entry)))))
 
 (defn focused? [$el]
   (= $el (.-activeElement js/document)))
