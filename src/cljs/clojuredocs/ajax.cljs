@@ -67,6 +67,8 @@
                          (-> headers
                              (get "Content-Type"))
                          "")
+        _ (.log js/console (str "AJAX CONTENT TYPE " (pr-str content-type)))
+        _ (.log js/console (str "HEADERS " (pr-str headers)))
         body (condp #(re-find %1 %2) content-type
                #"application/json" (-> body
                                        json-parse
