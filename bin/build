@@ -2,7 +2,7 @@
 
 set -e
 
-lein cljsbuild once prod
+env JVM_OPTS="-Xmx256m -Xms256m -server" lein cljsbuild once prod
 
 lein test
 
