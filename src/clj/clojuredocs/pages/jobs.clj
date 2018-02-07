@@ -4,7 +4,42 @@
             [clojuredocs.pages.common :as common]
             [clojure.string :as str]))
 
-(def DATA [{:job-title "Lead Clojure Engineer"
+(def DATA [{:job-title "Senior Engineer (Clojure, Datomic, Clojurescript)"
+            :job-type "Permanent"
+            :job-location "Berlin, Germany"
+            :job-apply-href "https://fy.breezy.hr/p/c5d1455dcaf801-senior-engineer-clojure--datomic--clojurescript"
+            :id "fy1"
+            :short-id "fy1"
+            :remote-ok? false
+            :posted-at (util/now)
+            :company-name "Fy!"
+            :company-url "https://www.iamfy.co"
+            :company-image-url "/img/fy-logo.jpg"
+            :company-description "At Fy! we are passionate about using technology to help people discover things that they love. Our iOS app connects women to the most exciting lifestyle products from around the World, through an addictive and serendipitous shopping experience.
+
+We are funded and backed by some of the savviest investors in Europe including Forward Partners, 500 Startups and ex-leadership of ASOS, Streetcar and LoveFilm. We are a small but passionate and experienced team of entrepreneurs, technologies and market experts working to build something huge. Join us!"
+            :job-description "Our iOS app and internal systems are built from the ground up using Clojure(script) and Datomic. The kinds of technical challenges we are taking on range from real-time recommendation to innovative shopping experiences such as customisation and AR.
+
+## Responsibilities
+
+* Design, develop and test new features across our systems: eCom, search, recommendation, notifications, supplier platform and reporting
+* Develop backend services using Clojure, Datomic and GraphQL
+* Build end-to-end tested frontends in Clojurescript using Om Next and our in-house UI component library
+* Maintain and deploy services via AWS and Kubernetes
+* Deliver load time and responsiveness improvements to our users
+* Manage technical debt and make improvements to the existing codebase
+
+
+## Requirements
+
+* 2+ years of relevant Clojure or Clojurescript experience
+* Deep experience in developing on either the JVM on in the browser
+* Flexibility and adaptability to work in a fast-paced startup
+* A passion for delivering benefits and solving pain-points for customers
+* Experience with Datomic, React, React Native and GraphQL are all bonus points
+* A dedication to good software development practices
+* Good communication skills (in English)"}
+           {:job-title "Lead Clojure Engineer"
             :job-type "Permanent"
             :job-location "New York City, NY"
             :job-apply-href "https://jobs.lever.co/spacious/b0f65550-8a4a-40c8-8694-389d6b10dc16"
@@ -156,6 +191,10 @@ Clojure, Python, JavaScript, DynamoDB, Redis, Memcached, AWS (lots). We mostly b
 Changing the entertainment business is hard work, but we do it sustainably. We invest in your health and productivity through great benefits, including medical, dental, vision, 401k, commuter benefits, unlimited PTO, and free lunch if you eat with 4 or more colleagues!
 
 Outpost Games is proud to be an Equal Opportunity Employer committed to a diverse and inclusive workforce – Minority / Female / Disability / Veteran / Gender Identity / Sexual Orientation."}
+
+
+
+
 
 
            {:job-title "Software Engineer"
@@ -672,6 +711,7 @@ We offer competitive compensation and great benefits; stock options; learning bu
 (defn $job-preview [{:keys [job-title job-type
                             job-location
                             job-description
+                            job-apply-href
                             short-id
                             posted-at
                             comp-cash
@@ -683,6 +723,7 @@ We offer competitive compensation and great benefits; stock options; learning bu
                      :as job}
                     &
                     [{:keys [description?
+                             show-apply-button?
                              comp?
                              posted-at?]}]]
   [:div.job-preview
@@ -720,6 +761,14 @@ We offer competitive compensation and great benefits; stock options; learning bu
            " ∙ "
            (equity-range comp-equity)])])
 
+     (when show-apply-button?
+       [:div
+        {:style "margin-top:10px"}
+        [:a.btn.btn-success
+         {:href job-apply-href
+          :target "_blank"}
+         "Apply Now"]])
+
      (when description?
        [:div.description-preview
         {:style "margin-top:5px;font-size:13px;line-height:150%;color:#777;font-weight:300"}
@@ -750,7 +799,8 @@ We offer competitive compensation and great benefits; stock options; learning bu
             (map (fn [job]
                    [:div.job-preview-wrapper
                     ($job-preview job
-                      {:description? true
+                      {:show-apply-button? false
+                       :description? true
                        :comp? true
                        :posted-at? true})])))]]}))
 
@@ -785,12 +835,7 @@ We offer competitive compensation and great benefits; stock options; learning bu
                 {:style "border-top:solid #ccc 1px;padding:20px 0px"}
                 [:div
                  {:style "position:relative;"}
-                 ($job-preview job)
-                 [:a.btn.btn-success
-                  {:href job-apply-href
-                   :target "_blank"
-                   :style "position:absolute;top:0px;right:0px"}
-                  "Apply Now"]]
+                 ($job-preview job {:show-apply-button? true})]
                 [:div.job-description
                  [:h2.section-header "Job Description"]
                  (util/markdown job-description)]
