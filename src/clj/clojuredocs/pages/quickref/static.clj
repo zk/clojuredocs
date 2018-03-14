@@ -269,7 +269,7 @@
          (contains?
            distinct? empty? every? not-every? some not-any?),
          :title "Content Tests"}
-        {:syms (sequential? associative? sorted? counted? reversible?),
+        {:syms (sequential? associative? sorted? counted? reversible? seqable?),
          :title "Capabilities"}
         {:syms (coll? seq? vector? list? map? set?),
          :title "Type Tests"})}
