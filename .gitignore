@@ -17,5 +17,6 @@ pom.xml.asc
 
 resources/public/css/app.css
 resources/public/css/highlighting.css
+resources/public/clojuredocs-export.json
 
 TAGS

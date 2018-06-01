@@ -2,6 +2,7 @@
   (:require [nsfw.util :as nu]
             [clojuredocs.search :as search]
             [clojuredocs.data :as data]
+            [clojuredocs.env :as env]
             [somnium.congomongo :as mon]))
 
 (defn ensure-empty->nil [c]
@@ -34,9 +35,17 @@
 (defn run-export [output-path]
   (spit
     output-path
-    {:created-at (nu/now)
-     :description "ClojureDocs Data Export"
-     :vars (->> search/clojure-lib
-                :vars
-                (map collect-var)
-                vec)}))
+    (nu/to-json
+      {:created-at (nu/now)
+       :description "ClojureDocs Data Export"
+       :vars (->> search/clojure-lib
+                  :vars
+                  (map collect-var)
+                  vec)})))
+
+
+(defn -main []
+  (mon/set-connection!
+    (mon/make-connection
+      (env/str :mongo-url)))
+  (run-export "resources/public/clojuredocs-export.json"))
