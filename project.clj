@@ -26,7 +26,6 @@
                  ;;[cljsjs/react-dom "0.14.0-1"]
                  [clj-fuzzy "0.1.8"]
                  [prone "0.6.0"]]
-  :java-agents [[com.newrelic.agent.java/newrelic-agent "3.10.0"]]
   :repl-options {:init (load-file "reup.clj")}
   :plugins [[lein-cljsbuild "1.1.5"]
             [lein-figwheel "0.5.1"]]
