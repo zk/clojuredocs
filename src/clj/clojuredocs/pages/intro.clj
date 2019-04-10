@@ -170,7 +170,8 @@
              "Clojure from the Ground Up"]]
        [:li [:a {:href "http://4clojure.org"} "4Clojure (learn Clojure interactively)"]]
        [:li [:a {:href "http://clojurescriptkoans.com/"} "ClojureScript Koans"]]
-       [:li [:a {:href "https://repl.it/languages/clojure"} "Run Clojure code live in your browser"]]]
+       [:li [:a {:href "https://repl.it/languages/clojure"} "Run Clojure code live in your browser"]]
+       [:li [:a {:href "https://clojurecademy.com"} "Clojurecademy (Codecademy for Clojure)"]]]
       [:p "There's no denying that Clojure is just so "
        " *different* "
        " from what most of us are used to (what is up with all those parentheses?!), "
