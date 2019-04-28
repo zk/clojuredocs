@@ -8,6 +8,7 @@
     clojure.core.logic.pldb
     clojure.core.reducers
     clojure.data
+    clojure.datafy
     clojure.edn
     clojure.inspector
     clojure.instant
