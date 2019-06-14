@@ -7,6 +7,7 @@
     clojure.core.logic.fd
     clojure.core.logic.pldb
     clojure.core.reducers
+    clojure.core.server
     clojure.data
     clojure.edn
     clojure.inspector
