@@ -1,12 +1,12 @@
-(defproject clojuredocs "0.1.0-SNAPSHOT"
-  :description "FIXME: write description"
-  :url "http://example.com/FIXME"
+(defproject clojuredocs "0.2.0"
+  :description "The clojuredocs.org web app"
+  :url "http://clojuredocs.org"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :min-lein-version "2.0.0"
   :source-paths ["src/clj" "src/cljc"]
   :test-paths ["test/clj"]
-  :dependencies [[org.clojure/clojure "1.9.0"]
+  :dependencies [[org.clojure/clojure "1.10.1"]
                  [org.clojure/clojurescript "1.9.946"]
                  [nsfw "0.11.72" :exclusions
                   [org.clojure/core.async
