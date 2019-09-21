@@ -235,7 +235,9 @@
               {:src "/img/adzerk-logo.png"
                :url "http://adzerk.com"}
               {:src "/img/witai-logo.png"
-               :url "http://wit.ai"}]]
+               :url "http://wit.ai"}
+              {:src "/img/pisano-logo.jpg"
+               :url "https://www.pisano.co"}]]
          [:li [:a {:href url} [:img {:src src}]]])]]]]
    [:div.row
     [:div.col-md-6
