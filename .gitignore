@@ -20,3 +20,5 @@ resources/public/css/highlighting.css
 resources/public/clojuredocs-export.json
 
 TAGS
+
+/dev-db
