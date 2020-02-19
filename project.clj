@@ -25,10 +25,12 @@
                  ;;[cljsjs/react "0.13.1-0"]
                  ;;[cljsjs/react-dom "0.14.0-1"]
                  [clj-fuzzy "0.1.8"]
-                 [prone "0.6.0"]]
+                 [prone "0.6.0"]
+                 [nrepl "0.6.0"]]
   :repl-options {:init (load-file "reup.clj")}
   :plugins [[lein-cljsbuild "1.1.5"]
-            [lein-figwheel "0.5.1"]]
+            [lein-figwheel "0.5.18"]
+            [cider/cider-nrepl "0.22.3"]]
   :cljsbuild {:builds
               {:dev  {:source-paths ["src/cljs" "src/cljc"]
                       :compiler {:output-to "resources/public/cljs/clojuredocs.js"
