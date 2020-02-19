@@ -6,8 +6,11 @@
     clojure.core.logic
     clojure.core.logic.fd
     clojure.core.logic.pldb
+    clojure.core.protocols
     clojure.core.reducers
+    clojure.core.server
     clojure.data
+    clojure.datafy
     clojure.edn
     clojure.inspector
     clojure.instant
@@ -25,6 +28,8 @@
     clojure.string
     clojure.template
     clojure.test
+    clojure.test.junit
+    clojure.test.tap
     clojure.walk
     clojure.xml
     clojure.zip])
