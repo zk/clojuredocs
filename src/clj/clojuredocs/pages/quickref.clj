@@ -107,7 +107,5 @@
        [:div.col-sm-9
         [:h1 "Quickref for Clojure Core"]
         [:p
-         "Adapted from Johannes Friestad's "
-         [:a {:href "http://faustus.webatu.com/clj-quick-ref.html"} "excellent quick ref"]
-         ". "]
+         "Adapted from Johannes Friestad's excellent quick ref."]
         (map $sphere static/quickref-data)]]]}))
