@@ -76,6 +76,7 @@
            (remove :no-doc))))
 
   ["clojure.core"
+   "clojure.core.server"
    "clojure.data"
    "clojure.edn"
    "clojure.inspector"
@@ -113,6 +114,7 @@
          :version "1.6.0"
          :source-base-url "https://github.com/clojure/clojure/1.6.0/blob"
          :namespaces ["clojure.core"
+                      "clojure.core.server"
                       "clojure.data"
                       "clojure.edn"
                       "clojure.inspector"
@@ -157,6 +159,7 @@
 
   (def clojure-namespaces
     '[clojure.core
+      clojure.core.server
       clojure.data
       clojure.edn
       clojure.inspector

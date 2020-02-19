@@ -215,6 +215,7 @@
 
 (def clojure-namespaces
   '[clojure.core
+    clojure.core.server
     clojure.data
     clojure.edn
     clojure.inspector
@@ -343,6 +344,7 @@
   [{:name "Clojure"
     :version "1.6"
     :nss ["clojure.core"
+          "clojure.core.server"
           "clojure.data"
           "clojure.edn"
           "clojure.inspector"
@@ -383,6 +385,7 @@
 
 
 #_(let [nss ["clojure.core"
+             "clojure.core.server"
            "clojure.data"
            "clojure.edn"
            "clojure.inspector"
