@@ -49,5 +49,5 @@
 (defn user [token]
   (when token
     (let [res (hc/get "https://api.github.com/user"
-                {:query-params {:access_token token}})]
+                {:basic-auth ["token" token]})]
       (-> res :body u/from-json))))
