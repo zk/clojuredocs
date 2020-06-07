@@ -145,8 +145,8 @@
          [:div.null-state "Uh-oh, no contributors!"])
        [:div.migrate-account
         [:a {:href "/migrate-account"} "Migrate your old ClojureDocs account"]]]]
-     [:section
-      ($jobs-preview (take 3 jobs/DATA))]
+     #_[:section
+        ($jobs-preview (take 3 jobs/DATA))]
      [:section
       [:h5 "Recently Updated"]
       [:div.row

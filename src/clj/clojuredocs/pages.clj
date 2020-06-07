@@ -320,11 +320,11 @@
 
   (GET "/search" [] search-page-handler)
 
-  (GET "/jobs" [] jobs/list-handler)
-  (GET "/jobs/post" [] jobs/post-handler)
-  (GET "/jobs/about" [] jobs/about-handler)
-  (GET "/jobs/:job-id" [job-id] (jobs/single-handler job-id))
-  (GET "/jobs/:job-id/:url-slug" [job-id] (jobs/single-handler job-id))
+  #_(GET "/jobs" [] jobs/list-handler)
+  #_(GET "/jobs/post" [] jobs/post-handler)
+  #_(GET "/jobs/about" [] jobs/about-handler)
+  #_(GET "/jobs/:job-id" [job-id] (jobs/single-handler job-id))
+  #_(GET "/jobs/:job-id/:url-slug" [job-id] (jobs/single-handler job-id))
 
   (GET "/ac-search" [] var-search-handler)
   (GET "/ac-vars" [] ac-vars-handler)
