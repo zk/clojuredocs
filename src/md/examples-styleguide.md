@@ -6,7 +6,7 @@ The example sections on each var page are there to provide simple, isolated exam
 
 Examples should be short, unique, self-contained snippets of code that illustrate var usage in the simplest possible way.
 
-* Try to imagine clear conceptual boundries of your example before submitting it.
+* Try to imagine clear conceptual boundaries of your example before submitting it.
 * Assume the reader has a background in software development, with little Clojure experience.
 * Short, sweet, and complete is the name of the game.
 
