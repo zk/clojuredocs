@@ -194,11 +194,11 @@
                :url "https://www.netflix.com"}
               {:src "/img/amazon-logo.png"
                :url "http://www.amazon.com"}
-              {:src "https://upload.wikimedia.org/wikipedia/en/2/22/The_Climate_Corporation_Logo2.jpg"
+              {:src "img/climate-corporation-logo.png"
                :url "http://www.climate.com/"}
               {:src "/img/funding-circle-logo.png"
                :url "https://www.fundingcircle.com"}
-              {:src "https://g.twimg.com/Twitter_logo_blue.png"
+              {:src "/img/twitter-logo.png"
                :url "https://twitter.com"}
               {:src "/img/factual-logo.png"
                :url "http://www.factual.com"}
@@ -206,7 +206,7 @@
                :url "https://simple.com"}
               {:src "/img/heroku-logo.png"
                :url "https://www.heroku.com"}
-              {:src "https://img.brightcove.com/logo-corporate-new.png"
+              {:src "img/brightcove-logo.png"
                :url "http://www.brightcove.com"}
               {:src "/img/soundcloud-logo.png"
                :url "https://soundcloud.com"}
