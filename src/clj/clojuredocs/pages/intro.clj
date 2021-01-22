@@ -230,8 +230,6 @@
                :url "https://kirasystems.com"}
               {:src "/img/farmlogs-logo.png"
                :url "http://www.farmlogs.com"}
-              {:src "/img/stylefruits-logo.png"
-               :url "http://www.stylefruits.de/"}
               {:src "/img/adzerk-logo.png"
                :url "http://adzerk.com"}
               {:src "/img/witai-logo.png"
