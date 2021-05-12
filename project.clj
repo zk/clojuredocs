@@ -19,7 +19,7 @@
                  [org.clojure/java.jdbc "0.3.0-beta2"]
                  [mysql/mysql-connector-java "5.1.25"]
                  [unk "0.9.1"]
-                 [org.clojure/core.async "0.4.474"]
+                 [org.clojure/core.async "1.3.618"]
                  [org.clojure/core.logic "0.8.11"]
                  [org.pegdown/pegdown "1.4.2"]
                  ;;[cljsjs/react "0.13.1-0"]

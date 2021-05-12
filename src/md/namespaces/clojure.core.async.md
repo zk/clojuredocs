@@ -1,4 +1,6 @@
-Channel primitives for building asynchronous programs. **Core.async is not provided as part of Clojure's standard distribution, and must be included as a [dependency](https://github.com/clojure/core.async#releases-and-dependency-information)**.
+A Clojure library providing facilities for async programming and communication.
+
+**Core.async is not provided as part of Clojure's standard distribution, and must be included as a [dependency](https://github.com/clojure/core.async#releases-and-dependency-information)**.
 
 
 ##### Community Links
