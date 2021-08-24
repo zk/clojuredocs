@@ -165,10 +165,10 @@
        "New to Clojure and not sure where to start? Here are a few good resources to get you off on the right foot:"]
       [:ul.getting-started-resources
        [:li [:a {:href "https://changelog.com/posts/rich-hickeys-greatest-hits/"} "Rich Hickey's Greatest Hits (videos)"]]
-       [:li [:a {:href "http://www.braveclojure.com"} "Clojure for the Brave and True"]]
-       [:li [:a {:href "http://aphyr.com/posts/301-clojure-from-the-ground-up-welcome"}
+       [:li [:a {:href "https://www.braveclojure.com"} "Clojure for the Brave and True"]]
+       [:li [:a {:href "https://aphyr.com/posts/301-clojure-from-the-ground-up-welcome"}
              "Clojure from the Ground Up"]]
-       [:li [:a {:href "http://4clojure.org"} "4Clojure (learn Clojure interactively)"]]
+       [:li [:a {:href "https://4clojure.oxal.org/"} "4Clojure (learn Clojure interactively)"]]
        [:li [:a {:href "http://clojurescriptkoans.com/"} "ClojureScript Koans"]]
        [:li [:a {:href "https://repl.it/languages/clojure"} "Run Clojure code live in your browser"]]]
       [:p "There's no denying that Clojure is just so "
