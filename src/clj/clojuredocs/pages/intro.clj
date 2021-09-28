@@ -202,8 +202,6 @@
                :url "https://twitter.com"}
               {:src "/img/factual-logo.png"
                :url "http://www.factual.com"}
-              {:src "/img/simple-logo.png"
-               :url "https://simple.com"}
               {:src "/img/heroku-logo.png"
                :url "https://www.heroku.com"}
               {:src "/img/brightcove-logo.png"
