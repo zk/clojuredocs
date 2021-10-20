@@ -169,6 +169,7 @@
        [:li [:a {:href "https://aphyr.com/posts/301-clojure-from-the-ground-up-welcome"}
              "Clojure from the Ground Up"]]
        [:li [:a {:href "https://4clojure.oxal.org/"} "4Clojure (learn Clojure interactively)"]]
+       [:li [:a {:href "https://exercism.org/tracks/clojure"} "Free Clojure mentoring"]]
        [:li [:a {:href "http://clojurescriptkoans.com/"} "ClojureScript Koans"]]
        [:li [:a {:href "https://repl.it/languages/clojure"} "Run Clojure code live in your browser"]]]
       [:p "There's no denying that Clojure is just so "
