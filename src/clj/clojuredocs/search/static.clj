@@ -19,6 +19,7 @@
     clojure.java.javadoc
     clojure.java.shell
     clojure.main
+    clojure.math
     clojure.pprint
     clojure.reflect
     clojure.repl
