@@ -190,11 +190,13 @@
       [:h5 "Clojure in Production"]
       [:ul
        (for [{:keys [src url]}
-             [{:src "/img/netflix-logo.png"
+             [{:src "/img/nubank-logo.png"
+               :url "https://nubank.com.br/en/"}
+              {:src "/img/netflix-logo.png"
                :url "https://www.netflix.com"}
               {:src "/img/amazon-logo.png"
                :url "http://www.amazon.com"}
-              {:src "https://upload.wikimedia.org/wikipedia/en/2/22/The_Climate_Corporation_Logo2.jpg"
+              {:src "/img/climate-corporation-logo.png"
                :url "http://www.climate.com/"}
               {:src "/img/funding-circle-logo.png"
                :url "https://www.fundingcircle.com"}
@@ -202,11 +204,11 @@
                :url "https://twitter.com"}
               {:src "/img/factual-logo.png"
                :url "http://www.factual.com"}
-              {:src "/img/simple-logo.png"
-               :url "https://simple.com"}
+              {:src "/img/exoscale-logo.png"
+               :url "https://www.exoscale.com/"}
               {:src "/img/heroku-logo.png"
                :url "https://www.heroku.com"}
-              {:src "https://img.brightcove.com/logo-corporate-new.png"
+              {:src "/img/brightcove-logo.png"
                :url "http://www.brightcove.com"}
               {:src "/img/soundcloud-logo.png"
                :url "https://soundcloud.com"}
@@ -230,12 +232,22 @@
                :url "https://kirasystems.com"}
               {:src "/img/farmlogs-logo.png"
                :url "http://www.farmlogs.com"}
-              {:src "/img/stylefruits-logo.png"
-               :url "http://www.stylefruits.de/"}
               {:src "/img/adzerk-logo.png"
                :url "http://adzerk.com"}
               {:src "/img/witai-logo.png"
                :url "http://wit.ai"}
+              {:src "/img/clearwater-logo.png"
+               :url "https://clearwateranalytics.com/"}
+              {:src "/img/griffin-logo.png"
+               :url "https://griffin.sh/"}
+              {:src "/img/whimsical-logo.png"
+               :url "https://whimsical.com/"}
+              {:src "/img/pitch-logo.png"
+               :url "https://pitch.com/"}
+              {:src "/img/fluent-logo.png"
+               :url "https://fluent.to/"}
+              {:src "/img/reify-health-logo.png"
+               :url "https://www.reifyhealth.com/"}
               {:src "/img/pisano-logo.jpg"
                :url "https://www.pisano.co"}]]
          [:li [:a {:href url} [:img {:src src}]]])]]]]
