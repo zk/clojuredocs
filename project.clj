@@ -26,7 +26,9 @@
                  ;;[cljsjs/react-dom "0.14.0-1"]
                  [clj-fuzzy "0.1.8"]
                  [prone "0.6.0"]
-                 [nrepl "0.6.0"]]
+                 [nrepl "0.6.0"]
+                 [javax.xml.bind/jaxb-api "2.4.0-b180830.0359"]
+                 [org.clojure/data.csv "1.0.1"]]
   :repl-options {:init (load-file "reup.clj")}
   :plugins [[lein-cljsbuild "1.1.5"]
             [lein-figwheel "0.5.18"]
