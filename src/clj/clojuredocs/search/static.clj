@@ -10,6 +10,7 @@
     clojure.core.reducers
     clojure.core.server
     clojure.data
+    clojure.data.csv
     clojure.datafy
     clojure.edn
     clojure.inspector
