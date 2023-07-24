@@ -714,3 +714,19 @@ should be on the component.
 
 On the SA UI, why is there an add button? The add buttons should be on
 the AC results (can't add a SA to a var that doesn't exist). Yay!
+
+
+* <2023-07-24 Mon 10:14>
+
+Rolling through GH issues and PRs. Been yak shaving for an hour trying to get an old enough version of mongo installed on my local. Also OSX now taking port 5k is causing issues, will switch to 4k, but can't seem to find where this is set. ENV var PORT, but if not set should default to 8080 not 5k.
+
+
+* <2023-07-24 Mon 10:36>
+
+Well, that's enought of that for now. Runnning into the
+
+```
+ java.lang.IllegalArgumentException: No implementation of method: :urls of protocol: #'clojure.java.classpath/URLClasspath found for class: jdk.internal.loader.ClassLoaders$AppClassLoader
+```
+
+issue and trying to work through it. Time to get back to work, I'll pick this up tomorrow.
