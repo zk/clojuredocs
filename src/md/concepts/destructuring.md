@@ -41,4 +41,8 @@ structure of the passed map:
 
 ```
 
-See John Del Rosario's [destructuring cheat sheet](https://gist.github.com/john2x/e1dca953548bfdfb9844) for a more comprehensive overview.
+* For more detailed take on destructuring see Daniel Gregoire's [blog post](https://danielgregoire.dev/posts/2021-06-13-code-observation-clojure-destructuring/).
+* Bruno Bonacci's [guide on destructuring](https://blog.brunobonacci.com/2014/11/16/clojure-complete-guide-to-destructuring/) is worth a look.
+* Jay Field's [introductory blog post](http://blog.jayfields.com/2010/07/clojure-destructuring.html) provides a good starting point.
+* See John Del Rosario's [destructuring cheat sheet](https://gist.github.com/john2x/e1dca953548bfdfb9844) for a more comprehensive overview.
+* Also there is [the official Clojure guide on destructuring](https://clojure.org/guides/destructuring).
