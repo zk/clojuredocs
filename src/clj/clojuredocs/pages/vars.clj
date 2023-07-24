@@ -45,7 +45,7 @@
 
 (defn source-url [{:keys [file line ns] :as var}]
   (when (and (= "clojure.core" ns) file)
-    (str "https://github.com/clojure/clojure/blob/clojure-1.10.1/src/clj/" file "#L" line)))
+    (str "https://github.com/clojure/clojure/blob/clojure-1.11.1/src/clj/" file "#L" line)))
 
 (defn lookup-var [ns name]
   (search/lookup (str ns "/" name)))

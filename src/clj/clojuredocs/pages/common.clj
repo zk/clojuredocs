@@ -89,7 +89,7 @@
     [:ul.navbar-nav.mobile-navbar-nav.nav
      [:li
       [:a {:href "/core-library"} "Core Library"
-       [:span.clojure-version "(1.10.1)"]]]
+       [:span.clojure-version "(1.11.1)"]]]
      [:li [:a {:href "/quickref"} "Quick Reference"]]
      (if user
        ($user-area user)

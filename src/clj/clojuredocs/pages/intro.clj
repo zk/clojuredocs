@@ -200,7 +200,7 @@
                :url "http://www.climate.com/"}
               {:src "/img/funding-circle-logo.png"
                :url "https://www.fundingcircle.com"}
-              {:src "/img/twitter-logo.png"
+              {:src "https://help.twitter.com/content/dam/help-twitter/brand/logo.png"
                :url "https://twitter.com"}
               {:src "/img/factual-logo.png"
                :url "http://www.factual.com"}
