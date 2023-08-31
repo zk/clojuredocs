@@ -1,4 +1,4 @@
-web: lein run -m clojuredocs.main
-mongo: mongod
+web: env PORT=4000 lein run -m clojuredocs.main
+mongo: mongod --dbpath ./data/proddb
 
 cljs: lein cljsbuild auto dev-advanced
