@@ -730,3 +730,10 @@ Well, that's enought of that for now. Runnning into the
 ```
 
 issue and trying to work through it. Time to get back to work, I'll pick this up tomorrow.
+
+
+* <2023-08-31 Thu 10:33>
+
+Ok, finally got the prod-local server running. Tried a rollback to openjdk@11 to fix the protocol error above, but no joy. It has something to do with clojure.tool.namespace.repl's use of classpath stuff, but I haven't had a chance to dig into it. Full fix would be pulling all that stuff out probably.
+
+Anyways got the server up and running, but encoutering js errors causing the page to not load completely. FastClick not defined and cannot read properties of undefined clojure.core. Not fun will have to dig in to get these figured out. Not great becuase any version bumps mean I'll have to verify resource versions on the server which probably means a server rebuild.
