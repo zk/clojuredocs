@@ -77,7 +77,7 @@ sudo service clojuredocs-web-2 restart
 Run `bin/dev`, which will start all the things (repl, web process,
 scss compiler, etc). See `Procfile` for more info.
 
-Connect to the repl and / or visit http://localhost:5000
+Connect to the repl and / or visit http://localhost:4000
 
 You'll notice that var information is already populated. In an effort to not make the same mistakes again, all core-related var info is loaded from the runtime version of Clojure on start up.
 
