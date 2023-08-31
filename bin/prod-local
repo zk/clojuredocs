@@ -4,7 +4,7 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 export SESSION_KEY="b46ca2a152173e68"
 
-export BASE_URL=http://localhost:5000
+export BASE_URL=http://localhost:4000
 
 export DEBUG_EXCEPTIONS=true
 export REPL_PORT=7888
