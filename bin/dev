@@ -11,5 +11,7 @@ source $SCRIPT_DIR/.devenv
 # export NEW_RELIC_BROWSER_ID=4996968
 # export NEW_RELIC_BROWSER_KEY=da19d87a54
 
+export PORT=4000
+
 cd $SCRIPT_DIR && lein clean
 cd $SCRIPT_DIR/.. && foreman start -f Procfile.dev
