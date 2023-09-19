@@ -1,10 +1,8 @@
 (ns clojuredocs.pages.nss
-  (:require [clojuredocs.config :as config]
-            [somnium.congomongo :as mon]
-            [clojuredocs.util :as util]
+  (:require [clojure.string :as str]
             [clojuredocs.pages.common :as common]
             [clojuredocs.search :as search]
-            [clojure.string :as str]))
+            [clojuredocs.util :as util]))
 
 (defn library-for [ns]
   search/clojure-lib)

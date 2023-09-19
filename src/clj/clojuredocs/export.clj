@@ -1,5 +1,5 @@
 (ns clojuredocs.export
-  (:require [nsfw.util :as nu]
+  (:require [nsfw.util :as util]
             [clojuredocs.search :as search]
             [clojuredocs.data :as data]
             [clojuredocs.env :as env]
@@ -35,8 +35,8 @@
 (defn run-export [output-path]
   (spit
     output-path
-    (nu/to-json
-      {:created-at (nu/now)
+    (util/to-json
+      {:created-at (util/now)
        :description "ClojureDocs Data Export"
        :vars (->> search/clojure-lib
                   :vars

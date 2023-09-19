@@ -1,12 +1,11 @@
 (ns clojuredocs.pages.user
-  (:require [clojuredocs.util :as util]
-            [clojuredocs.config :as config]
-            [clojuredocs.pages.common :as common]
+  (:require [clojuredocs.config :as config]
             [clojuredocs.mail :as mail]
-            [somnium.congomongo :as mon]
+            [clojuredocs.pages.common :as common]
+            [clojuredocs.util :as util]
             [ring.util.codec :as codec]
-            [ring.util.response :refer (redirect)]
-            [compojure.core :refer (defroutes GET)]))
+            [ring.util.response :refer [redirect]]
+            [somnium.congomongo :as mon]))
 
 (defn page-handler [login account-source]
   (let [{:keys [login account-source] :as user}

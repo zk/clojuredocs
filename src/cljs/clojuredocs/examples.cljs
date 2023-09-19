@@ -1,19 +1,8 @@
 (ns clojuredocs.examples
-  (:require [dommy.core :as dommy :refer-macros [sel1]]
-            [reagent.core :as rea]
-            [nsfw.ops :as ops]
-            [cljs.core.async :as async
-             :refer [<! >! chan close! sliding-buffer put!
-                     alts! timeout pipe mult tap]]
+  (:require [clojuredocs.syntax :as syntax]
             [clojuredocs.util :as util]
-            [nsfw.util :as nu]
-            [clojuredocs.ajax :refer [ajax]]
-            [clojuredocs.anim :as anim]
-            [clojuredocs.syntax :as syntax]
-            [clojure.string :as str]
-            [cljs.reader :as reader]
-            [clojure.data :refer [diff]])
-  (:require-macros [cljs.core.async.macros :refer [go go-loop]]))
+            [nsfw.ops :as ops]
+            [reagent.core :as rea]))
 
 (defn $expando-ta
   "A textarea the expands downward with the content (no scroll)"

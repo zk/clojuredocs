@@ -1,11 +1,7 @@
 (ns tools.sanity-check
   (:require [clojure.java.jdbc :as j]
-            [clojure.pprint :refer (pprint)]
-            [clojure.string :as str]
-            [somnium.congomongo :as mon]
-            [clojuredocs.data :as data]
-            [clojuredocs.util :as util]
-            [clojure.set :as set]))
+            [clojure.set :as set]
+            [somnium.congomongo :as mon]))
 
 (def mysql-db {:subprotocol "mysql"
                :subname "//127.0.0.1:3306/clojuredocs"

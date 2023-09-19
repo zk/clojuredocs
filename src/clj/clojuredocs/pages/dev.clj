@@ -1,10 +1,8 @@
 (ns clojuredocs.pages.dev
   (:require [clojure.string :as str]
-            [compojure.core :refer [defroutes GET]]
             [clojuredocs.pages.common :as common]
             [clojuredocs.pages.quickref :as quickref]
-            [schema.core :as s]
-            [clojuredocs.util :as util]))
+            [schema.core :as s]))
 
 (defn section [title & body]
   [:secton

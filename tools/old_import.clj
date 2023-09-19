@@ -1,11 +1,10 @@
 (ns tools.old-import
   (:require [clojure.java.jdbc :as j]
-            #_[clojure.java.jdbc.sql :as s]
-            [clojure.pprint :refer (pprint)]
+   #_[clojure.java.jdbc.sql :as s]
+            [clojure.pprint :refer [pprint]]
             [clojure.string :as str]
-            [somnium.congomongo :as mon]
-            [clojuredocs.data :as data]
-            [clojuredocs.util :as util]))
+            [clojuredocs.util :as util]
+            [somnium.congomongo :as mon]))
 
 (def mysql-db {:subprotocol "mysql"
                :subname "//127.0.0.1:3306/clojuredocs"
@@ -157,7 +156,7 @@
                                    :history (rest history)))))
                         (map #(assoc % :library-url "https://github.com/clojure/clojure"))
                         (map (fn [{:keys [author ns name body library-url created-at updated-at history]}]
-                               {:_id (org.bson.types.ObjectId.)
+                               {:_id (ObjectId.)
                                 :var {:ns ns
                                       :name name
                                       :library-url library-url}
@@ -175,7 +174,7 @@
             :example-histories
             (merge
               h
-              {:_id (org.bson.types.ObjectId.)
+              {:_id (ObjectId.)
                :example-id _id}))))
       (println "examples" (mon/fetch-count :examples))
       (println "example history entries" (mon/fetch-count :example-histories)))))

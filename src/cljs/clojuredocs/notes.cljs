@@ -1,19 +1,10 @@
 (ns clojuredocs.notes
-  (:require [dommy.core :as dommy :refer-macros [sel1]]
-            [reagent.core :as rea]
-            [nsfw.ops :as ops]
-            [cljs.core.async :as async
-             :refer [<! >! chan close! sliding-buffer put! alts! timeout pipe mult tap]]
-            [clojuredocs.ajax :refer [ajax]]
+  (:require [clojure.string :as str]
             [clojuredocs.anim :as anim]
-            [clojuredocs.examples :as examples]
-            [clojure.string :as str]
-            [cljs.reader :as reader]
-            [goog.crypt :as gcrypt]
-            [goog.crypt.Md5 :as Md5]
-            [goog.crypt.Sha1 :as Sha1]
-            [clojuredocs.util :as util])
-  (:require-macros [cljs.core.async.macros :refer [go go-loop]]))
+            [clojuredocs.util :as util]
+            [dommy.core :as dommy :refer-macros [sel1]]
+            [nsfw.ops :as ops]
+            [reagent.core :as rea]))
 
 (defn $expando-ta
   "A textarea the expands downward with the content (no scroll)"

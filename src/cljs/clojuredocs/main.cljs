@@ -1,25 +1,14 @@
 (ns clojuredocs.main
-  (:require [clojuredocs.util :as util]
-            [nsfw.util :as nu]
-            [nsfw.page :as page]
-            [dommy.core :as dommy :refer-macros [sel sel1]]
-            [reagent.core :as rea]
-            [clojure.string :as str]
-            [clojuredocs.ajax :refer [ajax]]
-            [clojuredocs.sticky :as sticky]
+  (:require [clojuredocs.anim :as anim]
             [clojuredocs.mods.search :as search]
-            [clojuredocs.see-alsos :as see-alsos]
-            [clojuredocs.examples :as examples]
-            [clojuredocs.notes :as notes]
-            [clojuredocs.mods.var-page :as var-page]
             [clojuredocs.mods.styleguide :as styleguide]
-            [clojuredocs.anim :as anim]
-            [cljs.reader :as reader]
-            [cljs.core.async :as async
-             :refer [<! >! chan close! sliding-buffer put! alts! timeout pipe mult tap]]
+            [clojuredocs.mods.var-page :as var-page]
+            [clojuredocs.see-alsos :as see-alsos]
+            [clojuredocs.sticky :as sticky]
             [clojuredocs.syntax :as syntax]
-            #_[clj-fuzzy.metrics1 :as fuzzy])
-  (:require-macros [cljs.core.async.macros :refer [go go-loop]]))
+            [dommy.core :as dommy :refer-macros [sel sel1]]
+            [nsfw.page :as page]
+   #_[clj-fuzzy.metrics1 :as fuzzy]))
 
 (enable-console-print!)
 

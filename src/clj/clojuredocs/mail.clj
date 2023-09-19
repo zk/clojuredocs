@@ -1,6 +1,5 @@
 (ns clojuredocs.mail
   (:require [clj-http.client :as client]
-            [clojuredocs.util :as util]
             [clojuredocs.config :as config]
             [somnium.congomongo :as mon]))
 

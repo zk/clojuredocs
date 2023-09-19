@@ -1,9 +1,10 @@
 (ns clojuredocs.search
-  (:require [clucy.core :as clucy]
-            [clojure.string :as str]
+  (:require [clojure.string :as str]
+            [clojuredocs.search.static :as static]
             [clojuredocs.util :as util]
-            [clojure.pprint :refer [pprint]]
-            [clojuredocs.search.static :as static]))
+            [clucy.core :as clucy])
+  (:import [org.apache.lucene.analysis.core WhitespaceAnalyzer]
+           [org.apache.lucene.queryparser.classic QueryParser]))
 
 (def search-index (clucy/memory-index))
 
@@ -127,7 +128,7 @@
        (map (fn [{:keys [name] :as ns}]
               (assoc ns :href (str "/" name))))))
 
-(binding [clucy/*analyzer* (org.apache.lucene.analysis.core.WhitespaceAnalyzer. clucy/*version*)]
+(binding [clucy/*analyzer* (WhitespaceAnalyzer. clucy/*version*)]
   (doseq [nm searchable-vars]
     (clucy/add search-index nm))
   (doseq [ns searchable-nss]
@@ -186,7 +187,7 @@ Still maintains the O(n*m) guarantee.
 
 (defn escape-query [q]
   (when-not (empty? q)
-    (org.apache.lucene.queryparser.classic.QueryParser/escape q)))
+    (QueryParser/escape q)))
 
 (defn format-query [q]
   (some-> q

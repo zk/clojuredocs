@@ -1,17 +1,15 @@
 (ns clojuredocs.mods.search
-  (:require [reagent.core :as rea]
-            [nsfw.ops :as ops]
-            [nsfw.page :as page]
-            [dommy.core :as dommy :refer-macros [sel1 sel]]
-            [cljs.core.async :as async
-             :refer [<! >! chan close! sliding-buffer put! alts! timeout pipe mult tap]]
+  (:require-macros [cljs.core.async.macros :refer [go go-loop]])
+  (:require [cljs.core.async :refer [<! >! alts! chan close! mult pipe put! sliding-buffer tap timeout]]
+            [cljs.reader]
             [clojuredocs.ajax :refer [ajax]]
             [clojuredocs.anim :as anim]
-            [clojure.string :as str]
-            [cljs.reader :as reader]
+            [clojuredocs.metrics :as metrics]
             [clojuredocs.util :as util]
-            [clojuredocs.metrics :as metrics])
-  (:require-macros [cljs.core.async.macros :refer [go go-loop]]))
+            [dommy.core :as dommy :refer-macros [sel1 sel]]
+            [nsfw.ops :as ops]
+            [nsfw.page :as page]
+            [reagent.core :as rea]))
 
 (defn ellipsis [n s]
   (if (> (- (count s) 3) n)

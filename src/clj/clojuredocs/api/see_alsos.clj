@@ -4,7 +4,8 @@
             [schema.core :as s]
             [clojuredocs.util :as util]
             [clojuredocs.api.common :as c]
-            [clojuredocs.search :as search]))
+            [clojuredocs.search :as search])
+  (:import [org.bson.types ObjectId]))
 
 ;; Schemas
 
@@ -19,11 +20,11 @@
    :library-url s/Str})
 
 (def SeeAlso
-  {:from-var Var
-   :to-var Var
-   :author User
+  {:from-var   Var
+   :to-var     Var
+   :author     User
    :created-at s/Int
-   :_id org.bson.types.ObjectId})
+   :_id        ObjectId})
 
 (defn prevent-duplicates [{:keys [from-var to-var]}]
   (when-let [existing (mon/fetch-one :see-alsos :where {:from-var from-var :to-var to-var})]
@@ -44,7 +45,7 @@
                                   [:ns :name :library-url])
                       :author user
                       :created-at (util/now)
-                      :_id (org.bson.types.ObjectId.)}]
+                      :_id (ObjectId.)}]
     (when-not to-var
       (throw+
         {:status 404
@@ -62,7 +63,7 @@
 (defn delete-see-also-handler [id]
   (fn [{:keys [edn-body user]}]
     (c/require-login! user)
-    (let [_id (org.bson.types.ObjectId. id)
+    (let [_id (ObjectId. (str id))
           sa (mon/fetch-one :see-alsos :where {:_id _id})]
       (c/validate! sa [(is-author? user)])
       #_(mon/update! :see-alsos

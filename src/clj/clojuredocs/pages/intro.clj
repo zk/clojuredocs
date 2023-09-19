@@ -1,12 +1,11 @@
 (ns clojuredocs.pages.intro
   (:require [clojuredocs.config :as config]
-            [clojuredocs.util :as util]
-            [compojure.core :refer (defroutes GET POST)]
-            [somnium.congomongo :as mon]
-            [fogus.unk :refer (memo-ttl)]
             [clojuredocs.pages.common :as common]
+            [clojuredocs.pages.jobs :as jobs]
             [clojuredocs.syntax :as syntax]
-            [clojuredocs.pages.jobs :as jobs]))
+            [clojuredocs.util :as util]
+            [fogus.unk :refer [memo-ttl]]
+            [somnium.congomongo :as mon]))
 
 (defmulti $render-recently-updated :type)
 

@@ -1,7 +1,8 @@
 (ns clojuredocs.api.common
   (:require [slingshot.slingshot :refer [throw+]]
             [schema.core :as s]
-            [clojuredocs.util :as util]))
+            [clojuredocs.util :as util])
+  (:import [org.bson.types ObjectId]))
 
 ;; Schemas
 
@@ -49,8 +50,8 @@
 
 (defn parse-mongo-id! [id]
   (try
-    (org.bson.types.ObjectId. id)
-    (catch java.lang.IllegalArgumentException e
+    (ObjectId. (str id))
+    (catch IllegalArgumentException e
       (throw+
         {:status 400
          :body {:message "Couldn't parse mongo id"}}))))

@@ -1,9 +1,7 @@
 (ns clojuredocs.pages.gh-auth
   (:require [clojuredocs.config :as config]
-            [clojuredocs.env :as env]
             [clojuredocs.github :as gh]
-            [ring.util.response :refer (redirect)]
-            [compojure.core :refer (defroutes GET)]
+            [ring.util.response :refer [redirect]]
             [somnium.congomongo :as mon]))
 
 (defn gh-user->user [{:keys [avatar_url id login]}]

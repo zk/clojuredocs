@@ -1,7 +1,7 @@
 (ns clojuredocs.data.import
-  (:require [clojure.pprint :refer [pprint]]
-            [somnium.congomongo :as mon]
-            [clojure.edn :as edn]))
+  (:require [clojure.edn]
+            [clojure.pprint :refer [pprint]]
+            [somnium.congomongo :as mon]))
 (comment
   (def var-keys
     [:ns

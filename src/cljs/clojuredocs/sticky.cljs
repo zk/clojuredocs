@@ -1,7 +1,6 @@
 (ns clojuredocs.sticky
-  (:require [dommy.utils :as utils]
-            [dommy.core :as dom :refer-macros [sel sel1]]
-            [clojure.string :as str]))
+  (:require [clojure.string :as str]
+            [dommy.core :as dom :refer-macros [sel sel1]]))
 
 (defn clog [& args]
   (.log js/console (pr-str args)))

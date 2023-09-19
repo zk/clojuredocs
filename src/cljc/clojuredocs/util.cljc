@@ -8,15 +8,19 @@
 
 
   #? (:clj
-      (:import [org.pegdown PegDownProcessor]
-               [org.pegdown Parser]
-               [org.pegdown Extensions])))
+      (:import [java.net URLEncoder]
+               [org.bson.types ObjectId]
+               [com.vladsch.flexmark.html HtmlRenderer]
+               [com.vladsch.flexmark.parser Parser]
+               [com.vladsch.flexmark.profile.pegdown Extensions]
+               [com.vladsch.flexmark.profile.pegdown PegdownOptionsAdapter]
+               [com.vladsch.flexmark.util.data DataHolder])))
 
 #? (:clj
     (do
       (defn url-encode [s]
         (when s
-          (java.net.URLEncoder/encode s)))
+          (URLEncoder/encode s)))
 
 
       (defn url-decode [s]
@@ -94,11 +98,11 @@
 #? (:clj
     (defn markdown [s]
       (when s
-        (let [pd (PegDownProcessor. (int (bit-or
-                                           Extensions/AUTOLINKS
-                                           Extensions/FENCED_CODE_BLOCKS
-                                           Extensions/TABLES)))]
-          (.markdownToHtml pd s)))))
+        (let [OPTIONS (PegdownOptionsAdapter/flexmarkOptions Extensions/ALL
+                                                             (make-array com.vladsch.flexmark.util.misc.Extension 0))
+              PARSER (-> (Parser/builder OPTIONS) .build)
+              RENDERER (-> (HtmlRenderer/builder OPTIONS) .build)]
+          (->> s (str) (.parse PARSER) (.render RENDERER))))))
 
 (defn pluralize [n single plural]
   (str n " " (if (= 1 n) single plural)))
@@ -166,9 +170,9 @@
 #? (:clj
     (defn bson-id
       ([]
-       (org.bson.types.ObjectId.))
+       (ObjectId.))
       ([id-or-str]
-       (org.bson.types.ObjectId/massageToObjectId id-or-str))))
+       (ObjectId. (str id-or-str)))))
 
 #? (:clj
     (defn uuid []

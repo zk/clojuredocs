@@ -1,16 +1,8 @@
 (ns clojuredocs.see-alsos
-  (:require [dommy.core :as dommy :refer-macros [sel1]]
+  (:require [clojuredocs.util :as util]
             [nsfw.ops :as ops]
             [nsfw.page :as page]
-            [reagent.core :as rea]
-            [cljs.core.async :as async
-             :refer [<! >! chan close! sliding-buffer put! alts! timeout pipe mult tap]]
-            [clojuredocs.ajax :refer [ajax]]
-            [clojuredocs.anim :as anim]
-            [clojure.string :as str]
-            [cljs.reader :as reader]
-            [clojuredocs.util :as util])
-  (:require-macros [cljs.core.async.macros :refer [go]]))
+            [reagent.core :as rea]))
 
 (defn $see-also [opts !sa bus]
   (let [{:keys [from-var to-var

@@ -2,24 +2,25 @@
   (:require [clojuredocs.api.common :as c]
             [schema.core :as s]
             [somnium.congomongo :as mon]
-            [slingshot.slingshot :refer [throw+]]))
+            [slingshot.slingshot :refer [throw+]])
+  (:import [org.bson.types ObjectId]))
 
 (defn body-not-empty [m]
   (when (empty? (:body m))
     {:message "Whoops, looks like your note is empty."}))
 
 (def Note
-  {:body s/Str
-   :var c/Var
-   :author c/User
+  {:body       s/Str
+   :var        c/Var
+   :author     c/User
    :created-at s/Int
    :updated-at s/Int
-   :_id org.bson.types.ObjectId})
+   :_id        ObjectId})
 
 (defn post-note-handler [{:keys [edn-body user]}]
   (c/require-login! user)
   (let [new-note (-> edn-body
-                     (assoc :_id (org.bson.types.ObjectId.))
+                     (assoc :_id (ObjectId.))
                      c/update-timestamps
                      (assoc :author user))]
     (c/validate! new-note [body-not-empty])

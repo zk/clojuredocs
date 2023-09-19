@@ -3,7 +3,8 @@
             [somnium.congomongo :as mon]
             [schema.core :as s]
             [clojuredocs.util :as util]
-            [clojuredocs.api.common :as c]))
+            [clojuredocs.api.common :as c])
+  (:import [org.bson.types ObjectId]))
 ;; Utils
 
 (defn edn-response [payload]
@@ -15,7 +16,7 @@
   payload)
 
 (defn create-example-history [example user new-body]
-  {:_id (org.bson.types.ObjectId.)
+  {:_id (ObjectId.)
    :editor user
    :body new-body
    :created-at (util/now)
@@ -41,12 +42,12 @@
 ;; Handlers
 
 (def InsertExample
-  {:author c/User
-   :body s/Str
+  {:author     c/User
+   :body       s/Str
    :created-at s/Int
    :updated-at s/Int
-   :var c/Var
-   :_id org.bson.types.ObjectId})
+   :var        c/Var
+   :_id        ObjectId})
 
 (defn post-example-handler [{:keys [edn-body user]}]
   (c/require-login! user)
@@ -54,7 +55,7 @@
   (-> edn-body
       (assoc :author user)
       c/update-timestamps
-      (assoc :_id (org.bson.types.ObjectId.))
+      (assoc :_id (ObjectId.))
       (c/validate-schema! InsertExample)
       insert!
       edn-response))
@@ -65,11 +66,11 @@
     {:editors [c/User]}))
 
 (def InsertExampleHistory
-  {:_id org.bson.types.ObjectId
-   :example-id org.bson.types.ObjectId
+  {:_id        ObjectId
+   :example-id ObjectId
    :created-at s/Int
-   :body s/Str
-   :editor c/User})
+   :body       s/Str
+   :editor     c/User})
 
 (defn patch-example-handler [id]
   (fn [{:keys [edn-body user]}]

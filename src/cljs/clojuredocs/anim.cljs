@@ -1,5 +1,5 @@
 (ns clojuredocs.anim
-  (:require [dommy.core :as dom :refer-macros [sel1]]))
+  (:require [dommy.core :refer-macros [sel1]]))
 
 (defn offset-parents
   "a lazy seq of offset parents of `node`"

@@ -1,31 +1,28 @@
 (ns clojuredocs.entry
-  (:use [ring.middleware
-         file
-         file-info
-         session
-         params
-         nested-params
-         multipart-params
-         keyword-params]
-        [ring.middleware.session.cookie :only (cookie-store)]
-        [ring.util.response :only (response content-type)])
-  (:require [clojuredocs.config :as config]
-            [compojure.core :refer (defroutes GET POST PUT DELETE context)]
-            [compojure.response :refer (Renderable render)]
-            [compojure.route :refer (not-found)]
-            [ring.util.response :refer (redirect)]
-            [clojure.string :as str]
-            [hiccup.page :refer (html5)]
-            [clojuredocs.env :as env]
-            [clojuredocs.util :as util]
-            [clojuredocs.pages.common :as common]
-            [clojuredocs.pages :as pages]
-            [clojure.pprint :refer (pprint)]
+  (:require [clojure.edn :as edn]
             [clojuredocs.api.server :as api.server]
-            [somnium.congomongo :as mon]
-            [clojure.edn :as edn]
-            [clojuredocs.search :as search]
-            [prone.middleware :as prone]))
+            [clojuredocs.config :as config]
+            [clojuredocs.pages :as pages]
+            [clojuredocs.pages.common :as common]
+            [clojuredocs.util :as util]
+            [compojure.core :refer [GET context defroutes]]
+            [compojure.response :refer [Renderable render]]
+            [compojure.route :refer [not-found]]
+            [hiccup.page :refer [html5]]
+            [prone.middleware :as prone]
+            [ring.util.response]
+            [somnium.congomongo :as mon])
+  (:use (ring.middleware
+         [file]
+         [file-info]
+         [keyword-params]
+         [multipart-params]
+         [nested-params]
+         [params]
+         [session])
+        [ring.middleware.session.cookie :only [cookie-store]]
+        [ring.util.response :only [content-type response]])
+  (:import [clojure.lang APersistentMap PersistentVector]))
 
 (defn decode-body [content-length body]
   (when (and content-length
@@ -52,11 +49,11 @@
 
 ;; Extend hiccup to support rendering of hiccup vectors
 (extend-protocol Renderable
-  clojure.lang.PersistentVector
+  PersistentVector
   (render [v request]
     (render (hiccup->html-string v) request))
 
-  clojure.lang.APersistentMap
+  APersistentMap
   (render [resp-map _]
     (if (-> resp-map :body vector?)
       (-> resp-map

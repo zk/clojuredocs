@@ -1,17 +1,14 @@
 (ns clojuredocs.mods.var-page
-  (:require [dommy.core :as dommy :refer-macros [sel sel1]]
-            [reagent.core :as rea]
-            [nsfw.ops :as ops]
-            [nsfw.page :as page]
-            [cljs.core.async :as async
-             :refer [<! >! chan close! sliding-buffer put! alts! timeout pipe mult tap]]
-            [clojuredocs.util :as util]
+  (:require-macros [cljs.core.async.macros :refer [go go-loop]])
+  (:require [cljs.core.async :refer [<! >! alts! chan close! mult pipe put! sliding-buffer tap timeout]]
+            [clojuredocs.ajax :refer [ajax]]
             [clojuredocs.examples :as examples]
-            [clojuredocs.see-alsos :as see-alsos]
             [clojuredocs.notes :as notes]
-            [clojuredocs.anim :as anim]
-            [clojuredocs.ajax :refer [ajax]])
-  (:require-macros [cljs.core.async.macros :refer [go go-loop]]))
+            [clojuredocs.see-alsos :as see-alsos]
+            [clojuredocs.util :as util]
+            [dommy.core :refer-macros [sel sel1]]
+            [nsfw.ops :as ops]
+            [reagent.core :as rea]))
 
 (enable-console-print!)
 

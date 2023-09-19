@@ -1,12 +1,11 @@
 (ns clojuredocs.pages.vars
-  (:require [clojuredocs.util :as util]
-            [clojure.string :as str]
-            [somnium.congomongo :as mon]
-            [clojuredocs.search :as search]
-            [clojuredocs.pages.common :as common]
+  (:require [clojure.string :as str]
             [clojuredocs.data :as data]
+            [clojuredocs.pages.common :as common]
+            [clojuredocs.search :as search]
+            [clojuredocs.util :as util]
             [ring.util.codec :as codec]
-            [hiccup.core :as hc]))
+            [somnium.congomongo :as mon]))
 
 (defn ellipsis [s n]
   (cond
