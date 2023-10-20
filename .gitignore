@@ -1,6 +1,8 @@
 /target
 /classes
 /checkouts
+/.idea
+*.iml
 pom.xml
 pom.xml.asc
 *.jar
@@ -22,3 +24,4 @@ resources/public/clojuredocs-export.json
 TAGS
 
 /dev-db
+/data

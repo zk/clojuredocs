@@ -1,15 +1,14 @@
 (ns clojuredocs.api.server
-  (:require [compojure.core :refer (defroutes GET POST PUT DELETE ANY PATCH) :as cc]
-            [compojure.route :refer (not-found)]
-            [somnium.congomongo :as mon]
-            [clout.core :as clout]
-            [slingshot.slingshot :refer [try+ throw+]]
-            [clojuredocs.util :as util]
-            [clojuredocs.api.examples :as examples]
-            [clojuredocs.api.see-alsos :as see-alsos]
+  (:require [clojuredocs.api.examples :as examples]
             [clojuredocs.api.notes :as notes]
+            [clojuredocs.api.see-alsos :as see-alsos]
+            [compojure.core :refer [DELETE GET PATCH POST defroutes]]
+            [compojure.route :refer [not-found]]
             [fogus.unk :as unk]
-            [nsfw.util :as nu]))
+            [nsfw.util :as nu]
+            [slingshot.slingshot :refer [throw+ try+]]
+            [somnium.congomongo :as mon])
+  (:import [org.bson.types ObjectId]))
 
 (defn all-see-alsos-relations-map []
   (->> (mon/fetch
@@ -71,7 +70,7 @@
   (fn [r]
     (let [{:keys [body] :as res} (h r)
           _id (:_id body)]
-      (if (and _id (instance? org.bson.types.ObjectId _id))
+      (if (and _id (instance? ObjectId _id))
         (update-in res [:body :_id] str)
         res))))
 
@@ -80,8 +79,8 @@
     (let [{:keys [_id] :as res} (h r)]
       (if (and _id (string? _id))
         (try
-          (assoc res :_id (org.bson.types.ObjectId. _id))
-          (catch java.lang.IllegalArgumentException e
+          (assoc res :_id (ObjectId. (str _id)))
+          (catch IllegalArgumentException e
             (throw+
               {:status 400
                :body {:message (str "Error parsing Mongo ID: " _id)}})))
