@@ -25,3 +25,5 @@ TAGS
 
 /dev-db
 /data
+
+**/.cache/
