@@ -249,7 +249,9 @@
               {:src "/img/reify-health-logo.png"
                :url "https://www.reifyhealth.com/"}
               {:src "/img/pisano-logo.jpg"
-               :url "https://www.pisano.co"}]]
+               :url "https://www.pisano.co"}
+              {:src "/img/Vouch-Positive-LG.png"
+               :url "https://vouch.io"}]]
          [:li [:a {:href url} [:img {:src src}]]])]]]]
    [:div.row
     [:div.col-md-6
