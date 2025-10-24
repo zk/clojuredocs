@@ -202,8 +202,6 @@
                :url "https://www.fundingcircle.com"}
               {:src "https://help.twitter.com/content/dam/help-twitter/brand/logo.png"
                :url "https://twitter.com"}
-              {:src "/img/factual-logo.png"
-               :url "http://www.factual.com"}
               {:src "/img/exoscale-logo.png"
                :url "https://www.exoscale.com/"}
               {:src "/img/heroku-logo.png"
@@ -222,8 +220,6 @@
                :url "http://www.walmartlabs.com"}
               {:src "/img/oscaro-logo.png"
                :url "https://www.oscaro.com/"}
-              {:src "/img/rjmetrics-logo.png"
-               :url "https://rjmetrics.com"}
               {:src "/img/cognician-logo.png"
                :url "https://www.cognician.com"}
               {:src "/img/qubit-logo.png"
@@ -249,7 +245,9 @@
               {:src "/img/reify-health-logo.png"
                :url "https://www.reifyhealth.com/"}
               {:src "/img/pisano-logo.jpg"
-               :url "https://www.pisano.co"}]]
+               :url "https://www.pisano.co"}
+              {:src "/img/Vouch-Positive-LG.png"
+               :url "https://vouch.io"}]]
          [:li [:a {:href url} [:img {:src src}]]])]]]]
    [:div.row
     [:div.col-md-6
