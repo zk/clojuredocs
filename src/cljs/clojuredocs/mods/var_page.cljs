@@ -78,7 +78,7 @@
      :add-see-also {}
      :add-note {}
      :user nil}
-    (util/page-data!)))
+    (page/page-data "PAGE_DATA" {})))
 
 (defn update-example [{:keys [examples] :as state} _id f & args]
   (assoc state

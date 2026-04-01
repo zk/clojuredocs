@@ -24,8 +24,9 @@
 
 (defn start-http-server [entry-point opts]
   (jetty/run-jetty
-    (fn [r]
-      (let [resp (entry-point r)]
+    (fn [req]
+      (let [handler (if (var? entry-point) @entry-point entry-point)
+            resp (handler req)]
         (if (:status resp)
           resp
           (assoc resp :status 200))))
@@ -95,4 +96,6 @@
   (when f (f)))
 
 (defn -main []
-  (start-app))
+  (start-app)
+  ;; Keep the main thread alive
+  @(promise))

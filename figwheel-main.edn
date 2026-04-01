@@ -1,0 +1,6 @@
+;; Figwheel Main configuration
+{:watch-dirs ["src/cljs" "src/cljc"]
+ :css-dirs ["resources/public/css"]
+ :ring-server-options {:port 3449
+                       :host "0.0.0.0"}
+ :rebel-readline false}

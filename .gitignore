@@ -14,8 +14,15 @@ pom.xml.asc
 .sass-cache
 .lein-errors
 
-/resources/public/cljs
-/resources/public/cljs-advanced
+
+# Ignore all generated ClojureScript build outputs
+/resources/public/cljs/
+/resources/public/cljs-prod/
+/resources/public/cljs-advanced/
+/resources/public/cljs_deps.js
+/resources/public/cljs-prod_deps.js
+/resources/public/cljs/**
+/resources/public/cljs-prod/**
 
 resources/public/css/app.css
 resources/public/css/highlighting.css
@@ -25,3 +32,14 @@ TAGS
 
 /dev-db
 /data
+
+# Ignore all tooling and linting files and directories
+.calva/
+.portal
+.portal/*
+/clj-kondo
+**/.clj-kondo/.cache
+performance.txt
+clj-kondo*.snap
+.planck_cache
+

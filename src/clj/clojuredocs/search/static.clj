@@ -18,12 +18,14 @@
     clojure.java.browse
     clojure.java.io
     clojure.java.javadoc
+    clojure.java.process
     clojure.java.shell
     clojure.main
     clojure.math
     clojure.pprint
     clojure.reflect
     clojure.repl
+    clojure.repl.deps
     clojure.set
     clojure.spec.alpha
     clojure.stacktrace
@@ -32,6 +34,8 @@
     clojure.test
     clojure.test.junit
     clojure.test.tap
+    clojure.tools.build.api
+    clojure.tools.deps.interop
     clojure.walk
     clojure.xml
     clojure.zip])

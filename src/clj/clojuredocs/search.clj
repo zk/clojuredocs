@@ -101,9 +101,9 @@
 
 (def clojure-lib
   (-> {:library-url "https://github.com/clojure/clojure"
-       :version "1.11.1"
-       :source-base-url "https://github.com/clojure/clojure/1.11.1/blob"
-       :gh-tag-url "https://github.com/clojure/clojure/tree/clojure-1.11.1"
+       :version "1.12.4"
+       :source-base-url "https://github.com/clojure/clojure/blob/clojure-1.12.4"
+       :gh-tag-url "https://github.com/clojure/clojure/tree/clojure-1.12.4"
        :namespaces static/clojure-namespaces}
       gather-namespaces
       gather-vars))

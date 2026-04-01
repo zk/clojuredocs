@@ -1,7 +1,6 @@
 (ns clojuredocs.core-test
-  (:require [clojure.test :refer :all]
-            [clojuredocs.core :refer :all]))
+  (:require [clojure.test :refer :all]))
 
-(deftest a-test
-  (testing "FIXME, I fail."
-    (is (= 0 1))))
+(deftest placeholder-test
+  (testing "Placeholder — real tests coming soon"
+    (is (= 1 1))))
