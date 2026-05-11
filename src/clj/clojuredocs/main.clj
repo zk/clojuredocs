@@ -3,9 +3,11 @@
             [somnium.congomongo :as mon]
             [clojuredocs.env :as env]
             [clojuredocs.entry :as entry]
+            [clojuredocs.export :as export]
             [clojuredocs.config :as config]
             [clojuredocs.css :as css]
-            [garden.core :as garden]))
+            [garden.core :as garden])
+  (:import [java.util.concurrent Executors TimeUnit]))
 
 (defn compile-css []
   (garden/css
@@ -78,6 +80,17 @@
 
   (add-indexes-to-coll! :migrate-users [:email :migraion-key]))
 
+(def ^:private export-path "resources/public/clojuredocs-export.json")
+
+(def ^:private export-interval-hours 6)
+
+(defn- run-scheduled-export []
+  (try
+    (export/run-export export-path)
+    (println "Export updated:" export-path)
+    (catch Exception e
+      (println "Scheduled export failed:" (.getMessage e)))))
+
 (defn start-app []
   (compile-css)
   (let [{:keys [mongo-url port entry] :as app} (create-app)
@@ -86,9 +99,15 @@
     (mon/set-connection! mongo-conn)
     (add-all-indexes!)
     (let [stop-server (start-http-server entry
-                        {:port port :join? false})]
+                        {:port port :join? false})
+          executor (Executors/newSingleThreadScheduledExecutor)]
+      (.scheduleAtFixedRate executor
+        ^Runnable run-scheduled-export
+        0 export-interval-hours TimeUnit/HOURS)
       (println (format "Server running on port %d" port))
+      (println (format "Export scheduled every %d hours" export-interval-hours))
       (fn []
+        (.shutdown executor)
         (mon/close-connection mongo-conn)
         (.stop stop-server)))))
 
@@ -99,3 +118,4 @@
   (start-app)
   ;; Keep the main thread alive
   @(promise))
+

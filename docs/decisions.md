@@ -4,6 +4,41 @@ Document design and architecture decisions. Lightweight alternative to full ADRs
 
 ---
 
+## 2026-05-11 — Schedule export JSON regeneration in-process
+
+### Status
+Decided
+
+### Context
+- `clojuredocs-export.json` is consumed by editor plugins (Calva, CIDER, etc.) to show usage examples inline. It was only regenerated manually via `lein run -m clojuredocs.export`.
+- The file went stale — vars like `halt-when` had `null` examples in the JSON despite having examples on the website. A community member reported the issue in Slack.
+- Issue #38 was created to automate regeneration.
+
+### Decision
+- Use `java.util.concurrent.ScheduledExecutorService` in `start-app` to run `export/run-export` every 6 hours, starting immediately on server boot.
+
+### Rationale
+- In-process scheduling reuses the existing DB connection and data access layer — no cold-start JVM, no separate env config.
+- Zero new dependencies; `ScheduledExecutorService` is a JVM primitive.
+- Initial delay of 0 means every deploy immediately refreshes the export.
+- Scales through the planned redesign: as the data model changes (multi-library, dialect metadata, quality signals), the export function evolves with it and the scheduler is indifferent.
+
+### Alternatives Considered
+- Cron job on the server (`lein run -m clojuredocs.export`) — spins up a separate JVM each time, requires MongoDB URL in cron environment, loses access to shared caches and connection pools.
+- External scheduler (e.g., systemd timer) — adds infrastructure dependency and deployment complexity for a simple periodic task.
+
+### Impacts and Risks
+- Export runs on a dedicated single-thread executor, so at most one export runs at a time.
+- Risk: a long-running export could overlap with the next scheduled run. Mitigation: `scheduleAtFixedRate` skips if the previous run hasn't finished; export currently takes seconds.
+- Risk: export failure kills the scheduler thread. Mitigation: `run-scheduled-export` wraps the call in try/catch.
+
+### Links
+- [Issue #38](https://github.com/nubank/clojuredocs/issues/38)
+- [src/clj/clojuredocs/export.clj](src/clj/clojuredocs/export.clj)
+- [src/clj/clojuredocs/main.clj](src/clj/clojuredocs/main.clj)
+
+---
+
 ## 2026-04-28 — Defer jank dialect until stable var enumeration exists
 
 ### Status
