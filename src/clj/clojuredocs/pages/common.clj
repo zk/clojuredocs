@@ -1,6 +1,7 @@
 (ns clojuredocs.pages.common
   (:require [clojure.string :as str]
             [clojuredocs.util :as util]
+            [nsfw.util]
             [clojuredocs.config :as config]
             [clojuredocs.env :as env]
             [clojuredocs.github :as gh]
@@ -13,15 +14,18 @@
              {:redirect-uri (config/url redirect-url)}))))
 
 
-(defn $ga-script-tag [ga-tracking-id]
-  (when ga-tracking-id
-    [:script "(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-  ga('create', '" ga-tracking-id "', 'auto');
-  ga('send', 'pageview');"]))
+(defn $matomo-script-tag []
+  [:script "var _paq = window._paq = window._paq || [];
+   /* tracker methods like \"setCustomDimension\" should be called before \"trackPageView\" */
+   _paq.push(['trackPageView']);
+   _paq.push(['enableLinkTracking']);
+   (function() {
+                var u=\"https://cognitect.matomo.cloud/\";
+                _paq.push(['setTrackerUrl', u+'matomo.php']);
+                _paq.push(['setSiteId', '15']);
+                var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+                g.async=true; g.src='https://cdn.matomo.cloud/cognitect.matomo.cloud/matomo.js'; s.parentNode.insertBefore(g,s);
+                })();"])
 
 (defn $user-area [user]
   [:li.user-area
@@ -62,7 +66,7 @@
        (when show-stars?
          [:li
           [:iframe.gh-starred-count
-           {:src "/github-btn.html?user=zk&repo=clojuredocs&type=watch&count=true"
+           {:src "/github-btn.html?user=nubank&repo=clojuredocs&type=watch&count=true"
             :allowtransparency "true"
             :frameborder "0"
             :scrolling "0"
@@ -71,10 +75,12 @@
       (when-not hide-search
         [:div.nav-search-widget.navbar-right.navbar-form
          [:form.search
-          {:autocomplete "off"}
+          {:autocomplete "off"
+           :action "/search"
+           :method :get}
           [:input.placeholder.form-control
            {:type "text"
-            :name "query"
+            :name "q"
             :placeholder "Looking for? (ctrl-s)"
             :autocomplete "off"}]]])]]
     (when-not hide-search
@@ -89,7 +95,7 @@
     [:ul.navbar-nav.mobile-navbar-nav.nav
      [:li
       [:a {:href "/core-library"} "Core Library"
-       [:span.clojure-version "(1.11.1)"]]]
+       [:span.clojure-version "(1.12.4)"]]]
      [:li [:a {:href "/quickref"} "Quick Reference"]]
      (if user
        ($user-area user)
@@ -106,7 +112,7 @@
 (defn md5-path [path]
   (try
     (-> path slurp util/md5)
-    (catch java.io.FileNotFoundException e
+    (catch java.io.FileNotFoundException _e
       nil)))
 
 (def clojuredocs-script
@@ -134,15 +140,15 @@
           :type "application/opensearchdescription+xml"
           :title "ClojureDocs"}])
 
-(defn $main [{:keys [page-uri
-                     content
+(defn $main [{:keys [content
                      title
                      body-class
-                     user
                      page-data
                      meta
-                     full-width?
-                     show-survey-banner?] :as opts}]
+                     og-meta
+                     json-ld
+                     canonical-url
+                     full-width?] :as opts}]
   [:html5
    [:head
     [:meta {:name "viewport" :content "width=device-width, maximum-scale=1.0"}]
@@ -153,25 +159,38 @@
     (->> meta
          (map (fn [[k v]]
                 [:meta {:name k :content v}])))
+    (->> og-meta
+         (map (fn [[k v]]
+                [:meta {:property k :content v}])))
+    (when json-ld
+      [:script {:type "application/ld+json"} json-ld])
+    (when canonical-url
+      [:link {:rel "canonical" :href canonical-url}])
     [:title (or title "Community-Powered Clojure Documentation and Examples | ClojureDocs")]
     opensearch-link
     font-awesome-link
     bootstrap-link
     app-link
-    [:script "// <![CDATA[\nwindow.PAGE_DATA=" (util/to-json (pr-str page-data)) ";\n//]]>"]]
+    [:script "// <![CDATA[\nwindow.PAGE_DATA=" (util/to-json (nsfw.util/to-transit page-data)) ";\n//]]>"]]
    [:body
     (when body-class
       {:class body-class})
     ($mobile-navbar-nav opts)
     [:div.mobile-nav-bar
      ($navbar opts)]
-    [:div.sticky-wrapper.mobile-push-wrapper
-     (when config/staging-banner?
-       [:div.staging-banner
-        "This is the ClojureDocs staging site, where you'll find all the neat things we're working on."])
-     [:div.desktop-nav-bar
-      ($navbar opts)]
-     [:div
+     [:div.sticky-wrapper.mobile-push-wrapper
+      (when config/staging-banner?
+        [:div.staging-banner
+         "This is the ClojureDocs staging site, where you'll find all the neat things we're working on."])
+      [:div.conj-banner
+       "Clojure/Conj 2026 — Charlotte, NC — Sept 30 - Oct 2 "
+       [:a {:href "https://2026.clojure-conj.org/?utm_source=clojuredocs&utm_medium=banner&utm_campaign=conj2026"
+            :target "_blank"
+            :onclick "_paq.push(['trackEvent', 'Banner', 'Click', 'Conj 2026']);"}
+        "Learn More & Get Tickets →"]]
+      [:div.desktop-nav-bar
+       ($navbar opts)]
+      [:div
       {:class (if full-width?
                 "container-fluid"
                 "container")}
@@ -187,34 +206,7 @@
       [:div.row
        [:div.col-sm-12
         [:div.divider
-         "- ❦ -"]]]
-      [:div.row
-       [:div.ctas
-        [:div.col-sm-6.left
-         "Brought to you by "
-         [:a {:href "https://zacharykim.com"} "Zachary Kim"]
-         ". "]
-        [:div.col-sm-6.right
-         [:iframe.gh-starred-count
-          {:src "/github-btn.html?user=zk&repo=clojuredocs&type=watch&count=true"
-           :allowtransparency "true"
-           :frameborder "0"
-           :scrolling "0"
-           :width "80"
-           :height "20"}]
-         #_[:iframe {:src "/github-btn.html?user=zk&repo=clojuredocs&type=fork&count=true"
-                     :allowtransparency "true"
-                     :frameborder "0"
-                     :scrolling "0"
-                     :width "80"
-                     :height "20"}]
-         [:a.twitter-share-button {:href "https://twitter.com/share"
-                                   :data-url "http://clojuredocs.org"
-                                   :data-text "Community-powered docs and examples for #Clojure"
-                                   :data-via "heyzk"}
-          "Tweet"]]]
-       [:script
-        "!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');"]]]]
+         "- ❦ -"]]]]]
     (when (env/bool :cljs-dev)
       [:script {:src "/js/fastclick.min.js"}])
     (when (env/bool :cljs-dev)
@@ -222,7 +214,7 @@
     (when (env/bool :cljs-dev)
       [:script {:src "/js/marked.min.js"}])
     clojuredocs-script
-    ($ga-script-tag config/ga-tracking-id)
+    ($matomo-script-tag)
     ;; mobile safari home screen mode
     [:script
      "if((\"standalone\" in window.navigator) && window.navigator.standalone){
@@ -245,7 +237,7 @@ document.location.href = noddy.href;
 },false);
 }"]]])
 
-(defn $avatar [{:keys [email login avatar-url] :as user}]
+(defn $avatar [{:keys [email login avatar-url]}]
   [:a {:href (str "/u/" login)}
    [:img.avatar
     {:src (or avatar-url
@@ -273,7 +265,7 @@ document.location.href = noddy.href;
        (map #(str/split % #"\."))
        (group-levels nil (set nss) current-ns)))
 
-(defn $ns-tree [{:keys [part path ns cs current?]}]
+(defn $ns-tree [{:keys [part ns cs current?]}]
   [:li
    [:span {:class (when current? "current")}
     (if ns
@@ -287,7 +279,7 @@ document.location.href = noddy.href;
     [:ul.ns-tree
      (map $ns-tree ns-trees)]))
 
-(defn $library-nav [{:keys [name namespaces]} & [current-ns]]
+(defn $library-nav [{:keys [namespaces]} & [current-ns]]
   (when-not (empty? namespaces)
     [:div.library-nav
      [:h5 "Namespaces"]
@@ -339,7 +331,7 @@ document.location.href = noddy.href;
     (-> path
         slurp
         util/markdown)
-    (catch java.io.FileNotFoundException e
+    (catch java.io.FileNotFoundException _e
       nil)))
 
 (defn prep-for-syntaxhighligher [s]

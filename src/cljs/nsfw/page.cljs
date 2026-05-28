@@ -1,7 +1,6 @@
 (ns nsfw.page
   (:require-macros [cljs.core.async.macros :refer [go go-loop]])
-  (:require [bidi.bidi :as bidi]
-            [cljs.core.async :refer [<! >! alts! chan close! mult pipe put! sliding-buffer take! tap timeout]]
+  (:require [cljs.core.async :refer [<! >! alts! chan close! mult pipe put! sliding-buffer take! tap timeout]]
             [cljs.tools.reader.edn :as edn]
             [dommy.core :as dommy :refer-macros [sel]]
             [nsfw.ops :as ops]
@@ -103,11 +102,8 @@
        first))
 
 (defn path-for [routes handler & [params]]
-  (apply
-    bidi/path-for
-    routes
-    handler
-    (mapcat identity params)))
+  ;; Stub
+  "/")
 
 (defn handler-for [views k]
   (:handler (view-for views k)))
@@ -198,11 +194,8 @@
                             (assoc-in [:state] state))))))))}))
 
 (defn dispatch-route [routes on-path & [{:keys [path]}]]
-  (let [path (or path (pathname))
-        {:keys [route-params handler] :as match}
-        (bidi/match-route routes path)]
-    (when handler
-      (on-path handler route-params path))))
+  ;; Stub
+  nil)
 
 (defn dispatch-view [views routes !app bus]
   (dispatch-route routes

@@ -301,7 +301,39 @@
                   :background-color code-bg}]
     [:ul {:margin-bottom "30px"}]
     [:li {:list-style-type 'disc
-          :margin-left "25px"}]]])
+          :margin-left "25px"}]]
+   [:.dialect-badges
+    {:display 'inline-block
+     :margin-top "5px"}
+    [:.dialect-badge
+     {:width "20px"
+      :height "20px"
+      :margin-right "4px"
+      :vertical-align 'middle
+      :transition "opacity 0.2s ease"}
+     [:&.unsupported
+      {:opacity 0.15
+       :filter "grayscale(100%)"}]]]
+   [:.implementation-badge
+    {:display 'inline-block
+     :margin-top "5px"
+     :padding "2px 8px"
+     :font-size "11px"
+     :font-weight 'bold
+     :color "#856404"
+     :background-color "#fff3cd"
+     :border "1px solid #ffc107"
+     :border-radius "10px"}]
+   [:.implementation-notice
+    {:margin-bottom "15px"
+     :padding "10px 15px"
+     :font-size "13px"
+     :color "#856404"
+     :background-color "#fff3cd"
+     :border "1px solid #ffeaa0"
+     :border-radius "4px"}]
+   [:&.implementation-var
+    [:.var-name {:opacity 0.7}]]])
 
 (def quickref
   [[:.toc {:margin-bottom "20px"}
@@ -574,10 +606,16 @@
       :padding "10px"}
      [:i {:margin-right "8px"}]]]
 
+   [:.desktop-nav-bar
+    {:position 'sticky
+     :top 0
+     :z-index 1000
+     :background-color 'white}]
+
    [:header.navbar
     {:border-radius 0
      :margin-bottom "20px"}
-    (nc/at-bp :xs {:margin-bottom "10px"})
+    (nc/at-bp :xs {:margin-bottom 0})
     [".nav > li > a" {:padding "15px 12px"}]
     [:i {:margin-right "5px"}]
     (nc/at-bp :xs [:.navbar-brand
@@ -642,20 +680,40 @@
       [:.btn.mobile-menu
        {:display 'block
         :margin-right "-11px"}]
-      [:.nav-search-widget {:display 'none}]
+      [:.nav-search-widget {:float 'none
+                            :clear 'both
+                            :width "100%"
+                            :padding "8px 15px 1px 15px"}
+       [:form {:margin-right 0}]
+       [:input {:width "100%"}]]
+      [:.ac-results-widget {:display 'none}]
       [:.navbar-nav {:display 'none}]]
+     [:body.search-active
+      [:header.navbar
+       {:position 'relative}
+       [:.ac-results-widget {:display 'block
+                            :position 'absolute
+                            :left 0
+                            :right 0
+                            :z-index 1001
+                            :max-height "60vh"
+                            :overflow-y 'auto
+                            :background-color 'white
+                            :box-shadow "0 2px 4px rgba(0,0,0,0.1)"
+                            :margin "0 -20px"
+                            :padding "0 20px"}]]]
      [:.mobile-push-wrapper
       (merge
         {:right 0
          :position 'relative
-         :padding-top "60px"
-         :transform "translate3d(0,0,0)"}
+         :transform "translate3d(0,0,0)"
+         :margin-top "56px"} ; offset for sticky navbar
         (nc/transition "all 0.2s ease"))]
      [:.desktop-nav-bar :.desktop-side-nav {:display 'none}]
      [:.mobile-nav-bar
       (nc/transition "all 0.2s ease")
       {:background-color 'white
-       :position 'fixed
+       :position 'sticky
        :top 0
        :width "100%"
        :z-index 1000
@@ -741,13 +799,12 @@
      :background-position "right 8px center"}]
 
    [:form.search
-    [:input.query
+    [:input.query :input.placeholder
      {:border-radius 0
       :min-width "200px"
       :height "100%"
       :font-size "14px"
-      :padding "6px 12px"}]
-    [:input.placeholder {:visibility 'hidden}]]
+      :padding "6px 12px"}]]
 
    [:.syntaxify {:padding 0
                  :background-color 'transparent
@@ -815,14 +872,16 @@
       [:.dl-row {:padding 0}]
       [:dt {:display 'block
             :text-align 'left
-            :padding-top "10px"}]
+            :padding-top "10px"
+            :clear 'both}]
       [:dd {:display 'block
             :border-bottom "solid #ddd 1px"
             :width "100%"
             :padding-bottom "10px"}])
     [:.no-doc {:color "#aaa"}]
     [:.ns-table
-     {:width "100%"}
+     {:width "100%"
+      :border-bottom "solid #ccc 2px"}
      [:.name {:text-align 'right}]
      [".name > span" {:padding-right "20px"
                       :font-family monospace-font
@@ -857,6 +916,28 @@
      :font-size "14px"
      :font-weight 400
      :padding "3px"}]
+   [:.survey-banner
+    {:text-align 'center
+     :background-color "rgb(91,164,207)"
+     :color "rgba(255,255,255, 0.95)"
+     :font-size "14px"
+     :font-weight 400
+     :padding "8px"}
+    [:a {:color "rgba(255,255,255, 1)"
+         :text-decoration 'underline
+         :font-weight 600}
+     [:&:hover {:color "rgba(255,255,255, 0.85)"}]]]
+   [:.conj-banner
+    {:text-align 'center
+     :background-color "rgb(68,138,88)"
+     :color "rgba(255,255,255, 0.95)"
+     :font-size "14px"
+     :font-weight 400
+     :padding "8px"}
+    [:a {:color "rgba(255,255,255, 1)"
+         :text-decoration 'underline
+         :font-weight 600}
+     [:&:hover {:color "rgba(255,255,255, 0.85)"}]]]
    [:.toggle-controls :.login-required-message
     {:text-align 'right
      :margin-bottom "4px"
@@ -896,11 +977,21 @@
       [:&:first-child {:margin-top "20px"}]
       [:&:last-child {:margin-bottom "20px"}]]]]
    [:.core-library-page
+    {:padding-top "32px"}
+    [:.nav-search-widget {
+      :display 'block
+      :position 'relative
+      :z-index 1200
+      :margin-bottom "24px"
+    }]
     [:pre :.syntaxify
      {:background-color code-bg
       :padding "20px"}]
     [:h2 {:border-bottom "solid #ddd 2px"}]
     [:h3 {:margin-top "30px"}]]
+   [:.nav-search-widget
+    {:z-index 1100
+     :position 'relative}]
    [:.markdown
     [:ol :ul
      {:padding-left 0
@@ -928,7 +1019,8 @@
           :vertical-align 'top}]]
    [:table.schema
     {:border-top "solid #ccc 3px"
-     :width "100%"}
+     :width "100%"
+     :padding "10px"}
     [:td {:border 'none
           :padding "5px"
           }]

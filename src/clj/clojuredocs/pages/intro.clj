@@ -1,12 +1,8 @@
 (ns clojuredocs.pages.intro
-  (:require [clojuredocs.config :as config]
-            [clojuredocs.util :as util]
-            [compojure.core :refer (defroutes GET POST)]
+  (:require [clojuredocs.util :as util]
             [somnium.congomongo :as mon]
-            [fogus.unk :refer (memo-ttl)]
             [clojuredocs.pages.common :as common]
-            [clojuredocs.syntax :as syntax]
-            [clojuredocs.pages.jobs :as jobs]))
+            [clojuredocs.syntax :as syntax]))
 
 (defmulti $render-recently-updated :type)
 
@@ -15,7 +11,7 @@
 (defmethod $render-recently-updated :example
   [{:keys [var author created-at]}]
   [:div.recently-updated
-   (util/$avatar author)
+   (util/$avatar author {:size 48})
    [:span.content
     (:login author)
     " authored an example for "
@@ -31,7 +27,7 @@
 (defmethod $render-recently-updated :see-also
   [{:keys [from-var to-var author created-at]}]
   [:div.recently-updated
-   (util/$avatar author)
+   (util/$avatar author {:size 48})
    [:span.content
     (:login author)
     " added a see-also from "
@@ -52,7 +48,7 @@
 (defmethod $render-recently-updated :note
   [{:keys [var author created-at]}]
   [:div.recently-updated
-   (util/$avatar author)
+   (util/$avatar author {:size 48})
    [:span.content
     (:login author)
     " authored a note for "
@@ -65,61 +61,7 @@
     " ago."]
    [:div.clear]])
 
-(defn $job-preview [{:keys [job-title
-                            company-name
-                            company-image-url
-                            short-id
-                            job-location
-                            remote-ok?
-                            comp-cash
-                            comp-equity]
-                     :as job}]
-  [:div.job-preview
-   {:style "background-color:#fafafa;padding:5px"}
-   #_[:img {:src company-image-url
-            :style "max-width:17px;max-height:17px;margin-top:-2px"}]
-   #_[:span {:style "margin-right:5px"}]
-   (->> [[:span.job-title [:a {:href (str "/jobs/"
-                                          short-id
-                                          "/"
-                                          (jobs/job-slug job))} job-title]]
-         [:span.company-name
-          {:style "font-weight:bold;"}
-          company-name]
-         (when job-location
-           [:span.job-location
-            {:style "color:#888;font-weight:normal"}
-            [:i.fa.fa-map-marker
-             {:style "margin-right:5px"}]
-            job-location])
-         (when comp-cash
-           [:span.comp-cash (jobs/currency-range comp-cash)])
-         (when comp-equity
-           [:span.comp-equity (jobs/equity-range comp-equity)])
-         (when remote-ok?
-           [:span.remote-ok
-            {:style "color:#888"}
-            [:i.fa.fa-globe
-             {:style "margin-right:5px"}]
-            "Remote"])]
-        (remove nil?)
-        (interpose [:span " ∙ "]))])
-
-(defn $jobs-preview [jobs]
-  [:div.jobs-preview
-   [:div.row
-    [:div.col-md-12
-     [:h5 "Featured Jobs"]]]
-   [:div.row
-    [:div.col-md-12
-     (->> jobs
-          (map $job-preview))]]
-   [:div.row
-    [:div.col-md-12.text-right
-     [:a {:style "font-size:12px"
-          :href "/jobs"} "More Clojure Jobs"]]]])
-
-(defn $index [top-contribs recently-updateds]
+(defn $index [recently-updateds]
   [:div
    [:div.row
     [:div.col-md-12
@@ -130,23 +72,13 @@
        [:form.search {:method :get :action "/search" :autocomplete "off"}
         [:input.form-control.placeholder
          {:type "text"
-          :name "query"
+          :name "q"
           :placeholder "Looking for?"
           :autoFocus "autofocus"
           :autoComplete "off"}]
         [:ul.ac-results]]]]]]
    [:div.row
     [:div.col-md-12
-     [:section
-      [:h5 "Top Contributors"]
-      [:div.top-contribs
-       (if-not (empty? top-contribs)
-         (map util/$avatar top-contribs)
-         [:div.null-state "Uh-oh, no contributors!"])
-       [:div.migrate-account
-        [:a {:href "/migrate-account"} "Migrate your old ClojureDocs account"]]]]
-     #_[:section
-        ($jobs-preview (take 3 jobs/DATA))]
      [:section
       [:h5 "Recently Updated"]
       [:div.row
@@ -155,35 +87,6 @@
             (partition-all 3)
             (map (fn [rs]
                    [:div.col-sm-6 rs])))]]]]
-   [:section
-    [:div.row
-     [:div.col-md-12
-      [:h5 "On Clojure"]]
-     [:div.col-md-6
-      [:p "Clojure is a concise, powerful, and performant general-purpose programming language that runs on the JVM, CLR, Node.js, and modern mobile and desktop web browsers."]
-      [:p
-       "New to Clojure and not sure where to start? Here are a few good resources to get you off on the right foot:"]
-      [:ul.getting-started-resources
-       [:li [:a {:href "https://changelog.com/posts/rich-hickeys-greatest-hits/"} "Rich Hickey's Greatest Hits (videos)"]]
-       [:li [:a {:href "https://www.braveclojure.com"} "Clojure for the Brave and True"]]
-       [:li [:a {:href "https://aphyr.com/posts/301-clojure-from-the-ground-up-welcome"}
-             "Clojure from the Ground Up"]]
-       [:li [:a {:href "https://4clojure.oxal.org/"} "4Clojure (learn Clojure interactively)"]]
-       [:li [:a {:href "http://clojurescriptkoans.com/"} "ClojureScript Koans"]]
-       [:li [:a {:href "https://repl.it/languages/clojure"} "Run Clojure code live in your browser"]]]
-      [:p "There's no denying that Clojure is just so "
-       " *different* "
-       " from what most of us are used to (what is up with all those parentheses?!), "
-       "so it's no surprise that it"
-       " takes a bit to get your head around it. Stick with it, and you won't be disappointed."]
-      [:p "But don't take our word for it, here's what XKCD has to say:"]
-      [:p [:img.xkcd {:src "/img/lisp_cycles.png"}]]
-      [:p "Seems like more than a few these days. Happy coding!"]]
-     [:div.col-md-6
-      [:div.example-code
-       (-> "src/examples/clj/first.clj"
-           slurp
-           (syntax/syntaxify :stringify-style? true))]]]]
    [:div.row
     [:div.col-md-12
      [:section.used-by
@@ -259,7 +162,7 @@
       [:ul
        [:li
         [:h4 [:i.fa.fa-comment-o] "Give Feedback"]
-        [:p "Please " [:a {:href "https://github.com/zk/clojuredocs/issues"} "open a ticket"] " if you have an idea of how we can improve ClojureDocs."]]
+        [:p "Please " [:a {:href "https://github.com/nubank/clojuredocs/issues"} "open a ticket"] " if you have an idea of how we can improve ClojureDocs."]]
        [:li
         [:h4 [:i.fa.fa-indent] "Add an Example"]
         [:p "Sharing your knowledge with fellow Clojurists is easy:"]
@@ -269,25 +172,6 @@
          ", and then add an example for your favorite var (or pick one from the list)."]
         [:p "In addition to examples, you also have the ability to add 'see also' references between vars."]]]]]]])
 
-
-(defn top-contribs []
-  (let [scores (atom {})]
-    (doseq [{:keys [author _id]} (mon/fetch :examples :where {:deleted-at nil})]
-      (let [editors (->> (mon/fetch :example-histories :where {:example-id _id})
-                         (map :editor))]
-        (swap! scores update-in [author] #(+ 4 (or % 0)))
-        (doseq [editor editors]
-          (swap! scores update-in [editor] #(inc (or % 0))))))
-    (->> @scores
-         (sort-by second)
-         reverse
-         (remove #(get #{"zkim" "zk"} (-> % first :login)))
-         (take (* 24 3))
-         (map #(assoc (first %) :score (second %))))))
-
-;; :|
-(when-not config/cljs-dev?
-  (def top-contribs (memo-ttl top-contribs (* 1000 60 60 6))))
 
 (defn recently-updated []
   (let [limit 6
@@ -309,11 +193,9 @@
          (take limit))))
 
 (defn page-handler [{:keys [user]}]
-  (-> {:content ($index
-                  (top-contribs)
-                  (recently-updated))
-       :body-class "intro-page"
-       :hide-search true
-       :user user
-       :show-stars? true}
-      common/$main))
+    (-> {:content ($index (recently-updated))
+      :body-class "intro-page"
+      :user user
+      :hide-search true
+      :show-stars? true}
+     common/$main))

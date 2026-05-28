@@ -54,43 +54,6 @@
     :required? false
     :default false}
 
-   {:key :mailgun-api-key
-    :type :string
-    :doc "Mailgun API key"
-    :required? true}
-
-   {:key :mailgun-api-endpoint
-    :type :string
-    :doc "Mailgun message endpoint (including domain to send from)."
-    :required? true}
-
-   {:key :ga-tracking-id
-    :type :string
-    :doc "GA id (UA-...)"
-    :required? false
-    :default "UA-17348828-3"}
-
-   {:key :cache-markdown
-    :type :bool
-    :doc "Cache markdown from disk for duration of app process?"
-    :required? false
-    :default false}
-
-   {:key :from-email
-    :type :string
-    :doc "Email address to put in 'from' field "
-    :default "ClojureDocs Development <dev@clojuredocs.org>"}
-
-   {:key :new-relic-app-name
-    :type :string
-    :doc "App name for display in new relic, ex `cd-dev`, `cd-staging`"
-    :required? false}
-
-   {:key :new-relic-license-key
-    :type :string
-    :doc "New Relic license key"
-    :required? false}
-
    {:key :new-relic-browser-id
     :type :string
     :doc "New Relic Browser perf tracking id"
@@ -99,7 +62,13 @@
    {:key :new-relic-browser-key
     :type :string
     :doc "New Relic Browser perf tracking key"
-    :required? false}])
+    :required? false}
+
+   {:key :cache-markdown
+    :type :bool
+    :doc "Cache markdown from disk for duration of app process?"
+    :required? false
+    :default false}])
 
 (defn get-env [lookup key]
   (let [{:keys [key type doc required? default] :as env-var-schema}
@@ -133,8 +102,6 @@
 
 (def staging-banner? (get-env env-vars :staging-banner))
 
-(def ga-tracking-id (get-env env-vars :ga-tracking-id))
-
 (def cljs-dev? (get-env env-vars :cljs-dev))
 
 (def allow-robots? (get-env env-vars :allow-robots))
@@ -146,16 +113,6 @@
 (def debug-exceptions? (get-env env-vars :debug-exceptions))
 
 (def log-exceptions? (get-env env-vars :log-exceptions))
-
-(def mailgun-api-key (get-env env-vars :mailgun-api-key))
-(def mailgun-api-endpoint (get-env env-vars :mailgun-api-endpoint))
-
-(def from-email (get-env env-vars :from-email))
-
-(def mailgun-config
-  {:endpoint mailgun-api-endpoint
-   :api-key mailgun-api-key
-   :from from-email})
 
 (def new-relic-browser-key (get-env env-vars :new-relic-browser-key))
 

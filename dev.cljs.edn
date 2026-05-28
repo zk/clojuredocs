@@ -1,0 +1,14 @@
+^{:watch-dirs ["src/cljs" "src/cljc"]
+  :css-dirs ["resources/public/css"]
+  :auto-testing false
+  :open-url false}
+{:main clojuredocs.main
+ :output-to "resources/public/cljs/clojuredocs.js"
+ :output-dir "resources/public/cljs"
+ :asset-path "/cljs"
+ :source-map true
+ :optimizations :none
+ :pretty-print true
+ :externs ["externs/morpheus.js"
+           "externs/marked.js"
+           "externs/fastclick.js"]}

@@ -5,11 +5,12 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :min-lein-version "2.0.0"
   :source-paths ["src/clj" "src/cljc"]
-  :test-paths ["test/clj"]
-  :dependencies [[org.clojure/clojure "1.11.1"]
-                 [org.clojure/clojurescript "1.9.946"]
-                 [ring "1.5.1"]
-                 [compojure "1.1.6"]
+  :test-paths ["test"]
+  :dependencies [[org.clojure/clojure "1.12.4"]
+                 [org.clojure/clojurescript "1.12.134"]
+                 [ring "1.13.0"]
+                 [commons-io "2.21.0"]
+                 [compojure "1.7.0"]
                  [aleph "0.4.2-alpha12"]
                  [clucy "0.4.0"]
                  [watchtower "0.1.1"]
@@ -18,28 +19,34 @@
                  [unk "0.9.1"]
                  [org.clojure/core.async "1.6.681"]
                  [org.clojure/core.logic "0.8.11"]
+                 [org.clojure/tools.build "0.9.2"]
                  [com.vladsch.flexmark/flexmark-all "0.64.8"]
                  [clj-fuzzy "0.1.8"]
                  [prone "0.6.0"]
-                 [nrepl "0.6.0"]
+                 [nrepl "1.6.0"]
                  [javax.xml.bind/jaxb-api "2.4.0-b180830.0359"]
                  [org.clojure/data.csv "1.0.1"]
                  [clojure-interop/java.security "1.0.5"]
                  [garden "1.2.5" :exclusions [org.clojure/clojure]]
                  [com.cognitect/transit-clj "1.0.333"]
                  [com.cognitect/transit-cljs "0.8.280"]
-                 [bidi "1.23.1" :exclusions [org.clojure/clojure]]
                  [slingshot "0.12.2"]
                  [cheshire "5.5.0"]
                  [clj-http "3.6.0"]
                  [camel-snake-kebab "0.3.2"]
                  [prismatic/dommy "1.1.0"]
+                 [prismatic/schema "1.1.12"]
                  [reagent "0.6.0"]
-                 [congomongo "2.6.0"]]
+                 [congomongo "2.6.0"]
+                 [joda-time/joda-time "2.12.5"]
+                 [com.bhauman/figwheel-main "0.2.20"]
+                 [com.bhauman/rebel-readline-cljs "0.1.4"]]
   :repl-options {:init (load-file "reup.clj")}
-  :plugins [[lein-cljsbuild "1.1.5"]
-            [lein-figwheel "0.5.18"]
-            [cider/cider-nrepl "0.22.3"]]
+  :plugins [[lein-cljsbuild "1.1.8"]
+            [cider/cider-nrepl "0.58.0"]]
+  :aliases {"fig"       ["trampoline" "run" "-m" "figwheel.main"]
+            "fig:build" ["trampoline" "run" "-m" "figwheel.main" "-b" "dev" "-r"]
+            "fig:prod"  ["run" "-m" "figwheel.main" "-O" "advanced" "-bo" "prod"]}
   :cljsbuild {:builds
               {:dev  {:source-paths ["src/cljs" "src/cljc"]
                       :compiler {:output-to "resources/public/cljs/clojuredocs.js"
@@ -66,7 +73,7 @@
 
                :prod {:source-paths ["src/cljs" "src/cljc"]
                       :compiler {:output-to "resources/public/cljs/clojuredocs.js"
-                                 :optimizations :advanced
+                                 :optimizations :simple
                                  :main "clojuredocs.main"
                                  :pretty-print false
                                  :preamble ["public/js/morpheus.min.js"
@@ -75,7 +82,4 @@
                                  :externs ["externs/morpheus.js"
                                            "externs/marked.js"
                                            "externs/fastclick.js"]}
-                      :jar true}}}
-  :figwheel {:http-server-root "resources/public"
-             :css-dirs ["resources/public/css"]
-             :repl false})
+                       :jar true}}})

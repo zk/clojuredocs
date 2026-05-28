@@ -3,8 +3,11 @@
             [clojure.string :as str]
             [somnium.congomongo :as mon]
             [clojuredocs.search :as search]
+            [clojuredocs.search.compat :as compat]
             [clojuredocs.pages.common :as common]
             [clojuredocs.data :as data]
+            [clojuredocs.config :as config]
+            [cheshire.core :as json]
             [ring.util.codec :as codec]
             [hiccup.core :as hc]))
 
@@ -16,6 +19,15 @@
                     (take n)
                     (apply str))
                "...")))
+
+(defn truncate-docstring [doc max-len]
+  (if (or (nil? doc) (<= (count doc) max-len))
+    doc
+    (let [truncated (subs doc 0 max-len)
+          last-space (str/last-index-of truncated " ")]
+      (if last-space
+        (str (subs truncated 0 last-space) "\u2026")
+        (str truncated "\u2026")))))
 
 (defn library-for [{:keys [ns]}]
   search/clojure-lib)
@@ -43,9 +55,42 @@
                (assoc sa :doc (:doc looked-up-var))))))
        (remove nil?)))
 
+;; Namespaces in the clojure/clojure repository (excludes external repos)
+(def clojure-repo-namespaces
+  #{"clojure.core"
+    "clojure.core.protocols"
+    "clojure.core.reducers"
+    "clojure.core.server"
+    "clojure.data"
+    "clojure.datafy"
+    "clojure.edn"
+    "clojure.inspector"
+    "clojure.instant"
+    "clojure.java.browse"
+    "clojure.java.io"
+    "clojure.java.javadoc"
+    "clojure.java.process"
+    "clojure.java.shell"
+    "clojure.main"
+    "clojure.math"
+    "clojure.pprint"
+    "clojure.reflect"
+    "clojure.repl"
+    "clojure.repl.deps"
+    "clojure.set"
+    "clojure.stacktrace"
+    "clojure.string"
+    "clojure.template"
+    "clojure.test"
+    "clojure.test.junit"
+    "clojure.test.tap"
+    "clojure.walk"
+    "clojure.xml"
+    "clojure.zip"})
+
 (defn source-url [{:keys [file line ns] :as var}]
-  (when (and (= "clojure.core" ns) file)
-    (str "https://github.com/clojure/clojure/blob/clojure-1.11.1/src/clj/" file "#L" line)))
+  (when (and (contains? clojure-repo-namespaces ns) file)
+    (str (:source-base-url search/clojure-lib) "/src/clj/" file "#L" line)))
 
 (defn lookup-var [ns name]
   (search/lookup (str ns "/" name)))
@@ -93,6 +138,37 @@
 (defn $number-badge [num]
   [:span.badge num])
 
+(def dialect-info
+  {:clj  {:label "Clojure/JVM" :img "/img/clojure-logo.png"}
+   :cljs {:label "ClojureScript" :img "/img/cljs-logo.svg"}
+   :bb   {:label "babashka" :img "/img/babashka-logo.svg"}})
+
+(defn $dialect-badges [ns-str name-str]
+  (when-let [dialects (compat/dialects-for ns-str name-str)]
+    [:span.dialect-badges
+     (for [k [:clj :cljs :bb]
+           :let [{:keys [label img]} (dialect-info k)
+                 supported? (contains? dialects k)]]
+       [:img {:src img
+              :alt label
+              :width 20
+              :height 20
+              :title (if supported?
+                       (str "Available in " label)
+                       (str "Not available in " label))
+              :class (str "dialect-badge"
+                          (when-not supported? " unsupported"))}])]))
+
+(defn $implementation-badge [v]
+  (when (search/impl-var? v)
+    [:span.implementation-badge "Implementation detail"]))
+
+(defn $implementation-notice [v]
+  (when (search/impl-var? v)
+    [:div.implementation-notice
+     "This var is an implementation detail and is not part of the public API. "
+     "It may change or be removed without notice."]))
+
 (defn $var-header [{:keys [ns name added arglists forms] :as v}]
   [:div.row.var-header
    [:div.col-sm-8
@@ -106,7 +182,9 @@
        [:span.source-link
         " ("
         [:a {:href su} "source"]
-        ") "])]]
+        ") "])
+     ($dialect-badges ns name)
+     ($implementation-badge v)]]
    [:div.col-sm-12
     [:section
      [:ul.arglists
@@ -130,7 +208,19 @@
                          (map #(let [author? (util/is-author? user %)]
                                  (-> %
                                      (assoc :can-delete? author?)
-                                     (assoc :can-edit? author?)))))]
+                                     (assoc :can-edit? author?)))))
+              canonical-url (config/url "/" ns "/" (util/cd-encode name))
+              og-title (str name " - " ns)
+              og-description (or (truncate-docstring doc 160)
+                                 (str "Clojure var " ns "/" name))
+              json-ld (json/generate-string
+                        {"@context" "https://schema.org"
+                         "@type" "SoftwareSourceCode"
+                         "name" (str ns "/" name)
+                         "description" (or doc (str "Clojure var " ns "/" name))
+                         "url" canonical-url
+                         "programmingLanguage" "Clojure"
+                         "codeRepository" "https://github.com/clojure/clojure"})]
           {:session (update-in session [:recent]
                       #(->> %
                             (concat [{:text name
@@ -140,8 +230,21 @@
                             (take 4)))
            :body
            (common/$main
-             {:body-class "var-page"
+             {:body-class (if (search/impl-var? v)
+                            "var-page implementation-var"
+                            "var-page")
               :title (util/html-encode (str name " - " ns " | ClojureDocs - Community-Powered Clojure Documentation and Examples"))
+              :meta {"description" og-description
+                     "twitter:card" "summary"
+                     "twitter:title" og-title
+                     "twitter:description" og-description}
+              :og-meta {"og:title" og-title
+                        "og:description" og-description
+                        "og:url" canonical-url
+                        "og:type" "website"
+                        "og:site_name" "ClojureDocs"}
+              :canonical-url canonical-url
+              :json-ld json-ld
               :page-data {:examples (mapv clean-example examples)
                           :var v
                           :notes (vec (map clean-id notes))
@@ -182,6 +285,7 @@
                            (common/$library-nav library ns)]]
                          [:div.col-sm-10
                           ($var-header v)
+                          ($implementation-notice v)
                           [:section
                            [:div.docstring
                             (if doc

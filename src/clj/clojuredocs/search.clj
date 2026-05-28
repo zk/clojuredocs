@@ -33,7 +33,16 @@
      :forms ; -> list of strings
      :deprecated
      :url
-     :no-doc])
+     :no-doc
+     :skip-wiki])
+
+(defn impl-var?
+  "Returns true if a var is an implementation detail — either marked
+   ^:skip-wiki or lacking a docstring (the same heuristic Clojure's
+   official docs use to omit internal vars)."
+  [{:keys [skip-wiki doc special-form]}]
+  (and (not special-form)
+       (or skip-wiki (nil? doc))))
 
 (defn cond-update-in [m keys & rest]
   (if (get-in m keys)
@@ -101,9 +110,9 @@
 
 (def clojure-lib
   (-> {:library-url "https://github.com/clojure/clojure"
-       :version "1.11.1"
-       :source-base-url "https://github.com/clojure/clojure/1.11.1/blob"
-       :gh-tag-url "https://github.com/clojure/clojure/tree/clojure-1.11.1"
+       :version "1.12.4"
+       :source-base-url "https://github.com/clojure/clojure/blob/clojure-1.12.4"
+       :gh-tag-url "https://github.com/clojure/clojure/tree/clojure-1.12.4"
        :namespaces static/clojure-namespaces}
       gather-namespaces
       gather-vars))
@@ -111,7 +120,8 @@
 (def searchable-vars
   (->> clojure-lib
        :vars
-       (map #(assoc % :keywords (tokenize-name (:name %))))))
+       (remove impl-var?)
+       (map #(assoc % :keywords (str/lower-case (tokenize-name (:name %)))))))
 
 (def searchable-nss
   (->> static/clojure-namespaces
@@ -136,7 +146,8 @@
     (clucy/add search-index page)))
 
 (def lookup-vars
-  (->> searchable-vars
+  (->> clojure-lib
+       :vars
        (reduce #(assoc %1 (str (:ns %2) "/" (:name %2)) %2) {})))
 
 (defn lookup [ns-name]
@@ -191,6 +202,7 @@ Still maintains the O(n*m) guarantee.
 (defn format-query [q]
   (some-> q
     str/trim
+    str/lower-case
     drop-leading-stars
     lucene-escape
     (str "*")))

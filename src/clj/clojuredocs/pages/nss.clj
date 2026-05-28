@@ -18,7 +18,8 @@
 (defn vars-for [ns]
   (->> search/clojure-lib
        :vars
-       (filter #(= ns (:ns %)))))
+       (filter #(= ns (:ns %)))
+       (remove search/impl-var?)))
 
 (defn group-vars [vars]
   (->> vars

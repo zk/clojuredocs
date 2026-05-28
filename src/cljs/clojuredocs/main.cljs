@@ -135,8 +135,6 @@ f should accept number-of-colls arguments."}
                  :name "Getting Started"
                  :desc "Where to go to get started with Clojure. Provides a host of information  con the language, core concepts, tutorials, books, and videos to help you learn Clojure."}]})
 
-(.attach js/FastClick js/document.body)
-
 (defn bind-resize []
   (let [unbinds (doall
                   (for [$el (sel :.mobile-nav-menu)]
@@ -155,6 +153,9 @@ f should accept number-of-colls arguments."}
         (unbind)))))
 
 (defn init []
+  (when (exists? js/FastClick)
+    (.attach js/FastClick js/document.body))
+  
   (let [shutdown-els
         (on-el
           {}
@@ -238,9 +239,9 @@ f should accept number-of-colls arguments."}
                   :see-alsos [{:_id "", :user {:login "mmwaikar"}, :created-at #inst "2011-10-14T13:29:04.000-00:00", :name "map-indexed", :ns "clojure.core", :doc "Returns a lazy sequence consisting of the result of applying f to 0\nand the first item of coll, followed by applying f to 1 and the second\nitem in coll, etc, until coll is exhausted. Thus function f should\naccept 2 arguments, index and item."} {:_id "", :user {:login "gstamp"}, :created-at #inst "2012-09-06T11:28:04.000-00:00", :name "pmap", :ns "clojure.core", :doc "Like map, except f is applied in parallel. Semi-lazy in that the\nparallel computation stays ahead of the consumption, but doesn't\nrealize the entire result unless required. Only useful for\ncomputationally intensive functions where the time of f dominates\nthe coordination overhead."} {:_id "", :user {:login "gstamp"}, :created-at #inst "2012-09-06T11:28:33.000-00:00", :name "amap", :ns "clojure.core", :doc "Maps an expression across an array a, using an index named idx, and\nreturn value named ret, initialized to a clone of a, then setting \neach element of ret to the evaluation of expr, returning the new \narray ret."} {:_id "", :user {:login "adereth"}, :created-at #inst "2013-06-21T19:20:53.000-00:00", :name "mapcat", :ns "clojure.core", :doc "Returns the result of applying concat to the result of applying map\nto f and colls.  Thus function f should return a collection."}]}
                  {:target $el}))
 
+          :body search/init
           :body.var-page var-page/init
           :body.styleguide-page styleguide/init
-          :body search/init
           "[data-sticky-offset]" sticky/init
           "[data-animate-scroll]" animated-scroll-init)
 
@@ -269,3 +270,5 @@ f should accept number-of-colls arguments."}
 
 ;; project.clj entry
 (defonce reload-hook (page/hook-reload-fn reload))
+
+(init)

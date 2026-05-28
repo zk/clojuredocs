@@ -104,7 +104,7 @@
       (= 38 key-code)             ; up arrow
       ))
 
-(defn $quick-search-bar [{:keys [autofocus?]} bus]
+(defn $quick-search-bar [props bus]
   (let [on-change-throttle
         (page/throttle-debounce
           (fn [text]
@@ -113,9 +113,10 @@
            :debounce 200})]
     (rea/create-class
       {:reagent-render
-       (fn [{:keys [highlighted-index search-loading?
-                    ac-results ac-text search-focused?
-                    placeholder] :as app}]
+       (fn [props bus]
+         (let [{:keys [highlighted-index search-loading?
+                       ac-results ac-text search-focused?
+                       placeholder autofocus?] :as app} props]
          [:form.search
           {:autoComplete "off"
            :on-submit (fn [e]
@@ -139,11 +140,11 @@
               :name "q"
               :autoComplete "off"
               :value ac-text
-              :on-change (fn [e]
-                           (let [text (.. e -target -value)]
-                             (ops/send bus ::ac-text-changed text)
-                             (on-change-throttle text)))
-              :on-key-down (fn [e]
+             :on-change (fn [e]
+                          (let [text (.. e -target -value)]
+                            (ops/send bus ::ac-text-changed text)
+                            (on-change-throttle text)))
+             :on-key-down (fn [e]
                              (let [act {:key-code (.-keyCode e)
                                         :ctrl? (.-ctrlKey e)}]
                                (cond
@@ -157,16 +158,17 @@
                                                    (ops/send bus ::move-highlight -1)
                                                    (.preventDefault e)))))}
              (when autofocus?
-               {:autoFocus "autofocus"}))]])
+               {:autoFocus "autofocus"}))]]))
        :component-did-mount
        (fn [this]
-         (when autofocus?
+         (let [{:keys [autofocus?]} (rea/props this)]
+           (when autofocus?
            (when-let [$form (rea/dom-node this)]
              (let [$input (dommy/sel1 $form :input.query)]
                (when (and $input
                           (not (focused? $input)))
                  (.focus $input)
-                 (aset $input "value" (.-value $input)))))))
+                 (aset $input "value" (.-value $input))))))))
        :did-update (fn [])
        #_(fn []
            (handle-search-active-state ac-text)
@@ -187,7 +189,7 @@
                     :as app}
                    bus]
   (rea/create-class
-    {:component-did-update (fn [this old-argv]
+     {:component-did-update (fn [this old-argv]
                              (let [{:keys [ac-results] :as app}
                                    (second (rea/argv this))
                                    old-app (second old-argv)]
@@ -290,30 +292,38 @@
                     :ac-results data))))
             (swap! app-state assoc :search-loading? false)))))))
 
+(def search-initialized? (atom false))
+
 (defn init [$root]
+  (when @search-initialized?
+    (fn []))
+  (when-not @search-initialized?
+    (reset! search-initialized? true)
   (let [prev-query (util/location-hash)
         !state (rea/atom {:ac-text (when-not (re-find #"^example[_-]" prev-query)
                                      prev-query)})
         bus (ops/kit
               !state
               {}
-              {::ac-text-changed (fn [state ac-text]
+               {::ac-text-changed (fn [state ac-text]
                                    (assoc state :ac-text ac-text))
-
                ::ac-text-throttled
                (fn [state ac-text]
                  (let [ch (chan)]
-                   (go
-                     (put! ch (merge state {:search-loading? true}))
-                     (if (empty? ac-text)
-                       (do
-                         (put! ch (merge state {:results-empty? false
-                                                :ac-results []
-                                                :search-loading? false}))
-                         (set-location-hash! ""))
-                       (do
-                         (put! ch (merge state {:search-loading? true}))
-                         (let [ac-response (<! (ajax-chan {:method :get
+                    (go
+                      (put! ch (fn [current-state] 
+                                 (merge current-state {:search-loading? true})))
+                      (if (empty? ac-text)
+                        (do
+                          (put! ch (fn [current-state]
+                                     (merge current-state {:results-empty? false
+                                                           :ac-results []
+                                                           :search-loading? false})))
+                          (set-location-hash! ""))
+                        (do
+                          (put! ch (fn [current-state]
+                                     (merge current-state {:search-loading? true})))
+                          (let [ac-response (<! (ajax-chan {:method :get
                                                            :path (str "/ac-search?query=" (util/url-encode ac-text))
                                                            :data-type :edn}))
                                data (-> ac-response :res :body)]
@@ -388,4 +398,4 @@
         [$ac-results-widget !state bus]
         $el))
 
-    (fn [])))
+    (fn []))))

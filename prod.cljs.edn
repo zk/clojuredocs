@@ -1,0 +1,12 @@
+{:main clojuredocs.main
+ :output-to "resources/public/cljs/clojuredocs.js"
+ :output-dir "resources/public/cljs-prod"
+ :optimizations :advanced
+ :pretty-print false
+ :externs ["externs/morpheus.js"
+           "externs/marked.js"
+           "externs/fastclick.js"]
+ :closure-defines {goog.DEBUG false}
+ :preamble ["public/js/morpheus.min.js"
+            "public/js/marked.min.js"
+            "public/js/fastclick.min.js"]}
