@@ -2,9 +2,6 @@
 
 The clojuredocs.org webapp
 
-![](http://cl.ly/image/1C2o2d181716/Screen%20Shot%202014-07-12%20at%202.03.25%20AM.png)
-
-
 ## Contributing
 
 A few ways to contribute:
@@ -160,12 +157,13 @@ how to do that:
 
 ## Contributors
 
-[Zachary Kim](https://github.com/zk), [Lee Hinman](https://github.com/dakrone), and [more](https://github.com/zk/clojuredocs/graphs/contributors).
+[Zachary Kim](https://github.com/zk), [Lee Hinman](https://github.com/dakrone), and [more](https://github.com/nubank/clojuredocs/graphs/contributors).
 
 
 ## License
 
-Copyright © 2010-present Zachary Kim
+Copyright © 2010-2025 Zachary Kim
+Copyright © 2025-present Nubank
 
 Distributed under the Eclipse Public License either version 1.0 or (at
 your option) any later version.
