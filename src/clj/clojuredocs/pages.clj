@@ -14,8 +14,7 @@
             [clojuredocs.pages.gh-auth :as gh-auth]
             [clojuredocs.pages.quickref :as quickref]
             [clojuredocs.pages.vars :as vars]
-            [clojuredocs.pages.nss :as nss]
-            [clojuredocs.pages.jobs :as jobs]))
+            [clojuredocs.pages.nss :as nss]))
 
 (def robots-resp
   (fn [r]
@@ -321,12 +320,6 @@
   (GET "/concepts/:concept" [concept] (concept-page-handler concept))
 
   (GET "/search" [] search-page-handler)
-
-  #_(GET "/jobs" [] jobs/list-handler)
-  #_(GET "/jobs/post" [] jobs/post-handler)
-  #_(GET "/jobs/about" [] jobs/about-handler)
-  #_(GET "/jobs/:job-id" [job-id] (jobs/single-handler job-id))
-  #_(GET "/jobs/:job-id/:url-slug" [job-id] (jobs/single-handler job-id))
 
   (GET "/ac-search" [] var-search-handler)
   (GET "/ac-vars" [] ac-vars-handler)
