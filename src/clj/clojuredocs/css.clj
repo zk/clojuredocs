@@ -927,17 +927,6 @@
          :text-decoration 'underline
          :font-weight 600}
      [:&:hover {:color "rgba(255,255,255, 0.85)"}]]]
-   [:.conj-banner
-    {:text-align 'center
-     :background-color "rgb(68,138,88)"
-     :color "rgba(255,255,255, 0.95)"
-     :font-size "14px"
-     :font-weight 400
-     :padding "8px"}
-    [:a {:color "rgba(255,255,255, 1)"
-         :text-decoration 'underline
-         :font-weight 600}
-     [:&:hover {:color "rgba(255,255,255, 0.85)"}]]]
    [:.toggle-controls :.login-required-message
     {:text-align 'right
      :margin-bottom "4px"
