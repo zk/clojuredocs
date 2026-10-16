@@ -480,42 +480,6 @@
       {:line-height "50px"
        :margin 0}]]]])
 
-(def jobs
-  [[:.job-preview
-    [:.job-location :.comp :.remote-ok :.comp-equity :.comp-cash
-     {:color "#888"}]]
-   [:.jobs-page
-    [:.job-preview-wrapper
-     :.list-jobs-header
-     {:border-bottom "solid #eee 1px"}]
-    [:.job-preview-wrapper
-     {:padding "20px 0"}]
-    [:.job-preview
-     [:.comp
-      {:margin-top "3px"
-       :color "#aaa"
-       :font-size "13px"}]]
-    [:.job-info
-     [:.section-header
-      {:border-bottom "solid #eee 1px"
-       :color "#888"
-       :font-size "20px"}]
-     [:ul {:margin-bottom "20px"}]
-     [:h1 {:font-size "20px"
-           :font-weight 'bold}]]
-    [:.btn {:border-radius 0}]
-    [:.job-description :.company-description
-     [:ul {:margin-left "20px"}]
-     [:li {:margin-bottom "0.5em"
-           :list-style-type 'disc}]]
-    [:.apply-now
-     {:border-top "solid #ccc 1px"
-      :border-bottom "solid #ccc 1px"
-      :padding "15px 0"
-      :text-align 'center}
-     [:.btn {:width "75%"
-             :border-radius 0}]]]])
-
 (def app
   [nc/flex-defaults
 
@@ -927,17 +891,6 @@
          :text-decoration 'underline
          :font-weight 600}
      [:&:hover {:color "rgba(255,255,255, 0.85)"}]]]
-   [:.conj-banner
-    {:text-align 'center
-     :background-color "rgb(68,138,88)"
-     :color "rgba(255,255,255, 0.95)"
-     :font-size "14px"
-     :font-weight 400
-     :padding "8px"}
-    [:a {:color "rgba(255,255,255, 1)"
-         :text-decoration 'underline
-         :font-weight 600}
-     [:&:hover {:color "rgba(255,255,255, 0.85)"}]]]
    [:.toggle-controls :.login-required-message
     {:text-align 'right
      :margin-bottom "4px"
@@ -1166,8 +1119,6 @@
     [:.search-controls
      {:text-align 'center
       :color "#888"}]]
-
-   jobs
 
    [:.header-banner
     {:background-color "#3498db"
