@@ -182,12 +182,6 @@
       (when config/staging-banner?
         [:div.staging-banner
          "This is the ClojureDocs staging site, where you'll find all the neat things we're working on."])
-      [:div.conj-banner
-       "Clojure/Conj 2026 — Charlotte, NC — Sept 30 - Oct 2 "
-       [:a {:href "https://2026.clojure-conj.org/?utm_source=clojuredocs&utm_medium=banner&utm_campaign=conj2026"
-            :target "_blank"
-            :onclick "_paq.push(['trackEvent', 'Banner', 'Click', 'Conj 2026']);"}
-        "Learn More & Get Tickets →"]]
       [:div.desktop-nav-bar
        ($navbar opts)]
       [:div
