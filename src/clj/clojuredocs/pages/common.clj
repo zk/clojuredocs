@@ -55,7 +55,6 @@
           [:div.navbar-brand.clojure-version
            [:a {:href (:gh-tag-url search/clojure-lib)}
             (:version search/clojure-lib)]]])
-       #_[:li [:a {:href "/jobs"} "Jobs"]]
        [:li [:a {:href "/core-library"} "Core Library"]]
        [:li [:a {:href "/quickref"} "Quick Ref"]]
        (if user
