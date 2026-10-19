@@ -181,10 +181,10 @@ f should accept number-of-colls arguments."}
           :.mobile-nav-menu
           (fn [$el]
             (let [h (fn [e] (.stopPropagation e))]
-              #_(dommy/listen! $el
-                  :click h
-                  :touchstart h
-                  :touchend h))
+              (dommy/listen! $el
+                :click h
+                :touchstart h
+                :touchend h))
 
             (let [f #(doseq [s push-sels]
                        (dommy/remove-class! (sel1 s) :mobile-push))]
@@ -270,5 +270,3 @@ f should accept number-of-colls arguments."}
 
 ;; project.clj entry
 (defonce reload-hook (page/hook-reload-fn reload))
-
-(init)

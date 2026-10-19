@@ -12,7 +12,7 @@ string to act on as the first parameter, lending themselves well for
 use with the <a href="/clojure.core/->">single-thrush operator (->)</a>
 , as in this contrived example:
 
-<pre class="brush: clojure">
+```clojure
 (require '[clojure.string :as str])
 
 (-> "  .LIRpa   ni  yAD    dloc thgIrb  a sAw Ti  "
@@ -23,4 +23,4 @@ use with the <a href="/clojure.core/->">single-thrush operator (->)</a>
     str/capitalize)
 
 ;;=> "It was a bright cold day in april"
-</pre>
+```
