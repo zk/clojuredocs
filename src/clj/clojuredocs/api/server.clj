@@ -2,17 +2,16 @@
   (:require [clojuredocs.api.examples :as examples]
             [clojuredocs.api.notes :as notes]
             [clojuredocs.api.see-alsos :as see-alsos]
+            [clojuredocs.data :as data]
             [compojure.core :refer [DELETE GET PATCH POST defroutes]]
             [compojure.route :refer [not-found]]
             [fogus.unk :as unk]
             [nsfw.util :as nu]
-            [slingshot.slingshot :refer [throw+ try+]]
-            [somnium.congomongo :as mon])
+            [slingshot.slingshot :refer [throw+ try+]])
   (:import [org.bson.types ObjectId]))
 
 (defn all-see-alsos-relations-map []
-  (->> (mon/fetch
-         :see-alsos)
+  (->> (data/find-all-see-alsos)
        (group-by #(select-keys (:from-var %) [:ns :name]))
        (map (fn [[{:keys [ns name]} to-vars]]
               [(str ns "/" name)

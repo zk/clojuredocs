@@ -1,7 +1,7 @@
 (ns clojuredocs.api.examples
   (:require [slingshot.slingshot :refer [throw+]]
-            [somnium.congomongo :as mon]
             [schema.core :as s]
+            [clojuredocs.data :as data]
             [clojuredocs.util :as util]
             [clojuredocs.api.common :as c]))
 ;; Utils
@@ -11,8 +11,7 @@
    :status 200})
 
 (defn insert! [payload]
-  (mon/insert! :examples payload)
-  payload)
+  (data/insert-example! payload))
 
 (defn create-example-history [example user new-body]
   {:_id (org.bson.types.ObjectId.)
@@ -76,7 +75,7 @@
     (c/require-login! user)
     (let [_id (c/parse-mongo-id! id)
           example-update (assoc edn-body :_id _id)
-          example (mon/fetch-one :examples :where {:_id (:_id example-update)})
+          example (data/find-example-by-id (:_id example-update))
           new-example (-> example
                           (assoc :body (:body example-update))
                           (update-in [:editors] (add-editor user))
@@ -92,10 +91,8 @@
       (c/validate! new-example [body-not-empty])
       (c/validate-schema! new-example UpdateExample)
       (c/validate-schema! example-history InsertExampleHistory)
-      (mon/update! :examples
-        {:_id (:_id example)}
-        new-example)
-      (mon/insert! :example-histories example-history)
+      (data/update-example! (:_id example) new-example)
+      (data/insert-example-history! example-history)
       {:status 200
        :headers {"Content-Type" "application/edn;charset=utf-8"}
        :body new-example})))
@@ -104,14 +101,12 @@
   (fn [{:keys [user]}]
     (c/require-login! user)
     (let [_id (c/parse-mongo-id! id)
-          example (mon/fetch-one :examples :where {:_id _id})]
+          example (data/find-example-by-id _id)]
       (when-not example
         (throw+ {:status 404
                  :body {:message "Not Found"}}))
       (when-not (util/is-author? user example)
         (throw+ {:status 401
                  :body {:message "Not authorized to delete that example"}}))
-      (mon/update! :examples
-        {:_id _id}
-        (assoc example :deleted-at (util/now)))
+      (data/update-example! _id (assoc example :deleted-at (util/now)))
       {:status 200 :body example})))

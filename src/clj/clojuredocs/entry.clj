@@ -22,7 +22,7 @@
             [clojuredocs.pages :as pages]
             [clojure.pprint :refer (pprint)]
             [clojuredocs.api.server :as api.server]
-            [somnium.congomongo :as mon]
+            [clojuredocs.data :as data]
             [clojure.edn :as edn]
             [clojuredocs.search :as search]
             [prone.middleware :as prone]))
@@ -77,7 +77,7 @@
   (fn [r]
     (try
       (let [{:keys [ns name] :as legacy-var}
-            (mon/fetch-one :legacy-var-redirects :where {:function-id (Integer/parseInt id)})]
+            (data/find-legacy-var-redirect (Integer/parseInt id))]
         (when legacy-var
           {:status 307
            :headers {"Location" (str "/" ns "/" (util/cd-encode name))}}))

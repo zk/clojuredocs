@@ -1,7 +1,7 @@
 (ns clojuredocs.api.see-alsos
   (:require [slingshot.slingshot :refer [throw+]]
-            [somnium.congomongo :as mon]
             [schema.core :as s]
+            [clojuredocs.data :as data]
             [clojuredocs.util :as util]
             [clojuredocs.api.common :as c]
             [clojuredocs.search :as search])
@@ -27,7 +27,7 @@
    :_id        ObjectId})
 
 (defn prevent-duplicates [{:keys [from-var to-var]}]
-  (when-let [existing (mon/fetch-one :see-alsos :where {:from-var from-var :to-var to-var})]
+  (when-let [existing (data/find-see-also-between from-var to-var)]
     {:message "Sorry, that see also already exists."}))
 
 (defn prevent-same [{:keys [from-var to-var]}]
@@ -52,7 +52,7 @@
          :body {:message (str "Couldn't find var \"" ns-name "\". Don't forget to fully qualify the var name.")} }))
     (c/validate! new-see-also [prevent-duplicates prevent-same])
     (c/validate-schema! new-see-also SeeAlso)
-    (mon/insert! :see-alsos new-see-also)
+    (data/insert-see-also! new-see-also)
     {:status 200 :body (assoc new-see-also :doc (:doc to-var) :can-delete? true)}))
 
 (defn is-author? [user]
@@ -64,8 +64,8 @@
   (fn [{:keys [edn-body user]}]
     (c/require-login! user)
     (let [_id (ObjectId. (str id))
-          sa (mon/fetch-one :see-alsos :where {:_id _id})]
+          sa (data/find-see-also-by-id _id)]
       (c/validate! sa [(is-author? user)])
-      (mon/destroy! :see-alsos {:_id _id})
+      (data/delete-see-also! _id)
       {:status 200
        :body sa})))

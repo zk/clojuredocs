@@ -20,6 +20,9 @@ on:
       - 'docs/metadata-schema.edn'
       - 'docs/context.jsonld'
 
+permissions:
+  contents: read
+
 jobs:
   validate-docs-metadata:
     runs-on: ubuntu-latest

@@ -1,7 +1,6 @@
 (ns clojuredocs.pages.vars
   (:require [clojuredocs.util :as util]
             [clojure.string :as str]
-            [somnium.congomongo :as mon]
             [clojuredocs.search :as search]
             [clojuredocs.search.compat :as compat]
             [clojuredocs.pages.common :as common]
@@ -43,11 +42,8 @@
 (defn $argform [s]
   [:li.arglist (util/html-encode s)])
 
-(defn see-alsos-for [{:keys [ns name library-url]}]
-  (->> (mon/fetch :see-alsos
-         :where {:from-var.ns ns
-                 :from-var.name name
-                 :from-var.library-url library-url})
+(defn see-alsos-for [v]
+  (->> (data/find-see-alsos-for v)
        (map (fn [{:keys [to-var] :as sa}]
          (let [ns-name (str (:ns to-var) "/" (:name to-var))
                looked-up-var (search/lookup ns-name)]
@@ -327,7 +323,7 @@
 (defn example-handler [id]
   (fn [{:keys [user session uri]}]
     (let [{:keys [history name ns] :as ex}
-          (mon/fetch-one :examples :where {:_id (util/bson-id id)})]
+          (data/find-example-by-id (util/bson-id id))]
       (common/$main
          {:body-class "example-page"
           :user user

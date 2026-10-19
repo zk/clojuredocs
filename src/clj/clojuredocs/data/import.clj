@@ -1,6 +1,6 @@
 (ns clojuredocs.data.import
   (:require [clojure.pprint :refer [pprint]]
-            [somnium.congomongo :as mon]
+            [clojuredocs.data :as data]
             [clojure.edn :as edn]))
 (comment
   (def var-keys
@@ -141,7 +141,7 @@
 
   (declare special-forms)
 
-  (mon/fetch-one :vars :where {:name "if-not"})
+  (data/fetch-var "clojure.core" "if-not")
 
   (->> (ns-publics 'clojure.core)
        (map second)

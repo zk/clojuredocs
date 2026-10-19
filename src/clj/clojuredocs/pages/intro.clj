@@ -1,6 +1,6 @@
 (ns clojuredocs.pages.intro
   (:require [clojuredocs.util :as util]
-            [somnium.congomongo :as mon]
+            [clojuredocs.data :as data]
             [clojuredocs.pages.common :as common]
             [clojuredocs.syntax :as syntax]))
 
@@ -175,14 +175,11 @@
 
 (defn recently-updated []
   (let [limit 6
-        examples (->> (mon/fetch :examples
-                        :where {:deleted-at nil}
-                        :sort {:created-at -1}
-                        :limit limit)
+        examples (->> (data/find-recent-examples limit)
                       (map #(assoc % :type :example)))
-        see-alsos (->> (mon/fetch :see-alsos :sort {:created-at -1} :limit limit)
+        see-alsos (->> (data/find-recent-see-alsos limit)
                        (map #(assoc % :type :see-also)))
-        notes (->> (mon/fetch :notes :sort {:created-at -1} :limit limit)
+        notes (->> (data/find-recent-notes limit)
                    (map #(assoc % :type :note)))]
     (->> (concat
            examples

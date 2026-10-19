@@ -1,27 +1,22 @@
 (ns clojuredocs.pages.user
   (:require [clojuredocs.util :as util]
             [clojuredocs.config :as config]
+            [clojuredocs.data :as data]
             [clojuredocs.pages.common :as common]
 
-            [somnium.congomongo :as mon]
             [ring.util.codec :as codec]
             [ring.util.response :refer (redirect)]
             [compojure.core :refer (defroutes GET)]))
 
 (defn page-handler [login account-source]
   (let [{:keys [login account-source] :as user}
-        (mon/fetch-one :users :where {:login (codec/url-decode login)
-                                      :account-source account-source})
+        (data/find-user (codec/url-decode login) account-source)
 
         examples-authored-count
-        (mon/fetch-count :examples :where {:author.login login
-                                           :author.account-source account-source
-                                           :deleted-at nil})
+        (data/count-examples-by-author login account-source)
 
         authored-examples
-        (mon/fetch :examples :where {:author.login login
-                                     :author.account-source account-source
-                                     :deleted-at nil})]
+        (data/find-examples-by-author login account-source)]
     (fn [r]
       (common/$main
         {:user (:user r)

@@ -79,10 +79,19 @@ This means `MONGO_URL` is not set.
 
 ## Starting the REPL
 
-`bin/dev` uses `foreman` to start everything (REPL, CLJS compiler, etc.). For a lighter backend-only REPL:
+Start MongoDB, a backend REPL, and the CLJS build in separate terminals:
 
 ```bash
-source bin/.devenv && lein repl :headless
+# terminal 1 — MongoDB (skip if already running)
+mongod --dbpath ./dev-db
+
+# terminal 2 — backend REPL
+source bin/.devenv
+lein repl
+
+# terminal 3 — ClojureScript build (only needed if you're touching src/cljs)
+source bin/.devenv
+lein fig:build
 ```
 
 The nREPL port is written to `.nrepl-port`.
@@ -97,7 +106,7 @@ The `:repl-options :init` in `project.clj` loads `reup.clj` on REPL start, which
 ## Web Server
 
 - Default port: **8080** (or whatever `PORT` env var is set to)
-- `bin/.devenv` pins `PORT=4000` and `BASE_URL=http://localhost:4000`; `bin/dev` also sets `PORT=4000`
+- `bin/.devenv` pins `PORT=4000` and `BASE_URL=http://localhost:4000`
 - Visit http://localhost:4000 (or your configured port) to verify
 
 > **GitHub login:** `BASE_URL` builds the OAuth `redirect_uri`, so it must match the port the server actually listens on. If they diverge (e.g. `BASE_URL` on `:5000` but the server on `:4000`), GitHub rejects the callback and login fails — see [issue #9](https://github.com/nubank/clojuredocs/issues/9).

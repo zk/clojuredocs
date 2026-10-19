@@ -2,8 +2,7 @@
   (:require [nsfw.util :as nu]
             [clojuredocs.search :as search]
             [clojuredocs.data :as data]
-            [clojuredocs.env :as env]
-            [somnium.congomongo :as mon]))
+            [clojuredocs.env :as env]))
 
 (defn ensure-empty->nil [c]
   (if (and c (empty? c))
@@ -45,7 +44,5 @@
 
 
 (defn -main []
-  (mon/set-connection!
-    (mon/make-connection
-      (env/str :mongo-url)))
+  (data/connect! (env/str :mongo-url))
   (run-export "resources/public/clojuredocs-export.json"))

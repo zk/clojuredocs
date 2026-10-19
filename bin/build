@@ -1,9 +1,0 @@
-#!/bin/bash
-
-set -e
-
-env JVM_OPTS="-Xmx256m -Xms256m -server" lein cljsbuild once prod
-
-lein test
-
-lein with-profile production compile :all

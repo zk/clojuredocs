@@ -1,6 +1,6 @@
 (ns clojuredocs.main
   (:require [ring.adapter.jetty :as jetty]
-            [somnium.congomongo :as mon]
+            [clojuredocs.data :as data]
             [clojuredocs.env :as env]
             [clojuredocs.entry :as entry]
             [clojuredocs.export :as export]
@@ -51,7 +51,7 @@
 
 (defn add-indexes-to-coll! [coll ks]
   (doseq [k ks]
-    (mon/add-index! coll [k])))
+    (data/add-index! coll [k])))
 
 (defn add-all-indexes! []
   (add-indexes-to-coll!
@@ -86,10 +86,10 @@
       (println "Scheduled export failed:" (.getMessage e)))))
 
 (defn start-app []
+  (compile-css)
   (let [{:keys [mongo-url port entry] :as app} (create-app)
-        mongo-conn (mon/make-connection mongo-url)]
+        mongo-conn (data/connect! mongo-url)]
     (report-and-exit-on-missing-env-vars!)
-    (mon/set-connection! mongo-conn)
     (add-all-indexes!)
     (let [stop-server (start-http-server entry
                         {:port port :join? false})
@@ -101,7 +101,7 @@
       (println (format "Export scheduled every %d hours" export-interval-hours))
       (fn []
         (.shutdown executor)
-        (mon/close-connection mongo-conn)
+        (data/disconnect! mongo-conn)
         (.stop stop-server)))))
 
 (defn stop-app [f]

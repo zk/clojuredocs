@@ -14,8 +14,6 @@ Docs under `docs/` follow a metadata convention (see [CLAUDE.md](CLAUDE.md));
 run `bin/install-hooks` once to enable the pre-commit check, or validate with
 `bb tools/validate_metadata.clj`.
 
-Let's use GH issues for discussion for now
-
 If you're looking for a project:
 
 * Content for namespaces (see `src/md/namespaces`) needs to be added /
@@ -32,16 +30,9 @@ If you're looking for a project:
 Production runs on an AWS EC2 instance with nginx proxying to a single
 systemd-managed JVM process.
 
-```bash
-# 1. SSH into the production box (requires ClojureDocs.pem — ask the team lead)
-ssh clojuredocs
+Every minute [./bin/deploy.sh](./bin/deploy.sh) runs and deploys the website if a new version is available.
 
-# 2. Deploy
-~/deploy.sh
-```
-
-This pulls latest, builds (deps, compile, CLJS), and restarts the
-service. See [docs/release-protocol.md](docs/release-protocol.md) for
+See [docs/release-protocol.md](docs/release-protocol.md) for
 the full release checklist, SSH setup, and smoke tests.
 
 
@@ -50,7 +41,6 @@ the full release checklist, SSH setup, and smoke tests.
 * Java (JDK 8+) (note prod build installs and runs `openjdk-17-jdk` )
 * [JCE Unlimited Strength Jurisdiction Policy Files](http://www.oracle.com/technetwork/java/javase/downloads/jce8-download-2133166.html)
 * [lein](http://leiningen.org)
-* [foreman](https://github.com/ddollar/foreman) (see `Procfile`, `bin/dev`)
 * [entr](http://entrproject.org/) (available in homebrew)
 * [babashka](https://babashka.org) (`bb`) (repo tooling + doc-metadata hook)
 * MongoDB
@@ -59,30 +49,29 @@ the full release checklist, SSH setup, and smoke tests.
 
 ## Dev
 
-> **Note:** The dev CLJS build (figwheel via `lein fig:build`) is
-> currently broken. Use `bin/prod-local` to compile and run locally
-> with the production CLJS build instead.
+Start MongoDB, a backend REPL, and the CLJS build in separate terminals:
 
-To start the server and connect a REPL:
+```bash
+# terminal 1 — MongoDB
+mongod --dbpath ./dev-db
 
-1. Run `bin/prod-local` in one terminal (compiles CLJS, starts the web
-   server on port 4000)
-2. Connect to the running nREPL with `lein repl :connect` (nREPL port
-   is printed at startup)
+# terminal 2 — backend REPL
+source bin/.devenv
+lein repl
 
-Visit http://localhost:4000 to verify. 
+# terminal 3 — ClojureScript build (only needed if you're touching src/cljs)
+source bin/.devenv
+lein fig:build
+```
 
-See `docs/dev-setup.md` and `docs/dev-setup-vscode.md` for more.
+Visit http://localhost:4000 to verify.
 
+See [docs/dev-setup.md](docs/dev-setup.md) and
+[docs/dev-setup-vscode.md](docs/dev-setup-vscode.md) for more.
 
 ### Local Data
 
 The app uses a MongoDB database named `clojuredocs` to store data. Run `bin/db-reset` to seed the database with a recent production export (you must be running `mongod` for this to work).
-
-### Prod Local
-
-Compile and run things as they would be in production (checking advanced cljs compilation, for example): `bin/prod-local`.
-
 
 ### CLJS Source Maps
 

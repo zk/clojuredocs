@@ -2,7 +2,7 @@
   (:require [clojure.string :as str]
             [compojure.core :refer (defroutes GET POST)]
             [ring.util.response :refer (redirect)]
-            [somnium.congomongo :as mon]
+            [clojuredocs.data :as data]
             [clojuredocs.util :as util]
             [clojuredocs.config :as config]
             [clojuredocs.search :as search]
@@ -134,10 +134,7 @@
   (let [sa-lookup (->> results
                        (map #(select-keys % [:ns :name :library-url]))
                        (map (fn [{:keys [ns name library-url] :as l}]
-                              [l (->> (mon/fetch :see-alsos
-                                        :where {:from-var.ns ns
-                                                :from-var.name name
-                                                :from-var.library-url library-url})
+                              [l (->> (data/find-see-alsos-for {:ns ns :name name :library-url library-url})
                                       (map (fn [{:keys [to-var]}]
                                              {:ns (:ns to-var)
                                               :name (:name to-var)
@@ -150,11 +147,7 @@
   (let [examples-lookup (->> results
                              (map #(select-keys % [:ns :name :library-url]))
                              (map (fn [{:keys [ns name library-url] :as l}]
-                                    [l (mon/fetch-count :examples
-                                         :where {:var.ns ns
-                                                 :var.name name
-                                                 :var.library-url library-url
-                                                 :deleted-at nil})]))
+                                    [l (data/count-examples-for {:ns ns :name name :library-url library-url})]))
                              (into {}))]
     (->> results
          (map #(assoc % :examples-count (get examples-lookup (select-keys % [:ns :name :library-url])))))))
@@ -189,7 +182,7 @@
          first)))
 
 (defn lookup-var [ns name]
-  (mon/fetch-one :vars :where {:name name :ns ns}))
+  (data/fetch-var ns name))
 
 (defn lookup-var-expand [ns name]
   (or (search/lookup (str ns "/" name))

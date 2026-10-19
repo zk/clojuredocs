@@ -1,3 +1,0 @@
-web: lein repl :headless
-cljs: lein fig:build
-# mongo: mongod --dbpath ./dev-db

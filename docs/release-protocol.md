@@ -51,7 +51,7 @@ Before every release:
    version section with today's date.
 2. **Run the full build locally**:
    ```bash
-   bin/build   # CLJS compile → tests → AOT compile
+   bin/deploy.sh   # CLJS compile → tests → AOT compile
    ```
 3. **Tag the release**:
    ```bash
@@ -152,16 +152,16 @@ sudo systemctl restart clojuredocs
 
 ### Status quo
 
-- **Leiningen** (`project.clj`) — all builds, REPL, CLJS compilation (dev build broken)
+- **Leiningen** (`project.clj`) — all builds, REPL, CLJS compilation
 - **cljsbuild** — ClojureScript prod builds (`:simple` optimization)
-- **foreman** — local dev process management (`Procfile.dev`)
+- **foreman** — no longer used; `Procfile`, `Procfile.dev`, and `Procfile.prod-local` are now unreferenced leftovers from the removed `bin/dev`/`bin/prod`/`bin/prod-local` scripts (see Version History below)
 
 ### [goal] Alignment with Clojure ecosystem
 
 - [ ] Migrate from Leiningen to **deps.edn + tools.build** (consistent
   with Clojure core and contrib libraries)
 - [ ] Modernize cljsbuild (figwheel or shadow)
-- [ ] Add GitHub Actions CI to run `bin/build` on every PR
+- [x] GitHub Actions CI runs `lein test` and `clj-kondo` on every PR (`.github/workflows/test.yml`); still missing a full CLJS-compile + AOT check like the release checklist above
 
 ---
 > **AI Disclaimer**: Initial draft and research conducted and drafted by Claude (Opus 4.6) via GitHub Copilot in VS Code. Information has been reviewed by a human, corrected where applicable and noted in Version History below.
@@ -172,6 +172,7 @@ sudo systemctl restart clojuredocs
 
 | Date | Summary |
 |------|--------|
+| 2026-10-19 | Removed `bin/build`, `bin/dev`, `bin/prod`, `bin/prod-local` (unused/dead scripts; `bin/prod` set an `IN_PROD` env var nothing read, `bin/dev`/`bin/prod-local` duplicated steps now documented inline). §2 Release Checklist and §4 Build Tooling updated to show the underlying `lein` commands directly instead of pointing at the removed scripts. `Procfile`, `Procfile.dev`, `Procfile.prod-local` are now orphaned — candidates for removal in a follow-up. |
 | 2026-03-18 | §3 Deploy: replaced outdated two-process Upstart rolling-restart with verified single-service systemd deploy (from server `deploy.sh` and `provision.sh`). §5 Rollback: updated to match actual deploy commands. Removed `system.properties` migration goal (file deleted). Removed `bin/ship` and `system.properties` (Heroku vestiges). |
 | 2026-03-13 | Rewrite: document status quo honestly, flag AI-introduced errors, surface AWS vs Heroku ambiguity, propose date-based versioning. |
 | 2026-03-13 | Initial draft created (AI-generated). Contained invented version scheme and unverified deploy procedure. |

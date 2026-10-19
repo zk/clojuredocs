@@ -1,7 +1,7 @@
 (ns clojuredocs.api.notes
   (:require [clojuredocs.api.common :as c]
+            [clojuredocs.data :as data]
             [schema.core :as s]
-            [somnium.congomongo :as mon]
             [slingshot.slingshot :refer [throw+]]))
 
 (defn body-not-empty [m]
@@ -24,7 +24,7 @@
                      (assoc :author user))]
     (c/validate! new-note [body-not-empty])
     (c/validate-schema! new-note Note)
-    (mon/insert! :notes new-note)
+    (data/insert-note! new-note)
     {:status 200
      :body (assoc new-note :can-edit? true :can-delete? true)}))
 
@@ -38,7 +38,7 @@
   (fn [{:keys [edn-body user]}]
     (c/require-login! user)
     (let [_id (c/parse-mongo-id! id)
-          note (mon/fetch-one :notes :where {:_id _id})
+          note (data/find-note-by-id _id)
           new-note (-> note
                        (assoc :body (:body edn-body))
                        c/update-timestamps)]
@@ -49,7 +49,7 @@
       (c/validate! note [(is-author user)])
       (c/validate! new-note [body-not-empty])
       (c/validate-schema! new-note Note)
-      (mon/update! :notes {:_id (:_id note)} new-note)
+      (data/update-note! (:_id note) new-note)
       {:status 200
        :body (assoc new-note :can-edit? true :can-delete? true)})))
 
@@ -57,12 +57,12 @@
   (fn [{:keys [user]}]
     (c/require-login! user)
     (let [_id (c/parse-mongo-id! id)
-          note (mon/fetch-one :notes :where {:_id _id})]
+          note (data/find-note-by-id _id)]
       (when-not note
         (throw+
           {:status 404
            :body {:message (str "Note with id " id " not found.")}}))
       (c/validate! note [(is-author user)])
-      (mon/destroy! :notes {:_id _id})
+      (data/delete-note! _id)
       {:status 200
        :body {:message "Note deleted"}})))

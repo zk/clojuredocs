@@ -1,6 +1,5 @@
 (ns clojuredocs.pages.nss
   (:require [clojuredocs.config :as config]
-            [somnium.congomongo :as mon]
             [clojuredocs.util :as util]
             [clojuredocs.pages.common :as common]
             [clojuredocs.search :as search]
