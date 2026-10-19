@@ -4,14 +4,20 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 source $SCRIPT_DIR/.devenv
 
-# Test account used to verify data's making it to New Relic
-
-# export NEW_RELIC_APP_NAME=cd-dev
-# export NEW_RELIC_LICENSE_KEY=d239f729cebbb2f0742fadcf9a6616dfb9bbcf73
-# export NEW_RELIC_BROWSER_ID=4996968
-# export NEW_RELIC_BROWSER_KEY=da19d87a54
-
 export PORT=4000
 
 cd $SCRIPT_DIR && lein clean
-cd $SCRIPT_DIR/.. && foreman start -f Procfile.dev
+cd $SCRIPT_DIR/..
+
+mongod --dbpath ./dev-db &
+MONGO_PID=$!
+
+lein repl :headless &
+REPL_PID=$!
+
+lein fig:build &
+FIG_PID=$!
+
+trap 'kill $MONGO_PID $REPL_PID $FIG_PID 2>/dev/null' EXIT INT TERM
+
+wait
