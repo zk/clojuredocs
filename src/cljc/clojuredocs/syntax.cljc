@@ -14,17 +14,15 @@
                 "drop" "when-let" "if-let" "add-watch" "mod" "quot"
                 "bit-test" "vector"})
 
-(def styles {:comment  {:style {:color "#008200"}}
-             :str-litt {:style {:color "#2D2DFE"}}
-             :keyw     {:style {:color "#77f"}}
-             :builtin  {:style {:font-weight "normal"
-                                :color "#687868"}}
-             :def      {:style {:color "#55c"
-                                :font-weight "normal"}}})
+(def styles {:comment  {:class "tok-comment"}
+             :str-litt {:class "tok-string"}
+             :keyw     {:class "tok-keyword"}
+             :builtin  {:class "tok-builtin"}
+             :def      {:class "tok-def"}})
 
-(def paren-styles [{:style {:color "#272"}}
-                   {:style {:color "#940"}}
-                   {:style {:color "#44a"}}])
+(def paren-styles [{:class "tok-paren-0"}
+                   {:class "tok-paren-1"}
+                   {:class "tok-paren-2"}])
 
 (defn tokenize [src]
   (let [ws " \\t\\n"
@@ -59,19 +57,8 @@
                :else [:iden s])
         any [:other s]))))
 
-(defn format-style-clj [s]
-  (->> s
-       (map (fn [[k v]]
-              (str (name k) ":" v)))
-       (interpose ";")
-       (apply str)))
-
-(defn format-style [{:keys [style] :as opts}]
-  (assoc opts :style (format-style-clj style)))
-
-(defn syntaxify [src & opts]
-  (let [{:keys [stringify-style?]} (apply hash-map opts)
-        def-re #"^def|^ns\b"
+(defn syntaxify [src]
+  (let [def-re #"^def|^ns\b"
         ncol (count paren-styles)
         paren-style (fn [level]
                       (nth paren-styles (mod level ncol)))]
@@ -95,9 +82,5 @@
           (recur remain
             (if (= kind :other) prev val)
             level'
-            (conj res [:span
-                       (if stringify-style?
-                         (format-style style)
-                         style)
-                       val]))
+            (conj res [:span style val]))
           (apply vector :pre.syntaxify (conj res [:span style val])))))))

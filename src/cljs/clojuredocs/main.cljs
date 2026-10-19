@@ -25,7 +25,7 @@
 
 (doseq [$el (sel :pre.clojure)]
   (let [contents (dommy/text $el)
-        highlighted (syntax/syntaxify contents :stringify-style? true)]
+        highlighted (syntax/syntaxify contents)]
     (dommy/replace! $el highlighted)))
 
 (defn log [& args]

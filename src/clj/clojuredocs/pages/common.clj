@@ -151,6 +151,7 @@
   [:html5
    [:head
     [:meta {:name "viewport" :content "width=device-width, maximum-scale=1.0"}]
+    [:meta {:name "color-scheme" :content "light dark"}]
     [:meta {:name "apple-mobile-web-app-capable" :content "yes"}]
     [:meta {:name "apple-mobile-web-app-status-bar-style" :content "default"}]
     [:meta {:name "apple-mobile-web-app-title" :content "ClojureDocs"}]
